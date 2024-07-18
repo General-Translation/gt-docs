@@ -1,18 +1,16 @@
 import React from 'react'
 import { DocsThemeConfig } from 'nextra-theme-docs'
+import Image from 'next/image'
 
 const config: DocsThemeConfig = {
-  logo: <span>My Project</span>,
+  logo: <Image src={'/light-logo.png'} width={45} height={45} alt='GT, Inc.'/>,
   project: {
-    link: 'https://github.com/shuding/nextra-docs-template',
+    link: 'https://github.com/General-Translation/gt-react',
   },
-  chat: {
-    link: 'https://discord.com',
-  },
-  docsRepositoryBase: 'https://github.com/shuding/nextra-docs-template',
+  docsRepositoryBase: 'https://github.com/General-Translation/gt-docs',
   footer: {
-    text: 'Nextra Docs Template',
-  },
+    component: <></>
+  }
 }
 
 export default config
