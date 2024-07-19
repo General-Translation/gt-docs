@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/General-Translation/gt-docs#readme",
   "dependencies": {
+    "generaltranslation": "^2.0.12",
     "next": "^13.0.6",
     "nextra": "latest",
     "nextra-theme-docs": "latest",

@@ -1,5 +1,98 @@
 # General Translation
 
+Welcome to the docs for [General Translation](https://www.generaltranslation.com), a collection of libraries and cloud services which make working with languages easy!
+
+- `gt-react` is an internationalization library for [React](https://react.dev) and [Next.js](https://nextjs.org) applications. 
+
+Unlike other libraries, `gt-react` translates entire React components, not just strings. It works in both client and server components. And once it's connected to our cloud service, internationalization is automatic — your app will instantly support dozens of languages, no extra work needed. See a [demo](https://www.generaltranslation.com/demo) in action.
+
+- `generaltranslation` is the http client and language infrastructure library for `gt-react`.
+- You can sign up for cloud services at [www.generaltranslation.com](https://www.generaltranslation.com)!
+
+## `gt-react` Quickstart 
+
+This quickstart describes how to add `gt-react` to a [Next.js](https://nextjs.org) project which is using the [App Router](https://nextjs.org/docs#app-router-vs-pages-router). See quickstarts for other frameworks [here](/guides).
+
+### Set up your account
+
+First, sign in to the General Translation [Dashboard](https://www.generaltranslation.com/dashboard) using an existing Google or GitHub account. On the Dashboard, add billing information via Stripe:
+
+![Button with "Add Payment Method"](/screenshots/stripe.jpeg)
+
+Check out our current pricing [here](https://www.generaltranslation.com/pricing). You will only be charged for what you use, and never for content in your default language. If you have any questions or concerns about billing, please [get in touch](mailto:archie@generaltranslation.com)! 
+
+Once billing information has been added to your project, you can create API keys. An API key is a 36-character string beginning `gtx-` which is used to authenticate your app with our cloud translation service. Create one on the Dashboard:
+
+![Button with "Create API Key"](/screenshots/create_api_key.jpeg)
+
+Keep your API key safe and secret.
+
+### Set up your local environment
+
+Navigate to your existing Next.js app, or follow the instructions [here](https://nextjs.org/docs/getting-started/installation) to create a new one.
+
+In your local environment, usually `.env.local`, set two environment variables:
+
+```.env copy
+GT_API_KEY=""
+GT_PROJECT_ID=""
+```
+
+- For `GT_API_KEY`, use the API key you created earlier.
+- For `GT_PROJECT_ID`, use the `projectID` found on the Dashboard.
+
+![Code copy container entitled "projectID"](/screenshots/project_id.jpeg)
+
+### Install the library
+
+To install `gt-react`, open your project and run: 
+
 ```shell copy
 npm i gt-react
 ```
+
+### Internationalization
+
+In the Next.js App Router, components are Server Components by default. The best way to internationalize these components is with `<I18N>`:
+
+```js copy
+import { I18N } from 'gt-react/next'
+```
+
+`<I18N>` is a server-only component that surrounds any text or tags you'd like to be internationalized. For example:
+
+
+```js copy
+import Link from 'next/link'
+import { I18N } from 'gt-react/next'
+
+export default function Page() {
+    return (
+        <I18N>
+            <h1>Welcome to my site!</h1>
+            <ul>
+                <li>This site contains nested tags.</li>
+                <li>Some tags are <b>bold</b>, some are <i>italicized</i>.</li>
+                <li>There can be <span className="text-green">tags within tags within</span> tags.</li>
+                <li>On <Link href="/">this page</Link>, simple children of any type of tag will still be translated.</li>
+            </ul>
+        </I18N>
+    )
+}
+```
+
+**That's it! That page is ready to go in dozens of languages.**
+
+If you ever change the text or structure of this page, it will translate again.
+
+### Next steps
+
+- Change how translated text is rendered, the default language, or which languages are approved for translation, by [configuring](/gt-react/gt_config) with `gt_config.json`.
+
+- Learn about the [parameters](/gt-react/I18N#props) of the `<I18N>` component, including `id` and `page`.
+
+- Learn how to translate [Client Components](/gt-react/client) with `<GTProvider>`.
+
+- Within the `<I18N>` tag, [stop components being translated](/gt-react/private) by marking them as `<Private>`.
+
+- Learn about how to [internationalize variables](/gt-react/variables), including the `<Numeric>` and `<Branch>` components.
