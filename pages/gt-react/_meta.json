@@ -1,7 +1,7 @@
 {
-  "gt_config": "Configuring gt-react",
+  "config": "Configuring gt-react",
   "I18N": "<I18N>",
   "private": "<Private>",
-  "variables": "Variables",
-  "client": "Client"
+  "client": "Client",
+  "variables": "Variables"
 }

@@ -1,3 +1,5 @@
 {
-  "index": "Introduction"
+  "index": "Client-side components",
+  "gtprovider": "<GTProvider>",
+  "usegt": "useGT()"
 }
