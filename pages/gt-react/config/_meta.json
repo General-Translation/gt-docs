@@ -1,4 +1,5 @@
 {
+  "dotenv": "Setting environment variables",
   "index": "Configuring gt-react",
   "i18n-sheets": "I18N Sheets"
 }
