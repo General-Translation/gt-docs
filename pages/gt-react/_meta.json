@@ -4,5 +4,6 @@
   "private": "<Private>",
   "client": "Client",
   "variables": "Variables",
-  "next": "Next.js"
+  "next": "Next.js",
+  "middleware": "Middleware"
 }
