@@ -2,5 +2,6 @@
   "index": "Translating variables",
   "numeric": "<Numeric>",
   "value": "<Value>",
-  "client": "Client"
+  "client": "Client",
+  "variables": "Variable types"
 }
