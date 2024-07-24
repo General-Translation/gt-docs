@@ -1,5 +1,7 @@
 {
   "index": "Client-side components",
   "gtprovider": "<GTProvider>",
-  "usegt": "useGT()"
+  "usegt": "useGT()",
+  "current-language": "useCurrentLanguage()",
+  "default-language": "useDefaultLanguage()"
 }
