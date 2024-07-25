@@ -2,7 +2,7 @@
 
 Welcome to the docs for [General Translation](https://www.generaltranslation.com), a collection of libraries and cloud services which make working with languages easy!
 
-- `gt-react` is an internationalization ("i18n") library for [React](https://react.dev) and [Next.js](https://nextjs.org) applications. 
+- `gt-react` is an internationalization ("i18n") library for [React](https://react.dev) and [Next.js](https://nextjs.org) applications.
 
 Unlike other i18n stacks, `gt-react`:
 
@@ -10,7 +10,7 @@ Unlike other i18n stacks, `gt-react`:
 - **Translates entire React components, not just strings.** So there's no need to rewrite your site to accomodate new languages.
 - **Works across both client and server components**, with first-class support for Next.js App Router and React Server Components.
 
-See a [demo](https://www.generaltranslation.com/demo) in action. Or get started with our cloud services at [www.generaltranslation.com](https://www.generaltranslation.com).
+See a [demo](https://www.generaltranslation.com/demo) in action. Or access our cloud services at [www.generaltranslation.com](https://www.generaltranslation.com).
 
 ## `gt-react` Quickstart 
 
@@ -104,12 +104,14 @@ Here's how it works when your default language is English:
 
 ### Next steps
 
+- Check the [Reference guide](/reference) for an overview of all the functions in the `gt-react` library.
+
 - Change how translated text is rendered, the default language, or which languages are approved for translation, by [configuring](/gt-react/config) with `gt_config.json`.
 
-- Learn about the [parameters](/gt-react/I18N#props) of the `<I18N>` component, including `id` and `page`.
+- Learn about the [parameters](/gt-react/server/i18n#props) of the `<I18N>` component, including `id` and `page`.
 
 - Learn how to translate [Client Components](/gt-react/client) with `<GTProvider>`.
 
-- Within the `<I18N>` tag, [stop components being translated](/gt-react/private) by marking them as `<Private>`.
+- Within the `<I18N>` tag, [stop components being translated](/gt-react/variables/variables/private) by marking them as `<Private>` or `<Variable>`.
 
 - Learn about how to [internationalize variables](/gt-react/variables), including the `<Numeric>` and `<Value>` components.

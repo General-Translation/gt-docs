@@ -1,0 +1,819 @@
+import { Callout } from 'nextra/components'
+
+# `gt-react` Reference
+
+This page contains a short description and reference implementation for each function in the `gt-react` internationalization library.
+
+<Callout>
+    Try copying and pasting this page into your favorite AI chat interface, then asking it questions about `gt-react`!
+</Callout>
+
+[Server-side Translation](#server-side-translation)
+- [`<I18N>`](#i18n)
+- [`intl()`](#intl)
+
+[Client-side Translation](#client-side-translation)
+- [`<GTProvider>`](#gtprovider)
+- [`useGT()`](#usegt)
+
+[Branching](#branching)
+- [`<Branch>`](#branch>)
+- [`<Numeric>`](#numeric)
+
+[Variables](#variables)
+- [`<Variable>`](#variable)
+- [`<NumberVariable>`](#numbervariable)
+- [`<DateVariable>`](#datevariable)
+- [`<CurrencyVariable>`](#currencyvariable)
+- [`<Private>`](#private)
+
+[Helpers](#helpers)
+- [`getDefaultLanguage()`](#getdefaultlanguage)
+- [`getUserLanguage()`](#getuserlanguage)
+- [`useDefaultLanguage()`](#usedefaultlanguage)
+- [`useUserLanguage()`](#useuserlanguage)
+
+[Middleware](#middleware) 
+
+---
+
+## Server-side Translation
+
+To protect your API keys, translation always happens on the server. However, these functions are specifically intended for use in Server Components and in server-side async functions. 
+
+<Callout type="info">
+  In modern versions of [Next.js](https://nextjs.org/docs/app), all components are server components by default. 
+</Callout>
+
+## `<I18N>`
+
+The `<I18N>` component is a server-side component which translates its children into the user's current language. How this translation is first displayed depends on the current [render method](/gt-react/config/rendering).
+
+```js copy
+import { I18N } from 'gt-react/next' // or 'gt-react'
+```
+
+<Callout>
+    If `<I18N>` is imported from `gt-react/next`, `userLanguage` is set automatically based on the user's request headers or cookies.
+</Callout>
+
+#### Example
+
+```javascript copy
+import { I18N } from 'gt-react/next' 
+// or 'gt-react' in other frameworks
+
+export default function Page() {
+    return (
+        <main>
+            <I18N id='welcome'>
+                <h1>Welcome to my site!</h1>
+                <p>This text will be <b>translated</b> into dozens of languages automatically.</p>
+            </I18N>
+        </main>
+    )
+}
+
+```
+
+#### Essential props
+
+| Prop Name  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `userLanguage`    | `string` | Yes, except in `gt-react/next`      | An [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag) language tag which represents the user's chosen language. |
+| `id`    | `string` | No       | A unique ID to represent this tag, allowing only the latest translation to be stored whenever its content is changed. |
+
+See a full list of `<I18N>` props [here](gt-react/server/i18n#props).
+
+## `intl()`
+
+The asynchronous `intl()` function is used to translate text from one language to another.
+
+```javascript copy
+import { I18N } from 'gt-react/next' // or 'gt-react'
+```
+
+<Callout>
+   If `intl()` is imported from `gt-react/next`, `userLanguage` is set automatically based on the user's request headers or cookies.
+</Callout>
+
+#### Example
+
+```javascript copy
+import { intl } from 'gt-react/next' 
+// or 'gt-react' in other frameworks
+
+export default async function greet() {
+    const sentence = await intl("Hello, world!", { id: "greeting" });
+    return sentence; // e.g. "Hola, mundo" if the user's language is Spanish
+}
+```
+
+#### Essential parameters
+
+| Parameter  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `content`    | `string` | Yes  | The text to be translated. |
+| `userLanguage` | `string` | Yes, except in `gt-react/next` | An [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag) language tag which represents the user's chosen language. |
+| `options`    | `object` | No | An object (`{}`) containing non-essential parameters like `id`. |
+
+Or in `gt-react/next`, where `userLanguage` is set automatically:
+
+| Parameter  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `content`    | `string` | Yes  | The text to be translated. |
+| `options`    | `object` | No | An object (`{}`) containing an optional `userLanguage`, in addition non-essential parameters like `id`. |
+
+
+See a full list of `intl()` options [here](gt-react/server/intl#options).
+
+---
+
+## Client-side Translation
+
+Components which use client-side JavaScript, like React [hooks](https://react.dev/reference/react/hooks), are client components. Since all translation in the `gt-react` stack happens on the server, text must be passed to the client for translation to work.
+
+The simplest way to do this is with an `<I18N>` component, like:
+
+```javascript copy
+import { I18N } from 'gt-react/next' // or 'gt-react'
+import ClientSideButton from './ClientSideButton.js' // a client component which is a button reading "Get Started!"
+
+export default function Page() {
+    return (
+        <I18N id='landing.page'>
+            <main>
+                <h1>Welcome to my site!</h1>
+                <ClientSideButton>Get Started!</ClientSideButton>
+            </main>
+        </I18N>
+    )
+}
+```
+
+However, sometimes it is difficult to pass children directly from server to client, for example if the client component is displayed conditionally, or is nested within another client component.
+In this case, it is recommended to use `<GTProvider>`.
+
+## `<GTProvider>`
+
+`<GTProvider>` provides translations to the client using React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API. 
+These translations can then be accessed with `useGT()`.
+
+```javascript copy
+import { GTProvider } from 'gt-react/next' // or 'gt-react'
+```
+
+<Callout>
+    If `<GTProvider>` is imported from `gt-react/next`, `userLanguage` is set automatically based on the user's request headers or cookies.
+</Callout>
+
+#### Example
+
+```javascript copy
+import { GTProvider } from 'gt-react/next' 
+// or 'gt-react' in other frameworks
+
+import ClientComponent from './ClientComponent.js'
+
+export default function Page() {
+    return (
+        <GTProvider dictionary={{
+            "welcome.hello": <>Hello, world! This is a fragment.</>
+            "welcome.goodbye": <p><b>Goodbye, world!</b> This is a paragraph with a bold tag.</p>
+        }}>
+            <ClientComponent />
+        </GTProvider>
+    )
+}
+```
+
+#### Essential props
+
+| Parameter  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `dictionary`    | `object` | Yes  | An object (`{}`) where the keys are IDs and the values are strings or React nodes. |
+| `userLanguage` | `string` | Yes, except in `gt-react/next` | An [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag) language tag which represents the user's chosen language. |
+| `userLanguage` | `string` | No | An ID string to avoid conflicts in the unified i18n sheet. For example, two separate `<GTProvider>`s with different IDs can both provide a dictionary entry with the same name. |
+
+See a full list of `<GTProvider>` props [here](gt-react/client/gtprovider#props).
+
+## `useGT()`
+
+A client-side hook used to access translations. Equivalent to `useTranslations()` in other libraries. Returns a function, `t()`, which can be used to access a translation according to a given ID.
+Should only be imported from `gt-react/client`.
+
+```javascript copy
+import { useGT } from 'gt-react/client'
+```
+
+#### Example
+
+```javascript copy
+// ClientComponent.js
+// Displays a button which changes the state every time it is pressed.
+// If currentState is true, displays a greeting. Otherwise displays a goodbye.
+
+'use client'
+
+import { useGT } from 'gt-react/client'
+import { useState } from 'react'
+
+export default function ClientComponent() {
+
+    const t = useGT()
+
+    const [currentState, setCurrentState] = useState(true)
+
+    return (
+        <div>
+            <button onClick={() => {setCurrentState(prev => !prev)}}>
+                {t('welcome.prompt')}
+            </button>
+            {
+                currentState
+                ?
+                t('welcome.hello')
+                :
+                t('welcome.goodbye')
+            }
+        </div>
+    )
+}
+```
+
+Where `<ClientComponent />` is used like:
+
+```javascript copy
+// page.js
+
+import { GTProvider } from 'gt-react/next' 
+import ClientComponent from './ClientComponent.js'
+
+export default function Page() {
+    return (
+        <GTProvider dictionary={{
+            "welcome.prompt": <>Click here to change the text!</>
+            "welcome.hello": <>Hello, world! This is a fragment.</>
+            "welcome.goodbye": <p><b>Goodbye, world!</b> This is a paragraph with a bold tag.</p>
+        }}>
+            <ClientComponent />
+        </GTProvider>
+    )
+}
+```
+
+---
+
+## Branching
+
+Sometimes translated text needs to change based on complex conditions, such as if a given number is plural, or if a user has provided a preferred gender or title.
+
+This is the use case for branching and [variables](#variables), two unique features of the `gt-react` library.
+
+## `<Variable>`
+
+`<Variable>` is a component which can be used on either the client or the server, inside or outside of an `<I18N>` tag.
+
+To use it on the server:
+
+```javascript copy
+import { Variable } from 'gt-react' // or gt-react/next
+```
+
+To use it on the client:
+
+```javascript copy
+import { Variable } from 'gt-react/client'
+```
+
+When they are the children of `<I18N>` components, variables are translated around, in context, but not translated themselves. 
+If you need variables to be translated, consider using [`intl()`](#intl).
+
+#### Example 
+
+```javascript copy
+import { Variable } from 'gt-react'
+
+export default function Page() {
+    const name = "Sam"; // could change without forcing another translation
+    return (
+        <I18N>
+            Your name is <Variable>{name}</Variable>.
+        </I18N>
+    )
+}
+```
+
+#### Essential props
+
+| Prop Name  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `name`    | `string` | No, defaults to "value" | Used for identification while rendering [`<Branch>`](#branch) or [`<Numeric>`](#numeric) components. |
+| `defaultValue`    | `any` | No, defaults to the component's children. Only one of `defaultValue` or `children` is required. | The displayed children of the component, by default. |
+
+## `<Branch>`
+
+`<Branch>` allows you to render a translation *conditionally*, based on a provided values prop. On the server, it is usually used inside an `<I18N>` component. Branches don't .
+
+To use it on the server:
+
+```javascript copy
+import { Branch } from 'gt-react' // or gt-react/next
+```
+
+To use it on the client:
+
+```javascript copy
+import { Branch } from 'gt-react/client'
+```
+
+The children of a `<Branch>` component are considered the default branch, and will be rendered if none of the conditions in the `branches` prop are met.
+
+#### Examples
+
+This component would change based on the provided name and gender, without forcing another translation:
+
+```javascript copy
+import { I18N, Branch } from 'gt-react/next'
+
+export default function Page() {
+    const name = "Sam" // could be changed without forcing another translation
+    const gender = "male" // could be changed without forcing another translation
+    return (
+        <I18N>
+            <Branch values={{name, gender}} branches={{
+                "gender": {
+                    "male": <>His name is <Variable name="name"/>.</>,
+                    "female": <>Her name is <Variable name="name"/>.</>
+                }
+            }}>
+                Their name is <Variable name="name"/>.
+            </Branch>
+        </I18N>
+    )
+}
+```
+
+<Callout>
+  `<Branch>` is providing the value for the `<Variable name="name" />` component. This means that branches can be defined in another file and imported.
+</Callout>
+
+In this example, `branches` is a simple decision tree:
+
+```javascript
+// with variables {name, gender}
+{
+    "gender": {
+        "male": <>His name is <Variable name="name" /></>,
+        "female": <>Her name is <Variable name="name" /></>
+    }
+}
+```
+
+The decision tree can be made as complex as necessary, and catch-all branches can be defined with `"*"`. Here it is with a special greeting for female customers named "Alice":
+
+```javascript
+// with variables {name, gender}
+{
+    "gender": {
+        "male": <>His name is <Variable name="name" /></>,
+        "female": {
+            "name": {
+                "Alice": <>Hey Alice! Great name!</>
+            }
+            "*": <>Her name is <Variable name="name" /></>
+        }
+    }
+}
+```
+
+<Callout>
+    `<Branch>` will fall back to the lowest-level catch all branch if no match can be found. Children of the `<Branch>` component are treated as the top-level catch-all branch.
+</Callout>
+
+`<Branch>` can also be used on the client:
+
+```javascript copy
+// ClientComponent.js
+// Displays a form which allows users to enter their name and gender
+
+'use client'
+
+import { useGT, Branch } from 'gt-react/client'
+import { useState } from 'react'
+
+export default function ClientComponent() {
+
+    const t = useGT()
+
+    const [currentName, setCurrentName] = useState(true);
+    const [currentGender, setCurrentGender] = useState("");
+
+    return (
+        <div>
+            <input onChange={(event) => { setCurrentName(event.target.value) }}/>
+            <input onChange={(event) => { setCurrentGender(event.target.value) }}/>
+            <Branch values={{ name: currentName }} branches = {{
+                "gender": {
+                    "male": t('customer.male'),
+                    "female": t('customer.female')
+                }
+                "*": t('customer.default')
+            }}/>
+        </div>
+    )
+}
+```
+
+Where `<ClientComponent />` is used like:
+
+```javascript copy
+// page.js
+
+import { GTProvider, Variable } from 'gt-react/next' 
+import ClientComponent from './ClientComponent.js'
+
+export default function Page() {
+    return (
+        <GTProvider dictionary={{
+            "customer.male": <>His name is <Variable name="name" /></>
+            "customer.female": <>Her name is <Variable name="name" /></>,
+            "customer.default": <>Their name is <Variable name="name" /></>
+        }}>
+            <ClientComponent />
+        </GTProvider>
+    )
+}
+```
+
+<Callout>
+    Note that `<Branch>` can be used to render variables in context which are only available on the client.
+</Callout>
+
+#### Essential props
+
+| Prop Name  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `branches`    | `object` | No | Object (`{}`) which defines the decision tree which determines which translation is rendered. |
+| `variables`    | `object` | No | Object (`{}`) where the keys are variable names and the values are `any`. Used to navigate `branches` and also to fill in variables which are only known on the client side.  |
+
+## `<Numeric>`
+
+Different languages have different plural rules. A new translation should not have to be generated every time a number changes, but sentences do have to change depending on both the language and the number.
+
+<Callout type="info">
+
+In English, nouns take two different forms: **singular**, for one item, or **plural**, for many.
+
+In Arabic, there are five: **zero**, for no items, **singular**, for exactly one item, **dual**, for exactly two items, **paucal**, for numbers between 3 and 10, and **plural**, for more than 10.
+
+**General Translation exists so you never have to worry about this again.**
+
+</Callout>
+
+The `<Numeric>` component is a special type of `<Branch>` that handles and generates plural forms automatically, language-by-language. It works out of the box on forms that don't even exist in English, like the Arabic dual.
+
+To use it on the server:
+
+```javascript copy
+import { Numeric } from 'gt-react' // or gt-react/next
+```
+
+To use it on the client:
+
+```javascript copy
+import { Numeric } from 'gt-react/client'
+```
+
+#### Example
+
+<Callout>
+    `<NumberVariable>` is a special type of `<Variable>` which formats a number for a given locale.
+</Callout>
+
+```javascript copy
+import { I18N, Numeric, NumberVariable } from "gt-react/next"
+
+export default async function Page() {
+
+    const numberOfMessages = 2;
+
+    return (
+        <I18N>
+            <Numeric
+                n={numberOfMessages}
+                singular={<>You have <NumberVariable /> new message.</>}
+            >
+                You have <NumberVariable /> new messages.
+            </Numeric>
+        </I18N>
+    )
+
+}
+```
+
+`<Numeric>` can also be used on the client:
+
+```javascript copy
+// ClientComponent.js
+// Displays a form which allows users to enter their name and gender
+
+'use client'
+
+import { useGT, Branch } from 'gt-react/client'
+import { useState } from 'react'
+
+export default function ClientComponent() {
+
+    const t = useGT()
+
+    const [count, setCount] = useState(0);
+
+    return (
+        <div>
+            <button onClick={() => { setCount(prev => prev + 1) }}>{t('button.text')}</button>
+            <Numeric
+                n={count}
+                singular={t('singular')}
+            >
+                {t('plural')}
+            </Numeric>
+        </div>
+    )
+}
+```
+
+Where `<ClientComponent />` is used like:
+
+```javascript copy
+// page.js
+
+import { GTProvider, NumberVariable } from 'gt-react/next' 
+import ClientComponent from './ClientComponent.js'
+
+export default function Page() {
+    return (
+        <GTProvider dictionary={{
+            "button.text": <>Click me!</>
+            "singular": <>You have pressed the button once.</>
+            "plural": <>You have pressed the button <NumberVariable /> times.</>
+        }}>
+            <ClientComponent />
+        </GTProvider>
+    )
+}
+```
+
+<Callout type="warning">
+    `<Numeric>` cannot generate additional forms when it is used on the client side.
+</Callout>
+
+#### Essential props
+
+| Prop Name  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `n`    | `number` | Yes | Number used to determine whether a singular, plural, or other form should be displayed. |
+
+The full list of forms which `<Numeric>` can take: `zero`, `one` (alias of `singular`), `two` (alias of `dual`), `few`, `many`, and `other` (alias of `plural`). You only need to provide the forms present in your default language, which in English are `singular` and `plural`, one of which can be the children of the `<Numeric>` component.
+
+---
+
+## Variables
+
+## `<Variable>`
+
+The default type of variable, which displays a value with no additional formatting. See [here](#variable).
+
+## `<NumberVariable>`
+
+`<NumberVariable>` is a special type of `<Variable>` which formats numbers for the user's locale.
+
+<Callout type="info">
+    In German, large numbers are displayed with a period rather than a comma: 1.000.000 rather than 1,000,000.
+</Callout>
+
+To use it on the server:
+
+```javascript copy
+import { NumberVariable } from 'gt-react' // or gt-react/next
+```
+
+To use it on the client:
+
+```javascript copy
+import { NumberVariable } from 'gt-react/client'
+```
+
+`<NumberVariable>` can be used natively with `<Numeric>`, without providing a name prop.
+
+#### Essential props
+
+| Prop Name  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `name`    | `string` | No, defaults to "n" | Used for identification while rendering [`<Branch>`](#branch) or [`<Numeric>`](#numeric) components. |
+| `defaultValue`    | `number` or `string` | No, defaults to the component's children. Only one of `defaultValue` or `children` is required. | The displayed children of the component, by default. |
+| `options`    | `object` | No | An object representing additional formatting instructions in the style of the [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) API. |
+
+## `<DateVariable>`
+
+`<DateVariable>` is a special type of `<Variable>` which formats dates for the user's locale.
+
+<Callout type="info">
+    In British English, dates are written DD/MM/YYYY, while in American English, dates are displayed MM/DD/YYYY.
+</Callout>
+
+To use it on the server:
+
+```javascript copy
+import { DateVariable } from 'gt-react' // or gt-react/next
+```
+
+To use it on the client:
+
+```javascript copy
+import { DateVariable } from 'gt-react/client'
+```
+
+#### Essential props
+
+| Prop Name  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `name`    | `string` | No, defaults to "date" | Used for identification while rendering [`<Branch>`](#branch) components. |
+| `defaultValue`    | `number` (Unix time), or `Date` | No, defaults to the component's children. Only one of `defaultValue` or `children` is required. | The displayed children of the component, by default. |
+| `options`    | `object` | No | An object representing additional formatting instructions in the style of the [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) API. |
+
+## `<CurrencyVariable>`
+
+`<CurrencyVariable>` is a special type of `<Variable>` which formats currencies for the user's locale.
+
+<Callout type="info">
+    For example, some European countries write $1,000 as 1,000 $.
+</Callout>
+
+To use it on the server:
+
+```javascript copy
+import { CurrencyVariable } from 'gt-react' // or gt-react/next
+```
+
+To use it on the client:
+
+```javascript copy
+import { CurrencyVariable } from 'gt-react/client'
+```
+
+#### Essential props
+
+| Prop Name  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `name`    | `string` | No, defaults to "date" | Used for identification while rendering [`<Branch>`](#branch) components. |
+| `defaultValue`    | `number` or `string` | No, defaults to the component's children. Only one of `defaultValue` or `children` is required. | The displayed children of the component, by default. |
+| `currency`    | `string` | No, defaults to "USD" | Follows the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code standard. |
+| `options`    | `object` | No | An object representing additional formatting instructions in the style of the [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) API. |
+
+## `<Private>`
+
+Any children of `<Private>` will never be sent to our API. (`<Variable>` also works like this, so `<Private>` is interchangeable with it for this purpose.) 
+
+Use `<Private>` to make sure components remain untranslated.
+
+```javascript copy
+import { Private } from 'gt-react' // or gt-react/next, gt-react/client
+```
+
+#### Example
+
+```javascript
+import { I18N, Private } from 'gt-react/next'
+
+// using private so that the company name remains untranslated
+export default function Page() {
+    return (
+        <I18N>
+            Welcome to the homepage of <Private>Acme, Inc.</Private>
+        </I18N>
+    )
+}
+```
+
+#### Essential props
+
+| Prop Name  | Type     | Required | Description                      |
+|------------|----------|----------|----------------------------------|
+| `label`    | `string` | No | Used by our systems as a translation aid. |
+
+---
+
+## Helpers
+
+### Server-side helpers
+
+#### `getUserLanguage()`
+
+A server-side function only available in `gt-react/next`, which returns the user's currently requested language.
+
+Returns a `string` which is an [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag) language tag representing the user's chosen language.
+
+#### `getDefaultLanguage()`
+
+A server-side function which returns the user's currently requested language. Available in both `gt-react` and `gt-react/next`.
+
+Returns a `string` which is an [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag) language tag representing the application's default language, such as `en-US` for English.
+
+#### Example
+
+```javascript
+import { getUserLanguage, getDefaultLanguage } from 'gt-react/next'
+
+export default function LanguageDisplayer() {
+
+    const userLanguage = getUserLanguage();
+
+    const defaultLanguage = getDefaultLanguage();
+    
+    return (
+        <main>
+            <p>This application was originally written in {defaultLanguage}.</p>
+            <p>You are viewing it in {userLanguage}.</p>
+        </main>
+    )
+}
+```
+
+### Client-side helpers
+
+#### `useUserLanguage()`
+
+A client-side hook to get the user's current language. Must be used inside a `<GTProvider>`.
+
+Returns a `string` which is an [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag) language tag representing the user's chosen language.
+
+#### `useDefaultLanguage()`
+
+A client-side hook to get your application's default language. Must be used inside a `<GTProvider>`.
+
+Returns a `string` which is an [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag) language tag representing the application's default language, such as `en-US` for English.
+
+#### Example
+
+```javascript
+'use client'
+
+import { useUserLanguage, useDefaultLanguage } from 'gt-react/client'
+
+export default function LanguageDisplayer() {
+
+    const userLanguage = useUserLanguage();
+
+    const defaultLanguage = useDefaultLanguage();
+    
+    return (
+        <main>
+            <p>This application was originally written in {defaultLanguage}.</p>
+            <p>You are viewing it in {userLanguage}.</p>
+        </main>
+    )
+}
+```
+
+---
+
+## Middleware
+
+i18n routing is a web development technique used to manage multiple languages and regional formats on a website, ensuring users can access content in their preferred language through language-specific URLs. It involves detecting the user's language and providing localized routes, like `www.example.com/fr` for French.
+
+### `createNextMiddleware()`
+
+`gt-react`'s Next.js middleware allows you easily add i18n routing to your Next.js App Router project. Read Vercel's middleware docs [here](https://nextjs.org/docs/app/building-your-application/routing/internationalization).
+
+```javascript copy
+import { createNextMiddleware} from 'gt-react/middleware'
+```
+
+In Next.js, create a file called `middleware.js` (or `.ts` if you are using TypeScript) inside the root directory. If you are using the `src` folder, place it in `src/middleware.js` instead. 
+
+```javascript copy
+// middleware.js
+
+import { createNextMiddleware } from 'gt-react/middleware'
+
+export default createNextMiddleware();
+
+export const config = {
+  matcher: [
+      /*
+       * Match all request paths except for the ones starting with:
+       * - api (API routes)
+       * - _next (internal files)
+       * - favicon.ico (favicon file)
+       */
+      "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
+
+Then, create a dynamic route (e.g., `[lang]`) in your app folder, and include all pages and layouts under it. From Vercel:
+
+> Ensure all special files inside app/ are nested under app/[lang]. This enables the Next.js router to dynamically handle different locales in the route, and forward the lang parameter to every layout and page. 
+
+This will enable `gt-react`-powered i18n routing on your Next.js project.

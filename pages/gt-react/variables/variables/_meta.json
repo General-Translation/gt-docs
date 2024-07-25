@@ -2,5 +2,6 @@
   "index": "<Variable>",
   "number": "<NumberVariable>",
   "date": "<DateVariable>",
-  "currency": "<CurrencyVariable>"
+  "currency": "<CurrencyVariable>",
+  "private": "<Private>"
 }

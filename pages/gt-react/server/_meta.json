@@ -1,0 +1,6 @@
+{
+  "i18n": "<I18N>",
+  "intl": "intl()",
+  "user-language": "getUserLanguage()",
+  "default-language": "getDefaultLanguage()"
+}
