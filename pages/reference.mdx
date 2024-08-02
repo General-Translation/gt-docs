@@ -1,0 +1,592 @@
+import { Callout } from 'nextra/components'
+
+# `gt-react` Reference
+
+This page contains a short description and reference implementation for each function in the `gt-react` internationalization library.
+It's written for AI, but humans may find it useful too!
+
+<Callout>
+    Chat to the GPT-powered [setup wizard](https://chatgpt.com/g/g-NRR9teLEv-gt-react-wizard).
+</Callout>
+
+<Callout>
+    Copy and paste this excerpt into your favorite AI model, then ask it questions about `gt-react`!
+</Callout>
+
+```javascript copy
+/*
+* gt-react is an automatic internationalization (i18n) library for React and Next.js
+* `npm i gt-react`
+* www.generaltranslation.com
+*/
+
+/* ENVIRONMENT VARIABLES */
+
+// Set up your .env (or .env.local in Next.js) environment with the following variables
+GT_API_KEY = "" // A 36-character secret key, beginning 'gtx-', which can be created at generaltranslation.com/dashboard.
+GT_PROJECT_ID = "" // A 36 character projectID which can be found at generaltranslation.com/dashboard.
+
+/* CONFIGURATION */
+
+/* i18n.js */
+// A central config file from which every server-side function is imported
+// Recommended placement in the root or `src/` directory of your project
+// approvedLocales (string[], optional) - List of approved locales. Default is an empty array.
+// defaultLocale (string, optional) - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
+// renderMethod (string, optional) - How translations are rendered for the first time. Options are "replace", "hang", "subtle". Default is "skeleton".
+// renderTimeout (string, optional) - Timeout before rendering a new translation is called off. Default is 8.5 seconds.
+// dictionaryName (string, optional) - Name of the dictionary to use. Default is "default".
+// dictionary (object, optional) - Dictionary object containing default language content.
+
+import { createGT } from 'gt-react/next' // or 'gt-react' in non-Next.js frameworks
+
+export const { I18N, intl, GTProvider, Numeric, Value, Variable, NumberVariable, CurrencyVariable, DateVariable } = createGT({
+    defaultLanguage: 'en-US'
+})
+
+/* Dictionaries */
+// Many internationalization libraries load content in from dictionary files. 
+// If you'd like to use this pattern, specify your default language dictionary as a parameter of createGT()
+// Unlike other i18n libraries, dictionaries in `gt-react` can specify JSX content.
+
+import { createGT } from 'gt-react/next' // or 'gt-react' in non-Next.js frameworks
+
+export const { t, dict, GTProvider } = createGT({
+    defaultLanguage: 'en-US',
+    dictionary: {
+        "hello.text": "Hello, world!",
+        "hello.pararaph": <>Hello, world</>
+    }
+})
+
+// When using this pattern in server components, import the `t()` function from '@i18n'. Your components will be translated automatically once you use it.
+// When using this pattern in client components, use `<GTProvider>` and `useGT()`, which provides a translated version of your dictionary to the client automatically.
+
+/* SERVER-SIDE I18N */
+
+// To protect your API keys, translation always happens on the server. However, these functions are specifically intended for use in Server Components and in server-side async functions. 
+// In modern versions of Next.js, all components are server components by default. 
+
+/* Server-side t() */
+// On the server-side, `t()` is imported directly from '@i18n'
+// the `t()` function takes a string id which corresponds to an item in the default language dictionary in 'i18n.js'
+// `t()` will return an empty React fragment if the item is not present in the dictionary
+
+import { t } from '@i18n'
+
+export default function Page() {
+    return (
+        <main>
+            {t('hello.paragraph')}
+        </main>
+    )
+}
+
+// For strings in the default language dictionary, `t()` becomes an asynchronous function.
+
+import { t } from '@i18n'
+
+export default async function greeting() {
+    return await t('hello.text');
+}
+
+// To retrieve an item in the dictionary without translating it, use `dict()`
+
+import { dict } from '@i18n'
+
+export default function Page() {
+    return (
+        <main>
+            {dict('hello.paragraph')}
+        </main>
+    )
+}
+
+/* <I18N> */
+// The `<I18N>` component is a server-side component which translates its children into the user's current language. How this translation is first displayed depends on the current render method.
+// `id` (string, best practice) - A unique ID which helps the automatic internationalization features manage changing site content.
+
+import { I18N } from '@i18n'
+
+export default function Page() {
+    return (
+        <main>
+            <I18N id='welcome'>
+                <h1>Welcome to my site!</h1>
+                <p>This text will be <b>translated</b> into dozens of languages automatically.</p>
+            </I18N>
+        </main>
+    )
+}
+
+/* intl() */
+// The asynchronous `intl()` function is used to translate text from one language to another.
+// `content` (string, required) - The text to be translated.
+// `options` (object) - An object containing an optional `userLanguage`, in addition to non-essential parameters like `id`. See full list of `intl()` options at docs.generaltranslation.com/gt-react/server/intl#options.
+
+import { intl } from '@i18n'
+
+export default async function greet() {
+    const sentence = await intl("Hello, world!", { id: "greeting" });
+    return sentence; // e.g. "Hola, mundo" if the user's language is Spanish
+}
+
+/* CLIENT-SIDE I18N */
+
+// Components which use client-side JavaScript, like React hooks, are client components. Since all translation in the `gt-react` stack happens on the server, translated text must be passed to the client for translation to work.
+// The simplest way to do this is with an `<I18N>` component, like:
+
+import { I18N } from '@i18n'
+import ClientSideButton from './ClientSideButton.js' // a client component
+
+export default function Page() {
+    return (
+        <I18N id='landing.page'>
+            <main>
+                <h1>Welcome to my site!</h1>
+                <ClientSideButton>Get Started!</ClientSideButton>
+            </main>
+        </I18N>
+    )
+}
+
+// However, sometimes it is difficult to pass children directly from server to client, for example if the client component is displayed conditionally, or is nested within another client component.
+// In this case, it is recommended to use `<GTProvider>`.
+
+/* <GTProvider> */
+// Provides translations to the client using React's Context API. These translations can then be accessed with `useGT()`.
+// `dictionary` (object, required) - An object where the keys are IDs and the values are strings or React nodes.
+// `id` (string, best practice) - An ID string to avoid conflicts in the unified i18n sheet. See full list of `<GTProvider>` props at docs.generaltranslation.comgt-react/client/gtprovider#props.
+// `<GTProvider>` must be used in a server component and its children must all be client components.
+
+import { GTProvider } from '@i18n' // remember @i18n can only be imported in server components
+
+import ClientComponent from './ClientComponent.js'
+
+export default function Page() {
+    return (
+        <GTProvider dictionary={{
+            "welcome.prompt": <>Click here to change the text!</>
+            "welcome.hello": <>Hello, world! This is a fragment.</>
+            "welcome.goodbye": <p><b>Goodbye, world!</b> This is a paragraph with a bold tag.</p>
+        }}>
+            <ClientComponent />
+        </GTProvider>
+    )
+}
+
+// `useGT()` is a client-side hook used to access translations. Equivalent to `useTranslations()` in other libraries. 
+// Returns a function, `t()`, which can be used to access a translation according to a given ID. 
+// `t()` can be limited in scope if an id is passed to `useGT()`, like `useGT(id)`
+// Should only be imported from `gt-react/client`.
+// For example, used within the above `<GTProvider>`:
+
+'use client'
+import { useGT } from 'gt-react/client'
+import { useState } from 'react'
+
+export default function ClientComponent() {
+
+    const t = useGT() // gets a translation function for the entire dictionary
+
+    const [currentState, setCurrentState] = useState(true)
+
+    return (
+        <div>
+            <button onClick={() => {setCurrentState(prev => !prev)}}>
+                {t('welcome.prompt')}
+            </button>
+            {
+                currentState
+                ?
+                t('welcome.hello')
+                :
+                t('welcome.goodbye')
+            }
+        </div>
+    )
+}
+
+/* BRANCHING AND VARIABLES */
+
+// Sometimes translated text needs to change based on complex conditions, such as if a given number is plural, or if a user has provided a preferred gender or title.
+// This is the use case for branching and variables, two unique features of the `gt-react` library.
+
+/* <Variable> */
+// `<Variable>` is a component which can be used on either the client or the server, inside or outside of an `<I18N>` tag.
+// When they are the children of `<I18N>` components, variables are translated around, in context, but not translated themselves
+// `name` (string, optional, defaults to "value") - Used for identification while rendering `<Value>` or `<Numeric>` components.
+// `defaultValue` (any, optional, defaults to the component's children) - The displayed children of the component, by default. Only one of `defaultValue` or `children` is required.
+// Any children or default values of `<Variable>` remain private, and are never sent to the General Translation cloud service.
+
+// To use it on the server:
+
+import { Variable } from '@i18n'
+
+export default function Page() {
+    const name = "Sam"; // could change without forcing another translation
+    return (
+        <I18N>
+            Your name is <Variable>{name}</Variable>.
+        </I18N>
+    )
+}
+
+/* <Value> */
+// `<Value>` allows you to render a translation conditionally, based on a provided values prop. 
+// On the server, it is usually used inside an `<I18N>` component.
+// On the client, it's child is usually the result of a `t()` function.
+
+// <Value> takes an optional `branches` parameter, which is a simple decision tree.
+// The children of a `<Value>` component are considered the default branch, and will be rendered if none of the conditions in the `branches` prop are met.
+// `branches` (object, optional) - Object which defines the decision tree that determines which translation is rendered.
+// `values` (object, optional) - Object where the keys are variable names and the values are `any`. Used to navigate `branches` and fill in variables known only on the client side.
+
+// To use `<Value>` inside `<I18N>` on the server:
+
+import { I18N, Value } from '@i18n'
+
+// This page would change based on the provided name and gender, without forcing another translation.
+export default function Page() {
+    const name = "Sam" // could be changed without forcing another translation
+    const gender = "male" // could be changed without forcing another translation
+    return (
+        <I18N>
+            <Value values={{name, gender}} branches={{
+                "gender": {
+                    "male": <>His name is <Variable name="name"/>.</>,
+                    "female": <>Her name is <Variable name="name"/>.</>
+                }
+            }}>
+                Their name is <Variable name="name"/>.
+            </Value>
+        </I18N>
+    )
+}
+
+// Note that `<Value>` is providing the value for the `<Variable name="name" />` component. This means that branches can be defined in another file and imported.
+
+// In the above example, `branches` are a simple decision tree:
+// with variables {name, gender}
+{
+    "gender": {
+        "male": <>His name is <Variable name="name" /></>,
+        "female": <>Her name is <Variable name="name" /></>
+    }
+}
+
+// The decision tree can be made as complex as necessary, and catch-all branches can be defined with `"*"`. Here it is with a special greeting for female customers named "Alice":
+// with variables {name, gender}
+{
+    "gender": {
+        "male": <>His name is <Variable name="name" /></>,
+        "female": {
+            "name": {
+                "Alice": <>Hey Alice! Great name!</>
+            }
+            "*": <>Her name is <Variable name="name" /></>
+        }
+    }
+}
+
+// `<Value>` will fall back to the lowest-level catch all branch if no match can be found. Children of the `<Value>` component are treated as the top-level catch-all branch.
+
+
+// To use `<Value>` with `<Variable>` on the client:
+
+// page.js
+import { GTProvider, Variable } from '@i18n' 
+import ClientNameComponent from './ClientComponent.js'
+
+export default function Page() {
+    return (
+        <GTProvider dictionary={{
+            "greeting": <>Your name is <Variable>{name}</Variable>.</>
+        }}>
+            <ClientNameComponent />
+        </GTProvider>
+    )
+}
+
+// ClientNameComponent.js
+'use client'
+import { useGT, Value } from 'gt-react/client'
+import { useState } from 'react'
+
+export default function ClientNameComponent() {
+
+    const t = useGT();
+
+    // can change on the client side
+    // name will be injected into the translation
+    const [name, setName] = useState("Sam");
+
+    return (
+        <div>
+            <Value values={{name}}>
+                {t('greeting')}
+            </Value>
+        </div>
+    )
+}
+
+// Importantly, `<Value>` can be used to render variables in context which are only available on the client.
+
+/* <Numeric> */
+// Different languages have different plural rules. A new translation should not have to be generated every time a number changes, but sentences do have to change depending on both the language and the number.
+// For example, in English, nouns take two different forms: **singular**, for one item, or **plural**, for many. In Arabic, there are five: **zero**, for no items, **singular**, for exactly one item, **dual**, for exactly two items, **paucal**, for numbers between 3 and 10, and **plural**, for more than 10.
+// The `<Numeric>` component is a special type of `<Value>` that handles and generates plural forms automatically, language-by-language. It works out of the box on forms that don't even exist in English, like the Arabic dual.
+// `n` (number, required) - Number used to determine whether a singular, plural, or other form should be displayed.
+// The full list of forms which `<Numeric>` can take: "zero", "one" or "singular", "two" or "dual", "few", "many", and "other" or "plural". Provide only the forms present in your default language, which in English are "singular" and "plural", one of which can be the children of the `<Numeric>` component.
+
+// To use `<Numeric>` on the server-side:
+
+import { I18N, Numeric, NumberVariable } from "@i18n"
+// where `<NumberVariable>` is a special type of `<Variable>` which formats a number for a given locale
+
+export default function Page() {
+
+    const numberOfMessages = 2;
+
+    return (
+        <I18N>
+            <Numeric
+                n={numberOfMessages}
+                singular={<>You have <NumberVariable /> new message.</>}
+            >
+                You have <NumberVariable /> new messages.
+            </Numeric>
+        </I18N>
+    )
+
+}
+
+// Warning: `<Numeric>` cannot generate additional forms when it is used on the client side. It can only use the forms it is provided.
+// To use `<Numeric>` and `<NumberVariable>` on the client-side:
+
+// page.js
+import { GTProvider, NumberVariable } from '@i18n' 
+import ClientComponent from './ClientComponent.js'
+
+export default function Page() {
+    return (
+        <GTProvider dictionary={{
+            "button.text": <>Click me!</>
+            "singular": <>You have pressed the button once.</>
+            "plural": <>You have pressed the button <NumberVariable /> times.</>
+        }}>
+            <ClientComponent />
+        </GTProvider>
+    )
+}
+
+// ClientComponent.js
+'use client'
+import { useGT, Numeric } from 'gt-react/client'
+import { useState } from 'react'
+
+export default function ClientComponent() {
+
+    const t = useGT()
+
+    const [count, setCount] = useState(0);
+
+    return (
+        <div>
+            <button onClick={() => { setCount(prev => prev + 1) }}>{t('button.text')}</button>
+            <Numeric
+                n={count}
+                singular={t('singular')}
+            >
+                {t('plural')}
+            </Numeric>
+        </div>
+    )
+}
+
+/* Types of Variables */
+
+/* `<Variable>` */
+// The default type of variable, which displays a value with no additional formatting. Default name is "value".
+
+import { Variable } from '@i18n' // on the server  server
+
+/* `<NumberVariable>` */
+// `<NumberVariable>` is a special type of `<Variable>` which formats numbers for the user's locale.
+// For example, in German, large numbers are displayed with a period rather than a comma: 1.000.000 rather than 1,000,000.
+// `name` (string, optional, defaults to "n") - Used for identification while rendering `<Value>` or `<Numeric>` components.
+// `defaultValue` (number or string, optional, defaults to the component's children) - The displayed children of the component, by default. Only one of `defaultValue` or `children` is required.
+// `options` (object, optional) - An object representing additional formatting instructions in the style of the `Intl.NumberFormat` API.
+
+// On the server:
+
+import { NumberVariable } from '@i18n' // server
+
+// On the client, must be used as the descendant of a `<GTProvider>`:
+
+import { NumberVariable } from 'gt-react/client'
+
+/* `<DateVariable>` */
+// `<DateVariable>` is a special type of `<Variable>` which formats dates for the user's locale.
+// For example, in British English, dates are written DD/MM/YYYY, while in American English, dates are displayed MM/DD/YYYY.
+// `name` (string, optional, defaults to "date") - Used for identification while rendering `<Value>` components.
+// `defaultValue` (number (Unix time) or Date, optional, defaults to the component's children) - The displayed children of the component, by default. Only one of `defaultValue` or `children` is required.
+// `options` (object, optional) - An object representing additional formatting instructions in the style of the `Intl.NumberFormat` API.
+
+// On the server:
+
+import { DateVariable } from '@i18n' // server
+
+// On the client, must be used as the descendant of a `<GTProvider>`:
+
+import { DateVariable } from 'gt-react/client'
+
+/* `<CurrencyVariable>` */
+// `<CurrencyVariable>` is a special type of `<Variable>` which formats currencies for the user's locale.
+// For example, some European countries write $1,000 as 1,000 $.
+// `name` (string, optional, defaults to "date") - Used for identification while rendering `<Value>` components.
+// `defaultValue` (number or string, optional, defaults to the component's children) - The displayed children of the component, by default. Only one of `defaultValue` or `children` is required.
+// `currency` (string, optional, defaults to "USD") - Follows the ISO 4217 currency code standard.
+// `options` (object, optional) - An object representing additional formatting instructions in the style of the `Intl.NumberFormat` API.
+
+// On the server:
+
+import { CurrencyVariable } from '@i18n' // server
+
+// On the client, must be used as the descendant of a `<GTProvider>`:
+
+import { CurrencyVariable } from 'gt-react/client'
+
+// Tip: write variables as self-closing, like <Variable/> and they will use their default name. In this way, `<NumberVariable>` can be used natively with `<Numeric>`, without providing a name prop, and `<Variable>` can be used natively with `<Value>`.
+
+/* SERVER-SIDE HELPER FUNCTIONS */
+
+/* getLocale() */
+// A server-side function that returns the user's currently requested language.
+// Returns a `string` which is an IETF BCP 47 language tag representing the user's chosen language.
+
+/* getDefaultLocale() */
+// A server-side function which returns the user's currently requested language. Available in both `gt-react` and `gt-react/next`.
+// Returns a `string` which is an IETF BCP 47 language tag representing the application's default language, such as `en-US` for English.
+
+import { getLocale, getDefaultLocale } from '@i18n'
+
+export default function LanguageDisplayer() {
+
+    const currentLocale = getLocale();
+
+    const defaultLocale = getDefaultLocale();
+    
+    return (
+        <main>
+            <p>This application was originally written in {defaultLocale}.</p>
+            <p>You are viewing it in {currentLocale}.</p>
+        </main>
+    )
+}
+
+/* CLIENT-SIDE HELPER HOOKS */
+
+/* useLocale() */
+// A client-side hook to get the user's current language. Must be used inside a `<GTProvider>`.
+// Returns a `string` which is an IETF BCP 47 language tag representing the user's chosen language.
+
+/* useDefaultLocale() */
+// A client-side hook to get your application's default language. Must be used inside a `<GTProvider>`.
+// Returns a `string` which is an IETF BCP 47 language tag representing the application's default language, such as `en-US` for English.
+
+'use client'
+
+import { useLocale, useDefaultLanguage } from 'gt-react/client'
+
+export default function LanguageDisplayer() {
+
+    const currentLocale = useLocale();
+
+    const defaultLocale = useDefaultLocale();
+    
+    return (
+        <main>
+            <p>This application was originally written in {defaultLocale}.</p>
+            <p>You are viewing it in {currentLocale}.</p>
+        </main>
+    )
+}
+
+/* MIDDLEWARE */
+
+// i18n routing is a web development technique used to manage multiple languages and regional formats on a website, ensuring users can access content in their preferred language through language-specific URLs. It involves detecting the user's language and providing localized routes, like `www.example.com/fr` for French.
+
+/* createNextMiddleware() */
+// `gt-react`'s Next.js middleware allows you to easily add i18n routing to your Next.js App Router project.
+// In Next.js, create a file called `middleware.js` (or `.ts` if you are using TypeScript) inside the root directory. If you are using the `src/` folder, place it in `src/middleware.js` instead.
+
+import { createNextMiddleware } from 'gt-react/middleware'
+
+export default createNextMiddleware();
+
+export const config = {
+  matcher: [
+      /*
+       * Match all request paths except for the ones starting with:
+       * - api (API routes)
+       * - _next (internal files)
+       * - static files
+       */
+      "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+
+// Then, create a dynamic route (e.g., `[lang]`) in your app folder, and include all pages and layouts under it. 
+// From Vercel: Ensure all special files inside app/ are nested under app/[lang]. This enables the Next.js router to dynamically handle different locales in the route, and forward the lang parameter to every layout and page. 
+// This will enable `gt-react`-powered i18n routing on your Next.js project.
+
+/* ADVANCED FAQ */
+
+/* How to use variables in the dictionary in 'i18n.js'? */
+
+// Use the `createVariables()` function from `gt-react` or `gt-react/next`:
+
+// i18n.js
+import { createGT, createVariables } from 'gt-react/next'
+const { Variable } = createVariables({ defaultLanguage: 'en-US' });
+export const { t, dict, GTProvider } = createGT({
+    defaultLanguage: 'en-US',
+    dictionary: {
+        "variable.component": <>Your name is <Variable name="name" /></>
+    }
+})
+
+/* How to provide your own translations, rather than using automatic translation? */
+
+// Local translation dictionaries must use the following format:
+
+{
+    [id]: { k: key, t: translation },
+    ...
+}
+
+// where `id` is a string, `key` is the SHA-256 hash (if a component) or the string in its default language (if a string), and `translation` is the translated content
+// It is best to use the General Translation platform at generaltranslation.com to create these.
+// Once created, best practice involves loading dictionaries dynamically, in order to reduce execution time
+// See https://nextjs.org/docs/app/building-your-application/routing/Internationalization
+
+// Create an object where the keys are BCP 47 language tags and the values are dynamic imports
+// Then pass it as `translations` to `createGT()`
+ 
+const translations = {
+  en: () => import('./dictionaries/en.json').then((module) => module.default),
+  nl: () => import('./dictionaries/nl.json').then((module) => module.default),
+}
+
+import { createGT } from 'gt-react/next'
+export const { t, dict, GTProvider } = createGT({
+    defaultLanguage: 'en-US',
+    dictionary: {
+        "hello": "Hello, world!"
+    },
+    translations: translations
+})
+
+// The translations should be available to the `t()`, `<I18N>`, `intl()`, and `<GTProvider>` functions.
+```

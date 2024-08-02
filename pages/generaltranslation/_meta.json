@@ -1,6 +1,6 @@
 {
   "index": "generaltranslation",
-  "iso-639": "ISO-639",
+  "bcp": "BCP 47 Language Tags",
   "gt": "GT Class",
   "api": "API Reference"
 }
