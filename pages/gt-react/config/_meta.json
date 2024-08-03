@@ -1,6 +1,5 @@
 {
   "dotenv": "Setting environment variables",
   "index": "Configuring gt-react",
-  "rendering": "Rendering methods",
-  "i18n-sheets": "I18N Sheets"
+  "rendering": "Rendering methods"
 }

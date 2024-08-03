@@ -4,5 +4,6 @@
   "client": "Client",
   "variables": "Variables",
   "next": "Next.js",
+  "dictionaries": "Dictionaries",
   "middleware": "Middleware"
 }
