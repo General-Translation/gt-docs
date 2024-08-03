@@ -1,13 +1,13 @@
 import { Callout } from 'nextra/components'
 
-# `gt-react` AI reference sheet
+# AI reference sheet
+
+<Callout>
+    Chat to the GPT-powered [installation wizard](https://chatgpt.com/g/g-NRR9teLEv-gt-react-wizard).
+</Callout>
 
 This page contains a short description and reference implementation for each function in the `gt-react` internationalization library.
 It's written for AI, but humans may find it useful too!
-
-<Callout>
-    Chat to the GPT-powered [setup wizard](https://chatgpt.com/g/g-NRR9teLEv-gt-react-wizard).
-</Callout>
 
 <Callout>
     Copy and paste this excerpt into your favorite AI model, then ask it questions about `gt-react`!
@@ -517,6 +517,7 @@ export default function LanguageDisplayer() {
 
 /* MIDDLEWARE */
 
+// Important: Middleware in `gt-react` is entirely optional. It's only used for i18n routing.
 // i18n routing is a web development technique used to manage multiple languages and regional formats on a website, ensuring users can access content in their preferred language through language-specific URLs. It involves detecting the user's language and providing localized routes, like `www.example.com/fr` for French.
 
 /* createNextMiddleware() */
