@@ -61,12 +61,12 @@ In the root directory of your project, or `src/` if you are using a `src` direct
 ```js copy
 import { createGT } from 'gt-react/next';
 
-export const { I18N, GTProvider } = createGT({
+export const { T, GTProvider } = createGT({
     defaultLocale: 'en-US' // the language of your app
 });
 ```
 
-`i18n.js` is a central config file for `gt-react` components. `<I18N>` and other server-side `gt-react` functions are exported from it, not from the library directly.
+`i18n.js` is a central config file for `gt-react` components. `<T>` and other server-side `gt-react` functions are exported from it, not from the library directly.
 
 <Callout type="info">
 You can name the config file whatever you want and place it wherever you like. Calling it `i18n.js` is just a convention.
@@ -74,24 +74,24 @@ You can name the config file whatever you want and place it wherever you like. C
 
 ### Server-side i18n
 
-In the Next.js App Router, components are Server Components by default. The best way to internationalize these components is with `<I18N>`:
+In the Next.js App Router, components are Server Components by default. The best way to internationalize these components is with `<T>`:
 
 ```js copy
-import { I18N } from '@i18n'
+import { T } from '@i18n'
 ```
 
-`<I18N>` is a server-only component that surrounds any text or tags you'd like to be internationalized. 
-Best practice is to pass a unique id prop to each `<I18N>` component. 
+When imported from `i18n.js`, `<T>` is a server-only component that surrounds any text or tags you'd like to be internationalized. 
+Best practice is to pass a unique id prop to each `<T>` component. 
 
 For example:
 
 ```js copy
 import Link from 'next/link'
-import { I18N } from '@i18n'
+import { T } from '@i18n'
 
 export default function Page() {
     return (
-        <I18N id='landing'>
+        <T id='landing'>
             <h1>Welcome to my site!</h1>
             <ul>
                 <li>This site contains nested tags.</li>
@@ -99,7 +99,7 @@ export default function Page() {
                 <li>There can be <span className="text-green">tags within tags within</span> tags.</li>
                 <li>On <Link href="/">this page</Link>, simple children of any type of tag will still be translated.</li>
             </ul>
-        </I18N>
+        </T>
     )
 }
 ```
@@ -110,20 +110,20 @@ export default function Page() {
 
 Components which use client-side JavaScript, like React [hooks](https://react.dev/reference/react/hooks), are client components. Since all translation in the `gt-react` stack happens on the server, translated text must be passed to the client for translation to work.
 
-The simplest way to do this is with an `<I18N>` component, like:
+The simplest way to do this is with an `<T>` component, like:
 
 ```javascript copy
-import { I18N } from '@i18n'
+import { T } from '@i18n'
 import ClientSideButton from './ClientSideButton.js' // a client component
 
 export default function Page() {
     return (
-        <I18N id='button'>
+        <T id='button'>
             <main>
                 <h1>Welcome to my site!</h1>
                 <ClientSideButton>Get Started!</ClientSideButton>
             </main>
-        </I18N>
+        </T>
     )
 }
 ```
@@ -207,7 +207,7 @@ Here's how it works when your default language is English:
 
 - General Translation then caches your translations to serve to subsequent non-English-speaking users, who only ever receive the page in their chosen language. Data is stored globally, and usually available in fewer than 100ms.
 
-- Whenever you update the children of the `<I18N>` component, it registers the new, uncached content. Translated content that is still valid is served, alongside the new content in English. Just like when the entire page needed to be translated, the new content replaces the English as soon as it's ready, and is cached for the next user.
+- Whenever you update the children of the `<T>` component, it registers the new, uncached content. Translated content that is still valid is served, alongside the new content in English. Just like when the entire page needed to be translated, the new content replaces the English as soon as it's ready, and is cached for the next user.
 
 ### Next steps
 
@@ -215,10 +215,10 @@ Here's how it works when your default language is English:
 
 - Change how translated text is rendered, the default language, or which languages are approved for translation, by [configuring](/gt-react/config) with `gt_config.json`.
 
-- Learn about the [parameters](/gt-react/server/i18n#props) of the `<I18N>` component, including `id` and `page`.
+- Learn about the [parameters](/gt-react/server/t-component#props) of the `<T>` component, including `id` and `page`.
 
 - Learn how to translate [Client Components](/gt-react/client) with `<GTProvider>`.
 
-- Within the `<I18N>` tag, [stop components being translated](/gt-react/variables/variables/private) by marking them as `<Private>` or `<Variable>`.
+- Within the `<T>` tag, [stop components being translated](/gt-react/variables/variables/private) by marking them as `<Private>` or `<Variable>`.
 
 - Learn about how to [internationalize variables](/gt-react/variables), including the `<Numeric>` and `<Value>` components.

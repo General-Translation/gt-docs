@@ -1,5 +1,8 @@
 {
-  "i18n": "<I18N>",
+  "t-component": "<T>",
+  "value": "<Value>",
+  "numeric": "<Numeric>",
+  "variables": "Variables",
   "intl": "intl()",
   "get-locale": "getLocale()",
   "get-default-locale": "getDefaultLocale()"
