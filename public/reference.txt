@@ -124,7 +124,7 @@ export default function Page() {
 /* <GTProvider> */
 // Provides translations to the client using React's Context API. These translations can then be accessed with `useGT()`.
 // `dictionary` (object, required) - An object where the keys are IDs and the values are strings or React nodes.
-// `id` (string, best practice) - An ID string to avoid conflicts in the unified i18n sheet. See full list of `<GTProvider>` props at docs.generaltranslation.comgt-react/client/gtprovider#props.
+// `id` (string, best practice) - An ID string to avoid conflicts in the unified i18n sheet. See full list of `<GTProvider>` props at docs.generaltranslation.com/gt-react/client/gtprovider#props.
 // `<GTProvider>` must be used in a server component and its children must all be client components.
  
 import { GTProvider } from '@i18n' // remember @i18n can only be imported in server components
@@ -150,7 +150,7 @@ export default function Page() {
 // For example, used within the above `<GTProvider>`:
  
 'use client'
-import { useGT } from 'gt-react'
+import { useGT } from 'gt-react/client'
 import { useState } from 'react'
  
 export default function ClientComponent() {
@@ -276,7 +276,7 @@ export default function Page() {
  
 // ClientNameComponent.js
 'use client'
-import { useGT, Value } from 'gt-react'
+import { useGT, Value } from 'gt-react/client'
 import { useState } from 'react'
  
 export default function ClientNameComponent() {
@@ -344,7 +344,7 @@ export default function Page() {
  
 // ClientComponent.js
 'use client'
-import { useGT, Numeric } from 'gt-react'
+import { useGT, Numeric } from 'gt-react/client'
 import { useState } from 'react'
  
 export default function ClientComponent() {
@@ -384,7 +384,7 @@ import { Num } from '@i18n' // server
  
 // On the client, must be used as the descendant of a `<GTProvider>`:
  
-import { Num } from 'gt-react'
+import { Num } from 'gt-react/client'
  
 /* `<DateTime>` */
 // `<DateTime>` is a special type of `<Var>` which formats dates for the user's locale.
@@ -399,7 +399,7 @@ import { DateTime } from '@i18n' // server
  
 // On the client, must be used as the descendant of a `<GTProvider>`:
  
-import { DateTime } from 'gt-react'
+import { DateTime } from 'gt-react/client'
  
 /* `<Currency>` */
 // `<Currency>` is a special type of `<Var>` which formats currencies for the user's locale.
@@ -415,7 +415,7 @@ import { Currency } from '@i18n' // server
  
 // On the client, must be used as the descendant of a `<GTProvider>`:
  
-import { Currency } from 'gt-react'
+import { Currency } from 'gt-react/client'
  
 // Tip: write variables as self-closing, like <Var/> and they will use their default name. In this way, `<Num>` can be used natively with `<Numeric>`, without providing a name prop, and `<Var>` can be used natively with `<Value>`.
  
@@ -457,7 +457,7 @@ export default function LanguageDisplayer() {
  
 'use client'
  
-import { useLocale, useDefaultLanguage } from 'gt-react'
+import { useLocale, useDefaultLanguage } from 'gt-react/client'
  
 export default function LanguageDisplayer() {
  
@@ -571,3 +571,5 @@ export const { t, dict, GTProvider } = createGT({
 /* END ADVANCED -- DICTIONARIES */
  
 /* END REFERENCE GUIDE */
+ 
+ 
