@@ -26,7 +26,7 @@ GT_PROJECT_ID = "" // A 36 character projectID which can be found at generaltran
  
 import { createGT } from 'gt-react/next' // or 'gt-react' in non-Next.js frameworks
  
-export const { T, Numeric, Value, GTProvider, intl, Var, Num, Currency, Date } = createGT({
+export const { T, Numeric, Value, GTProvider, intl, Var, Num, Currency, DateTime } = createGT({
     defaultLanguage: 'en-US'
 })
  
