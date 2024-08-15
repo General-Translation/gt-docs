@@ -1,0 +1,24 @@
+import { Callout } from 'nextra/components'
+
+# What are tokens?
+
+<Callout type="info">We charge for our services based on the length, in tokens, of what you input. We never charge based on the length of what we output.</Callout>
+
+When text is sent to [General Translation](https://www.generaltranslation.com) APIs, it is broken down into chunks called *tokens*.
+Think of tokens as small pieces of your input text, like words or parts of words, that an AI model uses to understand and translate your content.
+
+> A helpful rule of thumb is that one token generally corresponds to ~4 characters of text for common English text. This translates to roughly ¾ of a word (so 100 tokens ~= 75 words).
+
+For example, the string `Hello, world!` has 13 characters, and 4 tokens: `Hello`, `,`, ` world`, and `!`.
+
+General Translation's cloud services charge by the token. We currently tokenize with OpenAI's `tiktoken`, which is the same tokenizer used by [GPT-4](https://openai.com/index/gpt-4/). You can explore this tokenizer [here](https://platform.openai.com/tokenizer).
+
+Here’s how tokens work across our plans:
+
+| Plan              | Description                                                                                                      |
+|-------------------|------------------------------------------------------------------------------------------------------------------|
+| Free        | You’re allowed a limited number of tokens per month, meaning you can translate up to a certain amount of text before reaching your limit. |
+| Pay-As-You-Go | You get a specific number of tokens included each month, and if you need more, you automatically purchase additional tokens as needed. |
+| Fixed Cost  | You have unlimited tokens for translation at a fixed price.  |
+
+Tokens help us measure the amount of text we translate for you, ensuring that you only pay for what you use.

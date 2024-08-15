@@ -1,0 +1,51 @@
+import { Callout } from 'nextra/components'
+
+# How does `gt-react` work?
+
+Here's how the `gt-react` library works when your default language is English:
+
+- **For English-speaking users, nothing changes.** No data is ever sent to us and your site is rendered as normal.
+
+- The first time a non-English language user visits your site, we use a cloud-based AI model to translate your content into their preferred browser language.
+
+- The English version of your page is served to your user. When the translated content is ready, usually within a few seconds, it is rendered on the page, replacing the English content.
+
+- This is known as the "replace" render method, but `gt-react` can also be [configured](/gt-react/config) to handle the initial translation delay differently. Other options include serving web pages with the text still loading, hanging the page while the translation loads, or rendering the translation only on the second page access.
+
+- General Translation then caches your translations to serve to subsequent non-English-speaking users, who only ever receive the page in their chosen language. Data is stored globally, and usually available in fewer than 100ms.
+
+- Whenever you update the children of the `<T>` component, it registers the new, uncached content. Translated content that is still valid is served, alongside the new content in English. Just like when the entire page needed to be translated, the new content replaces the English as soon as it's ready, and is cached for the next user.
+
+## Billing
+
+- We only charge for translations, not caching.
+
+- Translations only happen *once* per piece of unique content.
+
+- We charge based on the length, in [tokens](/faqs/tokens), of what you input. We never charge based on the length of what we output.
+
+For example, if the only translation you needed was a single [`<T>`](/gt-react/server/t-component) containing the string `Hello, world!`:
+
+```javascript
+import { T } from '@i18n'
+
+export default function Page() {
+    return (
+        <T id='greeting'>
+            Hello, world
+        </T>
+    )
+} 
+```
+
+Then we would charge you for four tokens: `Hello`, `,`, ` world`, and `!`.
+
+Learn more about how we tokenize your input [here](/faqs/tokens).
+
+## Translation replication
+
+Translation replication is a powerful feature of our paid plans. It is not available for free customers.
+
+With translation replication, whenever an update to your site is translated into one language, it is automatically translated into all your site's existing languages. This means that for the vast majority of users and languages, displaying your site in another language is completely seamless. 
+
+Additionally, whenever a user visits your site in a new language, translations are made in the background not just for the page they visit, but all previously translated pages of your web app.
