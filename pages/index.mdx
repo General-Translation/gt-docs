@@ -2,9 +2,11 @@ import { Callout } from 'nextra/components'
 
 # General Translation
 
-Welcome to the docs for [General Translation](https://www.generaltranslation.com), a collection of libraries and cloud services which make working with languages easy!
+Welcome to the docs for [General Translation](https://www.generaltranslation.com).
 
-- `gt-react` is an internationalization ("i18n") library for [React](https://react.dev) and [Next.js](https://nextjs.org) applications.
+Our products:
+
+- `gt-react`, an internationalization ("i18n") library for [React](https://react.dev) and [Next.js](https://nextjs.org) applications.
 
 Unlike other i18n stacks, `gt-react`:
 
@@ -18,16 +20,9 @@ This guide describes how to add `gt-react` to a [Next.js](https://nextjs.org) pr
 
 ### Set up your account
 
-First, sign in to the General Translation [Dashboard](https://www.generaltranslation.com/dashboard) using an existing Google or GitHub account. On the Dashboard, add billing information via Stripe:
+First, sign in to the General Translation [Dashboard](https://www.generaltranslation.com/dashboard) using an existing Google or GitHub account. 
 
-![Button with "Add Payment Method"](/screenshots/stripe.jpeg)
-
-Check out our current pricing [here](https://www.generaltranslation.com/pricing). You will only be charged for what you use, and never for content in your default language. If you have any questions about billing, please [get in touch](mailto:archie@generaltranslation.com)! 
-
-Once billing information has been added to your project, you can create API keys. An API key is a 36-character string beginning `gtx-` which is used to authenticate your app with our cloud translation service. Create one on the Dashboard:
-
-![Button with "Create API Key"](/screenshots/create_api_key.jpeg)
-
+Next, [create](https://www.generaltranslation.com/dashboard/redirect/api-keys) an API key. This is a 36-character string beginning `gtx-` which is used to authenticate your app with our cloud translation service.
 Keep your API key safe and secret.
 
 ### Set up your local environment
@@ -66,7 +61,9 @@ export const { T, GTProvider } = createGT({
 });
 ```
 
-`i18n.js` is a central config file for `gt-react` components. `<T>` and other server-side `gt-react` functions are exported from it, not from the library directly.
+Proceed with support for all languages, or use this [page](https://www.generaltranslation.com/dashboard/redirect/welcome) to select common configuration options.
+
+`i18n.js` is a central config file for `gt-react` components. **`<T>` and other server-side `gt-react` functions are exported from it**, not from the library directly.
 
 <Callout type="info">
 You can name the config file whatever you want and place it wherever you like. Calling it `i18n.js` is just a convention.
@@ -150,9 +147,16 @@ import ClientComponent from './ClientComponent.js'
 export default function Page() {
     return (
         <GTProvider dictionary={{
-            "welcome.prompt": <>Click here to change the text!</>
-            "welcome.hello": <>Hello, world! This is a fragment.</>
-            "welcome.goodbye": <p><b>Goodbye, world!</b> This is a paragraph with a bold tag.</p>
+            "welcome": {
+                "prompt": <>Click here to change the text!</>,
+                "hello": <>Hello, world! This is a fragment.</>,
+                "goodbye": (
+                    <p>
+                        <b>Goodbye, world!</b> 
+                        This is a paragraph with a bold tag.
+                    </p>
+                )
+            }
         }}>
             <ClientComponent />
         </GTProvider>
@@ -213,12 +217,12 @@ Here's how it works when your default language is English:
 
 - Use the [AI reference sheet](/ai-guide) to ask your favorite AI model to set up the `gt-react` library.
 
-- Change how translated text is rendered, the default language, or which languages are approved for translation, by [configuring](/gt-react/config) with `gt_config.json`.
+- Change how translated text is rendered, the default language, or which languages are approved for translation, by [configuring](/gt-react/config) it.
 
 - Learn about the [parameters](/gt-react/server/t-component#props) of the `<T>` component, including `id` and `page`.
 
 - Learn how to translate [Client Components](/gt-react/client) with `<GTProvider>`.
 
-- Within the `<T>` tag, [stop components being translated](/gt-react/variables/variables/private) by marking them as `<Private>` or `<Variable>`.
+- Translate around private variables like `<Var>`, `<Num>`, `<Currency>`, and `<DateTime>`.
 
-- Learn about how to [internationalize variables](/gt-react/variables), including the `<Numeric>` and `<Value>` components.
+- Learn about translating [plural forms](/gt-react/server/numeric) with `<Numeric>` and [logic branches](/gt-react/server/value) with the `<Value>` component.

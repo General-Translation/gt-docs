@@ -1,3 +1,69 @@
-# Rendering methods
+# Rendering Methods
 
-TBC
+The `<T>` component (and by extension the server-side `<Numeric>` and `<Value>` components) offers several rendering methods to control how translations are displayed. These methods provide flexibility in handling the transition from original content to translated content, balancing factors such as user experience, performance, and visual consistency.
+
+```javascript copy
+// i18n.js
+import { createGT } from 'gt-react/next'
+
+export const { T } = createGT({
+	projectID: "abcdef12-3456-789a-bcd4-ef123456789a"
+	defaultLocale: "en-US"
+    renderMethod: "skeleton" // setting the render method to "skeleton"
+});
+```
+
+The `renderMethod` prop of the `<T>` component can be set to one of the following values:
+
+1. `"replace"` (default)
+2. `"skeleton"`
+3. `"hang"`
+4. `"subtle"`
+
+### Replace (`renderMethod: "replace"`)
+
+- **Behavior**: Displays the original content while the translation is loading. Once the translation is ready, it replaces the original content with the translated version.
+- **Use case**: Best for scenarios where showing the original content is preferable to showing a blank space or loading indicator.
+- **Pros**: Provides immediate content to the user, smooth transition to translated content.
+- **Cons**: May cause layout shifts if the translated content differs significantly in length from the original.
+
+### Skeleton (`renderMethod: "skeleton"`)
+
+- **Behavior**: Shows an empty placeholder while the translation is loading. Once ready, it populates the placeholder with the translated content.
+- **Use case**: Useful for creating a consistent layout across languages, especially when translation length may vary significantly.
+- **Pros**: Prevents layout shifts, can improve perceived performance.
+- **Cons**: Users see no content initially, which may not be ideal for critical information.
+
+### Hang (`renderMethod: "hang"`)
+
+- **Behavior**: Waits for the translation to complete before rendering anything. The component effectively "hangs" until the translated content is available.
+- **Use case**: Suitable for scenarios where showing partial or untranslated content is unacceptable.
+- **Pros**: Ensures only translated content is displayed.
+- **Cons**: Can lead to longer perceived load times, especially for larger chunks of content or slower translations.
+
+### Subtle (`renderMethod: "subtle"`)
+
+- **Behavior**: Renders the original content immediately and quietly updates it with the translation when available, without any visual indicators of the change.
+- **Use case**: Ideal for non-critical content where a seamless transition is preferred.
+- **Pros**: Provides immediate content with a smooth, unnoticeable transition to the translated version.
+- **Cons**: Users might miss the update if they've already read the original content.
+
+Additionally, there's a `renderPrevious` setting that can be used in combination with these methods.
+
+### `renderPrevious: true`
+
+- **Behavior**: When `true`, uses a previously cached translation as a placeholder while the new translation loads.
+- **Use case**: Enhances user experience by showing a potentially outdated but relevant translation instead of original content or a blank space.
+- **Pros**: Provides translated content immediately, even if it might not be the most up-to-date version.
+- **Cons**: May show outdated translations temporarily.
+
+## Choosing the Right Rendering Method
+
+The choice of rendering method depends on various factors:
+
+1. **Content criticality**: Use "hang" or "replace" for crucial content that must be accurate.
+2. **Performance concerns**: "Skeleton" or "subtle" methods can help manage perceived load times.
+3. **User experience**: Consider the jarring effect of sudden content changes vs. the frustration of waiting for content to appear.
+4. **Layout stability**: "Skeleton" method helps maintain layout stability across different language lengths.
+
+By carefully selecting the appropriate rendering method for each use case, developers can optimize the translation experience for their users, balancing factors such as speed, accuracy, and visual consistency.

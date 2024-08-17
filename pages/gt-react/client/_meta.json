@@ -2,7 +2,9 @@
   "index": "Client-side components",
   "gtprovider": "<GTProvider>",
   "use-gt": "useGT()",
-  "variables": "Client-side variables",
+  "client-t": "Client-side <T>",
+  "client-numeric": "<ClientNumeric>",
+  "client-value": "<ClientValue>",
   "use-locale": "useLocale()",
-  "use-default-locale": "useDefaultLanguage()"
+  "use-default-locale": "useDefaultLocale()"
 }

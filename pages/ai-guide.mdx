@@ -39,7 +39,7 @@ GT_PROJECT_ID = "" // A 36 character projectID which can be found at generaltran
 import { createGT } from 'gt-react/next' // or 'gt-react' in non-Next.js frameworks
 
 export const { T, Numeric, Value, GTProvider, intl, Var, Num, Currency, DateTime } = createGT({
-    defaultLanguage: 'en-US'
+    defaultLocale: 'en-US'
 })
 
 /* SERVER-SIDE I18N */
@@ -469,7 +469,7 @@ export default function LanguageDisplayer() {
 
 'use client'
 
-import { useLocale, useDefaultLanguage } from 'gt-react/client'
+import { useLocale, useDefaultLocale } from 'gt-react/client'
 
 export default function LanguageDisplayer() {
 
@@ -523,7 +523,7 @@ export const config = {
 import { createGT } from 'gt-react/next' // or 'gt-react' in non-Next.js frameworks
 
 export const { t, dict, GTProvider } = createGT({
-    defaultLanguage: 'en-US',
+    defaultLocale: 'en-US',
     dictionary: {
         "hello.text": "Hello, world!",
         "hello.pararaph": <>Hello, world</>
@@ -540,9 +540,9 @@ export const { t, dict, GTProvider } = createGT({
 
 // i18n.js
 import { createGT } from 'gt-react/next'
-const { Var } = createGT({ defaultLanguage: 'en-US' });
+const { Var } = createGT({ defaultLocale: 'en-US' });
 export const { t, dict, GTProvider } = createGT({
-    defaultLanguage: 'en-US',
+    defaultLocale: 'en-US',
     dictionary: {
         "variable": <>Your name is <Var name="name" /></>
     }
@@ -571,7 +571,7 @@ const translations = {
 
 import { createGT } from 'gt-react/next'
 export const { t, dict, GTProvider } = createGT({
-    defaultLanguage: 'en-US',
+    defaultLocale: 'en-US',
     dictionary: {
         "landing": "Hello, world!"
     },
