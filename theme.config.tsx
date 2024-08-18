@@ -1,6 +1,7 @@
 import React from 'react'
 import { DocsThemeConfig } from 'nextra-theme-docs'
 import Image from 'next/image'
+import { Logo } from "nextra-logo";
 
 const config: DocsThemeConfig = {
   useNextSeoProps() {
@@ -8,7 +9,7 @@ const config: DocsThemeConfig = {
       titleTemplate: `Docs — %s`
     }
   },
-  logo: <Image src={'/light-logo.png'} width={45} height={45} alt='GT, Inc.'/>,
+  logo: <Logo light={'/gt-logo-light.svg'} dark={'/gt-logo-dark.svg'} size="40"/>,
   project: {
     link: 'https://github.com/General-Translation/gt-react',
   },
