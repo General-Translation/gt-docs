@@ -24,6 +24,10 @@ Unlike other i18n stacks, `gt-react`:
 - If you need a quick, easy way to translate server components, it may be better to use the **Component Children Pattern**.
 - If you're already storing your translatable content in a `.json` or `.js` file which you import throughout your project, or you have a lot of client components, it may be better to use the **Dictionary Pattern**. 
 
+<Callout>
+    You can mix and match these patterns as needed, although for maintainability, you may want to stick to one or the other.
+</Callout>
+
 ### Component Children Pattern
 
 The component children pattern involves passing your translatable content as the children of a server-side `<T>`, `<Numeric>`, or `<Value>` component.
