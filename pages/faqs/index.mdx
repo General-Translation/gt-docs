@@ -10,7 +10,7 @@ Here's how the `gt-react` library works when your default language is English:
 
 - The English version of your page is served to your user. When the translated content is ready, usually within a few seconds, it is rendered on the page, replacing the English content.
 
-- This is known as the "replace" render method, but `gt-react` can also be [configured](/gt-react/config) to handle the initial translation delay differently. Other options include serving web pages with the text still loading, hanging the page while the translation loads, or rendering the translation only on the second page access.
+- This is known as the "replace" render method, but `gt-react` can also be [configured](/config) to handle the initial translation delay differently. Other options include serving web pages with the text still loading, hanging the page while the translation loads, or rendering the translation only on the second page access.
 
 - General Translation then caches your translations to serve to subsequent non-English-speaking users, who only ever receive the page in their chosen language. Data is stored globally, and usually available in fewer than 100ms.
 
@@ -24,7 +24,7 @@ Here's how the `gt-react` library works when your default language is English:
 
 - We charge based on the length, in [tokens](/faqs/tokens), of what you input. We never charge based on the length of what we output.
 
-For example, if the only translation you needed was a single [`<T>`](/gt-react/server/t-component) containing the string `Hello, world!`:
+For example, if the only translation you needed was a single [`<T>`](/server/t-component) containing the string `Hello, world!`:
 
 ```javascript
 import { T } from '@i18n'

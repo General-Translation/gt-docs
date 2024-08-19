@@ -68,7 +68,7 @@ export default function Page() {
 /* intl() */
 // The asynchronous `intl()` function is used to translate text from one language to another.
 // `content` (string, required) - The text to be translated.
-// `options` (object) - An object containing an optional `userLanguage`, in addition to non-essential parameters like `id`. See full list of `intl()` options at docs.generaltranslation.com/gt-react/server/intl#options.
+// `options` (object) - An object containing an optional `userLanguage`, in addition to non-essential parameters like `id`. See full list of `intl()` options at docs.generaltranslation.com/server/intl#options.
 
 import { intl } from '@i18n'
 
@@ -102,7 +102,7 @@ export default function Page() {
 /* <GTProvider> */
 // Provides translations to the client using React's Context API. These translations can then be accessed with `useGT()`.
 // `dictionary` (object, required) - An object where the keys are IDs and the values are strings or React nodes.
-// `id` (string, best practice) - An ID string to avoid conflicts in the unified i18n sheet. See full list of `<GTProvider>` props at docs.generaltranslation.com/gt-react/client/gtprovider#props.
+// `id` (string, best practice) - An ID string to avoid conflicts in the unified i18n sheet. See full list of `<GTProvider>` props at docs.generaltranslation.com/client/gtprovider#props.
 // `<GTProvider>` must be used in a server component and its children must all be client components.
 
 import { GTProvider } from '@i18n' // remember @i18n can only be imported in server components
