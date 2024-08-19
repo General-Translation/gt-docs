@@ -1,8 +1,0 @@
-{
-  "config": "Config",
-  "server": "Server",
-  "client": "Client",
-  "dictionaries": "Dictionaries",
-  "middleware": "Middleware",
-  "next": "Next.js"
-}

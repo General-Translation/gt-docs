@@ -1,8 +1,12 @@
 {
   "index": "Introduction",
-  "next": "Next.js Quickstart",
-  "ai-guide": "Reference Sheet for AI",
-  "gt-react": "gt-react",
+  "ai-guide": "Reference sheet for AI",
+  "quickstarts": "Quickstarts",
+  "config": "Config",
+  "server": "Server",
+  "dictionaries": "Dictionaries",
+  "client": "Client",
+  "middleware": "Middleware",
   "generaltranslation": "generaltranslation",
   "faqs": "FAQs"
 }
