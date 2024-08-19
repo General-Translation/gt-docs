@@ -201,6 +201,23 @@ export default function ClientComponent() {
 }
 ```
 
+### How it works
+
+Here's how `gt-react` works when your default language is English:
+
+- **For English-speaking users, nothing changes.** No data is ever sent to us and your site is rendered as normal.
+
+- The first time a non-English language user visits your site, we use a cloud-based AI model to translate your content into their preferred browser language.
+
+- The English version of your page is served to your user. When the translated content is ready, usually within a few seconds, it is rendered on the page, replacing the English content.
+
+- This is known as the "replace" render method, but `gt-react` can also be [configured](/gt-react/config) to handle the initial translation delay differently. Other options include serving web pages with the text still loading, hanging the page while the translation loads, or rendering the translation only on the second page access.
+
+- General Translation then caches your translations to serve to subsequent non-English-speaking users, who only ever receive the page in their chosen language. Data is stored globally, and usually available in fewer than 100ms.
+
+- Whenever you update the children of the `<T>` component, it registers the new, uncached content. Translated content that is still valid is served, alongside the new content in English. Just like when the entire page needed to be translated, the new content replaces the English as soon as it's ready, and is cached for the next user.
+
+
 ### Next steps
 
 - Use the [AI reference sheet](/ai-guide) to ask your favorite AI model to set up the `gt-react` library.
@@ -214,3 +231,4 @@ export default function ClientComponent() {
 - Translate around private variables like `<Var>`, `<Num>`, `<Currency>`, and `<DateTime>`.
 
 - Learn about translating [plural forms](/gt-react/server/numeric) with `<Numeric>` and [logic branches](/gt-react/server/value) with the `<Value>` component.
+
