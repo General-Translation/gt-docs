@@ -1,6 +1,6 @@
 import { Callout } from 'nextra/components'
 
-# Reference Sheet for AI
+# Reference sheet for AI
 
 <Callout>
     Copy and paste this excerpt into your favorite AI model, then ask it questions about `gt-react`!
@@ -9,11 +9,369 @@ import { Callout } from 'nextra/components'
 This page contains a short description and reference implementation for each function in the `gt-react` internationalization library.
 It's written for AI, but humans may find it useful too!
 
-```javascript copy
-/* BEGIN DOCUMENTATION */
+````markdown copy
+<DOCUMENTATION>
 
+# gt-react Documentation
 
-/* END DOCUMENTATION */
+gt-react is an automatic internationalization (i18n) library for React and Next.js. 
+Unlike other i18n stacks, gt-react:
+- Translates automatically and on-demand once connected to our cloud service.
+- Translates entire React components, not just strings. So there's no need to rewrite your site to accomodate new languages. You can write dictionaries in full JSX or use inline wrappers like <T> and <Plural>.
+- Works across both client and server components, with first-class support for Next.js App Router and React Server Components.
 
+Installation: `npm i gt-react`
+Platform: www.generaltranslation.com
+Docs: docs.generaltranslation.com
 
+## Set up
+
+### Environment Variables
+
+Set up your `.env` (or `.env.local` in Next.js) environment with the following variables:
+- `GT_API_KEY`: A 36-character secret key, beginning "gtx-", which can be created at generaltranslation.com/dashboard.
+- `GT_PROJECT_ID`: A 36-character projectID which can be found at generaltranslation.com/dashboard.
+
+### `i18n.js`
+
+`i18n.js` is a central config file from which every server-side function is imported. Recommended placement in the root or `src/` directory of your project.
+
+```js
+import { createGT } from 'gt-react/next'; // or 'gt-react/server' in non-Next.js frameworks
+
+export const { T, Plural, Value, intl, Var, Num, Currency, DateTime, GTProvider, t } = createGT({
+  defaultLocale: 'en-US' // locales are BCP-47 language codes
+});
 ```
+
+`createGT()` parameters include:
+- `defaultLocale` (string) specifies the language that you use natively for your app.
+- `approvedLocales` (string[]) specifies the approved locales that your app should be translated into.
+- For a full list, see docs.generaltranslation.com/config.
+
+## Translation approaches
+
+`gt-react` lets you translate in two interchangeable ways:
+1. Server-side in-line translation using a component like `<T>`.
+2. Translation from a dictionary using the `t()` function. This is best if you have a large project with many client components.
+
+## In-line translation
+
+In-line translation can be done on the server-side with `<T>`, `<Plural>`, or `<Value>` components. 
+
+Wrap your translatable JSX content with a `<T>` tag, which has an optional but recommended `id` prop.
+
+```js
+import { T } from '@i18n'
+
+export default function Page() {
+    return (
+        <main>
+            <T id='welcome'>
+                <h1>Welcome to my site!</h1>
+                <p>This text will be <b>translated</b> into dozens of languages automatically.</p>
+            </T>
+        </main>
+    )
+}
+```
+
+To read more about the `<T>` component: docs.generaltranslation.com/server/t-component.
+
+### Variables (in-line)
+
+Sometimes you want to include a variable in your translatable content without forcing a retranslation every time.
+
+`gt-react` provides four types of variable components: 
+- `<Var>`, for variables.
+- `<Num>`, for displaying numbers in the style of the user's locale.
+- `<DateTime>`, for displaying dates in the style of the user's locale.
+- `<Currency>`, for displaying currency data in the style of the user's locale.
+They can be used for inline translation like:
+
+```js
+import { Var, T } from '@i18n'
+
+export default function Page() {
+    const firstName = "Alice" // or "Bob", "Charlie"
+    return (
+        <main>
+            <T id='greeting'>
+                Nice to meet you, <Var>{firstName}</Var>!
+            </T>
+        </main>
+    )
+}
+```
+
+To read more about server-side inline variables: docs.generaltranslation.com/server/variables.
+
+## Plurals
+
+Different languages have different plural rules. A new translation should not have to be generated every time a number changes, but sentences do have to change depending on both the language and the number.
+The `<Plural>` component is a special type of `<T>` that handles and generates plural forms automatically, language-by-language. It works out of the box on forms that don't even exist in English, like the Arabic dual.
+
+```js
+import { Plural, Num } from "@i18n"
+// where `<Num>` is a special type of `<Var>` which formats a number for a given locale
+
+export default function Page() {
+
+    const numberOfMessages = 2;
+
+    return (
+        <Plural
+            n={numberOfMessages}
+            singular={<>You have 1 new message.</>}
+        >
+            You have <Num/> new messages.
+        </Plural>
+    )
+}
+```
+
+The full list of forms which `<Plural>` can take: "zero", "one" or "singular", "two" or "dual", "few", "many", and "other" or "plural". Provide only the forms present in your default language, which in English are "singular" and "plural", one of which can be the children of the `<Plural>` component.
+
+To read more about the `<Plural>` component: docs.generaltranslation.com/server/plural.
+
+## Translating from a dictionary
+
+Keeping translatable content in a single `.json` or `.js` file is a common technique in web app development.
+Using a single dictionary allows for easier management of translations and ensures consistency across the application.
+
+In addition to inline translation components like `<T>`, `gt-react` also supports dictionaries.
+**Uniquely, `gt-react` dictionaries don't just support strings**. You can write content in JSX too!
+
+A typical dictionary could look something like:
+
+```js
+// dictionary.js
+
+const dictionary = {
+    "landing": {
+        "hero": <h1>Welcome to our site!</h1>,
+        "get_started_button": (
+            <a href='/signin'><button>Get Started</button></a>
+        )
+    },
+    "client_component" {
+        "greeting": <>Hello, world. This content is rendered in a client component.</>
+    }
+}
+
+export default dictionary;
+```
+
+Ensure that every entry in the dictionary has a unique ID. This ID is formed by adding periods between nested keys. For example, in the above dictionary, the keys would be `landing.hero`, `landing.get_started_button`, and `client_component.greeting`.
+
+Add the dictionary to the `i18n.js` config file:
+
+```js
+import { createGT } from 'gt-react/next';
+import dictionary from './dictionary.js'
+ 
+export const { t } = createGT({
+    defaultLocale: 'en-US',
+    dictionary: dictionary
+});
+```
+
+Translated dictionary entries can be used in server components with the `t()` function.
+
+```js
+import { t } from '@i18n'
+ 
+export default function Page() {
+    return (
+        <main>
+            {t('landing.hero')}
+        </main>
+    )
+}
+```
+
+To get a dictionary entry without translating it, use `dict()`.
+
+```js
+import { dict } from '@i18n'
+const untranslatedContent = dict('my_id')
+```
+
+### Variables (dictionary)
+
+To use variables in a dictionary that you use to initialize your other `gt-react` components, you can use the special function `createVariables()`.
+This will create `<Var>`, `<Num>`, `<DateTime>`, and `<Currency>` which you can then use in your dictionary.
+
+```js
+// dictionary.js
+
+import { createVariables } from 'gt-react/next'
+const { Var, Num, Currency, DateTime } = createVariables({
+    defaultLocale: 'en-US'
+});
+
+const dictionary = {
+    "my_id": <>My name is <Var name="name"/>!</>
+}
+
+export default dictionary; // should be used in i18n.js
+```
+
+Values can then be injected variable into the using the `t()` function:
+
+```js
+import { t } from '@i18n'
+ 
+// will return "My name is John!"
+export default function Page() {
+    const name = "John"
+    return (
+        <main>
+            {t('my_id', { values: { name } })}
+        </main>
+    )
+}
+```
+
+## Client-side translation
+
+Components which use client-side JavaScript, like React hooks, are client components. Since all translation in the `gt-react` stack happens on the server, content must be translated before being passed to the client for translation to work.
+
+If you're using inline translation, the simplest way to do this is with a `<T>` component. You can pass translatable content as the props of a client-side child of `<T>`:
+
+```js
+// page.js, a server component
+ 
+import { T } from '@i18n'
+import ClientSideButton from './ClientSideButton.js' // a client component
+ 
+export default function Page() {
+    return (
+        <T id='button'>
+            <main>
+                <h1>Welcome to my site!</h1>
+                <ClientSideButton>Get Started!</ClientSideButton>
+            </main>
+        </T>
+    )
+}
+```
+
+However, sometimes it is difficult to pass children directly from server to client, for example if the client component is displayed conditionally, or is nested within another client component. 
+In this case, it is recommended to use `<GTProvider>`.
+
+`<GTProvider>` provides a dictionary of translations to the client using React's Context API. 
+These translations can then be accessed with the client-side `useGT()` hook.
+
+```js
+import { GTProvider } from '@i18n' // remember this can only be imported in server components
+ 
+import ClientComponent from './ClientComponent.js'
+ 
+export default function Page() {
+    return (
+        <GTProvider dictionary={{
+            "welcome": {
+                "prompt": <>Click here to change the text!</>,
+                "hello": <>Hello, world! This is a fragment.</>,
+                "goodbye": (
+                    <p>
+                        <b>Goodbye, world!</b> 
+                        This is a paragraph with a bold tag.
+                    </p>
+                )
+            }
+        }}>
+            <ClientComponent />
+        </GTProvider>
+    )
+}
+```
+
+```js
+// ClientComponent.js
+// Displays a button which changes the state every time it is pressed.
+// If currentState is true, displays a greeting. Otherwise displays a goodbye.
+ 
+'use client'
+ 
+import { useGT } from 'gt-react/client' // client-side library
+import { useState } from 'react'
+ 
+export default function ClientComponent() {
+ 
+    // Specifying a part of the dictionary here for cleaner ids in the t function
+    const t = useGT('welcome') 
+ 
+    const [currentState, setCurrentState] = useState(true)
+ 
+    return (
+        <div>
+            <button onClick={() => {setCurrentState(prev => !prev)}}>
+                {t('prompt')}
+            </button>
+            {
+                currentState
+                ?
+                t('hello')
+                :
+                t('goodbye')
+            }
+        </div>
+    )
+}
+```
+
+`<GTProvider>` integrates with existing `gt-react` dictionaries. If a dictionary is included in the config file, initializing `<GTProvider>` without a dictionary prop will provide all the translations in your default dictionary to the client.
+
+### Variables (client-side)
+
+You can use variables in the `<GTProvider>` dictionary. 
+If you need to supply values to them which can only be known on the client-side (e.g., a value governed by a `useState()` hook), then you can pass a `values`, or `n` parameter to the `t()` function on the client-side.
+
+For example:
+
+```js
+'use client'
+import { useGT } from 'gt-react/client'
+import { useState } from 'react'
+
+export default function ClientComponent() {
+    const t = useGT()
+    const [count, setCount] = useState(0);
+    return (
+        <div>
+            <button onClick={() => { setCount(prev => prev + 1) }}>{t('button.text')}</button>
+            {t('count_component', { n: count })}
+        </div>
+    )
+}
+```
+
+## Helper functions
+
+On the server side, use:
+- `getLocale()`, `import { getLocale } from '@i18n'` to get the user's language
+- `getDefaultLocale()`, `import { getDefaultLocale } from '@i18n'` to get the application's default language
+
+On the client side, use:
+- `useLocale()`, `import { useLocale } from 'gt-react/client'` to get the user's language
+- `useDefaultLocale()`, `import { useDefaultLocale } from 'gt-react/client'` to get the application's default language
+
+## Middleware
+
+In `gt-react`, middleware is used for i18n routing.
+i18n routing is a web development technique used to manage multiple languages and regional formats on a website, ensuring users can access content in their preferred language through language-specific URLs. 
+It involves detecting the user's language and providing localized routes, like `www.example.com/fr` for French. 
+`gt-react`'s Next.js middleware allows you to easily add i18n routing to your Next.js App Router project.
+
+To read more about `gt-react` Next.js middleware, go to docs.generaltranslation.com/middleware/next.
+
+## Using your own translations
+
+See docs.generaltranslation.com/dictionaries/self-serve.
+
+</DOCUMENTATION>
+
+
+````
