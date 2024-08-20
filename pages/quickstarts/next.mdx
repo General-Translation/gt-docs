@@ -317,6 +317,64 @@ You can pass variables to the client-side using a `<GTProvider>`, or use [`creat
 
 ### Plurals
 
+Imagine you wanted to translate a phrase with a number that could be singular or plural, like:
+
+```js copy
+export default function Page() {
+    const n = 2 // or any other number
+    return (
+        <main>
+            You have {n} new messages.
+        </main>
+    )
+}
+```
+
+You could use the `<Var>` component, or better yet, the `<Num>` component, to render the number without forcing a new translation for each different value of `n`.
+
+```js copy
+import { T, Num } from "@i18n" // make sure you are exporting <Num> alongside <T>
+
+export default function Page() {
+    const n = 2 // or any other number
+    return (
+        <main>
+            <T id='greeting'>
+                You have <Num>{n}</Num> new messages.
+            </T>
+        </main>
+    )
+}
+```
+
+But sometimes the translation needs to change depending on the value of the number. For example, "You have 1 new *message*", but "You have 2 new *messages*". 
+In this case, try using the `<Plural>` component to translate. `<Plural>` is a special form of `<T>` that takes a number `n` as a prop. Depending on the value of `n` and your user's current locale, it selectively renders a singular or plural form.
+
+```js copy
+import { Plural, Num } from "@i18n" // make sure you are exporting these
+
+export default function Page() {
+    const n = 2 // or any other number
+    return (
+        <main>
+            <Plural 
+                n={n}
+                singular={<>You have 1 new message.</>}
+            >
+                You have <Num>{n}</Num> new messages.
+            </Plural>
+        </main>
+    )
+}
+```
+
+Learn more about plurals [here](/server/plural), how to use plurals with dictionaries [here](/dictionaries/server-t#plural-t), or how to use plurals on the client-side [here](/client/client-plural).
+
+<Callout>
+    Some languages, like Arabic, have a *dual*, a special plural form for when there are exactly two of something.
+    The `<Plural>` server component handles these scenarios by gracefully generating localized plurals.
+</Callout>
+
 ### Next steps
 
 - Use the [AI reference sheet](/ai-guide) to ask your favorite AI model to set up the `gt-react` library.
@@ -325,9 +383,9 @@ You can pass variables to the client-side using a `<GTProvider>`, or use [`creat
 
 - Learn about the [parameters](/server/t-component#props) of the `<T>` component, including `id`.
 
-- Learn how to translate [Client Components](/client) with `<GTProvider>`.
+- Read more about translating [Client Components](/client) with `<GTProvider>`.
 
-- Translate with [variables](/server/variables) like `<Var>`, `<Num>`, `<Currency>`, and `<DateTime>`.
+- Read more about [variables](/server/variables) like `<Var>`, `<Num>`, `<Currency>`, and `<DateTime>`.
 
-- Learn about translating plural forms with [`<Plural>`](/server/plural).
+- Read more about translating plural forms with [`<Plural>`](/server/plural).
 
