@@ -2,7 +2,7 @@
   "use-gt": "useGT()",
   "use-locale": "useLocale()",
   "use-default-locale": "useDefaultLocale()",
-  "client-numeric": "<ClientNumeric>",
+  "client-plural": "<ClientPlural>",
   "client-value": "<ClientValue>",
   "client-variables": "Client-side variables",
   "gt-client-provider": "<GTClientProvider>"

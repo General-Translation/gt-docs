@@ -2,19 +2,25 @@ import { Callout } from 'nextra/components'
 
 # How does `gt-react` work?
 
-Here's how the `gt-react` library works when your default language is English:
+Here's how `gt-react` works when your [`defaultLocale`](/config) is English (`en-US`):
 
 - **For English-speaking users, nothing changes.** No data is ever sent to us and your site is rendered as normal.
 
-- The first time a non-English language user visits your site, we use a cloud-based AI model to translate your content into their preferred browser language.
+- When a non-English language user visits your site, the library checks our cache. The cache is global, and fast — typical response time is 50 ms.
 
-- The English version of your page is served to your user. When the translated content is ready, usually within a few seconds, it is rendered on the page, replacing the English content.
+- If a cached translation exists, the library reconciles the non-English content with the structure of what it's been asked to translate, and serves the page.
 
-- This is known as the "replace" render method, but `gt-react` can also be [configured](/config) to handle the initial translation delay differently. Other options include serving web pages with the text still loading, hanging the page while the translation loads, or rendering the translation only on the second page access.
+- If no cached translation exists, and the language requested is in [`approvedLanguages`](/config), the library sends a request to our server to translate the content into a new language.
 
-- General Translation then caches your translations to serve to subsequent non-English-speaking users, who only ever receive the page in their chosen language. Data is stored globally, and usually available in fewer than 100ms.
+- Once the translation is complete, it is cached, and returned to your site. Newly translated content is displayed according to your chosen [`renderMethod`](/config/rendering).
 
-- Whenever you update the children of the `<T>` component, it registers the new, uncached content. Translated content that is still valid is served, alongside the new content in English. Just like when the entire page needed to be translated, the new content replaces the English as soon as it's ready, and is cached for the next user.
+- Whenever you your content changes, your server will send a request to ours for a new translation. Previously translated content is served while a new translation is prepared using your desired `renderMethod`.
+
+- If you're a paid customer, [Translation Replication](/faqs#translation-replication) means your new content will be translated into all your existing languages automatically, with no further requests needed.
+
+- This "just-in-time" method of translation means you only pay for the languages and content people actually see.
+
+- However, if you'd prefer not to use just-in-time translation, there is a [CLI tool](/dictionaries/cli-tool) to translate your dictionary before you ship.
 
 ## Billing
 

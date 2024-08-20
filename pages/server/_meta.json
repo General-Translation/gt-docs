@@ -1,10 +1,10 @@
 {
   "t-component": "<T>",
   "value": "<Value>",
-  "numeric": "<Numeric>",
+  "plural": "<Plural>",
   "variables": "Variables",
   "intl": "intl()",
   "get-locale": "getLocale()",
   "get-default-locale": "getDefaultLocale()",
-  "gtprovider": "<GTProvider>"
+  "gt-provider": "<GTProvider>"
 }

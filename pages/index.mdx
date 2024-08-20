@@ -15,9 +15,33 @@ Our products:
 Unlike other i18n stacks, `gt-react`:
 
 - **Translates automatically and on-demand** — once connected to our cloud service, your app will instantly support dozens of languages, no extra work needed.
-- **Translates entire React components, not just strings.** So there's no need to rewrite your site to accomodate new languages.
+- **Translates entire React components, not just strings.** So there's no need to rewrite your site to accomodate new languages. You can write [dictionaries](/dictionaries) in full JSX or use inline wrappers like [`<T>`](/server/t-component) and [`<Plural>`](/server/plural).
 - **Works across both client and server components**, with first-class support for Next.js App Router and React Server Components.
 
 ## Quickstarts
 
+- [Reference sheet for AI](/ai-reference) - copy and paste into your favorite chat model and ask it to set up `gt-react` for you!
+
 - [Next.js App Router](/next)
+
+## How does `gt-react` work?
+
+Here's how `gt-react` works when your [`defaultLocale`](/config) is English (`en-US`):
+
+- **For English-speaking users, nothing changes.** No data is ever sent to us and your site is rendered as normal.
+
+- When a non-English language user visits your site, the library checks our cache. The cache is global, and fast — typical response time is 50 ms.
+
+- If a cached translation exists, the library reconciles the non-English content with the structure of what it's been asked to translate, and serves the page.
+
+- If no cached translation exists, and the language requested is in [`approvedLanguages`](/config), the library sends a request to our server to translate the content into a new language.
+
+- Once the translation is complete, it is cached, and returned to your site. Newly translated content is displayed according to your chosen [`renderMethod`](/config/rendering).
+
+- Whenever you your content changes, your server will send a request to ours for a new translation. Previously translated content is served while a new translation is prepared using your desired `renderMethod`.
+
+- If you're a paid customer, [Translation Replication](/faqs#translation-replication) means your new content will be translated into all your existing languages automatically, with no further requests needed.
+
+- This "just-in-time" method of translation means you only pay for the languages and content people actually see.
+
+- However, if you'd prefer not to use just-in-time translation, there is a [CLI tool](/dictionaries/cli-tool) to translate your dictionary before you ship.

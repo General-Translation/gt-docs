@@ -107,13 +107,79 @@ export default function Page() {
 
 **That's it! The page is ready to go in dozens of languages.**
 
+### Using a dictionary
+
+Keeping translatable content in a single `.json` or `.js` file is a common technique in web app development.
+Using a single dictionary allows for easier management of translations and ensures consistency across the application.
+
+In addition to inline translation components like `<T>`, `gt-react` also supports dictionaries.
+**Uniquely, `gt-react` dictionaries don't just support strings**. You can write content in JSX too!
+
+A typical dictionary could look something like:
+
+```js copy
+// dictionary.js
+
+const dictionary = {
+    "landing": {
+        "hero": <h1>Welcome to our site!</h1>,
+        "get_started_button": (
+            <a href='/signin'><button>Get Started</button></a>
+        )
+    },
+    "client_component" {
+        "greeting": <>Hello, world. This content is rendered in a client component.</>
+    }
+}
+
+export default dictionary;
+```
+
+<Callout>
+    Ensure that every entry in the dictionary has a unique ID. This ID is formed by adding periods between nested keys. For example, in the above dictionary, the keys would be `landing.hero`, `landing.get_started_button`, and `client_component.greeting`.
+</Callout>
+
+Translated dictionary entries can be used in server components with the `t()` function.
+
+```js copy
+// i18n.js 
+
+import { createGT } from 'gt-react/next';
+import dictionary from './dictionary.js'
+ 
+export const { t } = createGT({
+    defaultLocale: 'en-US',
+    dictionary: dictionary
+});
+```
+
+```js copy
+// page.js 
+
+import { t } from '@i18n'
+
+export default function Page() {
+    return (
+        <main>
+            {t('landing.hero')}
+        </main>
+    )
+}
+```
+
+Read more about dictionaries [here](/dictionaries).
+
 ### Client-side i18n
 
-Components which use client-side JavaScript, like React [hooks](https://react.dev/reference/react/hooks), are client components. Since all translation in the `gt-react` stack happens on the server, translated text must be passed to the client for translation to work.
+Components which use client-side JavaScript, like React [hooks](https://react.dev/reference/react/hooks), are client components. 
+Since all translation in the `gt-react` stack happens on the server, content must be translated before being passed to the client for translation to work.
 
-The simplest way to do this is with an `<T>` component, like:
+If you're using inline translation, the simplest way to do this is with a `<T>` component.
+You can pass translatable content as the props of a client-side child of `<T>`:
 
 ```javascript copy
+// page.js, a server component
+
 import { T } from '@i18n'
 import ClientSideButton from './ClientSideButton.js' // a client component
 
@@ -136,15 +202,15 @@ In this case, it is recommended to use `<GTProvider>`.
 import { GTProvider } from '@i18n'
 ```
 
-`<GTProvider>` provides translations to the client using React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API. 
-These translations can then be accessed with `useGT()`.
+`<GTProvider>` provides a dictionary of translations to the client using React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API. 
+These translations can then be accessed with the client-side `useGT()` hook.
 
 <Callout type="info">
 `useGT()` is equivalent to the `useTranslations()` hook in other i18n libraries.
 </Callout>
 
 ```javascript copy
-import { GTProvider } from '@i18n' // remember @i18n can only be imported in server components
+import { GTProvider } from '@i18n' // remember this can only be imported in server components
 
 import ClientComponent from './ClientComponent.js'
 
@@ -180,26 +246,76 @@ import { useState } from 'react'
 
 export default function ClientComponent() {
 
-    const t = useGT()
+    // Specifying a part of the dictionary here for cleaner ids in the t function
+    const t = useGT('welcome') 
 
     const [currentState, setCurrentState] = useState(true)
 
     return (
         <div>
             <button onClick={() => {setCurrentState(prev => !prev)}}>
-                {t('welcome.prompt')}
+                {t('prompt')}
             </button>
             {
                 currentState
                 ?
-                t('welcome.hello')
+                t('hello')
                 :
-                t('welcome.goodbye')
+                t('goodbye')
             }
         </div>
     )
 }
 ```
+
+`<GTProvider>` integrates with existing `gt-react` dictionaries. 
+If a dictionary is included in the config file, initializing `<GTProvider>` without a dictionary prop will provide all the translations in your default dictionary to the client.
+
+Read more about `<GTProvider>` [here](/server/gt-provider).
+
+### Using variables
+
+Sometimes you need to include a variable in your content. For example, imagine you are displaying a welcome page and you want to address your user by their first name:
+
+```js copy
+export default function Page() {
+    const name = "Alice" // or "Bob", "Charlie", etc.
+    return (
+        <main>
+            Nice to meet you, {name}!
+        </main>
+    )
+}
+```
+
+To translate a phrase involving a variable, use the [`<Var>`](/server/variables#var) component of `gt-react`:
+
+```js copy
+import { T, Var } from "@i18n" // make sure you are exporting <Var> alongside <T>
+
+export default function Page() {
+    const name = "Alice" // or "Bob", "Charlie", etc.
+    return (
+        <main>
+            <T id='greeting'>
+                Nice to meet you, <Var name="name">{name}</Var>!
+            </T>
+        </main>
+    )
+}
+```
+
+The children of the `<Var>` component will remain untranslated and can change without forcing a retranslation.
+
+<Callout>
+    You can use the `name` prop to let the AI model know what sort of variable it's translating.
+</Callout>
+
+In addition to `<Var>`, there are the specialized variable types [`<Num>`](/server/variables#num) for numbers, [`<DateTime>`](/server/variables#datetime) for dates, and [`<Currency>`](/server/variables#currency) for currencies.
+
+You can pass variables to the client-side using a `<GTProvider>`, or use [`createVariables()`](/dictionaries/variables#createvariables) to get them in your default dictionary.  
+
+### Plurals
 
 ### Next steps
 
@@ -213,5 +329,5 @@ export default function ClientComponent() {
 
 - Translate around private variables like `<Var>`, `<Num>`, `<Currency>`, and `<DateTime>`.
 
-- Learn about translating [plural forms](/server/numeric) with `<Numeric>` and [logic branches](/server/value) with the `<Value>` component.
+- Learn about translating plural forms with [`<Plural>`](/server/plural).
 

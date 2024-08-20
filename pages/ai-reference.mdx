@@ -38,7 +38,7 @@ GT_PROJECT_ID = "" // A 36 character projectID which can be found at generaltran
 
 import { createGT } from 'gt-react/next' // or 'gt-react' in non-Next.js frameworks
 
-export const { T, Numeric, Value, GTProvider, intl, Var, Num, Currency, DateTime } = createGT({
+export const { T, Plural, Value, GTProvider, intl, Var, Num, Currency, DateTime } = createGT({
     defaultLocale: 'en-US'
 })
 
@@ -161,7 +161,7 @@ export default function ClientComponent() {
 /* <Var> */
 // `<Var>` is a component which can be used on either the client or the server, inside or outside of an `<T>` tag.
 // When they are the children of `<T>` components, variables are translated around, in context, but not translated themselves
-// `name` (string, optional, defaults to "value") - Used for identification while rendering `<Value>` or `<Numeric>` components.
+// `name` (string, optional, defaults to "value") - Used for identification while rendering `<Value>` or `<Plural>` components.
 // `defaultValue` (any, optional, defaults to the component's children) - The displayed children of the component, by default. Only one of `defaultValue` or `children` is required.
 // Any children or default values of `<Var>` remain private, and are never sent to the General Translation cloud service.
 
@@ -274,16 +274,16 @@ export default function ClientNameComponent() {
 
 // Importantly, `<Value>` can be used to render variables in context which are only available on the client.
 
-/* <Numeric> */
+/* <Plural> */
 // Different languages have different plural rules. A new translation should not have to be generated every time a number changes, but sentences do have to change depending on both the language and the number.
 // For example, in English, nouns take two different forms: **singular**, for one item, or **plural**, for many. In Arabic, there are five: **zero**, for no items, **singular**, for exactly one item, **dual**, for exactly two items, **paucal**, for numbers between 3 and 10, and **plural**, for more than 10.
-// The `<Numeric>` component is a special type of `<Value>` that handles and generates plural forms automatically, language-by-language. It works out of the box on forms that don't even exist in English, like the Arabic dual.
+// The `<Plural>` component is a special type of `<Value>` that handles and generates plural forms automatically, language-by-language. It works out of the box on forms that don't even exist in English, like the Arabic dual.
 // `n` (number, required) - Number used to determine whether a singular, plural, or other form should be displayed.
-// The full list of forms which `<Numeric>` can take: "zero", "one" or "singular", "two" or "dual", "few", "many", and "other" or "plural". Provide only the forms present in your default language, which in English are "singular" and "plural", one of which can be the children of the `<Numeric>` component.
+// The full list of forms which `<Plural>` can take: "zero", "one" or "singular", "two" or "dual", "few", "many", and "other" or "plural". Provide only the forms present in your default language, which in English are "singular" and "plural", one of which can be the children of the `<Plural>` component.
 
-// To use `<Numeric>` on the server-side:
+// To use `<Plural>` on the server-side:
 
-import { Numeric, Num } from "@i18n"
+import { Plural, Num } from "@i18n"
 // where `<Num>` is a special type of `<Var>` which formats a number for a given locale
 
 export default function Page() {
@@ -291,18 +291,18 @@ export default function Page() {
     const numberOfMessages = 2;
 
     return (
-        <Numeric
+        <Plural
             n={numberOfMessages}
             singular={<>You have <Number /> new message.</>}
         >
             You have <Num/> new messages.
-        </Numeric>
+        </Plural>
     )
 
 }
 
-// Warning: `<Numeric>` cannot generate additional forms when it is used on the client side. It can only use the forms it is provided.
-// To use `<Numeric>` and `<Num>` on the client-side:
+// Warning: `<Plural>` cannot generate additional forms when it is used on the client side. It can only use the forms it is provided.
+// To use `<Plural>` and `<Num>` on the client-side:
 
 // page.js
 import { GTProvider, Num } from '@i18n' 
@@ -322,7 +322,7 @@ export default function Page() {
 
 // ClientComponent.js
 'use client'
-import { useGT, Numeric } from 'gt-react/client'
+import { useGT, Plural } from 'gt-react/client'
 import { useState } from 'react'
 
 export default function ClientComponent() {
@@ -334,7 +334,7 @@ export default function ClientComponent() {
     return (
         <div>
             <button onClick={() => { setCount(prev => prev + 1) }}>{t('button.text')}</button>
-            <Numeric
+            <Plural
                 n={count}
                 id='count'
             />
@@ -352,7 +352,7 @@ import { Var } from '@i18n' // server
 /* `<Num>` */
 // `<Num>` is a special type of `<Var>` which formats numbers for the user's locale.
 // For example, in German, large numbers are displayed with a period rather than a comma: 1.000.000 rather than 1,000,000.
-// `name` (string, optional, defaults to "n") - Used for identification while rendering `<Value>` or `<Numeric>` components.
+// `name` (string, optional, defaults to "n") - Used for identification while rendering `<Value>` or `<Plural>` components.
 // `defaultValue` (number or string, optional, defaults to the component's children) - The displayed children of the component, by default. Only one of `defaultValue` or `children` is required.
 // `options` (object, optional) - An object representing additional formatting instructions in the style of the `Intl.NumberFormat` API.
 
@@ -395,7 +395,7 @@ import { Currency } from '@i18n' // server
 
 import { Currency } from 'gt-react/client'
 
-// Tip: write variables as self-closing, like <Var/> and they will use their default name. In this way, `<Num>` can be used natively with `<Numeric>`, without providing a name prop, and `<Var>` can be used natively with `<Value>`.
+// Tip: write variables as self-closing, like <Var/> and they will use their default name. In this way, `<Num>` can be used natively with `<Plural>`, without providing a name prop, and `<Var>` can be used natively with `<Value>`.
 
 /* SERVER-SIDE HELPER FUNCTIONS */
 
@@ -544,7 +544,7 @@ export const { t, dict, GTProvider } = createGT({
     translations: translations
 })
 
-// The translations should be available to the `t()`, `<T>`, `<Value>`, `<Numeric>`, `intl()`, and `<GTProvider>` functions.
+// The translations should be available to the `t()`, `<T>`, `<Value>`, `<Plural>`, `intl()`, and `<GTProvider>` functions.
 
 /* END ADVANCED -- DICTIONARIES */
 
