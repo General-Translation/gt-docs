@@ -365,6 +365,26 @@ i18n routing is a web development technique used to manage multiple languages an
 It involves detecting the user's language and providing localized routes, like `www.example.com/fr` for French. 
 `gt-react`'s Next.js middleware allows you to easily add i18n routing to your Next.js App Router project.
 
+```js
+// middleware.js
+
+import { createNextMiddleware } from 'gt-react/middleware'
+ 
+export default createNextMiddleware();
+ 
+export const config = {
+  matcher: [
+      /*
+       * Match all request paths except for the ones starting with:
+       * - api (API routes)
+       * - _next (internal files)
+       * - static files
+       */
+      "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
+
 To read more about `gt-react` Next.js middleware, go to docs.generaltranslation.com/middleware/next.
 
 ## Using your own translations
