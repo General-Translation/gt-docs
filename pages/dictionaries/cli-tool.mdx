@@ -4,26 +4,18 @@ The `gt-react-cli` tool is used to push a JSX translation dictionary to General 
 
 The dictionary will be translated into your project's previous languages, plus any you specify while running the script, and be available and ready to use within a few minutes.
 
-## Installation
-
-To install the CLI as a development dependency, run:
-
-```bash
-npm i gt-react-cli --save-dev
-```
-
 ## Usage
 
 Run the following command from the **root of your repository**:
 
 ```bash
-npx gt-react-push <path_to_dictionary> [--apiKey=<apiKey>] [--projectID=<projectID>] [--dictionaryName=<dictionaryName>] [--languages=<lang1,lang2,...>]
+npx gt-react-cli <path_to_dictionary> [--apiKey=<apiKey>] [--projectID=<projectID>] [--dictionaryName=<dictionaryName>] [--languages=<lang1,lang2,...>]
 ```
 
 ### Example
 
 ```bash
-npx gt-react-push ./src/dictionary.js --apiKey=gtx-12..89 --projectID=ab..12 --dictionaryName=my-site --languages=fr,es
+npx gt-react-cli ./src/dictionary.js --apiKey=gtx-12..89 --projectID=ab..12 --dictionaryName=my-site --languages=fr,es
 ```
 
 This command:
@@ -52,7 +44,7 @@ GT_PROJECT_ID="ab..12"
 ### Full Example
 
 ```bash
-npx gt-react-push ./src/dictionary.js --dictionaryName=my-site --languages=fr,es
+npx gt-react-cli ./src/dictionary.js --dictionaryName=my-site --languages=fr,es
 ```
 
 This will push the dictionary and update the translations for the specified languages.
