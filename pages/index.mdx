@@ -12,6 +12,10 @@ Our products:
 
 - `gt-react`, an internationalization ("i18n") library for [React](https://react.dev) and [Next.js](https://nextjs.org) applications.
 
+```txt copy
+npm i gt-react
+```
+
 Unlike other i18n stacks, `gt-react`:
 
 - **Translates automatically and on-demand** — once connected to our cloud service, your app will instantly support dozens of languages, no extra work needed.
@@ -20,7 +24,7 @@ Unlike other i18n stacks, `gt-react`:
 
 ## Quickstarts
 
-- [Reference sheet for AI](/ai-reference) - copy and paste into your favorite chat model and ask it to set up `gt-react` for you!
+- [Reference sheet for AI](/ai-reference) - copy into your favorite chat model and ask it questions!
 
 - [Next.js App Router](/next)
 
@@ -40,7 +44,7 @@ Here's how `gt-react` works when your [`defaultLocale`](/config) is English (`en
 
 - Whenever you your content changes, your server will send a request to ours for a new translation. Previously translated content is served while a new translation is prepared using your desired `renderMethod`.
 
-- If you're a paid customer, [Translation Replication](/faqs#translation-replication) means your new content will be translated into all your existing languages automatically, with no further requests needed.
+- Whenever an update to your site is translated into one language, it is automatically translated into all your site's existing languages. Similarly, whenever a user visits your site in a new language, translations are made in the background not just for the page they visit, but all previously translated pages. This means that for the vast majority of users and languages, displaying your site in another language is completely seamless.
 
 - This "just-in-time" method of translation means you only pay for the languages and content people actually see.
 
