@@ -36,7 +36,7 @@ export const {
 ### `projectID`
 
 - **Type**: `string`
-- **Description**: Specifies the project ID for cloud integration. This ID can also be set in the environment as `GT_PROJECT_ID`.
+- **Description**: Specifies the project ID, which can be found on the General Translation [Dashboard](https://www.generaltranslation.com/dashboard). This ID can also be set in the environment as `GT_PROJECT_ID`.
 
 ### `dictionaryName`
 
@@ -46,7 +46,30 @@ export const {
 ### `apiKey`
 
 - **Type**: `string`
-- **Description**: Specifies the API key for cloud integration. **It is best to set this in the environment as `GT_API_KEY` rather than in the config file.**
+- **Description**: Specifies the API key for interacting with our cloud service. **It is best to set this in the environment as `GT_API_KEY` rather than in the config file.**
+
+## Setting environment variables
+
+An API key is a 36-character string beginning `gtx-` which is used to authenticate your app with our cloud translation service. Create one on the [API Keys](https://www.generaltranslation.com/dashboard/redirect/api-keys) page.
+
+Keep your API key somewhere safe and secret.
+
+Then copy your Project ID, which can be found on the Dashboard:
+
+![Code copy container entitled "projectID"](/screenshots/project_id.jpeg)
+
+Set two environment variables:
+
+```.env copy
+GT_API_KEY=""
+GT_PROJECT_ID=""
+```
+
+- For `GT_API_KEY`, use your API key.
+- For `GT_PROJECT_ID`, use your Project ID.
+
+In [Next.js](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables) this is done by editing `.env.local`. 
+In other frameworks, such as Express.js, use a package like [dotenv](https://github.com/motdotla/dotenv).
 
 ## List of parameters
 
@@ -55,8 +78,8 @@ export const {
 | Parameter                | Type                                      | Default Value                              | Description                                                                                   |
 |--------------------------|-------------------------------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------|
 | **Cloud Integration**    |                                           |                                            |                                                                                               |
-| `apiKey`                 | `string`                                  | Value of environment variable `GT_API_KEY` | API key for cloud integration.                                                                |
-| `projectID`              | `string`                                  | Value of environment variable `GT_PROJECT_ID` | Project ID for cloud integration.                                                             |
+| `apiKey`                 | `string`                                  | Value of environment variable `GT_API_KEY` | API key to authenticate with cloud services.                                                                |
+| `projectID`              | `string`                                  | Value of environment variable `GT_PROJECT_ID` | Project ID to authenticate with cloud services.                                                             |
 | `baseURL`                | `string`                                  | `"https://prod.gtx.dev"`                   | Base URL for API requests.                                                                    |
 | `cacheURL`               | `string`                                  | `"https://cache.gtx.dev"`                  | URL for the global cache.                                                                              |
 | `remoteSource`           | `boolean`                                 | `true`                                     | Determines whether the library fetches a dictionary from a remote cache.                      |

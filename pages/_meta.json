@@ -1,12 +1,11 @@
 {
   "index": "Introduction",
   "ai-reference": "Reference sheet for AI",
-  "quickstarts": "Quickstarts",
   "config": "Config",
-  "server": "Server",
-  "dictionaries": "Dictionaries",
-  "client": "Client",
+  "essentials": "Essentials",
+  "inline": "Inline translation",
   "middleware": "Middleware",
+  "quickstarts": "Quickstarts",
   "generaltranslation": "generaltranslation",
   "faqs": "FAQs"
 }

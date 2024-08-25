@@ -1,7 +1,0 @@
-{
-  "use-gt": "useGT()",
-  "use-locale": "useLocale()",
-  "use-default-locale": "useDefaultLocale()",
-  "client-variables": "Client-side variables",
-  "gt-client-provider": "<GTClientProvider>"
-}
