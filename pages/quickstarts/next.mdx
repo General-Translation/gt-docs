@@ -217,25 +217,19 @@ export default function ClientComponent() {
 
 Sometimes you need to include a variable in your content. For example, imagine you are displaying a welcome page and you want to address your user by their first name:
 
-```js copy
-TBD
-```
+// js
 
 To translate a phrase involving a variable, use the [`<Var>`](/essentials#variables) component of `gt-react`:
 
-```js copy
-TBD
-```
+// js
 
-```js copy
-TBD
-```
+// js
 
 The children of the `<Var>` component will remain untranslated and can change without forcing a retranslation.
 Anything you include as the children of the `<Var>` in the dictionary will be the default value, rendered if no value is supplied in the `t()` function. 
 
 <Callout>
-    Use the `name` prop to specify the name of the variable, then assign a value to that name like `t('id', { [your_variable_name]: your_value })
+    Use the `name` prop to specify the name of the variable, then assign a value to that name like `t('id', { [your_variable_name]: your_value })`
 </Callout>
 
 In addition to `<Var>`, there are the specialized variable types [`<Num>`](/essentials#num) for numbers, [`<DateTime>`](/essentials#datetime) for dates, and [`<Currency>`](/essentials#currency) for currencies.
@@ -244,25 +238,17 @@ In addition to `<Var>`, there are the specialized variable types [`<Num>`](/esse
 
 Imagine you wanted to translate a phrase with a number that could be singular or plural, like:
 
-```js copy
-TBD
-```
-```js copy
-TBD
-```
+// js
+// js
 
 You could use the `<Var>` component, or better yet, the `<Num>` component, to render the number without forcing a new translation for each different value of `n`.
 
-```js copy
-TBD
-```
+// js
 
 But sometimes the translation needs to change depending on the value of the number. For example, "You have 1 new *message*", but "You have 2 new *messages*". 
 In this case, try using the `<Plural>` component to translate. `<Plural>` is a special form of `<T>` that takes a number `n` as a prop. Depending on the value of `n` and your user's current locale, it selectively renders a singular or plural form.
 
-```js copy
-TBD
-```
+// js
 
 Learn more about plurals [here](/essentials#plurals).
 
