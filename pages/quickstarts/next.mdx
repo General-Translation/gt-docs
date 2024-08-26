@@ -215,47 +215,118 @@ export default function ClientComponent() {
 
 ### Using variables
 
-Sometimes you need to include a variable in your content. For example, imagine you are displaying a welcome page and you want to address your user by their first name:
+Sometimes you need to include content that shouldn't be translated but could change in your content. For example, imagine you are displaying a welcome page and you want to address your user by their first name:
 
-// js
+```js
+export default function Page() {
+    const firstname = "Alice" // or "Bob", "Charlie", etc.
+    return (
+        <main>
+            Welcome to our site, {firstname}!
+        </main>
+    )
+}
+```
 
 To translate a phrase involving a variable, use the [`<Var>`](/essentials#variables) component of `gt-react`:
 
-// js
+```js copy
+// dictionary.js
+import { createVariables } from 'gt-react/next'
 
-// js
+const { Var } = createVariables();
+
+const dictionary = {
+    "var_example": <>Welcome to our site, <Var name="firstname"/>!</>
+}
+
+export default dictionary;
+```
+
+```js copy
+export default function Page() {
+    const firstname = "Alice" // or "Bob", "Charlie", etc.
+    return (
+        <main>
+            {t('var_example', { firstname })}
+        </main>
+    )
+}
+```
 
 The children of the `<Var>` component will remain untranslated and can change without forcing a retranslation.
 Anything you include as the children of the `<Var>` in the dictionary will be the default value, rendered if no value is supplied in the `t()` function. 
 
 <Callout>
-    Use the `name` prop to specify the name of the variable, then assign a value to that name like `t('id', { [your_variable_name]: your_value })`
+    Use the `name` prop to specify the name of the variable, then assign a value to that name like `t('id', { "your_variable_name": your_value })`
 </Callout>
 
-In addition to `<Var>`, there are the specialized variable types [`<Num>`](/essentials#num) for numbers, [`<DateTime>`](/essentials#datetime) for dates, and [`<Currency>`](/essentials#currency) for currencies.
+Sometimes variables need to be localized in some way — for example, in US English (`en-US`) dates are written month first, with slashes: MM/DD/YY. In German (`de`) they are written day first, with periods: DD.MM.YY.
+In addition to `<Var>`, there are the specialized variable types [`<Num>`](/essentials#num) for numbers, [`<DateTime>`](/essentials#datetime) for dates, and [`<Currency>`](/essentials#currency) for currencies, which handle these 
+
+```js copy
+const { Var, Num, DateTime, Currency } = createVariables();
+```
 
 ### Plurals
 
-Imagine you wanted to translate a phrase with a number that could be singular or plural, like:
+Imagine you wanted to translate a phrase that could be singular or plural, like:
 
-// js
-// js
+```js
+export default function Page() {
+    const n = 2; // could be any number
+    return (
+        <main>
+            {
+                n === 1 
+                ?
+                <>You have one new message.
+                :
+                <>You have {n} new messages.</>
+            }
+        </main>
+    )
+}
+```
 
-You could use the `<Var>` component, or better yet, the `<Num>` component, to render the number without forcing a new translation for each different value of `n`.
+You *could* create two translations, and use the `<Var>` component (or better yet, the `<Num>` component) to render the number without forcing a new translation for each different value of `n`.
 
-// js
+But in some languages, there are more than just singulars and plurals. 
+For example, many Arabic nouns have a dual form, a unique type of plural that is only used if there are exactly two of something.
+`gt-react` handles this natively. All you have to do is include one of the following in your dictionary metadata: `singular`, `plural`, `dual`, `zero`, `one`, `two`, `few`, `many`, `other`.
 
-But sometimes the translation needs to change depending on the value of the number. For example, "You have 1 new *message*", but "You have 2 new *messages*". 
-In this case, try using the `<Plural>` component to translate. `<Plural>` is a special form of `<T>` that takes a number `n` as a prop. Depending on the value of `n` and your user's current locale, it selectively renders a singular or plural form.
+```js
+// dictionary.js
 
-// js
+const { Num } = createVariables();
+
+const dictionary = {
+    "messages": [
+        <>You have <Num/> new messages.</>, 
+        { singular: <>You have one new message.</> }
+    ]
+}
+
+export default dictionary;
+```
+
+Then, when you render your plural, pass a number `n`.
+Depending on the value of `n` and your user's current locale, it selectively renders a singular or plural form.
+
+```js copy
+export default function Page() {
+    const n = 2; // could be any number
+    return (
+        <main>
+            {t('messages', { n })}
+        </main>
+    )
+}
+```
+
+This will display a plural form in English, but an autogenerated dual form in Arabic.
 
 Learn more about plurals [here](/essentials#plurals).
-
-<Callout>
-    Some languages, like Arabic, have a *dual*, a special plural form for when there are exactly two of something.
-    The `<Plural>` server component handles these scenarios by gracefully generating localized plurals.
-</Callout>
 
 ### Next steps
 
