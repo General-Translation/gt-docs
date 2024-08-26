@@ -39,8 +39,20 @@ Set up your `.env` (or `.env.local` in Next.js) environment with the following v
 ```js
 import { createGT } from 'gt-react/next'; // or 'gt-react/server' in non-Next.js frameworks
 
-export const { T, Plural, Value, intl, Var, Num, Currency, DateTime, GTProvider, t } = createGT({
-  defaultLocale: 'en-US' // locales are BCP-47 language codes
+export const { t } = createGT({
+  defaultLocale: 'en-US', // locales are BCP-47 language codes
+  dictionary: {
+    "greeting": <>Hello, world</>,
+    "example_one": "Items in gt-react dictionaries can be strings.",
+    "example_two": <p><b className="text-green">Items</b> in gt-react dictionaries can also be JSX</p>,
+    "nested_dictionary": {
+        "nested_example": <p>Items in gt-react can be nested.</p>
+    },
+    "example_with_metadata": [
+        <p>Items in gt-react dictionaries can be assigned metadata by writing them as the first item in an array, with the second item being an object containing metadata.</p>, 
+        { context: "Translate this informally" }
+    ]
+  }
 });
 ```
 
@@ -49,36 +61,35 @@ export const { T, Plural, Value, intl, Var, Num, Currency, DateTime, GTProvider,
 - `approvedLocales` (string[]) specifies the approved locales that your app should be translated into.
 - For a full list, see docs.generaltranslation.com/config.
 
-## Translation approaches
+### Dictionaries
 
-`gt-react` lets you translate in two interchangeable ways:
-1. Server-side in-line translation using a component like `<T>`.
-2. Translation from a dictionary using the `t()` function. This is best if you have a large project with many client components.
+Keeping translatable content in a single `.json` or `.js` file is a common technique in web app development.
+Using a single dictionary allows for easier management of translations and ensures consistency across the application.
 
-## In-line translation
+**Uniquely, `gt-react` dictionaries don't just support strings**. You can write content in JSX too!
 
-In-line translation can be done on the server-side with `<T>`, `<Plural>`, or `<Value>` components. 
+Ensure that every entry in the dictionary has a unique ID. This ID is formed by adding periods between nested keys. 
+For example, in the above dictionary, the keys would be `greeting`, `example_one`, `example_two`, `nested_dictionary.nested_example`, and `example_with_metadata`.
 
-Wrap your translatable JSX content with a `<T>` tag, which has an optional but recommended `id` prop.
+## The `t()` function
+
+Dictionary entries can be used in server components with the `t()` function.
+
+This translation will display in every language!
 
 ```js
-import { T } from '@i18n'
-
+import { t } from '@i18n'
+ 
 export default function Page() {
     return (
         <main>
-            <T id='welcome'>
-                <h1>Welcome to my site!</h1>
-                <p>This text will be <b>translated</b> into dozens of languages automatically.</p>
-            </T>
+            {t('greeting')}
         </main>
     )
 }
 ```
 
-To read more about the `<T>` component: docs.generaltranslation.com/server/t-component.
-
-### Variables (in-line)
+## Variables
 
 Sometimes you want to include a variable in your translatable content without forcing a retranslation every time.
 
@@ -87,120 +98,8 @@ Sometimes you want to include a variable in your translatable content without fo
 - `<Num>`, for displaying numbers in the style of the user's locale.
 - `<DateTime>`, for displaying dates in the style of the user's locale.
 - `<Currency>`, for displaying currency data in the style of the user's locale.
-They can be used for inline translation like:
 
-```js
-import { Var, T } from '@i18n'
-
-export default function Page() {
-    const firstName = "Alice" // or "Bob", "Charlie"
-    return (
-        <main>
-            <T id='greeting'>
-                Nice to meet you, <Var>{firstName}</Var>!
-            </T>
-        </main>
-    )
-}
-```
-
-To read more about server-side inline variables: docs.generaltranslation.com/server/variables.
-
-## Plurals
-
-Different languages have different plural rules. A new translation should not have to be generated every time a number changes, but sentences do have to change depending on both the language and the number.
-The `<Plural>` component is a special type of `<T>` that handles and generates plural forms automatically, language-by-language. It works out of the box on forms that don't even exist in English, like the Arabic dual.
-
-```js
-import { Plural, Num } from "@i18n"
-// where `<Num>` is a special type of `<Var>` which formats a number for a given locale
-
-export default function Page() {
-
-    const numberOfMessages = 2;
-
-    return (
-        <Plural
-            n={numberOfMessages}
-            singular={<>You have 1 new message.</>}
-        >
-            You have <Num/> new messages.
-        </Plural>
-    )
-}
-```
-
-The full list of forms which `<Plural>` can take: "zero", "one" or "singular", "two" or "dual", "few", "many", and "other" or "plural". Provide only the forms present in your default language, which in English are "singular" and "plural", one of which can be the children of the `<Plural>` component.
-
-To read more about the `<Plural>` component: docs.generaltranslation.com/server/plural.
-
-## Translating from a dictionary
-
-Keeping translatable content in a single `.json` or `.js` file is a common technique in web app development.
-Using a single dictionary allows for easier management of translations and ensures consistency across the application.
-
-In addition to inline translation components like `<T>`, `gt-react` also supports dictionaries.
-**Uniquely, `gt-react` dictionaries don't just support strings**. You can write content in JSX too!
-
-A typical dictionary could look something like:
-
-```js
-// dictionary.js
-
-const dictionary = {
-    "landing": {
-        "hero": <h1>Welcome to our site!</h1>,
-        "get_started_button": (
-            <a href='/signin'><button>Get Started</button></a>
-        )
-    },
-    "client_component" {
-        "greeting": <>Hello, world. This content is rendered in a client component.</>
-    }
-}
-
-export default dictionary;
-```
-
-Ensure that every entry in the dictionary has a unique ID. This ID is formed by adding periods between nested keys. For example, in the above dictionary, the keys would be `landing.hero`, `landing.get_started_button`, and `client_component.greeting`.
-
-Add the dictionary to the `i18n.js` config file:
-
-```js
-import { createGT } from 'gt-react/next';
-import dictionary from './dictionary.js'
- 
-export const { t } = createGT({
-    defaultLocale: 'en-US',
-    dictionary: dictionary
-});
-```
-
-Translated dictionary entries can be used in server components with the `t()` function.
-
-```js
-import { t } from '@i18n'
- 
-export default function Page() {
-    return (
-        <main>
-            {t('landing.hero')}
-        </main>
-    )
-}
-```
-
-To get a dictionary entry without translating it, use `dict()`.
-
-```js
-import { dict } from '@i18n'
-const untranslatedContent = dict('my_id')
-```
-
-### Variables (dictionary)
-
-To use variables in a dictionary that you use to initialize your other `gt-react` components, you can use the special function `createVariables()`.
-This will create `<Var>`, `<Num>`, `<DateTime>`, and `<Currency>` which you can then use in your dictionary.
+They can be used in dictionaries like:
 
 ```js
 // dictionary.js
@@ -211,48 +110,94 @@ const { Var, Num, Currency, DateTime } = createVariables({
 });
 
 const dictionary = {
-    "my_id": <>My name is <Var name="name"/>!</>
+    "var_example": <>My name is <Var name="name"></Var>!</>,
+    "number_example": <>The Earth's currenct population is <Num name="population"/></>
+    "date_example": <>Today's date is <DateTime name="today/></>, // must supply new Date() in t() function
+    "currency_example": <>This product costs <Currency>99</Currency>, // default value is 99, but can be changed by the t() function
 }
 
 export default dictionary; // should be used in i18n.js
 ```
 
-Values can then be injected variable into the using the `t()` function:
+If no name prop is provided, the default names of these variables are:
+- `<Var>`: "value"
+- `<Num>`: "n"
+- `<DateTime>`: "date"
+- `<Currency>`: "cost"
+
+You would then use these variables like:
 
 ```js
 import { t } from '@i18n'
  
-// will return "My name is John!"
 export default function Page() {
-    const name = "John"
     return (
         <main>
-            {t('my_id', { values: { name } })}
+            {t('var_example'), { name: "John" }}
+            {t('number_example'), { population: 8172721396 }}
+            {t('date_example'), { date: Date.now() }}
+            {t('currency_example'), { cost: 99 }}
         </main>
     )
 }
+```
+
+If a an entry in the dictionary has two variables, for example:
+
+```js
+{ 
+    "two_var_example": <>The movie is called <i><Var name="movie"/></i> and a ticket costs <Currency />.</> 
+}
+```
+
+Then you would supply two values to `t()`:
+
+```js
+{t('two_var_example', { movie: "Terminator 2: Judgement Day", cost: 10 })}
+```
+
+## Plurals
+
+Different languages have different plural rules. A new translation should not have to be generated every time a number changes, but sentences do have to change depending on both the language and the number.
+`gt-react` handles and generates plural forms automatically, language-by-language. It works out of the box on forms that don't even exist in English, like the Arabic dual.
+
+The full list of forms which plurals can take: "zero", "one" or "singular", "two" or "dual", "few", "many", and "other" or "plural". Provide only the forms present in your default language, which in English are "singular" and "plural", one of which can be the children of the `<Plural>` component.
+
+To indicate that an item is plural, supply metadata in the dictionary with one of these form names. For example:
+
+```js
+{  
+    "messages": [
+        <p>You have <Num/> new messages.</p>, 
+        { singular: "You have one new message." }
+    ]
+}
+```
+
+Plurals *require* an `n` parameter in the `t()` function. In this example:
+
+```
+t('messages', { n: 3 }); // displaying "You have 3 new messages".
 ```
 
 ## Client-side translation
 
 Components which use client-side JavaScript, like React hooks, are client components. Since all translation in the `gt-react` stack happens on the server, content must be translated before being passed to the client for translation to work.
 
-If you're using inline translation, the simplest way to do this is with a `<T>` component. You can pass translatable content as the props of a client-side child of `<T>`:
+The simplest way to do this is with a server-side `t()` function which you pass as a child:
 
 ```js
 // page.js, a server component
  
-import { T } from '@i18n'
+import { t } from '@i18n'
 import ClientSideButton from './ClientSideButton.js' // a client component
  
 export default function Page() {
     return (
-        <T id='button'>
-            <main>
-                <h1>Welcome to my site!</h1>
-                <ClientSideButton>Get Started!</ClientSideButton>
-            </main>
-        </T>
+        <main>
+            <h1>Welcome to my site!</h1>
+            <ClientSideButton>{t('my_id')}</ClientSideButton>
+        </main>
     )
 }
 ```
@@ -270,18 +215,7 @@ import ClientComponent from './ClientComponent.js'
  
 export default function Page() {
     return (
-        <GTProvider dictionary={{
-            "welcome": {
-                "prompt": <>Click here to change the text!</>,
-                "hello": <>Hello, world! This is a fragment.</>,
-                "goodbye": (
-                    <p>
-                        <b>Goodbye, world!</b> 
-                        This is a paragraph with a bold tag.
-                    </p>
-                )
-            }
-        }}>
+        <GTProvider>
             <ClientComponent />
         </GTProvider>
     )
@@ -324,10 +258,11 @@ export default function ClientComponent() {
 
 `<GTProvider>` integrates with existing `gt-react` dictionaries. If a dictionary is included in the config file, initializing `<GTProvider>` without a dictionary prop will provide all the translations in your default dictionary to the client.
 
+Alternatively, you can provide an `id` prop to the `<GTProvider>` to only get a nested route in the default dictionary.
+
 ### Variables (client-side)
 
-You can use variables in the `<GTProvider>` dictionary. 
-If you need to supply values to them which can only be known on the client-side (e.g., a value governed by a `useState()` hook), then you can pass a `values`, or `n` parameter to the `t()` function on the client-side.
+If you need to supply values to variables in a translation which can only be known on the client-side (e.g., a value determined by a `useState()` hook), just pass a parameter to the `t()` function on the client-side.
 
 For example:
 
@@ -386,10 +321,6 @@ export const config = {
 ```
 
 To read more about `gt-react` Next.js middleware, go to docs.generaltranslation.com/middleware/next.
-
-## Using your own translations
-
-See docs.generaltranslation.com/dictionaries/self-serve.
 
 ## AI Assistant Instructions
 
