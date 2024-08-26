@@ -55,7 +55,12 @@ my-app/
 └── README.md
 ```
 
-`i18n.js` is a central config file for `gt-react` components. **`<T>` and other server-side `gt-react` functions are exported from it**, not from the library directly. 
+`i18n.js` is a central config file for `gt-react` components. **`t()` and other server-side `gt-react` functions are exported from it**, not from the library directly. 
+
+<Callout type="info">
+You can name the config file whatever you want and place it wherever you like. Calling it `i18n.js` is just a convention.
+</Callout>
+
 The file should look like:
 
 ```js copy
@@ -63,58 +68,21 @@ import { createGT } from 'gt-react/next';
 
 export const { T, GTProvider } = createGT({
     defaultLocale: 'en-US' // the language of your app
+    dictionary: {
+        /* your dictionary here */
+    }
 });
 ```
 
-Proceed with support for all languages, or use this [page](https://www.generaltranslation.com/dashboard/redirect/welcome) to select common configuration options.
-
-<Callout type="info">
-You can name the config file whatever you want and place it wherever you like. Calling it `i18n.js` is just a convention.
-</Callout>
-
-### Server-side i18n
-
-In the Next.js App Router, components are Server Components by default. The best way to internationalize these components is with `<T>`:
-
-```js copy
-import { T } from '@i18n'
-```
-
-When imported from `i18n.js`, `<T>` is a server-only component that surrounds any text or tags you'd like to be internationalized. 
-Best practice is to pass a unique id prop to each `<T>` component. 
-
-For example:
-
-```js copy
-import Link from 'next/link'
-import { T } from '@i18n'
-
-export default function Page() {
-    return (
-        <T id='landing'>
-            <h1>Welcome to my site!</h1>
-            <ul>
-                <li>This site contains nested tags.</li>
-                <li>Some tags are <b>bold</b>, some are <i>italicized</i>.</li>
-                <li>There can be <span className="text-green">tags within tags within</span> tags.</li>
-                <li>On <Link href="/">this page</Link>, simple children of any type of tag will still be translated.</li>
-            </ul>
-        </T>
-    )
-}
-```
-
-**That's it! The page is ready to go in dozens of languages.**
-
-### Using a dictionary
+## Dictionaries
 
 Keeping translatable content in a single `.json` or `.js` file is a common technique in web app development.
 Using a single dictionary allows for easier management of translations and ensures consistency across the application.
 
-In addition to inline translation components like `<T>`, `gt-react` also supports dictionaries.
 **Uniquely, `gt-react` dictionaries don't just support strings**. You can write content in JSX too!
+This means you can usually copy and paste your components directly into your dictionaries.
 
-A typical dictionary could look something like:
+A simple dictionary could look something like:
 
 ```js copy
 // dictionary.js
@@ -134,9 +102,9 @@ const dictionary = {
 export default dictionary;
 ```
 
-<Callout>
-    Ensure that every entry in the dictionary has a unique ID. This ID is formed by adding periods between nested keys. For example, in the above dictionary, the keys would be `landing.hero`, `landing.get_started_button`, and `client_component.greeting`.
-</Callout>
+## Server-side i18n
+
+In the Next.js App Router, components are Server Components by default.
 
 Translated dictionary entries can be used in server components with the `t()` function.
 
@@ -166,36 +134,14 @@ export default function Page() {
 }
 ```
 
-Read more about dictionaries [here](/dictionaries).
+Read more about dictionaries [here](/config/dictionaries).
 
 ### Client-side i18n
 
 Components which use client-side JavaScript, like React [hooks](https://react.dev/reference/react/hooks), are client components. 
 Since all translation in the `gt-react` stack happens on the server, content must be translated before being passed to the client for translation to work.
 
-If you're using inline translation, the simplest way to do this is with a `<T>` component.
-You can pass translatable content as the props of a client-side child of `<T>`:
-
-```javascript copy
-// page.js, a server component
-
-import { T } from '@i18n'
-import ClientSideButton from './ClientSideButton.js' // a client component
-
-export default function Page() {
-    return (
-        <T id='button'>
-            <main>
-                <h1>Welcome to my site!</h1>
-                <ClientSideButton>Get Started!</ClientSideButton>
-            </main>
-        </T>
-    )
-}
-```
-
-However, sometimes it is difficult to pass children directly from server to client, for example if the client component is displayed conditionally, or is nested within another client component.
-In this case, it is recommended to use `<GTProvider>`.
+Use `<GTProvider>` to pass translations from the server to the client.
 
 ```javascript copy
 import { GTProvider } from '@i18n'
@@ -267,107 +213,58 @@ export default function ClientComponent() {
 }
 ```
 
-`<GTProvider>` integrates with existing `gt-react` dictionaries. 
-If a dictionary is included in the config file, initializing `<GTProvider>` without a dictionary prop will provide all the translations in your default dictionary to the client.
-
-Read more about `<GTProvider>` [here](/server/gt-provider).
-
 ### Using variables
 
 Sometimes you need to include a variable in your content. For example, imagine you are displaying a welcome page and you want to address your user by their first name:
 
 ```js copy
-export default function Page() {
-    const name = "Alice" // or "Bob", "Charlie", etc.
-    return (
-        <main>
-            Nice to meet you, {name}!
-        </main>
-    )
-}
+TBD
 ```
 
-To translate a phrase involving a variable, use the [`<Var>`](/server/variables#var) component of `gt-react`:
+To translate a phrase involving a variable, use the [`<Var>`](/essentials#variables) component of `gt-react`:
 
 ```js copy
-import { T, Var } from "@i18n" // make sure you are exporting <Var> alongside <T>
+TBD
+```
 
-export default function Page() {
-    const name = "Alice" // or "Bob", "Charlie", etc.
-    return (
-        <main>
-            <T id='greeting'>
-                Nice to meet you, <Var name="name">{name}</Var>!
-            </T>
-        </main>
-    )
-}
+```js copy
+TBD
 ```
 
 The children of the `<Var>` component will remain untranslated and can change without forcing a retranslation.
+Anything you include as the children of the `<Var>` in the dictionary will be the default value, rendered if no value is supplied in the `t()` function. 
 
 <Callout>
-    You can use the `name` prop to let the AI model know what sort of variable it's translating.
+    Use the `name` prop to specify the name of the variable, then assign a value to that name like `t('id', { [your_variable_name]: your_value })
 </Callout>
 
-In addition to `<Var>`, there are the specialized variable types [`<Num>`](/server/variables#num) for numbers, [`<DateTime>`](/server/variables#datetime) for dates, and [`<Currency>`](/server/variables#currency) for currencies.
-
-You can pass variables to the client-side using a `<GTProvider>`, or import from `gt-react/client` to use them in your default dictionary.
+In addition to `<Var>`, there are the specialized variable types [`<Num>`](/essentials#num) for numbers, [`<DateTime>`](/essentials#datetime) for dates, and [`<Currency>`](/essentials#currency) for currencies.
 
 ### Plurals
 
 Imagine you wanted to translate a phrase with a number that could be singular or plural, like:
 
 ```js copy
-export default function Page() {
-    const n = 2 // or any other number
-    return (
-        <main>
-            You have {n} new messages.
-        </main>
-    )
-}
+TBD
+```
+```js copy
+TBD
 ```
 
 You could use the `<Var>` component, or better yet, the `<Num>` component, to render the number without forcing a new translation for each different value of `n`.
 
 ```js copy
-import { T, Num } from "@i18n" // make sure you are exporting <Num> alongside <T>
-
-export default function Page() {
-    const n = 2 // or any other number
-    return (
-        <main>
-            <T id='messages'>
-                You have <Num>{n}</Num> new messages.
-            </T>
-        </main>
-    )
-}
+TBD
 ```
 
 But sometimes the translation needs to change depending on the value of the number. For example, "You have 1 new *message*", but "You have 2 new *messages*". 
 In this case, try using the `<Plural>` component to translate. `<Plural>` is a special form of `<T>` that takes a number `n` as a prop. Depending on the value of `n` and your user's current locale, it selectively renders a singular or plural form.
 
 ```js copy
-import { Plural, Num } from "@i18n" // make sure you are exporting these
-
-export default function Page() {
-    const n = 2 // or any other number
-    return (
-        <main>
-            <Plural 
-                n={n}
-                singular={<>You have 1 new message.</>}
-            >
-                You have <Num>{n}</Num> new messages.
-            </Plural>
-        </main>
-    )
-}
+TBD
 ```
 
-Learn more about plurals [here](/server/plural), how to use plurals with dictionaries [here](/dictionaries/server-t#plural-t), or how to use plurals on the client-side [here](/client/client-plural).
+Learn more about plurals [here](/essentials#plurals).
 
 <Callout>
     Some languages, like Arabic, have a *dual*, a special plural form for when there are exactly two of something.
@@ -377,14 +274,3 @@ Learn more about plurals [here](/server/plural), how to use plurals with diction
 ### Next steps
 
 - Use the [AI reference sheet](/ai-guide) to ask your favorite AI model to set up the `gt-react` library.
-
-- Change how translated text is rendered, the default language, or which languages are approved for translation, by [configuring](/config) it.
-
-- Learn about the [parameters](/server/t-component#props) of the `<T>` component, including `id`.
-
-- Read more about translating [Client Components](/client) with `<GTProvider>`.
-
-- Read more about [variables](/server/variables) like `<Var>`, `<Num>`, `<Currency>`, and `<DateTime>`.
-
-- Read more about translating plural forms with [`<Plural>`](/server/plural).
-
