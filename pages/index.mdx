@@ -40,7 +40,7 @@ Here's how `gt-react` works when your [`defaultLocale`](/config#defaultlocale) i
 
 This can happen if:
 - You never created a remote dictionary for the language your user is requesting.
-- You've changed an item your local (default language) dictionary without updating your remote one.
+- You've changed an item in your local (default language) dictionary without updating your remote one.
 - A translation is not ready yet.
 
 If no cached translation exists, we'll perform a translation on-demand. This translation will be streamed via your server to your user within a few seconds.
