@@ -1,21 +1,33 @@
+import { Callout } from 'nextra/components'
+
 # Translate from CLI
 
-The `gt-react-cli` tool is used to push a JSX translation dictionary to General Translation's cloud cache.
+The `gt-update` tool is used to push a JSX translation dictionary to General Translation's cloud cache.
 
 The dictionary will be translated into your project's previous languages, plus any you specify while running the script, and be available and ready to use within a few minutes.
+
+## Installation
+
+```bash
+npm i --save-dev gt-update
+```
+
+<Callout type="info">
+Using `--save-dev` will add the package as a development dependency in your project. This means it will be listed under `devDependencies` in your `package.json` file and won't be installed in your production environment when running `npm install --production`.
+</Callout>
 
 ## Usage
 
 Run the following command from the **root of your repository**:
 
 ```bash
-npx gt-react-cli <path_to_dictionary> [--apiKey=<apiKey>] [--projectID=<projectID>] [--dictionaryName=<dictionaryName>] [--languages=<lang1,lang2,...>]
+npx i18n <path_to_dictionary> [--apiKey=<apiKey>] [--projectID=<projectID>] [--dictionaryName=<dictionaryName>] [--languages=<lang1,lang2,...>]
 ```
 
 ### Example
 
 ```bash
-npx gt-react-cli ./src/dictionary.js --apiKey=gtx-12..89 --projectID=ab..12 --dictionaryName=my-site --languages=fr,es
+npx i18n ./src/dictionary.js --apiKey=gtx-12..89 --projectID=ab..12 --dictionaryName=my-site --languages=fr,es
 ```
 
 This command:
