@@ -2,50 +2,56 @@ import { Callout } from 'nextra/components'
 
 # Translate from CLI
 
-<Callout type="warning">
-As of August 31st, the CLI tool is being rewritten. Please come back tomorrow.
-</Callout>
-
-The `gt-update` tool is used to push a JSX translation dictionary to General Translation's cloud cache.
-
-The dictionary will be translated into your project's previous languages, plus any you specify while running the script, and be available and ready to use within a few minutes.
+The `gt-update` is a command-line tool that processes React JSX translation dictionaries and pushes them to General Translation's cloud for translation into multiple languages. The dictionaries are translated into previously used languages in your project and any additional languages you specify during the script's execution.
 
 ## Installation
 
-```bash
-npm i --save-dev gt-update
+To install `gt-update`, run the following command:
+
+```bash copy
+npm install -g gt-update
 ```
 
 <Callout type="info">
-Using `--save-dev` will add the package as a development dependency in your project. This means it will be listed under `devDependencies` in your `package.json` file and won't be installed in your production environment when running `npm install --production`.
+Using `-g` will install the package globally, ensuring it isn't included in production builds of your project.
 </Callout>
 
 ## Usage
 
-Run the following command from the **root of your repository**:
+Run the following command from the **root of your repository** to process a dictionary file:
 
-```bash
-npx i18n <path_to_dictionary> [--apiKey=<apiKey>] [--projectID=<projectID>] [--dictionaryName=<dictionaryName>] [--languages=<lang1,lang2,...>]
+```bash copy
+npx i18n
+```
+
+If you're using a file called `dictionary.js` (also `.ts`, `.jsx`, or `.tsx`) for your JSX dictionary, and a file called `i18n.js` (also `.ts`, `.jsx`, or `.tsx`) for config, this is usually enough!
+
+This is the full command, for specifying configuration options and filepaths:
+
+
+```text
+npx i18n <path_to_dictionary> [--apiKey=<apiKey>] [--projectID=<projectID>] [--dictionaryName=<dictionaryName>] [--languages=<lang1,lang2,...>] [--defaultLanguage=<defaultLanguage>] [--override] [--config=<configFilePath>] [--i18n=<i18nFilePath>]
 ```
 
 ### Example
 
 ```bash
-npx i18n ./src/dictionary.js --apiKey=gtx-12..89 --projectID=ab..12 --dictionaryName=my-site --languages=fr,es
+npx i18n ./src/dictionary.js --apiKey=gtx-12..89 --projectID=ab..12 --dictionaryName=my-site --languages=fr,es --defaultLanguage=en
 ```
 
 This command:
-- Pushes the dictionary located at `./src/dictionary.js`.
+- Processes the dictionary located at `./src/dictionary.js`.
 - Uses the API key `gtx-12..89` and project ID `ab..12`.
 - Updates the dictionary with the name `my-site`.
 - Translates to French (`fr`) and Spanish (`es`).
+- Sets English (`en`) as the default language for the dictionary.
 
 ### Required Arguments
 
-- `--apiKey=<apiKey>`: The GeneralTranslation API key. 
+- `--apiKey=<apiKey>`: The GeneralTranslation API key.
 - `--projectID=<projectID>`: The project ID for your translations.
 
-Alternatively, place your `GT_API_KEY` and `GT_PROJECT_ID` in a `.env` file in the **root of your repository**.
+Alternatively, you can place your `GT_API_KEY` and `GT_PROJECT_ID` in a `.env` file at the **root of your repository**:
 
 ```.env
 GT_API_KEY="gtx-12..89"
@@ -54,15 +60,21 @@ GT_PROJECT_ID="ab..12"
 
 ### Optional Arguments
 
-- `--dictionaryName=<dictionaryName>`: Specify the dictionary name to be updated.
+- `--dictionaryName=<dictionaryName>`: Specify the dictionary name for metadata purposes.
 - `--languages=<lang1,lang2,...>`: Comma-separated list of target languages (e.g., `fr`, `es`).
+- `--defaultLanguage=<defaultLanguage>`: Specify a default language code or name for metadata purposes.
+- `--override`: Override existing translations in the General Translation cloud cache.
+- `--config=<configFilePath>`: Path to a `tsconfig.json` or `jsconfig.json` file to apply TypeScript or JavaScript configurations.
+- `--i18n=<i18nFilePath>`: Path to an `i18n.js` configuration file to automatically set `projectID`, `defaultLanguage`, `languages`, and `dictionaryName`.
 
-### Full Example
+### Override
 
-```bash
-npx gt-react-cli ./src/dictionary.js --dictionaryName=my-site --languages=fr,es
-```
+The `--override` command is an optional flag that allows you to replace any existing translations with the new translations from your dictionary.
 
-This will push the dictionary and update the translations for the specified languages.
+## Troubleshooting
 
-## Manage dictionaries from CLI
+- **Ensure you're in the root directory of your project**: The `npx i18n` command needs to be run from the root directory of your project. If you're in a subdirectory, the command might not be able to find the dictionary or configuration files.
+- **Check your API key and project ID**: Make sure that your `apiKey` and `projectID` are correct and correspond to your General Translation account.
+- **Verify the dictionary path**: Ensure that the path to your dictionary file is correct and that the file exists.
+- **Environment variables not loading**: If you’re using a `.env` file, ensure it’s properly formatted and located in the root directory.
+- **Dependencies not installed**: Make sure all necessary dependencies are installed by running `npm install` before executing the translation command.
