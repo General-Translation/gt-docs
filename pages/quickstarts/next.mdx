@@ -66,11 +66,9 @@ The file should look like:
 ```js copy
 import { createGT } from 'gt-react/next';
 
-export const { T, GTProvider } = createGT({
+export const { t, GTProvider } = createGT({
     defaultLocale: 'en-US' // the language of your app
-    dictionary: {
-        /* your dictionary here */
-    }
+    approvedLocales: ['en-US', 'fr', 'de', 'es', 'it', 'ja'] // the languages you want your app to be available in
 });
 ```
 
@@ -100,6 +98,19 @@ const dictionary = {
 }
 
 export default dictionary;
+```
+
+It would be imported into your `i18n.js` like this:
+
+```js copy
+import dictionary from './dictionary'
+import { createGT } from 'gt-react/next';
+
+export const { t, GTProvider } = createGT({
+    defaultLocale: 'en-US'
+    approvedLocales: ['en-US', 'fr', 'de', 'es', 'it', 'ja'],
+    dictionary
+});
 ```
 
 ## Server-side i18n
@@ -262,7 +273,7 @@ Anything you include as the children of the `<Var>` in the dictionary will be th
 </Callout>
 
 Sometimes variables need to be localized in some way — for example, in US English (`en-US`) dates are written month first, with slashes: MM/DD/YY. In German (`de`) they are written day first, with periods: DD.MM.YY.
-In addition to `<Var>`, there are the specialized variable types [`<Num>`](/essentials#num) for numbers, [`<DateTime>`](/essentials#datetime) for dates, and [`<Currency>`](/essentials#currency) for currencies, which handle these 
+In addition to `<Var>`, there are the specialized variable types [`<Num>`](/essentials#num) for numbers, [`<DateTime>`](/essentials#datetime) for dates, and [`<Currency>`](/essentials#currency) for currencies, which handle these. 
 
 ```js copy
 const { Var, Num, DateTime, Currency } = createVariables();

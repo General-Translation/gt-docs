@@ -8,21 +8,23 @@ This function should be called in a configuration file called something like `i1
 
 ```javascript copy
 // i18n.js
-// initialize gt-react to translate only to French, German, Spanish, and Italian
+// initialize gt-react to translate myDictionary to French, German, Spanish, and Italian
 
+import myDictionary from './dictionary'
 import { createGT } from 'gt-react/next'
 
+// use the t() exported from this file in your components
 export const {
-	T, Plural, Value,
-	GTProvider, intl,
-	Var, Num, Currency, DateTime
+	t, GTProvider
 } = createGT({
 	projectID: "abcdef12-3456-789a-bcd4-ef123456789a"
 	defaultLocale: "en",
-	dictionaryName: "my-app", // distinguishing multiple projects
+	dictionaryName: "my-app", // "default" if left blank
 	approvedLocales: [
 		"en", "fr", "de", "es", "it"
-	]
+	],
+	dictionary: myDictionary,
+	description: "My personal site" // a description of the project which will be used to help translate
 });
 ```
 
@@ -33,22 +35,21 @@ export const {
 - **Type**: `string`
 - **Description**: Specifies the default locale for the app. This is the language that you use natively for your app.
 
+### `approvedLocales`
+
+- **Type**: `string[]`
+- **Description**: The locales to which the app should be internationalized. 
+
 ### `projectID`
 
 - **Type**: `string`
 - **Description**: Specifies the project ID, which can be found on the General Translation [Dashboard](https://www.generaltranslation.com/dashboard). This ID can also be set in the environment as `GT_PROJECT_ID`.
 
-### `dictionaryName`
-
-- **Type**: `string`
-- **Description**: Specifies the name of the dictionary to use. This is useful for distinguishing between multiple projects or different sets of translations within the same project.
-
-### `apiKey`
-
-- **Type**: `string`
-- **Description**: Specifies the API key for interacting with our cloud service. **It is best to set this in the environment as `GT_API_KEY` rather than in the config file.**
-
 ## Setting environment variables
+
+<Callout>
+	You need an API key to use the [CLI tool](/essentials/cli). Server-side API keys are recommended, but not strictly necessary, in production, so you can use [on-demand](/#what-happens-if-a-translation-doesnt-exist) and [inline](/inline) translation.
+</Callout>
 
 An API key is a 36-character string beginning `gtx-` which is used to authenticate your app with our cloud translation service. Create one on the [API Keys](https://www.generaltranslation.com/dashboard/redirect/api-keys) page.
 
@@ -78,14 +79,14 @@ In other frameworks, such as Express.js, use a package like [dotenv](https://git
 | Parameter                | Type                                      | Default Value                              | Description                                                                                   |
 |--------------------------|-------------------------------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------|
 | **Cloud Integration**    |                                           |                                            |                                                                                               |
-| `apiKey`                 | `string`                                  | Value of environment variable `GT_API_KEY` | API key to authenticate with cloud services.                                                                |
-| `projectID`              | `string`                                  | Value of environment variable `GT_PROJECT_ID` | Project ID to authenticate with cloud services.                                                             |
+| `apiKey`                 | `string`                                  | Value of environment variable `GT_API_KEY` | API key to authenticate with cloud services.                                                  |
+| `projectID`              | `string`                                  | Value of environment variable `GT_PROJECT_ID` | Project ID to authenticate with cloud services.                                               |
 | `baseURL`                | `string`                                  | `"https://prod.gtx.dev"`                   | Base URL for API requests.                                                                    |
-| `cacheURL`               | `string`                                  | `"https://cache.gtx.dev"`                  | URL for the global cache.                                                                              |
+| `cacheURL`               | `string`                                  | `"https://cache.gtx.dev"`                  | URL for the global cache.                                                                     |
 | `remoteSource`           | `boolean`                                 | `true`                                     | Determines whether the library fetches a dictionary from a remote cache.                      |
 | `automaticTranslation`   | `boolean`                                 | `true`                                     | Determines whether the library translates using cloud services.                               |
 | **Locale Information**   |                                           |                                            |                                                                                               |
-| `approvedLocales`        | `string[]`                                |                        | List of approved locales.                                                                     |
+| `approvedLocales`        | `string[]`                                |                                            | List of approved locales.                                                                     |
 | `defaultLocale`          | `string`                                  | First locale in `approvedLocales` or `'en'` | Default locale for the translation.                                                           |
 | `getLocale`              | `() => string`                            | Function that returns `defaultLocale`      | Function to get the current locale.                                                           |
 | **Rendering**            |                                           |                                            |                                                                                               |
@@ -94,11 +95,12 @@ In other frameworks, such as Express.js, use a package like [dotenv](https://git
 | `renderTimeout`          | `number \| null`                          | `12500`                                    | Timeout (in milliseconds) before rendering a new translation is called off.                   |
 | **Dictionaries**         |                                           |                                            |                                                                                               |
 | `dictionaryName`         | `string`                                  | `"default"`                                | Name of the dictionary to use.                                                                |
-| `dictionary`             | `Record<string, any>`                     |                                | Dictionary object containing default language content.                                        |
+| `dictionary`             | `Record<string, any>`                     |                                            | Dictionary object containing default language content.                                        |
 | `translations`           | `Record<string, () => Promise<Record<string, any>>>` |                              | An object containing strings that correspond to locales and functions that define translation dictionaries associated with those locales. |
 | **Batching Configuration**|                                          |                                            |                                                                                               |
 | `maxConcurrentRequests`  | `number`                                  | `2`                                        | Maximum number of concurrent requests.                                                        |
 | `batchInterval`          | `number`                                  | `1000`                                     | Interval for batching requests in milliseconds.                                               |
 | **Other Metadata**       |                                           |                                            |                                                                                               |
-| `getMetadata`            | `() => Record<string, any>`               | | Function to get additional metadata.                                                          |
-| `...metadata`  | `any`                                     |                                            | Any additional metadata. Used for experimental variables.                                     |
+| `getMetadata`            | `() => Record<string, any>`               |                                            | Function to get additional metadata.                                                          |
+| `description`            | `string`                                  |                                            | Description of your project used to help translation.                                         |
+| `...metadata`            | `any`                                     |                                            | Any additional metadata. Used for experimental variables.                                     |

@@ -2,7 +2,7 @@ import { Callout } from 'nextra/components'
 
 # Translate from CLI
 
-The `gt-update` is a command-line tool that processes React JSX translation dictionaries and pushes them to General Translation's cloud for translation into multiple languages. The dictionaries are translated into previously used languages in your project and any additional languages you specify during the script's execution.
+`gt-update` is a command-line tool for sending `gt-react` dictionaries for translation. The dictionaries are translated into your project's existing languages, plus any additional languages you specify during the script's execution.
 
 ## Installation
 
@@ -27,7 +27,6 @@ npx i18n
 If you're using a file called `dictionary.js` (also `.ts`, `.jsx`, or `.tsx`) for your JSX dictionary, and a file called `i18n.js` (also `.ts`, `.jsx`, or `.tsx`) for config, this is usually enough!
 
 This is the full command, for specifying configuration options and filepaths:
-
 
 ```text
 npx i18n <path_to_dictionary> [--apiKey=<apiKey>] [--projectID=<projectID>] [--dictionaryName=<dictionaryName>] [--languages=<lang1,lang2,...>] [--defaultLanguage=<defaultLanguage>] [--override] [--config=<configFilePath>] [--i18n=<i18nFilePath>]
