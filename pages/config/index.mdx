@@ -2,7 +2,7 @@ import { Callout } from 'nextra/components'
 
 # Configuring `gt-react`
 
-The `gt-react` library is initialized using the `createGT()` function. This function accepts an object with various configuration options.
+The `gt-react` library is initialized using the `initGT()` function. This function accepts an object with various configuration options.
 
 This function should be called in a configuration file called something like `i18n.js`, and placed in the root of your project.
 
@@ -11,12 +11,12 @@ This function should be called in a configuration file called something like `i1
 // initialize gt-react to translate myDictionary to French, German, Spanish, and Italian
 
 import myDictionary from './dictionary'
-import { createGT } from 'gt-react/next'
+import { initGT } from 'gt-react/next'
 
 // use the t() exported from this file in your components
 export const {
 	t, GTProvider
-} = createGT({
+} = initGT({
 	projectID: "abcdef12-3456-789a-bcd4-ef123456789a"
 	defaultLocale: "en",
 	dictionaryName: "my-app", // "default" if left blank
@@ -74,7 +74,7 @@ In other frameworks, such as Express.js, use a package like [dotenv](https://git
 
 ## List of parameters
 
-<Callout>Besides `apiKey` and `projectID`, which should be set in the environment, all parameters are optional. This means `gt-react` functions can be initialized by calling `createGT()` with no arguments.</Callout>
+<Callout>Besides `apiKey` and `projectID`, which should be set in the environment, all parameters are optional. This means `gt-react` functions can be initialized by calling `initGT()` with no arguments.</Callout>
 
 | Parameter                | Type                                      | Default Value                              | Description                                                                                   |
 |--------------------------|-------------------------------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------|

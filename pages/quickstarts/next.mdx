@@ -64,9 +64,9 @@ You can name the config file whatever you want and place it wherever you like. C
 The file should look like:
 
 ```js copy
-import { createGT } from 'gt-react/next';
+import { initGT } from 'gt-react/next';
 
-export const { t, GTProvider } = createGT({
+export const { t, GTProvider } = initGT({
     defaultLocale: 'en-US' // the language of your app
     approvedLocales: ['en-US', 'fr', 'de', 'es', 'it', 'ja'] // the languages you want your app to be available in
 });
@@ -104,9 +104,9 @@ It would be imported into your `i18n.js` like this:
 
 ```js copy
 import dictionary from './dictionary'
-import { createGT } from 'gt-react/next';
+import { initGT } from 'gt-react/next';
 
-export const { t, GTProvider } = createGT({
+export const { t, GTProvider } = initGT({
     defaultLocale: 'en-US'
     approvedLocales: ['en-US', 'fr', 'de', 'es', 'it', 'ja'],
     dictionary
@@ -115,17 +115,17 @@ export const { t, GTProvider } = createGT({
 
 ## Server-side i18n
 
-In the Next.js App Router, components are Server Components by default.
+In the Next.js App Router, components are Server Components by default. 
 
-Translated dictionary entries can be used in server components with the `t()` function.
+To get a translation in a server component, use the `t()` function and pass the appropriate `id` string.
 
 ```js copy
 // i18n.js 
 
-import { createGT } from 'gt-react/next';
+import { initGT } from 'gt-react/next';
 import dictionary from './dictionary.js'
  
-export const { t } = createGT({
+export const { getGT } = initGT({
     defaultLocale: 'en-US',
     dictionary: dictionary
 });
@@ -134,9 +134,10 @@ export const { t } = createGT({
 ```js copy
 // page.js 
 
-import { t } from '@i18n'
+import { getGT } from '@i18n'
 
 export default function Page() {
+    const t = getGT()
     return (
         <main>
             {t('landing.hero')}
@@ -145,7 +146,11 @@ export default function Page() {
 }
 ```
 
-Read more about dictionaries [here](/config/dictionaries).
+You can also import the `t()` component directly, **but only in server components**:
+
+<Callout type="info">
+    If you're not sure whether a component will be rendered on the client or the server, you should use `getGT()` to safely create the `t()` function.
+</Callout>
 
 ### Client-side i18n
 
@@ -158,15 +163,16 @@ Use `<GTProvider>` to pass translations from the server to the client.
 import { GTProvider } from '@i18n'
 ```
 
-`<GTProvider>` provides a dictionary of translations to the client using React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API. 
-These translations can then be accessed with the client-side `useGT()` hook.
+`<GTProvider>` provides a dictionary of translations to the client using React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API.
+As long as a client-side component has context provided by `<GTProvider>`, it can be accessed with `getGT()`.
 
 <Callout type="info">
-`useGT()` is equivalent to the `useTranslations()` hook in other i18n libraries.
+`getGT()` is equivalent to the `useTranslations()` hook in other i18n libraries.
 </Callout>
 
 ```javascript copy
 import { GTProvider } from '@i18n' // remember this can only be imported in server components
+
 /*
 Where dictionary is something like: 
 {
@@ -194,13 +200,12 @@ export default function Page() {
 
 'use client'
 
-import { useGT } from 'gt-react/client' // client-side library
+import { getGT } from '@i18n'
 import { useState } from 'react'
 
 export default function ClientComponent() {
 
-    // Specifying a part of the dictionary here for cleaner ids in the t function
-    const t = useGT() 
+    const t = getGT()
 
     const [currentState, setCurrentState] = useState(true)
 
@@ -234,9 +239,9 @@ To translate a phrase involving a variable, use the [`<Var>`](/essentials#variab
 
 ```js copy
 // dictionary.js
-import { createVariables } from 'gt-react/next'
+import { initVariables } from 'gt-react/next'
 
-const { Var } = createVariables();
+const { Var } = initVariables();
 
 const dictionary = {
     "var_example": <>Welcome to our site, <Var name="firstname"/>!</>
@@ -246,8 +251,14 @@ export default dictionary;
 ```
 
 ```js copy
+import { getGT } from '@i18n'
+
 export default function Page() {
+
+    const t = getGT();
+
     const firstname = "Alice" // or "Bob", "Charlie", etc.
+
     return (
         <main>
             {t('var_example', { firstname })}
@@ -267,7 +278,7 @@ Sometimes variables need to be localized in some way — for example, in US Engl
 In addition to `<Var>`, there are the specialized variable types [`<Num>`](/essentials#num) for numbers, [`<DateTime>`](/essentials#datetime) for dates, and [`<Currency>`](/essentials#currency) for currencies, which handle these. 
 
 ```js copy
-const { Var, Num, DateTime, Currency } = createVariables();
+const { Var, Num, DateTime, Currency } = initVariables();
 ```
 
 ### Plurals
@@ -300,7 +311,7 @@ For example, many Arabic nouns have a dual form, a unique type of plural that is
 ```js
 // dictionary.js
 
-const { Num } = createVariables();
+const { Num } = initVariables();
 
 const dictionary = {
     "messages": [
@@ -316,7 +327,10 @@ Then, when you render your plural, pass a number `n`.
 Depending on the value of `n` and your user's current locale, it selectively renders a singular or plural form.
 
 ```js copy
+import { getGT } from '@i18n'
+
 export default function Page() {
+    const t = getGT();
     const n = 2; // could be any number
     return (
         <main>

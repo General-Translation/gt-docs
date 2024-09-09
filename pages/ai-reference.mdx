@@ -37,9 +37,9 @@ Set up your `.env` (or `.env.local` in Next.js) environment with the following v
 `i18n.js` is a central config file from which every server-side function is imported. Recommended placement in the root or `src/` directory of your project.
 
 ```js
-import { createGT } from 'gt-react/next'; // or 'gt-react/server' in non-Next.js frameworks
+import { initGT } from 'gt-react/next'; // or 'gt-react' in non-Next.js frameworks
 
-export const { t } = createGT({
+export const { getGT, GTProvider } = initGT({
   defaultLocale: 'en-US', // locales are BCP-47 language codes
   dictionary: {
     "greeting": <>Hello, world</>,
@@ -56,7 +56,7 @@ export const { t } = createGT({
 });
 ```
 
-`createGT()` parameters include:
+`initGT()` parameters include:
 - `defaultLocale` (string) specifies the language that you use natively for your app.
 - `approvedLocales` (string[]) specifies the approved locales that your app should be translated into.
 - For a full list, see docs.generaltranslation.com/config.
@@ -78,9 +78,10 @@ Dictionary entries can be used in server components with the `t()` function.
 This translation will display in every language!
 
 ```js
-import { t } from '@i18n'
+import { getGT } from '@i18n'
  
 export default function Page() {
+    const t = getGT();
     return (
         <main>
             {t('greeting')}
@@ -104,8 +105,8 @@ They can be used in dictionaries like:
 ```js
 // dictionary.js
 
-import { createVariables } from 'gt-react/next'
-const { Var, Num, Currency, DateTime } = createVariables({
+import { initVariables } from 'gt-react/next'
+const { Var, Num, Currency, DateTime } = initVariables({
     defaultLocale: 'en-US'
 });
 
@@ -128,9 +129,10 @@ If no name prop is provided, the default names of these variables are:
 You would then use these variables like:
 
 ```js
-import { t } from '@i18n'
+import { getGT } from '@i18n'
  
 export default function Page() {
+    const t = getGT();
     return (
         <main>
             {t('var_example'), { name: "John" }}
@@ -184,32 +186,14 @@ t('messages', { n: 3 }); // displaying "You have 3 new messages".
 
 Components which use client-side JavaScript, like React hooks, are client components. Since all translation in the `gt-react` stack happens on the server, content must be translated before being passed to the client for translation to work.
 
-The simplest way to do this is with a server-side `t()` function which you pass as a child:
-
-```js
-// page.js, a server component
- 
-import { t } from '@i18n'
-import ClientSideButton from './ClientSideButton.js' // a client component
- 
-export default function Page() {
-    return (
-        <main>
-            <h1>Welcome to my site!</h1>
-            <ClientSideButton>{t('my_id')}</ClientSideButton>
-        </main>
-    )
-}
-```
-
-However, sometimes it is difficult to pass children directly from server to client, for example if the client component is displayed conditionally, or is nested within another client component. 
+Sometimes it is difficult to pass children directly from server to client, for example if the client component is displayed conditionally, or is nested within another client component. 
 In this case, it is recommended to use `<GTProvider>`.
 
 `<GTProvider>` provides a dictionary of translations to the client using React's Context API. 
-These translations can then be accessed with the client-side `useGT()` hook.
+These translations can then be accessed with the client-side `getGT()` hook. (`getGT()` will work on both the client and server.)
 
 ```js
-import { GTProvider } from '@i18n' // remember this can only be imported in server components
+import { GTProvider } from '@i18n' // you should only use this in server components
  
 import ClientComponent from './ClientComponent.js'
  
@@ -229,13 +213,13 @@ export default function Page() {
  
 'use client'
  
-import { useGT } from 'gt-react/client' // client-side library
+import { getGT } from '@i18n' // client-side library
 import { useState } from 'react'
  
 export default function ClientComponent() {
  
     // Specifying a part of the dictionary here for cleaner ids in the t function
-    const t = useGT('welcome') 
+    const t = getGT('welcome') 
  
     const [currentState, setCurrentState] = useState(true)
  
@@ -268,11 +252,11 @@ For example:
 
 ```js
 'use client'
-import { useGT } from 'gt-react/client'
+import { getGT } from '@i18n'
 import { useState } from 'react'
 
 export default function ClientComponent() {
-    const t = useGT()
+    const t = getGT()
     const [count, setCount] = useState(0);
     return (
         <div>
@@ -285,13 +269,8 @@ export default function ClientComponent() {
 
 ## Helper functions
 
-On the server side, use:
 - `getLocale()`, `import { getLocale } from '@i18n'` to get the user's language
 - `getDefaultLocale()`, `import { getDefaultLocale } from '@i18n'` to get the application's default language
-
-On the client side, use:
-- `useLocale()`, `import { useLocale } from 'gt-react/client'` to get the user's language
-- `useDefaultLocale()`, `import { useDefaultLocale } from 'gt-react/client'` to get the application's default language
 
 ## Middleware
 

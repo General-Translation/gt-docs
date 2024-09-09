@@ -21,12 +21,12 @@ export default myDictionary;
 // initialize gt-react to translate myDictionary to any language
 
 import myDictionary from './dictionary'
-import { createGT } from 'gt-react/next'
+import { initGT } from 'gt-react/next'
 
 // use the t() exported from this file in your components
 export const {
 	t, GTProvider
-} = createGT({
+} = initGT({
 	defaultLocale: "en",
 	approvedLocales: [
 		"en", "fr", "de", "es", "it"
@@ -173,13 +173,13 @@ export default function HomePage() {
 
 ## Variables
 
-In `gt-react`, variables allow you to dynamically insert content into your translations that can change but shouldn’t be translated. For example, user names, dates, or numbers may vary between sessions or users, but the surrounding text remains constant. You can use the `createVariables()` function to create components like `<Var>` for inserting custom variables into your translations. Additionally, specialized variable types such as `<Num>`, `<DateTime>`, and `<Currency>` can handle localized numbers, dates, and currencies.
+In `gt-react`, variables allow you to dynamically insert content into your translations that can change but shouldn’t be translated. For example, user names, dates, or numbers may vary between sessions or users, but the surrounding text remains constant. You can use the `initVariables()` function to create components like `<Var>` for inserting custom variables into your translations. Additionally, specialized variable types such as `<Num>`, `<DateTime>`, and `<Currency>` can handle localized numbers, dates, and currencies.
 
 ```js copy
 // dictionary.js
-import { createVariables } from 'gt-react/next';
+import { initVariables } from 'gt-react/next';
 
-const { Var } = createVariables();
+const { Var } = initVariables();
 
 const dictionary = {
     "greeting": <>Welcome to our site, <Var name="firstname"/>!</>
@@ -214,9 +214,9 @@ export default function Page() {
 
 ```js copy
 // dictionary.js
-import { createVariables } from 'gt-react/next';
+import { initVariables } from 'gt-react/next';
 
-const { Num } = createVariables();
+const { Num } = initVariables();
 
 const dictionary = {
     "message_count": [
