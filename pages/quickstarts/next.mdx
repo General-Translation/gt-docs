@@ -172,18 +172,7 @@ import ClientComponent from './ClientComponent.js'
 
 export default function Page() {
     return (
-        <GTProvider dictionary={{
-            "welcome": {
-                "prompt": <>Click here to change the text!</>,
-                "hello": <>Hello, world! This is a fragment.</>,
-                "goodbye": (
-                    <p>
-                        <b>Goodbye, world!</b> 
-                        This is a paragraph with a bold tag.
-                    </p>
-                )
-            }
-        }}>
+        <GTProvider>
             <ClientComponent />
         </GTProvider>
     )
