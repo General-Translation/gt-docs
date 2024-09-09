@@ -66,7 +66,7 @@ The file should look like:
 ```js copy
 import { initGT } from 'gt-react/next';
 
-export const { t, GTProvider } = initGT({
+export const { t, getGT, GTProvider } = initGT({
     defaultLocale: 'en-US' // the language of your app
     approvedLocales: ['en-US', 'fr', 'de', 'es', 'it', 'ja'] // the languages you want your app to be available in
 });
@@ -117,7 +117,7 @@ export const { t, GTProvider } = initGT({
 
 In the Next.js App Router, components are Server Components by default. 
 
-To get a translation in a server component, use the `t()` function and pass the appropriate `id` string.
+To get a translation in a server component, use the `getGT()` function to create `t()`. Then pass `t()` the appropriate `id` string.
 
 ```js copy
 // i18n.js 
@@ -145,12 +145,6 @@ export default function Page() {
     )
 }
 ```
-
-You can also import the `t()` component directly, **but only in server components**:
-
-<Callout type="info">
-    If you're not sure whether a component will be rendered on the client or the server, you should use `getGT()` to safely create the `t()` function.
-</Callout>
 
 ### Client-side i18n
 
