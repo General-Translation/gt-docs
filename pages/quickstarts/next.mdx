@@ -167,6 +167,14 @@ These translations can then be accessed with the client-side `useGT()` hook.
 
 ```javascript copy
 import { GTProvider } from '@i18n' // remember this can only be imported in server components
+/*
+Where dictionary is something like: 
+{
+    "prompt": <>Click me!<>,
+    "hello": <p>Hello, world</p>,
+    "goodbye": <p>Goodbye, world</p>
+}
+*/
 
 import ClientComponent from './ClientComponent.js'
 
@@ -192,7 +200,7 @@ import { useState } from 'react'
 export default function ClientComponent() {
 
     // Specifying a part of the dictionary here for cleaner ids in the t function
-    const t = useGT('welcome') 
+    const t = useGT() 
 
     const [currentState, setCurrentState] = useState(true)
 
@@ -201,13 +209,7 @@ export default function ClientComponent() {
             <button onClick={() => {setCurrentState(prev => !prev)}}>
                 {t('prompt')}
             </button>
-            {
-                currentState
-                ?
-                t('hello')
-                :
-                t('goodbye')
-            }
+            {t(currentState ? 'hello' : 'goodbye')}
         </div>
     )
 }
