@@ -37,7 +37,7 @@ npm i gt-react
 
 ### `i18n.js`
 
-In the root directory of your project, or `src/` if you are using a `src` directory, create a file called `i18n.js`, or `i18n.ts` if you are using TypeScript.
+In the root directory of your project, or `src/` if you are using a `src` directory, create a file called `i18n.js`.
 
 ```
 my-app/
@@ -55,30 +55,30 @@ my-app/
 └── README.md
 ```
 
-`i18n.js` is a central config file for `gt-react` components. **`t()` and other server-side `gt-react` functions are exported from it**, not from the library directly. 
+`i18n.js` is a central config file for `gt-react` components. **`getGT()` and other `gt-react` functions are exported from it**, not from the library directly. 
 
 <Callout type="info">
-You can name the config file whatever you want and place it wherever you like. Calling it `i18n.js` is just a convention.
+    You can name the config file whatever you want and place it wherever you like. Calling it `i18n.js` is just a convention.
 </Callout>
 
-The file should look like:
+`i18n.js` should look like:
 
 ```js copy
 import { initGT } from 'gt-react/next';
 
-export const { t, getGT, GTProvider } = initGT({
-    defaultLocale: 'en-US' // the language of your app
-    approvedLocales: ['en-US', 'fr', 'de', 'es', 'it', 'ja'] // the languages you want your app to be available in
-});
+// initialize the library
+export const { getGT, GTProvider } = initGT(); 
 ```
+
+You can pass a config object to `initGT()` specifying 
 
 ## Dictionaries
 
 Keeping translatable content in a single `.json` or `.js` file is a common technique in web app development.
 Using a single dictionary allows for easier management of translations and ensures consistency across the application.
 
-**Uniquely, `gt-react` dictionaries don't just support strings**. You can write content in JSX too!
-This means you can usually copy and paste your components directly into your dictionaries.
+Uniquely, `gt-react` dictionaries don't just support strings. **You can write content in JSX too!**
+This means you can usually copy and paste the content of your components directly into a `gt-react` dictionary.
 
 A simple dictionary could look something like:
 
@@ -108,16 +108,15 @@ import { initGT } from 'gt-react/next';
 
 export const { t, GTProvider } = initGT({
     defaultLocale: 'en-US'
-    approvedLocales: ['en-US', 'fr', 'de', 'es', 'it', 'ja'],
-    dictionary
+    dictionary: dictionary
 });
 ```
 
-## Server-side i18n
+## `getGT()`
 
 In the Next.js App Router, components are Server Components by default. 
 
-To get a translation in a server component, use the `getGT()` function to create `t()`. Then pass `t()` the appropriate `id` string.
+`initGT()` creates a function called `getGT()`, which you can use in your components like a React [hook](https://react.dev/reference/react/hooks). However, unlike a hook, `getGT()` works in both client and server-rendered components.
 
 ```js copy
 // i18n.js 
@@ -133,6 +132,7 @@ export const { getGT } = initGT({
 
 ```js copy
 // page.js 
+// this will work regardless of whether page is rendered on the client or the server
 
 import { getGT } from '@i18n'
 
@@ -146,7 +146,11 @@ export default function Page() {
 }
 ```
 
-### Client-side i18n
+<Callout type="info">
+`getGT()` is equivalent to the `useTranslations()` hook in other i18n libraries.
+</Callout>
+
+### `<GTProvider>`
 
 Components which use client-side JavaScript, like React [hooks](https://react.dev/reference/react/hooks), are client components. 
 Since all translation in the `gt-react` stack happens on the server, content must be translated before being passed to the client for translation to work.
@@ -159,10 +163,6 @@ import { GTProvider } from '@i18n'
 
 `<GTProvider>` provides a dictionary of translations to the client using React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API.
 As long as a client-side component has context provided by `<GTProvider>`, it can be accessed with `getGT()`.
-
-<Callout type="info">
-`getGT()` is equivalent to the `useTranslations()` hook in other i18n libraries.
-</Callout>
 
 ```javascript copy
 import { GTProvider } from '@i18n' // remember this can only be imported in server components
