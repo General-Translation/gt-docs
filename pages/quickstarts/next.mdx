@@ -325,10 +325,9 @@ import { getGT } from '@i18n'
 
 export default function Page() {
     const t = getGT();
-    const n = 2; // could be any number
     return (
         <main>
-            {t('messages', { n })}
+            {t('messages', { n: 2 })}
         </main>
     )
 }
