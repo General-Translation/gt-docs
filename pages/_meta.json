@@ -1,10 +1,8 @@
 {
   "index": "Introduction",
   "quickstarts": "Quickstarts",
-  "config": "Config",
-  "essentials": "Essentials",
-  "inline": "Inline translation",
-  "middleware": "Middleware",
+  "next": "gt-next",
+  "react": "gt-react",
   "generaltranslation": "generaltranslation",
   "faqs": "FAQs"
 }
