@@ -1,4 +1,4 @@
-import { Callout } from 'nextra/components'
+import { Callout, Tabs } from 'nextra/components'
 
 # General Translation
 
@@ -6,17 +6,28 @@ Welcome to the docs for [General Translation](https://www.generaltranslation.com
 
 We publish internationalization ("i18n") libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps.
 
-### React
-
-```bash copy
-npm i gt-react
-```
-
-### Next.js 
-
-```bash copy
-npm i gt-next
-```
+<Tabs items={['npm', 'yarn']}>
+    <Tabs.Tab>
+    **React**
+    ```bash copy
+    npm i gt-react
+    ```
+    **Next.js**
+    ```bash copy
+    npm i gt-next
+    ```
+    </Tabs.Tab>
+    <Tabs.Tab>
+    **React**
+    ```bash copy
+    yarn add gt-react
+    ```
+    **Next.js**
+    ```bash copy
+    yarn add gt-next
+    ```
+    </Tabs.Tab>
+</Tabs>
 
 Unlike other i18n stacks, `gt-react`:
 - **Translates entire React components, not just strings.** So there's no need to rewrite your site to accomodate new languages. You can write [dictionaries](/config/dictionaries) in full JSX or use inline wrappers like [`<T>`](/inline).

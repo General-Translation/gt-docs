@@ -1,3 +1,89 @@
-import { Callout } from 'nextra/components'
+import { Steps, Callout, Tabs } from 'nextra/components'
 
 # Next.js App Router
+
+This guide describes how to add `gt-next` to a [Next.js](https://nextjs.org) project which is using the [App Router](https://nextjs.org/docs#app-router-vs-pages-router).
+
+<Steps>
+
+### Set up your local environment
+
+Navigate to your existing Next.js app, or follow the instructions [here](https://nextjs.org/docs/getting-started/installation) to create a new one.
+
+In your local environment, usually `.env.local`, set two environment variables:
+
+```.env copy
+GT_API_KEY=""
+GT_PROJECT_ID=""
+```
+
+An API key (`GT_API_KEY`) is a 36-character string beginning `gtx-` which is used to authenticate your app with our cloud translation service. Create one on the [API Keys](https://www.generaltranslation.com/dashboard/redirect/api-keys) page.
+
+Your Project ID can also be found on the Dashboard:
+
+![Code copy container entitled "projectID"](/screenshots/project_id.jpeg)
+
+### Install the library
+
+To install `gt-next`, navigate to your Next.js project's root directory and run: 
+
+<Tabs items={['npm', 'yarn']}>
+    <Tabs.Tab>
+    ```bash copy
+    npm i gt-react
+    ```
+    </Tabs.Tab>
+    <Tabs.Tab>
+    ```bash copy
+    yarn add gt-next
+    ```
+    </Tabs.Tab>
+</Tabs>
+
+### Install the plugin
+
+In the root directory of your project, there should be a file called `next.config.js` (or `.ts`, `.mjs`, `.cjs`).
+
+```
+my-app/
+├── src/
+│   ├── app/
+│   │    └── page.js
+│   └── components/
+│       ├── Header.js
+│       └── Footer.js
+├── public/
+│   └── favicon.ico
+├── next.config.js
+├── .gitignore
+├── package.json
+└── README.md
+```
+
+Edit your `next.config.js` file to run `initGT()`. This function will let you add configuration options like a non-English default language (`defaultLocale`) or a list of approved languages to translate into (`locales`). Use the `withGT()` plugin it returns to configure [Webpack](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) to bundle your `dictionary.jsx` file into production builds of your app.
+
+```js copy
+// next.config.mjs
+
+import { initGT } from 'gt-next/config'
+
+const withGT = initGT()
+
+export default withGT({});
+```
+
+</Steps>
+
+### Dictionaries
+
+### `getGT()`
+
+### `<GTProvider>`
+
+### Variables
+
+### Plurals
+
+### Next steps
+
+- Set up [i18n routing](/quickstarts/routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`) for better SEO

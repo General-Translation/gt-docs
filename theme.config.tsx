@@ -8,7 +8,7 @@ const config: DocsThemeConfig = {
       titleTemplate: `Docs — %s`
     }
   },
-  logo: <b>GT</b>,
+  logo: <b><code>gt</code></b>,
   project: {
     link: 'https://github.com/General-Translation/gt-react',
   },

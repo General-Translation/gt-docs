@@ -4,6 +4,9 @@
   "next": "gt-next",
   "react": "gt-react",
   "dictionaries": "Dictionaries",
-  "generaltranslation": "generaltranslation",
+  "generaltranslation": {
+    "title": "generaltranslation",
+    "href": "https://www.npmjs.com/package/generaltranslation"
+  },
   "faqs": "FAQs"
 }
