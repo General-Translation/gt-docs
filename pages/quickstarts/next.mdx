@@ -60,7 +60,7 @@ my-app/
 └── README.md
 ```
 
-Edit your `next.config.js` file to run `initGT()`. This function will let you add configuration options like a non-English default language (`defaultLocale`) or a list of approved languages to translate into (`locales`). Use the `withGT()` plugin it returns to configure [Webpack](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) to bundle your `dictionary.jsx` file into production builds of your app.
+Edit your `next.config.js` file to run `initGT()`. This function will let you add configuration options like a non-English default language (`defaultLocale`) or a list of approved languages to translate into (`locales`). Use the `withGT()` plugin it returns to configure [Webpack](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) to bundle your `dictionary.js` file into production builds of your app.
 
 ```js copy
 // next.config.mjs
@@ -76,14 +76,119 @@ export default withGT({});
 
 ### Dictionaries
 
+Keeping translatable content in a single `.json` or `.js` file is a common technique in web app development.
+Using a single dictionary allows for easier management of translations and ensures consistency across the application.
+
+Uniquely, `gt-react` dictionaries don't just support strings. **You can write content in JSX too!**
+This means you can usually copy and paste the content of your components directly into a `gt-react` dictionary.
+
+A simple dictionary could look something like:
+
+```js copy
+// dictionary.js
+
+const dictionary = {
+    "landing": {
+        "hero": <h1>Welcome to our site!</h1>,
+        "get_started_button": (
+            <a href='/signin'><button>Get Started</button></a>
+        )
+    },
+    "dashboard": {
+        "welcome": <p><b>Welcome</b> to the Dashboard!</p>
+    }
+}
+
+export default dictionary;
+```
+
+Dictionaries can include [plural forms](/next#plurals), [variables](/next#variables), and [context](/dictionaries#context) for the AI model to use while translating.
+
+Create a file called `dictionary.js` (or `.jsx`, `.ts`, `.tsx`) and place it into the root directory of your project (or `src/dictionary.js` if you are using the `src` folder).
+
+```
+my-app/
+├── src/
+│   ├── app/
+│   │    └── page.js
+│   ├── components/
+│   │   ├── Header.js
+│   │   └── Footer.js
+│   └── dictionary.js
+├── public/
+│   └── favicon.ico
+├── next.config.js
+├── .gitignore
+├── package.json
+└── README.md
+```
+
 ### `getGT()`
+
+Once you've installed the plugin in `next.config.js` and created a `dictionary.js` file, you can begin using items from your dictionary in your application:
+
+```javascript copy
+// page.js
+// will work as a server component
+// or as a client component if the child of a <GTProvider>
+
+import { getGT } from 'gt-next'
+
+export default function Page() {
+
+    const t = getGT(); // you can pass a string as an optional prefix to getGT()
+
+    return (
+        <main>
+            {t('landing.hero')}
+        </main>
+    )
+}
+```
 
 ### `<GTProvider>`
 
-### Variables
+To provide the dictionary to client components, you should use `<GTProvider>`. Make sure every client component in which you use items from your dictionary is the descendant of a `<GTProvider>`.
 
-### Plurals
+```javascript copy
+// page.json
+
+import { GTProvider } from 'gt-next'
+import SomeClientComponent from './SomeClientComponent'
+
+export default function Page() {
+    return (
+        <main>
+            <GTProvider>
+                <SomeClientComponent/>
+            </GTProvider>
+        </main>
+    )
+}
+```
+
+If you only want to provide a subset of your dictionary, use the `id` prop of `<GTProvider>`:
+
+```javascript copy
+// page.json
+
+import { GTProvider } from 'gt-next'
+import Dashboard from './Dashboard'
+
+export default function Page() {
+    return (
+        <main>
+            <GTProvider id='dashboard'>
+                <Dashboard/>
+            </GTProvider>
+        </main>
+    )
+}
+```
+
+In this example, `getGT()` on the client side will only be able to access items in the dictionary beginning `"dashboard."`. (Do not include `"dashboard."`, in the `id` parameter of your `t()` or `getGT()` functions.)
 
 ### Next steps
 
+- [Learn more](/next) about the `t()` function, including how to handle [variables](/next#variables) and [plurals](/next#plurals).
 - Set up [i18n routing](/quickstarts/routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`) for better SEO
