@@ -140,3 +140,44 @@ By default, the currency is `USD` ($).
     </>
 )
 ```
+
+## Variables in strings
+
+To include a variable in a string, include the name in braces (`{}`).
+For example:
+
+```js
+"greeting": "Welcome to our site, {firstname}!"
+```
+
+Then use the `t()` function like:
+
+```js
+t("greeting", { firstname: "Alice" })
+```
+
+To include the `{` or `}` characters in a string, use the escape character `^`:
+
+```js
+"with_escaped_brace": "Many programming languages use braces like ^{ and ^}"
+```
+
+```js
+t("with_escaped_brace") // Does not display the ^ characters
+```
+
+### Variable types in strings
+
+To include types in a string variable, add the type you need after a comma, within the braces:
+
+```js
+"example_with_currency": "This product costs {cost, currency}"
+```
+
+```js
+t("example_with_currency", { cost: 10 })
+```
+
+### Variable string options
+
+Use [dictionary metadata](/dictionaries#metadata) to add advanced `Intl.NumberFormatOptions` and `Intl.DateTimeFormat` options to the variables within strings.
