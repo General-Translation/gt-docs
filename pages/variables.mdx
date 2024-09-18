@@ -1,0 +1,142 @@
+# Variables
+
+Sometimes you need to include content that shouldn't be translated but could change in your content. 
+For example, imagine you are displaying a welcome page. You might want to address your user by their first name:
+
+```javascript
+const firstname = "Alice" // or "Bob", "Charlie", etc.
+return (
+    <p>
+        Welcome to our site, {firstname}!
+    </p>
+)
+```
+
+## `<Var>` 
+
+In your dictionary, you can use the `<Var>` component to signify a variable which will be translated around.
+
+```javascript copy
+// dictionary.js
+
+import { Var } from 'gt-next' // or 'gt-react'
+
+const dictionary = {
+    "my_id": <>Welcome to our site, <Var name="firstname"/>!</>
+}
+
+export default dictionary;
+```
+
+`<Var>` takes an optional `name` prop which specifies the variable name. To supply a variable with [`t()`](/t), you can write:
+
+```javascript copy
+const firstname = "Alice" // or "Bob", "Charlie", etc.
+return t('my_id', { firstname })
+```
+
+The children of the `<Var>` component will remain untranslated and can change without forcing a retranslation. Anything you include as the children of the `<Var>` in the dictionary will be the default value, rendered if no value is supplied in the `t()` function.
+
+```javascript copy
+// dictionary.js
+
+import { Var } from 'gt-next' // or 'gt-react'
+
+const dictionary = {
+    "my_id": <>Welcome to our site, <Var name="firstname">valued customer!</Var>!</>
+}
+
+export default dictionary;
+```
+
+## `<Num>`, `<DateTime>`, and `<Currency>`
+
+Sometimes variables need to be localized in some way — for example, in US English (`en-US`) dates are written month first, with slashes: `MM/DD/YY`. In German (`de`) they are written day first, with periods: `DD.MM.YY`. In addition to `<Var>`, there are the specialized variable types `<Num>` for numbers, `<DateTime>` for dates, and `<Currency>` for currencies.
+
+```javascript copy
+// dictionary.js
+
+import { Var, Num, DateTime, Currency } from 'gt-next' // or 'gt-react'
+
+const dictionary = {
+    "my_id": <>Welcome to our site, <Var name="firstname">valued customer!</Var>!</>,
+    "num_example": <>You have <Num/> new messages.</>,
+    "datetime_example": <>Today is <DateTime/>.</>,
+    "currency_example": <>This product costs <Currency/>.</>
+}
+
+export default dictionary;
+```
+
+If a an entry in the dictionary has two variables, for example:
+
+```js
+{ 
+    "two_var_example": <>The movie is called <i><Var name="movie"/></i> and a ticket costs <Currency name="price"/>.</> 
+}
+```
+
+Then you would supply two values to `t()`:
+
+```js
+t('two_var_example', { movie: "Terminator 2: Judgement Day", price: 10 })
+```
+
+## Variable names
+
+If no `name` prop is provided, variable components will default to the following names:
+
+| Variable Type | Default Name |
+|----------------|--------------|
+| `<Var>`            | value        |
+| `<Num>`           | n            |
+| `<DateTime>`       | date         |
+| `<Currency>`     | cost         |
+
+This means that
+
+```javascript
+"datetime_example": <>Today is <DateTime/>.</>
+```
+
+Would be supplied a variable like:
+
+```javascript
+t("datetime_example", { date: new Date() })
+```
+
+## Variable options
+
+The specialized variables `<Num>`, `<DateTime>`, and `<Currency>` take an `options` prop, which conforms to
+the [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) standard in the case of `<Num>` and `<Currency>`, and the [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat) standards in the case of `<DateTime>`.
+
+For example:
+
+```js copy
+// displays a percentage, rounded to a whole number
+"num_example_two": (
+    <>
+        Your progress is about 
+        <Num 
+            name="count" 
+            options={{style: "percent", maximumFractionDigits: 0}}
+        />.
+    </>
+)
+```
+
+Additionally, the `<Currency>` component takes an optional `currency` prop which corresponds to an [ISO-4217](https://en.wikipedia.org/wiki/ISO_4217) currency code. 
+By default, the currency is `USD` ($).
+
+```js copy
+// displays the price in euros (€), rounded to the nearest whole number
+"currency_example_two": (
+    <>
+        This plan costs
+        <Currency 
+            currency="EUR"
+            options={{maximumFractionDigits: 0}}
+        />.
+    </>
+)
+```

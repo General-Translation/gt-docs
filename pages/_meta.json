@@ -1,9 +1,16 @@
 {
   "index": "Introduction",
   "quickstarts": "Quickstarts",
-  "next": "gt-next",
-  "react": "gt-react",
+  "t": "t()",
+  "variables": "Variables",
+  "plurals": "Plurals",
+  "helpers": "Helper functions",
+  "provider": "<GTProvider>",
+  "config": "Config",
   "dictionaries": "Dictionaries",
+  "cli": "Translate from CLI",
+  "inline": "Inline translation",
+  "advanced": "Advanced",
   "generaltranslation": {
     "title": "generaltranslation",
     "href": "https://www.npmjs.com/package/generaltranslation"

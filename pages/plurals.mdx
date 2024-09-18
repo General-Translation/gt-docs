@@ -1,0 +1,40 @@
+# Plurals
+
+Imagine you wanted to translate a phrase that could be singular or plural. You could use a `<Num>` variable and render a translation conditionally, like: 
+
+```javascript
+"singular": <>I have one new message.</>
+"plural": <>I have <Num/> new messages.</>
+```
+
+```javascript
+t(n === 1 ? 'singular' : 'plural')
+```
+
+However, some languages have forms which don't exist in English, like the Arabic [dual](https://en.wikipedia.org/wiki/Dual_(grammatical_number)).
+`gt-react` and `gt-next` generate plural forms automatically, language-by-language.
+
+The full list of forms which the library allows plurals to take is an extension of JavaScript's [`Intl.PluralRules`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules): 
+
+`zero`, `one`, `two`, `few`, `many`, `other`, `singular`, `dual`, `plural`
+
+To indicate that an item is plural, supply metadata in the dictionary with one of these form names. For example:
+
+```js
+// Will display "You have one new message" when n is 1,
+// and "You have {n} new messages" when n is plural.
+// May display dual, paucal, null forms in other languages.
+{  
+    "messages": [
+        <p>You have <Num/> new messages.</p>, 
+        { singular: <p>You have one new message.</p> }
+    ]
+}
+```
+
+Plurals *require* an `n` parameter in the `t()` function. In this example:
+
+```js
+t('messages', { n: 1 }); // <p>You have 1 new message.</p>
+t('messages', { n: 3 }); // <p>You have 3 new messages.</p>
+```

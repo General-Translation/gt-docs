@@ -1,0 +1,91 @@
+import { Callout, Tabs } from 'nextra/components'
+
+# Using `t()`
+
+`t()` translates an item from a `gt-next` or `gt-react` [dictionary](/dictionaries) into the user's preferred language.
+
+<Tabs items={['gt-next', 'gt-react']}>
+<Tabs.Tab>
+    ## `getLocale()`
+
+    `getLocale()` can be imported anywhere in your app. When you use `getLocale()` in client components (components marked `'use client'` or their children), they must be the descendants of a [`<GTProvider>`](/provider).
+
+    ```javascript copy
+    import { getGT } from 'gt-next'
+
+    export default function MyComponent() {
+        const t = getGT();
+        return (
+            <div>
+                {t('hello')}
+            </div>
+        )
+    }
+    ```
+
+    <Callout type="warning">
+        In [server components](https://nextjs.org/docs/app/building-your-application/rendering/server-components), `getGT()` is a normal function. However, in [client components](https://nextjs.org/docs/app/building-your-application/rendering/client-components), `getGT()` is a React hook and follows the [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks). 
+        For this reason, we recommend you use `getGT()` as if it were a React hook everywhere, especially if you are not sure whether your component will be rendered on the client or the server.
+    </Callout>
+
+    `getGT()` takes an optional `id` string. This is used as a prefix for items in the dictionary.
+    For example, if you write:
+    ```javascript copy
+    const t = getGT('dashboard')
+    return t('welcome')
+    ```
+    This would be equivalent to:
+    ```javascript copy
+    const t = getGT()
+    return t('dashboard.welcome')
+    ```
+    
+
+    ### `useGT()`
+
+    If you want to ensure a translation is only accessed on the client, you can import the `useGT()` hook from `gt-next/client`.
+    ```javascript copy
+    import { useGT } from 'gt-next/client'
+    ```
+
+    `useGT()` is a client-side React hook. It will throw an error if it is used in a server component or outside of a `<GTProvider>`. Otherwise, it is equivalent to `getGT()`. 
+    </Tabs.Tab>
+    <Tabs.Tab>
+    ## `useGT()`
+
+    `t()` can be accessed in the descendants of [`<GTProvider>`](/react#provider) with the `useGT()` hook.
+
+    ```javascript copy
+    import { useGT } from 'gt-react'
+
+    export default function MyComponent() {
+        const t = useGT();
+        return (
+            <div>
+                {t('hello')}
+            </div>
+        )
+    }
+    ```
+
+    `useGT()` takes an optional `id` string. This is used as a prefix for items in the dictionary.
+    For example, if you write:
+    ```javascript copy
+    const t = useGT('dashboard')
+    return t('welcome')
+    ```
+    This would be equivalent to:
+    ```javascript copy
+    const t = useGT()
+    return t('dashboard.welcome')
+    ```
+    </Tabs.Tab>
+</Tabs>
+
+## Variables
+
+## Functions
+
+<Callout type="warning">
+    This is an advanced feature which you probably only need if you're using [functional dictionary entries](/dictionaries#functions) in the client-side of `gt-next`
+</Callout>
