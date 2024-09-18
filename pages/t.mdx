@@ -3,12 +3,21 @@ import { Callout, Tabs } from 'nextra/components'
 # Using `t()`
 
 `t()` translates an item from a `gt-next` or `gt-react` [dictionary](/dictionaries) into the user's preferred language.
+For example, if the user's browser is requesting Spanish (`es`):
+
+```jsx
+"greeting": <p>Hello, world!</p>
+```
+
+```js
+t("greeting") // returns <p>¡Hola, mundo!</p>
+```
 
 <Tabs items={['gt-next', 'gt-react']}>
 <Tabs.Tab>
-    ## `getLocale()`
+    ## `getGT()`
 
-    `getLocale()` can be imported anywhere in your app. When you use `getLocale()` in client components (components marked `'use client'` or their children), they must be the descendants of a [`<GTProvider>`](/provider).
+    `getGT()` can be imported anywhere in your app. When you use `getLocale()` in client components (components marked `'use client'` or their children), they must be the descendants of a [`<GTProvider>`](/provider).
 
     ```javascript copy
     import { getGT } from 'gt-next'
@@ -82,10 +91,40 @@ import { Callout, Tabs } from 'nextra/components'
     </Tabs.Tab>
 </Tabs>
 
-## Variables
+## Parameters
 
-## Functions
+`t(id: string, variables?: object, f?: Function): Promise<string | JSX.Element> | JSX.Element | string`
+
+- **id**: `string`  
+  The identifier for the localized string or JSX element. This ID is used to lookup the appropriate translation for the current language.
+
+- **variables**: `Record<string, any>`  
+  An object containing key-value pairs used to dynamically replace placeholders in the localized string. The placeholders in the string should match the keys in this object.
+
+- **f**: `Function`  
+  Function used to further process or modify the localized string. Details of this function are omitted.
 
 <Callout type="warning">
-    This is an advanced feature which you probably only need if you're using [functional dictionary entries](/dictionaries#functions) in the client-side of `gt-next`
+    `f: Function` is an advanced feature which you probably only need if you're using [functional dictionary entries](/dictionaries#functions) in the client-side of `gt-next`
 </Callout>
+
+## Return Types
+
+`t()` returns a string, a JSX element, or a promise of either of those two types, depending on what you wrote in the dictionary. 
+
+|          | Server component      | Client component      |
+|----------|--------------|--------------|
+| String in dictionary  | `Promise<string>` | `string` |
+| JSX in dictionary   | `Promise<JSX.Element>` | `JSX.Element` |
+
+If you use it on the server to access a string, it will return a `Promise<string>`:
+
+```js
+"message": "Hello, world!"
+```
+
+```js copy
+// server component
+const translation = await t('message')
+console.log(translation) // ¡Hola, mundo!
+```
