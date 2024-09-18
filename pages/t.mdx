@@ -99,14 +99,10 @@ t("greeting") // returns <p>¡Hola, mundo!</p>
   The identifier for the localized string or JSX element. This ID is used to lookup the appropriate translation for the current language.
 
 - **variables**: `Record<string, any>`  
-  An object containing key-value pairs used to dynamically replace placeholders in the localized string. The placeholders in the string should match the keys in this object.
+  An object containing key-value pairs used to dynamically replace placeholders in the localized string or JSX element. The placeholders in the string should match the keys in this object.
 
 - **f**: `Function`  
-  Function used to further process or modify the localized string. Details of this function are omitted.
-
-<Callout type="warning">
-    `f: Function` is an advanced feature which you probably only need if you're using [functional dictionary entries](/dictionaries#functions) in the client-side of `gt-next`
-</Callout>
+  An advanced feature which you probably only need if you're using [functional dictionary entries](/dictionaries#functions) in a client component and using `gt-next`.
 
 ## Return Types
 
