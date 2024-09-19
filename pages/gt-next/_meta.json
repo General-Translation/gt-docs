@@ -1,5 +1,5 @@
 {
-  "index": "t()",
+  "index": "getGT()",
   "helpers": "Helper functions",
   "provider": "<GTProvider>",
   "config": "Config",
