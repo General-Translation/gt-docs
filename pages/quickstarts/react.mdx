@@ -1,3 +1,171 @@
-import { Callout } from 'nextra/components'
+import { Callout, Steps, Tabs } from 'nextra/components'
 
 # React
+
+This guide describes how to add `gt-react` to a [React.js](https://react.dev) project. It assumes that all components are [client-rendered](https://react.dev/reference/rsc/use-client#noun-labs-1201738-(2)).
+
+## Create a secret key for `gt-update`
+
+Because `gt-react` is entirely server-rendered, you will be using the CLI tool, [`gt-update`](/cli) to translate your dictionaries.
+For this you will need a **API Key** and a **Project ID**.
+
+An API key is a 36-character string beginning `gtx-` which is used to authenticate `gt-update` with our cloud translation service. Create one on the [API Keys](https://www.generaltranslation.com/dashboard/redirect/api-keys) page.
+
+Your Project ID is a public identifier for your project. It can also be found on the Dashboard:
+
+![Code copy container entitled "projectID"](/screenshots/project_id.jpeg)
+
+Store these variables safely, and **make sure not to write your API key anywhere where it could be sent to the client**.
+
+## Install the library
+
+To install `gt-react`, navigate to your project's root directory and run: 
+
+<Tabs items={['npm', 'yarn']}>
+    <Tabs.Tab>
+    ```bash copy
+    npm i gt-react
+    ```
+    </Tabs.Tab>
+    <Tabs.Tab>
+    ```bash copy
+    yarn add gt-react
+    ```
+    </Tabs.Tab>
+</Tabs>
+
+## Add `<GTProvider>`
+
+[`<GTProvider>`](/gt-react/provider#config) is used to configure the behavior of `gt-react`. It should be placed as high up in your app as possible, ideally at the root.
+
+To work out of the box, `<GTProvider>` needs the `projectID` you created earlier, plus a dictionary from which to load content.
+`projectID` is used to access the General Translation global cache, which serves translations around the world at millisecond speeds.
+
+Other useful `<GTProvider>` props include `locales`, which specifies the approved languages for your app, and `defaultLocale`, which specifies the application's default language.
+
+```js copy
+import dictionary from './dictionary'
+import MyApp from './MyApp'
+
+export default function App() {
+
+    // Initialize i18n with a dictionary
+    // The app's default language is US English
+    // Approved languages are US English, French, Spanish, and Japanese
+
+    return (
+        <GTProvider
+            projectID='abc-123'
+            dictionary={dictionary}
+            defaultLocale='en-US'
+            locales={['en-US', 'fr', 'es', 'ja']}
+        >
+            <MyApp />
+        </GTProvider>
+    )
+}
+
+```
+
+See a full list of `<GTProvider>` props [here](/gt-react/provider#config).
+
+## Dictionaries
+
+Keeping translatable content in a single `.json` or `.js` file is a common technique in web app development.
+Using a single dictionary allows for easier management of translations and ensures consistency across the application.
+
+Uniquely, `gt-react` dictionaries don't just support strings. **You can write content in JSX too!**
+This means you can usually copy and paste the content of your components directly into a `gt-react` dictionary.
+
+A simple dictionary could look something like:
+
+```js copy
+// dictionary.js
+
+const dictionary = {
+    "landing": {
+        "hero": <h1>Welcome to our site!</h1>,
+        "get_started_button": (
+            <a href='/signin'><button>Get Started</button></a>
+        )
+    },
+    "dashboard": {
+        "welcome": <p><b>Welcome</b> to the Dashboard!</p>
+    }
+}
+
+export default dictionary;
+```
+
+Dictionaries can include [plural forms](/dictionaries/plurals), [variables](/dictionaries/variables), and [context](/dictionaries#context) for the AI model to use while translating.
+
+Create a file called `dictionary.js` (or `.jsx`, `.ts`, `.tsx`) and place it into the root directory of your project (or `src/dictionary.js` if you are using the `src` folder).
+
+```
+my-app/
+├── src/
+│   ├── app/
+│   │    └── page.js
+│   ├── components/
+│   │   ├── Header.js
+│   │   └── Footer.js
+│   └── dictionary.js
+├── .gitignore
+├── package.json
+└── README.md
+```
+
+## `useGT()`
+
+Once you've placed `<GTProvider>` at the root of your app and supplied the `dictionary` prop to it, you can begin using items from your dictionary in your application.
+
+```javascript copy
+// page.js
+// will work as a server component
+// or as a client component if the child of a <GTProvider>
+
+import { useGT } from 'gt-react'
+
+export default function Page() {
+
+    const t = useGT(); // you can pass a string as an optional prefix to useGT()
+
+    return (
+        <main>
+            {t('landing.hero')}
+        </main>
+    )
+}
+```
+
+## `gt-update`
+
+Now that content is loading in your `defaultLocale` (usually English), you can use the `gt-update` CLI tool to request translations.
+We recommend installing `gt-update` globally or as a developer dependency, so it doesn't increase your app's production size.
+
+```bash copy
+npm i -g gt-update
+```
+
+To run a script that will iterate through your dictionary and send each item for translation, run `npx i18n` with the secret API key you generated earlier.
+
+```bash copy
+npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+```
+
+If the script is successful, you should see the following message in the console:
+
+```txt
+Remote dictionary "default" updated: true. Languages: ["French", "Japanese", "Spanish"]. Translations are usually live within a minute. Check status: www.generaltranslation.com/dashboard.
+```
+
+Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
+
+Learn more about `gt-update` [here](/cli).
+
+### Congratulations! Your app is now multilingual! 🥳
+
+## Next steps
+
+- [Learn more](/gt-react) about the `t()` function, including how to handle [variables](/dictionaries/variables) and [plurals](/dictionaries/plurals).
+- [Set up](/advanced/rtl) your app so that the UI is mirrored for languages like Arabic and Hebrew, which are written right-to-left.

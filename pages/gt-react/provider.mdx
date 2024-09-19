@@ -2,14 +2,14 @@ import { Callout, Tabs } from 'nextra/components'
 
 # `<GTProvider>`
 
-    `<GTProvider>` uses React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API to give its descendants access to translations and locale information.
+`<GTProvider>` uses React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API to give its descendants access to translations and locale information.
     
-    **`<GTProvider>` should be placed at the top of the component tree** so that all your components can use the `useGT()`, `useLocale()`, and `useDefaultLocale()` hooks.
+**`<GTProvider>` should be placed at the top of the component tree** so that all your components can use the `useGT()`, `useLocale()`, and `useDefaultLocale()` hooks.
 
-    - [`useGT()`](/gt-react): Used to initialize the `t()` function, which loads a translation from the dictionary.
-    - [`useLocale()`](/gt-react/helpers#uselocale): Retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code.
-    - [`useDefaultLocale()`](/gt-react/helpers#usedefaultlocale): Retrieves the application's default language as an ISO-639 language code.
+- [`useGT()`](/gt-react): Used to initialize the `t()` function, which loads a translation from the dictionary.
+- [`useLocale()`](/gt-react/helpers#uselocale): Retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code.
+- [`useDefaultLocale()`](/gt-react/helpers#usedefaultlocale): Retrieves the application's default language as an ISO-639 language code.
 
-    ## Config
+## Config
 
-    Pass props to `<GTProvider>` to configure the behavior of `gt-react`.
+Pass props to `<GTProvider>` to configure the behavior of `gt-react`.

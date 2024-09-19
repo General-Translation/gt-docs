@@ -4,9 +4,7 @@ import { Steps, Callout, Tabs } from 'nextra/components'
 
 This guide describes how to add `gt-next` to a [Next.js](https://nextjs.org) project which is using the [App Router](https://nextjs.org/docs#app-router-vs-pages-router).
 
-<Steps>
-
-### Set up your local environment
+## Set up your local environment
 
 Navigate to your existing Next.js app, or follow the instructions [here](https://nextjs.org/docs/getting-started/installation) to create a new one.
 
@@ -23,14 +21,14 @@ Your Project ID can also be found on the Dashboard:
 
 ![Code copy container entitled "projectID"](/screenshots/project_id.jpeg)
 
-### Install the library
+## Install the library
 
 To install `gt-next`, navigate to your Next.js project's root directory and run: 
 
 <Tabs items={['npm', 'yarn']}>
     <Tabs.Tab>
     ```bash copy
-    npm i gt-react
+    npm i gt-next
     ```
     </Tabs.Tab>
     <Tabs.Tab>
@@ -40,7 +38,7 @@ To install `gt-next`, navigate to your Next.js project's root directory and run:
     </Tabs.Tab>
 </Tabs>
 
-### Install the plugin
+## Install the plugin
 
 In the root directory of your project, there should be a file called `next.config.js` (or `.ts`, `.mjs`, `.cjs`).
 
@@ -72,15 +70,13 @@ const withGT = initGT()
 export default withGT({});
 ```
 
-</Steps>
-
-### Dictionaries
+## Dictionaries
 
 Keeping translatable content in a single `.json` or `.js` file is a common technique in web app development.
 Using a single dictionary allows for easier management of translations and ensures consistency across the application.
 
-Uniquely, `gt-react` dictionaries don't just support strings. **You can write content in JSX too!**
-This means you can usually copy and paste the content of your components directly into a `gt-react` dictionary.
+Uniquely, `gt-next` dictionaries don't just support strings. **You can write content in JSX too!**
+This means you can usually copy and paste the content of your components directly into a `gt-next` dictionary.
 
 A simple dictionary could look something like:
 
@@ -123,7 +119,7 @@ my-app/
 └── README.md
 ```
 
-### `getGT()`
+## `getGT()`
 
 Once you've installed the plugin in `next.config.js` and created a `dictionary.js` file, you can begin using items from your dictionary in your application:
 
@@ -146,7 +142,7 @@ export default function Page() {
 }
 ```
 
-### `<GTProvider>`
+## `<GTProvider>`
 
 To provide the dictionary to client components, you should use `<GTProvider>`. Make sure every client component in which you use items from your dictionary is the descendant of a `<GTProvider>`.
 
@@ -187,6 +183,43 @@ export default function Page() {
 ```
 
 In this example, `getGT()` on the client side will only be able to access items in the dictionary beginning `"dashboard."`. (Do not include `"dashboard."`, in the `id` parameter of your `t()` or `getGT()` functions.)
+
+## `gt-update`
+
+Now that content is loading in your `defaultLocale` (usually English), you can use on-demand translation to test it out. Simply [change your browser language](https://support.google.com/chrome/answer/173424) and reload the page.
+The first time you do this, translations will take a few seconds to load. Afterwards, they will be cached, and load instantly.
+
+For large applications in production, we recommend using the `gt-update` CLI tool to request translations, rather than translating everything on demand.
+
+Install `gt-update` globally or as a developer dependency, so it doesn't increase your app's production size.
+
+```bash copy
+npm i -g gt-update
+```
+
+To run a script that will iterate through your dictionary and send each item for translation, run `npx i18n`. This script requires your API key and projectID, but `gt-update` automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them:
+
+```bash copy
+npx i18n --languages fr es ja
+```
+
+Or, with `projectID` and `apiKey`:
+
+```bash copy
+npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+```
+
+If the script is successful, you should see the following message in the console:
+
+```txt
+Remote dictionary "default" updated: true. Languages: ["French", "Japanese", "Spanish"]. Translations are usually live within a minute. Check status: www.generaltranslation.com/dashboard.
+```
+
+Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
+
+Learn more about `gt-update` [here](/cli).
+
+### Congratulations! Your app is now multilingual! 🥳
 
 ### Next steps
 
