@@ -1,0 +1,9 @@
+{
+  "index": "t()",
+  "helpers": "Helper hooks",
+  "provider": "<GTProvider>",
+  "config": {
+    "title": "Config",
+    "href": "/gt-react/provider#config"
+  }
+}

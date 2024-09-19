@@ -1,0 +1,52 @@
+import { Callout, Tabs } from 'nextra/components'
+
+# Helper functions
+
+## `getLocale()`
+
+`getLocale()` retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code. It can be imported anywhere in your app. When you use `getLocale()` in client components (components marked `'use client'` or their children), they must be the descendants of a [`<GTProvider>`](/gt-next/provider).
+
+```javascript copy
+import { getLocale } from 'gt-next'
+
+export default function MyComponent() {
+    const locale = getLocale(); // gets the user's language, e.g. 'en' for English
+    return (
+        <div>
+            {locale}
+        </div>
+    )
+}
+```
+
+## `getDefaultLocale()`
+
+`getDefaultLocale()` retrieves your application's default language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code. `getDefaultLocale()` can be imported anywhere in your app. When you use `getDefaultLocale()` in client components (components marked `'use client'` or their children), they must be the descendants of a [`<GTProvider>`](/gt-next/provider).
+
+```javascript copy
+import { getDefaultLocale } from 'gt-next'
+
+export default function MyComponent() {
+    const defaultLocale = getDefaultLocale(); // gets the user's language, e.g. 'en' for English
+    return (
+        <div>
+            {defaultLocale}
+        </div>
+    )
+}
+```
+    
+<Callout type="warning">
+    In [server components](https://nextjs.org/docs/app/building-your-application/rendering/server-components), `getLocale()` is a normal function. However, in [client components](https://nextjs.org/docs/app/building-your-application/rendering/client-components), `getLocale()` is a React hook and follows the [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks). 
+    For this reason, we recommend you use `getLocale()` or `getDefaultLocale()` as if they were React hooks everywhere.
+</Callout>
+
+## `useLocale()` and `useDefaultLocale()`
+
+If you want to ensure that a locale is only accessed on the client, you can import the `useLocale()` or `useDefaultLocale()` hook from `gt-next/client`.
+
+```javascript copy
+import { useLocale, useDefaultLocale } from 'gt-next/client'
+```
+
+`useLocale()` and `useDefaultLocale()` are client-side React hooks. They will throw errors if used in a server component or outside of a `<GTProvider>`. Otherwise, they are equivalent to `getLocale()` and `getDefaultLocale()`. 

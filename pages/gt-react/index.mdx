@@ -1,0 +1,58 @@
+import { Callout, Tabs } from 'nextra/components'
+
+# Using `t()`
+
+`t()` translates an item from a `gt-next` or `gt-react` [dictionary](/dictionaries) into the user's preferred language.
+For example, if the user's browser is requesting Spanish (`es`):
+
+```jsx
+"greeting": <p>Hello, world!</p>
+```
+
+```js
+t("greeting") // returns <p>¡Hola, mundo!</p>
+```
+
+## `useGT()`
+
+    `t()` can be accessed in the descendants of [`<GTProvider>`](/gt-react/provider) with the `useGT()` hook.
+
+    ```javascript copy
+    import { useGT } from 'gt-react'
+
+    export default function MyComponent() {
+        const t = useGT();
+        return (
+            <div>
+                {t('hello')}
+            </div>
+        )
+    }
+    ```
+
+    `useGT()` takes an optional `id` string. This is used as a prefix for items in the dictionary.
+    For example, if you write:
+    ```javascript copy
+    const t = useGT('dashboard')
+    return t('welcome')
+    ```
+    This would be equivalent to:
+    ```javascript copy
+    const t = useGT()
+    return t('dashboard.welcome')
+    ```
+
+## Parameters
+
+`t(id: string, variables?: Record<string, any>): JSX.Element | string`
+
+- **id**: `string`  
+  The identifier for the localized string or JSX element. This ID is used to lookup the appropriate translation for the current language.
+
+- **variables**: `Record<string, any>`  
+  An object containing key-value pairs used to dynamically replace placeholders in the localized string or JSX element. The placeholders in the string should match the keys in this object.
+
+## Return Types
+
+`t()` returns a `string` or a `JSX.Element`, depending on what you wrote in the dictionary. 
+It will return the same type as the dictionary entry which corresponds to the `id` parameter.

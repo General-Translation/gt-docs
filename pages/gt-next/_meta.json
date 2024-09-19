@@ -1,0 +1,8 @@
+{
+  "index": "t()",
+  "helpers": "Helper functions",
+  "provider": "<GTProvider>",
+  "config": "Config",
+  "inline": "Inline translation",
+  "routing": "i18n Routing"
+}

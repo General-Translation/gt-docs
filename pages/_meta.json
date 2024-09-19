@@ -1,15 +1,10 @@
 {
   "index": "Introduction",
   "quickstarts": "Quickstarts",
-  "t": "t()",
-  "variables": "Variables",
-  "plurals": "Plurals",
-  "helpers": "Helper functions",
-  "provider": "<GTProvider>",
-  "config": "Config",
+  "gt-next": "gt-next",
+  "gt-react": "gt-react",
   "dictionaries": "Dictionaries",
   "cli": "Translate from CLI",
-  "inline": "Inline translation",
   "advanced": "Advanced",
   "generaltranslation": {
     "title": "generaltranslation",

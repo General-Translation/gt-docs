@@ -1,0 +1,89 @@
+import { Callout, Tabs } from 'nextra/components'
+
+# `<GTProvider>`
+
+**In the Next.js [App Router](https://nextjs.org/docs/app), components are server components by default.**
+    This means they are executed on the server, and can perform server-specific actions like `async` API calls and accessing environment variables.
+
+    Components which use client-side JavaScript, including React hooks like `useState()` and `useEffect()`, are client components. They must marked with [`'use client'`](https://nextjs.org/docs/app/building-your-application/rendering/client-components#using-client-components-in-nextjs) or the descendants of another client component.
+   
+    To use translations in client components, you must pass them from the server to the client using `<GTProvider>`. `<GTProvider>` uses React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API to give its descendants access to translations and locale information.
+    
+    The following hooks are available to the children of `<GTProvider>`:
+
+    - [`getGT()`](/gt-next): Used to initialize the `t()` function, which loads a translation from the dictionary.
+    - [`getLocale()`](/gt-next/helpers#getlocale): Retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code.
+    - [`getDefaultLocale()`](/gt-next/helpers#getdefaultlocale): Retrieves the application's default language as an ISO-639 language code.
+
+    <Callout type="warning">
+        **In Next.js, you should import `<GTProvider>` in a server component.** If you try using it in a client component, you will get the following error:
+        "You're attempting to import `<GTProvider>` on the client. Are you sure you want to do this? It's better to import `<GTProvider>` in a file not marked `'use client'` so that it can fetch translations on the server. If you really need to put `<GTProvider>` on the client, import `<GTProvider>` from `'gt-next/client'` (not recommended in server-first apps)."
+    </Callout>
+
+    ### Using `<GTProvider>` with `id`
+
+    If your dictionary is very large and you don't want to provide all of it in the server response, pass the optional `id` prop to `<GTProvider>`. 
+    This will let you send a nested subset of your server-side dictionary to the client.
+
+
+    ### Example
+
+    ```javascript copy
+    // dictionary.js
+
+    import { Num } from 'gt-next'
+
+    export default {
+        "client": {
+            "counting_text": <>The current count is <Num/>.</>,
+            "click_me": "Click me!"
+        }
+    }
+    ```
+
+    ```javascript copy
+    // page.js
+
+    import { GTProvider } from 'gt-next'
+    import MyClientComponent from './MyClientComponent'
+
+    export default function Page() {
+
+        // using GTProvider with the 'id' prop to pass only a subset of the dictionary to the client
+        return (
+            <main>
+                <GTProvider id='client'>
+                    <MyClientComponent />
+                </GTProvider>
+            </main>
+        )
+    }
+
+    ```
+
+    ```javascript copy
+    'use client'
+
+    import { useState } from 'react'
+    import { getGT } from 'gt-next'
+
+    export default function MyClientComponent() {
+
+        const [count, setCount] = useState(0);
+
+        const t = getGT();
+
+        return (
+            <div>
+                <div>
+                    {t('counting_text', { n: count })}
+                </div>
+                <div>
+                    <button onClick={() => {setCount(prev => prev + 1)}}>
+                        {t('click_me')}
+                    </button>
+                </div>
+            </div>
+        )
+    }
+    ```
