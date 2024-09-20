@@ -49,7 +49,7 @@ Here is a detailed breakdown of the available props for the `<GTProvider>` compo
 - **Description**: The project ID used to identify your project on General Translation cloud services. It is required if you are using the default cloud services to fetch or cache translations.
 
 ### `dictionary`
-- **Type**: `Dictionary`
+- **Type**: `Record<string, string | JSX.Element | [string | JSX.Element, Record<string, any>]>`
 - **Default**: `defaultDictionary`
 - **Description**: The dictionary object used for translations. This object contains all the translation entries for the project.
 
