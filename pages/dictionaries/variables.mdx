@@ -37,6 +37,7 @@ return t('my_id', { firstname })
 
 The children of the `<Var>` component will remain untranslated and can change without forcing a retranslation. Anything you include as the children of the `<Var>` in the dictionary will be the default value, rendered if no value is supplied in the `t()` function.
 
+
 ```javascript copy
 // dictionary.js
 
@@ -47,6 +48,12 @@ const dictionary = {
 }
 
 export default dictionary;
+```
+
+The value provided for `<Var>` can be anything, including additional JSX:
+
+```
+t("my_id", { firstname: <b>Alice</b> }) // <>Welcome to our site, <b>Alice</b>!</>
 ```
 
 ## `<Num>`, `<DateTime>`, and `<Currency>`

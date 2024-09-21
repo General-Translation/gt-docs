@@ -1,21 +1,232 @@
+import { Callout } from 'nextra/components'
+
 # Dictionaries
+
+<Callout type="info">
+    If you don't want to use a dictionary or you want a dynamically translating component (which translates every time the page loads), use the [`<T>`](/gt-next/inline) wrapper.
+</Callout>
+
+Keeping translatable content in a single `.json` or `.js` file is a common technique in web app development.
+Using a single dictionary allows for easier management of translations and ensures consistency across the application.
+
+Uniquely, General Translation dictionaries don't just support strings. **You can write content in JSX too!**
+This means you can usually copy and paste the content of your components directly into a dictionary.
+
+Your dictionary is a JavaScript object, **which should be the default export of a file called `dictionary.js`** (or `.jsx`, `.tsx` etc.). The key of each entry is the `id` string, and the value is the default language (usually English) translatable content.
 
 ## JSX
 
+You can write [JSX](https://react.dev/learn/writing-markup-with-jsx) in your dictionaries, just like you would in the return statement of a React component.
+
+```jsx copy
+const dictionary = {
+    "greeting": <p>Hello, world</p>
+}
+export default dictionary;
+```
+
+In this example, `<p>Hello, world</p>`, or its translation, would be rendered when you call the `t()` function with the corresponding `id`:
+
+```js copy
+t("greeting") // returns <p>Hello, world</p>
+```
+
+The JSX you write can be arbitrarily nested, and can contain class names and other values.
+
+```jsx copy
+const dictionary = {
+    "greeting_two": (
+        <p className="text-green">
+            <b>Hello</b>, <i><span id="world-string">world</span></i>
+        </p>
+    )
+}
+export default dictionary;
+```
+
+You can also import complex components into your dictionaries:
+
+```javascript copy
+import Button from './Button'
+
+const dictionary = {
+    "button": <Button>Click me!</Button>
+}
+
+export default dictionary;
+```
+
 ### Variables
+
+In your dictionary, you can use the `<Var>` component to signify a variable. Variables won't be translated and can be supplied at runtime like:
+
+```javascript copy
+import { Var } from 'gt-next'
+
+export default {
+    "welcome": <>Welcome to our site, <Var name="firstname"/>!</>
+}
+```
+
+```javascript copy
+const firstname = "Alice"
+t("welcome", { firstname }) // <>Welcome to our site, Alice!<>
+```
+
+The four available variable types are: `<Var>`, `<Num>` for numbers, `<DateTime>` for dates and times, and `<Currency>` for currencies.
+To learn more, see [Variables](/dictionaries/variables).
 
 ## Strings
 
+You can also write strings in dictionaries. These are translated as strings:
+
+```javascript copy
+export default {
+    "string_example": "This is a string!",
+    "jsx_example": <p>You can write strings alongside JSX</p>
+}
+```
+
+```javascript
+t("string_example") // returns "This is a string!"
+```
+
 ### Variables
+
+To include a variable in a string, include the name in braces (`{}`).
+For example:
+
+```js copy
+"greeting": "Welcome to our site, {firstname}!"
+```
+
+Then use the `t()` function like:
+
+```js copy
+t("greeting", { firstname: "Alice" }) // "Welcome to our site, Alice!"
+```
 
 ### `^` as an escape character
 
+To include the `{` or `}` characters in a string, use the escape character `^`:
+
+```js
+"with_escaped_brace": "Many programming languages use braces like ^{ and ^}"
+```
+
+```js
+t("with_escaped_brace") // Does not display the ^ characters
+```
+
+To display a single `^` character in a string, escape it by writing `^^`. (To display `^^`, write `^^^` and so on.)
+
+### Variable types in strings
+
+To include types in a string variable, add the type you need after a comma, within the braces:
+
+```js
+"example_with_currency": "This product costs {cost, currency}"
+```
+
+```js
+t("example_with_currency", { cost: 10 })
+```
+
+## Nested dictionaries
+
 ## Metadata 
+
+Metadata in General Translation dictionaries are used to add additional context, and specify plural forms and variable options. 
+*To add metadata to an entry, write an array, where the first item is the translatable content, and the second is a JavaScript object.*
+For example:
+
+```javascript copy
+const dictionary = {
+    "entry_with_metadata": ["How are you?", { context: "Translate informally" }]
+}
+export default dictionary;
+```
+
+In this example, the string `"How are you?"`, is given the metadata object `{
+    "context": "Translate informally"
+}`.
+
+### Context
+
+Context is a natural language string used to provide additional instructions to the AI translation model. 
+For example, in some languages, there is a formal and informal way to say "you", and you might want to specify that `"How are you?"` should be translated informally.
+
+<Callout type="unmarked">
+    🇺🇸: `"How are you?"`
+    → <br/>
+    🇩🇪: `"Wie geht es Ihnen?"`
+
+    🇺🇸: `["How are you?", { "context": "Translate informally" }]` 
+    → <br/> 
+    🇩🇪: `"Wie geht es dir?"`
+</Callout>
+
+Context can also be used to specify a word with a double meaning:
+
+```javascript copy
+export default {
+    "plans_link": [<a href='/plans'>Plans</a>, { context: `as in, "Payment Plans"` }]
+}
+```
+
+To prevent abuse, context can be a maximum of `512` characters.
+
+### Plurals
+
+To render a different translation depending on whether a variable is singular or plural, 
+add one of the following plural forms to metadata:
+
+`zero`, `one`, `two`, `few`, `many`, `other`, `singular`, `dual`, `plural`
+
+Generally, English content should only have two forms, `singular`, and `plural`:
+
+```javascript copy
+import { Num } from 'gt-next'
+
+export default {
+    "message_count": [
+        <p>You have <Num/> new messages.</p>,
+        {
+            "singular": <p>You have one new message.</p>
+        }
+    ]
+}
+```
+
+When you pass plural entries to `t()`, they require an `n` number to determine which form to take:
+
+```javascript copy
+t("message_count", { n: 1 }) // <p>You have one new message</p>
+t("message_count", { n: 2 }) // <p>You have 2 new messages</p>
+```
+
+To learn more, see [Plurals](/dictionaries/plurals).
 
 ### Variable options
 
-## Context
+<Callout type="warning">
+    In most cases, it's better to use JSX with a variable component like [`<Num>`](/dictionaries/variables#num-datetime-and-currency) and pass an `options` prop.
+</Callout>
 
-## Plurals
+If you need to write a string with a number, date, or currency variable which needs options, you can add `variablesOptions` to your metadata object. 
+`variablesOptions` is a JavaScript object where the keys are the names of variables and the values are the formatting options.
+
+For example:
+
+```javascript copy
+export default {
+    "user_score": ["Your score was {score, num}!", { variablesOptions: { score: { style: "percent" }}}]
+}
+```
 
 ## Functions
+
+<Callout type="warning">
+    Functional dictionary entries are experimental.
+    Please contact us or read the source code for more info at this time.
+</Callout>
