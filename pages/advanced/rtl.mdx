@@ -44,7 +44,7 @@ offers a `getLanguageDirection()` function to determine if a language goes `"rtl
 
     export default function Layout({ children, params }) {
         
-        const locale = params.locale;
+        const locale = params.locale; // e.g. "he"
         const dir = getLanguageDirection(locale); // e.g. "rtl"
 
         return (
