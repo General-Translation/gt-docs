@@ -14,6 +14,10 @@ This means you can usually copy and paste the content of your components directl
 
 Your dictionary is a JavaScript object, **which should be the default export of a file called `dictionary.js`** (or `.jsx`, `.tsx` etc.). The key of each entry is the `id` string, and the value is the default language (usually English) translatable content.
 
+<Callout>
+    `id`s should be lower case, so: `"example_one"` is a valid `id`, but `"exampleOne"` isn't.
+</Callout>
+
 ## JSX
 
 You can write [JSX](https://react.dev/learn/writing-markup-with-jsx) in your dictionaries, just like you would in the return statement of a React component.
