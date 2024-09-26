@@ -44,9 +44,9 @@ Additionally, `gt-next`:
 
 Here's how `gt-next` works when the default language of your app ([`defaultLocale`](/gt-next/config#defaultlocale))  is English (`en-US`):
 
-- **For English-speaking users, nothing changes.** No data is ever sent to us and your site is rendered as normal.
+- **For English-speaking users, nothing changes.** No request is ever made to the translation CDN and your site is rendered as normal.
 
-- When a non-English language user visits your site, the library checks our cache. The cache is global and fast — typical response time is double digit milliseconds.
+- When a non-English language user visits your site, the library checks our CDN. The CDN is global and fast — typical response time is double digit milliseconds.
 
 - If a cached translation exists, the library reconciles it with the original structure of the page (handling things like [plurals](/dictionaries/plurals) and [variables](/dictionaries/variables)) and displays the translated site.
 
