@@ -183,29 +183,28 @@ To prevent abuse, context can be a maximum of `512` characters.
 ### Plurals
 
 To render a different translation depending on whether a variable is singular or plural, 
-add one of the following plural forms to metadata:
+use the `<Plural>` component with one of the following forms:
 
 `zero`, `one`, `two`, `few`, `many`, `other`, `singular`, `dual`, `plural`
 
 Generally, English content should only have two forms, `singular`, and `plural`:
 
 ```javascript copy
-import { Num } from 'gt-next'
+import { Num, Plural } from 'gt-next'
 
 export default {
-    "message_count": [
-        <p>You have <Num/> new messages.</p>,
-        {
-            "singular": <p>You have one new message.</p>
-        }
-    ]
+    "message_count": (
+        <Plural singular={<p>You have <Num/> new message.</p>}>
+            <p>You have <Num/> new messages.</p>
+        </Plural>
+    )
 }
 ```
 
 When you pass plural entries to `t()`, they require an `n` number to determine which form to take:
 
 ```javascript copy
-t("message_count", { n: 1 }) // <p>You have one new message</p>
+t("message_count", { n: 1 }) // <p>You have 1 new message</p>
 t("message_count", { n: 2 }) // <p>You have 2 new messages</p>
 ```
 

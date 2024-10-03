@@ -18,17 +18,18 @@ The full list of forms which the library allows plurals to take is an extension 
 
 `zero`, `one`, `two`, `few`, `many`, `other`, `singular`, `dual`, `plural`
 
-To indicate that an item is plural, supply metadata in the dictionary with one of these form names. For example:
+To indicate that an item is plural, use the `<Plural>` component and supply alternate forms with these names. For example:
 
 ```js
-// Will display "You have one new message" when n is 1,
+// Will display "You have 1 new message" when n is 1,
 // and "You have {n} new messages" when n is plural.
 // May display dual, paucal, null forms in other languages.
 {  
-    "messages": [
-        <p>You have <Num/> new messages.</p>, 
-        { singular: <p>You have one new message.</p> }
-    ]
+    "messages": (
+        <Plural singular={<p>You have <Num/> new message.</p>}>
+            <p>You have <Num/> new messages.</p>
+        </Plural>
+    )
 }
 ```
 
