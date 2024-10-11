@@ -12,8 +12,6 @@ For more, see our [Terms of Use](https://www.generaltranslation.com/terms).
 
 ## What are tokens?
 
-<Callout type="info">We charge for our services based on the length, in tokens, of what you input. We never charge based on the length of what we output.</Callout>
-
 When text is sent to [General Translation](https://www.generaltranslation.com) APIs, it is broken down into chunks called *tokens*.
 Think of tokens as small pieces of your input text, like words or parts of words, that an AI model uses to understand and translate your content.
 
@@ -21,6 +19,8 @@ Think of tokens as small pieces of your input text, like words or parts of words
 
 For example, the string `Hello, world!` has 13 characters, and 4 tokens: `Hello`, `,`, ` world`, and `!`.
 
-General Translation's cloud services charge by the token. We currently tokenize with OpenAI's `tiktoken`, which is the same tokenizer used by [GPT-4](https://openai.com/index/gpt-4/). You can explore this tokenizer [here](https://platform.openai.com/tokenizer).
+If you go over the token limit for your plan, we begin to charge based on token usage. 
+We only ever charge based on the length of your input — never the length of the translation.
+Read more about our available plans [here](https://www.generaltranslation.com/plans).
 
-Tokens help us measure the amount of text we translate for you, ensuring that you only pay for what you use.
+We currently tokenize with OpenAI's `tiktoken`, which is the same tokenizer used by [GPT-4](https://openai.com/index/gpt-4/). You can explore this tokenizer [here](https://platform.openai.com/tokenizer).

@@ -2,67 +2,60 @@ import { Callout, Tabs } from 'nextra/components'
 
 # General Translation
 
-Welcome to the docs for [General Translation](https://www.generaltranslation.com).
-
-We publish internationalization ("i18n") libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps.
-
-<Tabs items={['npm', 'yarn']}>
-    <Tabs.Tab>
-    **React**
-    ```bash copy
-    npm i gt-react
-    ```
-    **Next.js**
-    ```bash copy
-    npm i gt-next
-    ```
-    </Tabs.Tab>
-    <Tabs.Tab>
-    **React**
-    ```bash copy
-    yarn add gt-react
-    ```
-    **Next.js**
-    ```bash copy
-    yarn add gt-next
-    ```
-    </Tabs.Tab>
-</Tabs>
-
-Unlike other i18n stacks, `gt-react`:
-- **Translates entire React components, not just strings.** So there's no need to rewrite your site to accomodate new languages. You can write [dictionaries](/gt-next/dictionaries) in full JSX or use inline wrappers like [`<T>`](/gt-next).
-
-Additionally, `gt-next`:
-- **Translates automatically** — once connected to our cloud service, your app will instantly support dozens of languages, no extra work needed.
-- **Works across both client and server components**, with first-class support for Next.js App Router and React Server Components.
-
 <Callout>
     These docs are under construction. Please email [archie@generaltranslation.com](mailto:archie@generaltranslation.com?subject=Docs) if what you're looking for isn't here.
 </Callout>
 
-## How does it work?
+Welcome to the docs for [General Translation](https://www.generaltranslation.com). 
 
-Here's how `gt-next` works when the default language of your app ([`defaultLocale`](/gt-next/config#defaultlocale))  is English (`en-US`):
+We publish developer libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps which automate your entire internationalization ("i18n") stack.
 
-- **For English-speaking users, nothing changes.** No request is ever made to the translation CDN and your site is rendered as normal.
+- Setup is simple, with no need for complex rewrites of your project.
+- Translations ship in seconds and load in milliseconds.
+- UI gets translated in context by powerful AI models.
 
-- When a non-English language user visits your site, the library checks our CDN. The CDN is global and fast — typical response time is double digit milliseconds.
+## Get started
 
-- If a cached translation exists, the library reconciles it with the original structure of the page (handling things like [plurals](/gt-next/plurals) and [variables](/gt-next/variables)) and displays the translated site.
+<Tabs items={['Next.js', 'React']}>
+    <Tabs.Tab>
+    Follow the [Quickstart](/gt-next/quickstart) guide to ship your first translations.
 
-- By default, the server fetches translations and then either renders them with [SSR](https://nextjs.org/docs/app/building-your-application/rendering#rendering-environments) or provides them to the client with [`<GTProvider>`](/gt-next/provider). Non-Next.js React apps should use [`gt-react`](/gt-react/provider).
+    **npm**
+    ```bash copy
+    npm i gt-next
+    ```
+    **yarn**
+    ```bash copy
+    yarn add gt-next
+    ```
+    </Tabs.Tab>
+    <Tabs.Tab>
+    Follow the [Quickstart](/gt-react/quickstart) guide to ship your first translations. 
+    
+    **npm**
+    ```bash copy
+    npm i gt-react
+    ```
+    **yarn**
+    ```bash copy
+    yarn add gt-react
+    ```
+    </Tabs.Tab>
+</Tabs>
 
-- You can use the [CLI](/gt-next/cli) to update your remote dictionary automatically, e.g. whenever you push to a remote Git repo. Translations are usually available in less than a minute.
+## Why choose General Translation?
 
-## What happens if a translation doesn't exist?
+**General Translation builds the entire i18n stack**, from developer libraries, to AI translations, to the infrastructure that serves your translations.
+Because we built the whole stack from scratch, our libraries can:
 
-This can happen if:
-- You never created a remote dictionary for the language your user is requesting.
-- You've changed an item in your local (default language) dictionary without updating your remote one.
-- A translation is not ready yet.
+#### Translate entire React components, not just strings
 
-If no cached translation exists, we'll perform a translation on-demand. This translation will be streamed via your server to your user within a few seconds.
+#### Support translated content inline or in dictionaries
 
-<Callout type="info">
-    **What this looks like:** the rest of the page loads, with your translated component loading in a few seconds later. The second time a user visits your page, the new translation will be cached, so it should load like any other component.
-</Callout>
+#### Work across both client and server components
+
+With first class support for the Next.js [App Router](https://nextjs.org/docs/app) and [React Server Components](https://react.dev/reference/rsc/server-components).
+
+#### Support on-demand translation
+
+(Experimental, currently `gt-next` only.)
