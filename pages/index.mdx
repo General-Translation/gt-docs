@@ -30,7 +30,7 @@ We publish internationalization ("i18n") libraries for [React](https://react.dev
 </Tabs>
 
 Unlike other i18n stacks, `gt-react`:
-- **Translates entire React components, not just strings.** So there's no need to rewrite your site to accomodate new languages. You can write [dictionaries](/gt-next/dictionaries) in full JSX or use inline wrappers like [`<T>`](/gt-next/inline).
+- **Translates entire React components, not just strings.** So there's no need to rewrite your site to accomodate new languages. You can write [dictionaries](/gt-next/dictionaries) in full JSX or use inline wrappers like [`<T>`](/gt-next).
 
 Additionally, `gt-next`:
 - **Translates automatically** — once connected to our cloud service, your app will instantly support dozens of languages, no extra work needed.
@@ -64,5 +64,5 @@ This can happen if:
 If no cached translation exists, we'll perform a translation on-demand. This translation will be streamed via your server to your user within a few seconds.
 
 <Callout type="info">
-**What this looks like:** the rest of the page loads, with your translated component loading in a few seconds later. The second time a user visits your page, the new translation will be cached, so it should load like any other component.
+    **What this looks like:** the rest of the page loads, with your translated component loading in a few seconds later. The second time a user visits your page, the new translation will be cached, so it should load like any other component.
 </Callout>
