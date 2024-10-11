@@ -45,17 +45,158 @@ We publish developer libraries for [React](https://react.dev) and [Next.js](http
 
 ## Why choose General Translation?
 
-**General Translation builds the entire i18n stack**, from developer libraries, to AI translations, to the infrastructure that serves your translations.
-Because we built the whole stack from scratch, our libraries can:
+**General Translation creates the entire i18n stack**, from developer libraries, to AI translations, to the infrastructure that serves your translations.
+Because we built the whole stack from scratch, it:
 
-#### Translate entire React components, not just strings
+#### Translates entire React components, not just strings
 
-#### Support translated content inline or in dictionaries
+UI passed as the children of the `<T>` component will be translated, regardless of how complicated the JSX tree:
 
-#### Work across both client and server components
+```javascript
+import { T } from 'gt-next'
+import CustomButton from './CustomButton'
+
+export default function Page() {
+
+    const myFunction = () => { console.log("myValue") };
+
+    return (
+        <T id="my_id">
+            <p>
+                You can write any JSX as children of the {"<T>"} component.
+            </p>
+            <p>
+                For example, you could write a <a href='/'>link</a> and have the text be translated in context.
+            </p>
+            <CustomButton onClick={myFunction}>
+                Or you could translate the children of a complex component like this one!
+            </CustomButton>
+        </T>
+    )
+}
+```
+
+#### Supports translated content inline or in dictionaries
+
+JSX content placed inside a `<T>` component is marked for translation:
+
+<Tabs items={['page.js']}>
+    <Tabs.Tab>  
+        ```jsx copy
+        // inline translation
+
+        import { T } from 'gt-next;
+
+        // translates <p>Hello, world</p>
+        export default function Page() {
+            return (
+                <T id='hello'>
+                    <p>Hello, world!</p>
+                </T>
+            )
+        }
+        ```
+    </Tabs.Tab>
+</Tabs>
+
+Many projects have a central dictionary in which they store all translatable content.
+Uniquely, General Translation libraries let you write dictionaries as objects containing JSX:
+
+<Tabs items={['page.js', 'dictionary.js', 'next.config.js']}>
+    <Tabs.Tab>  
+        ```jsx copy
+        // dictionary translation
+
+        import { getGT } from 'gt-next;
+
+        // translates <p>Hello, world</p>
+        export default function Page() {
+            const t = getGT();
+            return t('hello');
+        }
+        ```
+    </Tabs.Tab>
+    <Tabs.Tab>  
+        ```jsx copy
+        const dictionary = {
+            "hello": <p>Hello, world</p>
+        }
+
+        export default dictionary;
+        ```
+    </Tabs.Tab>
+    <Tabs.Tab>  
+        ```jsx copy
+        import { initGT } from 'gt-next/config'
+
+        const nextConfig = {};
+
+        // initialize the GT plugin
+        const withGT = initGT(); 
+
+        // bundles your JSX dictionary into your app
+        export default withGT(nextConfig);
+        ```
+    </Tabs.Tab>
+</Tabs>
+
+#### Works across both client and server components
 
 With first class support for the Next.js [App Router](https://nextjs.org/docs/app) and [React Server Components](https://react.dev/reference/rsc/server-components).
 
-#### Support on-demand translation
+```jsx copy
+// server component
 
-(Experimental, currently `gt-next` only.)
+import getName from '@/getName';
+import { T, Var } from 'gt-next;
+
+export default async function Page() {
+
+    const name = await getName();
+
+    return (
+        <T id='greeting'>
+            Hello, <Var value={name} />
+        </T>
+    )
+}
+```
+
+```jsx copy
+'use client'
+
+// client component
+// should be used inside <GTProvider>
+
+import { useState } from 'react';
+import { T, Var } from 'gt-next;
+
+export default function Page() {
+
+    const [name, setName] = useState("John");
+
+    return (
+        <T id='greeting'>
+            Hello, <Var value={name} />
+        </T>
+    )
+}
+```
+
+#### Supports on-demand translation
+
+(Experimental, currently `gt-next` server components only.)
+
+Sometimes, your app needs a translation which doesn't already exist.
+
+This can happen if:
+- You've enabled the language a user requests, but never created translations for it before.
+- You've changed some translated content in your project without requesting a new translation for it.
+
+In this situation, `gt-next` can create a translation for you on demand, during runtime. This translation will be streamed via your server to your user within a few seconds.
+
+<Callout type="info">
+**What this looks like:** the rest of the page loads, with your translated component loading in a few seconds later. The second time a user visits your page, the new translation will be cached, so it should load like any other component.
+</Callout>
+
+Most projects should use the [CLI tool](/gt-next/cli) to create translations in advance, rather than relying on on-demand translations.
