@@ -30,7 +30,7 @@ We publish internationalization ("i18n") libraries for [React](https://react.dev
 </Tabs>
 
 Unlike other i18n stacks, `gt-react`:
-- **Translates entire React components, not just strings.** So there's no need to rewrite your site to accomodate new languages. You can write [dictionaries](/gt-next/dictionaries) in full JSX or use inline wrappers like [`<T>`](/gt-next/inline).
+- **Translates entire React components, not just strings.** So there's no need to rewrite your site to accomodate new languages. You can write [dictionaries](/dictionaries) in full JSX or use inline wrappers like [`<T>`](/gt-next/inline).
 
 Additionally, `gt-next`:
 - **Translates automatically** — once connected to our cloud service, your app will instantly support dozens of languages, no extra work needed.
@@ -48,11 +48,11 @@ Here's how `gt-next` works when the default language of your app ([`defaultLocal
 
 - When a non-English language user visits your site, the library checks our CDN. The CDN is global and fast — typical response time is double digit milliseconds.
 
-- If a cached translation exists, the library reconciles it with the original structure of the page (handling things like [plurals](/gt-next/plurals) and [variables](/gt-next/variables)) and displays the translated site.
+- If a cached translation exists, the library reconciles it with the original structure of the page (handling things like [plurals](/dictionaries/plurals) and [variables](/dictionaries/variables)) and displays the translated site.
 
-- By default, the server fetches translations and then either renders them with [SSR](https://nextjs.org/docs/app/building-your-application/rendering#rendering-environments) or provides them to the client with [`<GTProvider>`](/gt-next/provider). Non-Next.js React apps should use [`gt-react`](/gt-react/provider).
+- By default, the server fetches translations and then either renders them with [SSR](https://nextjs.org/docs/app/building-your-application/rendering#rendering-environments) or provides them to the client with [`<GTProvider>`](/gt-next/provider). Entirely client-side Next.js apps should use [`gt-react`](/gt-react/provider).
 
-- You can use the [CLI](/gt-next/cli) to update your remote dictionary automatically, e.g. whenever you push to a remote Git repo. Translations are usually available in less than a minute.
+- You can use the [CLI](/cli) to update your remote dictionary automatically, e.g. whenever you push to a remote Git repo. Translations are usually available in less than a minute.
 
 ## What happens if a translation doesn't exist?
 

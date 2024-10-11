@@ -1,14 +1,7 @@
 {
   "index": "Introduction",
-  "quickstarts": "Quickstarts",
   "gt-next": "gt-next",
   "gt-react": "gt-react",
-  "dictionaries": "Dictionaries",
-  "cli": "Translate from CLI",
-  "advanced": "Advanced",
-  "generaltranslation": {
-    "title": "generaltranslation",
-    "href": "https://www.npmjs.com/package/generaltranslation"
-  },
+  "generaltranslation": "generaltranslation",
   "faqs": "FAQs"
 }
