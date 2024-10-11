@@ -15,6 +15,9 @@ const config: DocsThemeConfig = {
   docsRepositoryBase: 'https://github.com/General-Translation/gt-docs',
   footer: {
     component: <></>
+  },
+  sidebar: {
+    defaultMenuCollapseLevel: 1
   }
 }
 

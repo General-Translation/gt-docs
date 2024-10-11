@@ -3,6 +3,7 @@
   "index": "<T>",
   "variables": "Variables",
   "plurals": "Plurals",
+  "gt-provider": "<GTProvider>",
   "dictionaries": "Using dictionaries",
   "cli": "Using the CLI tool",
   "routing": "i18n Routing",
