@@ -1,0 +1,4 @@
+{
+    "title": "gt-next",
+    "pages": ["quickstart", "gt-provider", "helpers", "routing", "advanced"]
+}

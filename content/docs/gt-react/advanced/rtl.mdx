@@ -1,0 +1,37 @@
+---
+title: Right-to-left languages
+---
+
+Right-to-left (rtl) languages are those that are read and written from right to left.
+
+Languages written from right to left have a combined total of over 500 million speakers worldwide. They include:
+
+- Arabic (`ar`)
+- Hebrew (`he`)
+- Persian (`fa`)
+- Urdu (`ur`)
+
+The [`generaltranslation`](/generaltranslation) language infrastructure library 
+offers a `getLanguageDirection()` function to determine if a language goes `"rtl"` or `"ltr"`.
+
+<Callout type="warn">
+    The solution here involves writing a short script which sets the `<html>` element's `lang` and `dir` attributes before the app loads. 
+    We're actively looking at ways to make the developer experience easier.
+</Callout>
+
+Run this script in your app's `index.html` file:
+
+```js copy
+import { determineLanguage, getLanguageDirection } from 'generaltranslation'
+
+const defaultLocale = "en-US" // your default locale
+const approvedLocales = ["en-US", "es", "fr", "de", "ja"] // your approved languages
+
+const browserLocale = navigator?.language || navigator?.userLanguage;
+let locale = browserLocale || defaultLocale;
+if (approvedLocales) {
+    locale = determineLanguage([locale, browserLocale], locales) || defaultLocale;
+}
+document.documentElement.lang = locale;
+document.documentElement.dir = getLanguageDirection(locale);
+```

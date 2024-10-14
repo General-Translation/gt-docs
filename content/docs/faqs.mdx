@@ -1,0 +1,26 @@
+---
+title: FAQs
+---
+
+## Do I own my translations?
+
+**Yes.** 
+
+> You, the customer, retain full ownership and rights to any translated output produced through the Services. We make no claim to your output.
+
+For more, see our [Terms of Use](https://www.generaltranslation.com/terms).
+
+## What are tokens?
+
+When text is sent to [General Translation](https://www.generaltranslation.com) APIs, it is broken down into chunks called *tokens*.
+Think of tokens as small pieces of your input text, like words or parts of words, that an AI model uses to understand and translate your content.
+
+> A helpful rule of thumb is that one token generally corresponds to ~4 characters of text for common English text. This translates to roughly ¾ of a word (so 100 tokens ~= 75 words).
+
+For example, the string `Hello, world!` has 13 characters, and 4 tokens: `Hello`, `,`, ` world`, and `!`.
+
+If you go over the token limit for your plan, we begin to charge based on token usage. 
+We only ever charge based on the length of your input — never the length of the translation.
+Read more about our available plans [here](https://www.generaltranslation.com/plans).
+
+We currently tokenize with OpenAI's `tiktoken`, which is the same tokenizer used by [GPT-4](https://openai.com/index/gpt-4/). You can explore this tokenizer [here](https://platform.openai.com/tokenizer).

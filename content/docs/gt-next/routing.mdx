@@ -1,0 +1,79 @@
+---
+title: i18n Routing
+---
+
+i18n routing is a web development technique used to manage multiple languages and regional formats on a website, ensuring users can access content in their preferred language through language-specific URLs. It involves detecting the user's language and providing localized routes, like `www.example.com/fr` for French. `gt-next`'s middleware allows you to easily add i18n routing to your Next.js App Router project.
+
+In Next.js, create a file called `middleware.js` (or `.ts` if you are using TypeScript) inside the root directory. If you are using the `src/` folder, place it in `src/middleware.js` instead.
+
+```js copy
+// middleware.js
+
+import { createNextMiddleware } from 'gt-next/middleware'
+
+export default createNextMiddleware();
+
+export const config = {
+  matcher: [
+      /*
+       * Match all request paths except for the ones starting with:
+       * - api (API routes)
+       * - _next (internal files)
+       * - static files
+       */
+      "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
+
+You should include `defaultLocale` and `locales` in both `middleware.js` and [`next.config.js`](/gt-next/config). The reason you have to include them separately is that on certain hosts (e.g. Vercel), middleware runs in a different environment, meaning `createNextMiddleware()` does not have access to your `initGT()` configuration.
+
+```js copy
+// middleware.js
+
+import { createNextMiddleware } from 'gt-next/middleware'
+
+export default createNextMiddleware({
+  defaultLocale: "en-US",
+  locales: ["en-US", "fr", "es", "de", "ja"]
+});
+
+export const config = {
+  matcher: [
+      /*
+       * Match all request paths except for the ones starting with:
+       * - api (API routes)
+       * - _next (internal files)
+       * - static files
+       */
+      "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
+
+Then, create a dynamic route (e.g., `[lang]`) in your app folder, and include all pages and layouts under it. From [Vercel](https://nextjs.org/docs/app/building-your-application/routing/internationalization#routing-overview):
+
+> Ensure all special files inside `app/` are nested under `app/[lang]`. This enables the Next.js router to dynamically handle different locales in the route, and forward the lang parameter to every layout and page. 
+
+Your file structure should look like:
+
+```
+my-app/
+├── middleware.js
+├── app/
+│   ├── [lang]/
+│   │   ├── layout.js
+│   │   ├── page.js
+│   │   └── some-page/
+│   │       └── page.js
+│   └── api/
+│       └── route.js
+├── public/
+│   └── images/
+│       └── logo.png
+├── styles/
+│   └── globals.css
+└── next.config.js
+```
+
+This will enable `gt-next`-powered i18n routing on your Next.js project.

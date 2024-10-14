@@ -1,0 +1,82 @@
+---
+title: <GTProvider>
+---
+
+`<GTProvider>` uses React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API to give its descendants access to translations and locale information.
+    
+**`<GTProvider>` should be placed at the top of the component tree** so that all your components can use the translations and provided hooks.
+
+### Inline translation
+
+`<T>` components which are the children of a `<GTProvider>` **must** have an `id` prop, or they will throw an error.
+
+### Hooks
+
+- [`useLocale()`](/gt-react/helpers#uselocale): Retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code.
+- [`useDefaultLocale()`](/gt-react/helpers#usedefaultlocale): Retrieves the application's default language as an ISO-639 language code.
+- [`useGT()`](/gt-react/dictionaries): Used to initialize the `t()` function, which loads a translation from the dictionary if you are using the dictionary pattern.
+
+### Example
+
+```javascript
+// App.js
+
+import { GTProvider } from 'gt-react';
+import MyApp from './MyApp';
+
+export default function App() {
+  return (
+    <GTProvider 
+      projectID="abc-123"
+      locales={["en-US", "es", "fr"]}
+      defaultLocale="en-US"
+    >
+      <MyApp />
+    </GTProvider>
+  );
+}
+```
+
+## Config
+
+Pass props to `<GTProvider>` to configure the behavior of `gt-react`.
+ 
+### Recommended props
+
+### `children`
+- **Type**: `React.ReactNode`
+- **Description**: The children components that will use the General Translation context. All components within `<GTProvider>` can access translation-related hooks such as `useGT`, `useLocale`, and `useDefaultLocale`.
+
+### `projectID`
+- **Type**: `string`
+- **Description**: The project ID used to identify your project on General Translation cloud services. It is required if you are using the default cloud services to fetch or cache translations.
+
+### `dictionary`
+- **Type**: `Record<string, string | JSX.Element | [string | JSX.Element, Record<string, any>]>`
+- **Default**: `defaultDictionary`
+- **Description**: The dictionary object used for translations. This object contains all the translation entries for the project.
+
+### `locales`
+- **Type**: `string[]`
+- **Description**: A list of locales that are supported by the application. If not provided, it will use the default locale.
+
+### `defaultLocale`
+- **Type**: `string`
+- **Default**: `locales[0] || 'en'`
+- **Description**: The default locale to use for the application. This is the fallback language when no other locale is specified or detected. It can be the first item in the `locales` array or a custom value.
+
+### Advanced Props
+
+#### `locale`
+- **Type**: `string`
+- **Description**: The current locale for the application. If this prop is not provided, the `GTProvider` will attempt to detect the browser's locale via `useBrowserLocale()` and default to `defaultLocale` if none is detected. **Supply this prop only if you need to manually set the user's language.**
+
+#### `dictionaryName`
+- **Type**: `string`
+- **Default**: `defaultDictionaryName`
+- **Description**: The name of the dictionary used for translation. Multiple dictionaries can be specified for different parts of your application or for different projects.
+
+#### `cacheURL`
+- **Type**: `string`
+- **Default**: `https://cache.gtx.dev`
+- **Description**: The URL where cached translations are fetched from. This is useful when using the General Translation cache server to retrieve pre-translated content for faster load times. You can customize this URL to point to your own caching server if needed.

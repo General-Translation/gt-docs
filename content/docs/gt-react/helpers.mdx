@@ -1,0 +1,38 @@
+---
+title: Helper hooks
+---
+
+## `useLocale()`
+
+`useLocale()` retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code.
+It can be used in the descendants of [`<GTProvider>`](/gt-react/provider).
+
+```javascript copy
+import { useLocale } from 'gt-react'
+
+export default function MyComponent() {
+    const locale = useLocale(); // e.g. 'en-US'
+    return (
+        <div>
+            {locale}
+        </div>
+    )
+}
+```
+
+## `useDefaultLocale()`
+
+The application's default locale can be accessed in the descendants of [`<GTProvider>`](/gt-react/provider) with the `useDefaultLocale()` hook.
+
+```javascript copy
+import { useDefaultLocale } from 'gt-react'
+
+export default function MyComponent() {
+    const defaultLocale = useDefaultLocale(); // e.g. 'en-US'
+    return (
+        <div>
+            {defaultLocale}
+        </div>
+    )
+}
+```

@@ -1,0 +1,83 @@
+---
+title: <GTProvider>
+---
+
+<Callout type="warn">
+    **In Next.js, you should import `<GTProvider>` in a server component**
+</Callout>
+
+**In the Next.js [App Router](https://nextjs.org/docs/app), components are server components by default.**
+This means they are executed on the server, and can perform server-specific actions like `async` API calls and accessing environment variables.
+
+Components which use client-side JavaScript, including React hooks like `useState()` and `useEffect()`, are client components. They must marked with [`'use client'`](https://nextjs.org/docs/app/building-your-application/rendering/client-components#using-client-components-in-nextjs) or the descendants of another client component.
+   
+To use translations in client components, you must pass them from the server to the client using `<GTProvider>`. `<GTProvider>` uses React's [Context](https://react.dev/learn/passing-data-deeply-with-context) API to give its descendants access to translations and locale information.
+
+## Inline translations
+
+`<T>` components which are the children of a `<GTProvider>` **must** have an `id` prop, or they will throw an error.
+
+## Hooks
+
+The following hooks are available to the children of `<GTProvider>`:
+
+- [`getLocale()`](/gt-next/helpers#getlocale): Retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code.
+- [`getDefaultLocale()`](/gt-next/helpers#getdefaultlocale): Retrieves the application's default language as an ISO-639 language code.
+- [`getGT()`](/gt-next/dictionaries): Used to initialize the `t()` function, which loads a translation from the dictionary, if you are using a dictionary pattern.
+
+## Using `<GTProvider>` with `id`
+
+If your app is very large and you don't want to provide all of your translations in the server response, pass the optional `id` prop to `<GTProvider>`. 
+This will let you send a nested subset of your server-side dictionary to the client. 
+Every `<T>` component which is a child of `<GTProvider>` must have an `id` prefixed with the `id` you pass to `<GTProvider>`.
+
+### Example
+
+```javascript copy
+// page.js
+
+import { GTProvider } from 'gt-next'
+import MyClientComponent from './MyClientComponent'
+
+export default function Page() {
+    // using GTProvider with the 'id' prop to pass only a subset of the dictionary to the client
+    return (
+        <main>
+            <GTProvider id='client'>
+                <MyClientComponent />
+            </GTProvider>
+        </main>
+    )
+}
+
+```
+
+```javascript copy
+'use client'
+
+import { useState } from 'react'
+import { T, Num } from 'gt-next'
+
+export default function MyClientComponent() {
+
+    const [count, setCount] = useState(0);
+
+    return (
+        <T id='client.my_id'>
+            <div>
+                The count is <Num value={count} />!
+            </div>
+            <div>
+            <button onClick={() => {setCount(prev => prev + 1)}}>
+                Click me
+            </button>
+            </div>
+        </T>
+    )
+}
+```
+
+## Using `<GTProvider>` on the client side
+
+It's better to import `<GTProvider>` in a file not marked `'use client'`, so that it can fetch translations on the server-side. 
+If you really need to put `<GTProvider>` on the client, import `<GTProvider>` from `'gt-next/client'` (not recommended in server-first apps), and follow the [`gt-react`](/gt-react/gt-provider) documentation.

@@ -1,0 +1,225 @@
+---
+title: Quickstart
+description: For the Next.js App Router
+---
+
+This guide describes how to add `gt-next` to a [Next.js](https://nextjs.org) project which is using the [App Router](https://nextjs.org/docs#app-router-vs-pages-router).
+
+## Set up your local environment
+
+Navigate to your existing Next.js app, or follow the instructions [here](https://nextjs.org/docs/getting-started/installation) to create a new one.
+
+In your local environment, usually `.env.local`, set two environment variables:
+
+```.env copy
+GT_API_KEY=""
+GT_PROJECT_ID=""
+```
+
+An API key (`GT_API_KEY`) is a 36-character string beginning `gtx-` which is used to authenticate your app with our cloud translation service. Create one on the [API Keys](https://www.generaltranslation.com/dashboard/redirect/api-keys) page.
+
+Your Project ID can also be found on the Dashboard:
+
+![Code copy container entitled "projectID"](/screenshots/project_id.jpeg)
+
+## Install the library
+
+To install `gt-next`, navigate to your Next.js project's root directory and run: 
+
+<Tabs items={['npm', 'yarn']}>
+    <Tab value="npm">
+    ```bash copy
+    npm i gt-next
+    ```
+    </Tab>
+    <Tab value="yarn">
+    ```bash copy
+    yarn add gt-next
+    ```
+    </Tab>
+</Tabs>
+
+## Install the plugin
+
+In the root directory of your project, there should be a file called `next.config.js` (or `.ts`, `.mjs`, `.cjs`).
+
+```
+my-app/
+├── src/
+│   ├── app/
+│   │    └── page.js
+│   └── components/
+│       ├── Header.js
+│       └── Footer.js
+├── public/
+│   └── favicon.ico
+├── next.config.js
+├── .gitignore
+├── package.json
+└── README.md
+```
+
+Edit your `next.config.js` file to run `initGT()`. This function will let you add configuration options like a non-English default language (`defaultLocale`) or a list of approved languages to translate into (`locales`). 
+
+<Callout>
+    If you are using a [`dictionary.js`](/gt-next/dictionaries) file, use the `withGT()` plugin returned by `initGT()` to configure [Webpack](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) to bundle your `dictionary.js` file into your app.
+</Callout>
+
+```js copy
+// next.config.mjs
+
+import { initGT } from 'gt-next/config'
+
+const withGT = initGT()
+
+export default withGT({});
+```
+
+Add parameters to `initGT()` to configure `gt-next`:
+
+```js copy
+// next.config.mjs
+
+import { initGT } from 'gt-next/config'
+
+const withGT = initGT({
+    defaultLocale: "en-US", // the default language of your app, usually "en" or "en-US"
+    locales: ["en-US", "es", "fr"] // the languages your app is available in
+    description: "A personal website for John Smith" // a natural language description of your site used to aid in translation
+});
+
+export default withGT({});
+```
+
+See a full list of parameters [here](/gt-next/advanced/config).
+
+## Setting the `<html>` language
+
+Browsers read the `lang` attribute of the `<html>` tag to check the language of a site. 
+In Next.js, you set the `lang` attribute in your root `layout.js` file.
+
+`getLocale()` is a function which returns the current language of the page, based on the user's language preferences and the translations available.
+
+Make sure the value of `lang` is the result of the `getLocale()` function.
+
+```js copy
+// app/layout.js
+
+import { getLocale } from 'gt-next';
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang={getLocale()}>
+            <body>{children}</body>
+        </html>
+    );
+}
+```
+
+## Inline translation
+
+To mark JSX for translation, pass it as the children of your `<T>` component.
+Every `<T>` component you need translated should have a unique `id` prop:
+
+```js copy
+import { T } from 'gt-next'
+
+export default function Page() {
+    return (
+        <T id='my_id'>
+            Hello, world
+        </T>
+    )
+}
+```
+
+The text and structure of the tags inside your `<T>` component should be static. 
+Attributes like `className` can be dynamic.
+To include dynamic variables inside your `<T>` component, use the `<Var>` component:
+
+```js copy
+import { T, Var } from 'gt-next'
+
+export default function Page() {
+
+    const name = "Alice"; // or "Bob", "Charlie", etc.
+
+    return (
+        <T id='my_other_id'>
+            Hello, <Var value={name}/>
+        </T>
+    )
+}
+```
+
+The children (and the fallback `value` prop) of a `<Var>` component will never be translated and will remain private.
+
+Learn how to include:
+- [Plural forms](/dictionaries/plurals) with the `<Plural>` component
+- [Formatted variables](/dictionaries/variables) like numbers, currencies, and dates
+- [Context](/gt-next#context) for the AI model to use while translating
+- [Translating strings](/gt-next#translate) rather than JSX
+
+## `<GTProvider>`
+
+To provide translations to client components, you should use [`<GTProvider>`](/gt-next/gt-provider). Make sure every client component in which you use items from your dictionary is the descendant of a `<GTProvider>`.
+
+```javascript copy
+// page.json
+
+import { GTProvider } from 'gt-next'
+import SomeClientComponent from './SomeClientComponent'
+
+export default function Page() {
+    return (
+        <main>
+            <GTProvider>
+                <SomeClientComponent/>
+            </GTProvider>
+        </main>
+    )
+}
+```
+
+## `gt-update`
+
+Now that content is loading in your `defaultLocale` (usually English), you can use on-demand translation to test it out. (Note: as of 10/11/24, on-demand translation only works in server components.) Simply [change your browser language](https://support.google.com/chrome/answer/173424) and reload the page.
+The first time you do this, translations will take a few seconds to load. Afterwards, they will be cached, and load instantly.
+
+**In production, we recommend using the `gt-update` CLI tool to request translations, rather than translating everything on demand.**
+
+Install `gt-update` globally or as a developer dependency, so it doesn't increase your app's production bundle size.
+
+```bash copy
+npm i -g gt-update
+```
+
+To run a script that will scan through your project and send each item for translation, run `npx i18n`. This script requires your API key and projectID, but `gt-update` automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them:
+
+```bash copy
+npx i18n --languages fr es ja
+```
+
+Or, with `projectID` and `apiKey`:
+
+```bash copy
+npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+```
+
+If the script is successful, you should see the following message in the console:
+
+```txt
+Remote dictionary "default" updated: true. Languages: ["French", "Japanese", "Spanish"]. Translations are usually live within a minute. Check status: www.generaltranslation.com/dashboard.
+```
+
+Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
+
+Learn more about `gt-update` [here](/gt-next/cli).
+
+## Congratulations! Your app is now multilingual! 🥳
+
+### Next steps
+
+- Learn more about the [`<T>`](/gt-next) component, or dictionaries with [`getGT()`](/gt-next/dictionaries)
+- Set up [i18n routing](/gt-next/routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`) for better SEO
+- [Set up](/gt-next/advanced/rtl) your app so that the UI is mirrored for languages like Arabic and Hebrew, which are written right-to-left.
