@@ -3,7 +3,7 @@ title: <GTProvider>
 ---
 
 <Callout type="warn">
-    **In Next.js, you should import `<GTProvider>` in a server component**
+    **In Next.js, you should use `<GTProvider>` in a server component**
 </Callout>
 
 **In the Next.js [App Router](https://nextjs.org/docs/app), components are server components by default.**
@@ -79,5 +79,5 @@ export default function MyClientComponent() {
 
 ## Using `<GTProvider>` on the client side
 
-It's better to import `<GTProvider>` in a file not marked `'use client'`, so that it can fetch translations on the server-side. 
-If you really need to put `<GTProvider>` on the client, import `<GTProvider>` from `'gt-next/client'` (not recommended in server-first apps), and follow the [`gt-react`](/gt-react/gt-provider) documentation.
+It's better to use `<GTProvider>` in a file not marked `'use client'`, so that it can fetch translations on the server-side. 
+If you really need to put `<GTProvider>` on the client, import `<GTProvider>` from `'gt-next/client'` (not recommended in server-first apps), and follow the [`gt-react`](/gt-react/quickstart#add-gtprovider) documentation.
