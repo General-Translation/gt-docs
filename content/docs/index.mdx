@@ -1,6 +1,6 @@
 ---
 title: Introduction
-description: Docs for General Translation localization libraries
+description: Docs for General Translation's localization libraries
 ---
 
 <Callout>
@@ -44,14 +44,29 @@ We publish developer libraries for [React](https://react.dev) and [Next.js](http
     </Tab>
 </Tabs>
 
+### Example
+
+```javascript
+import { T } from 'gt-next'
+
+export default function MyComponent() {
+    return (
+        <T id="my_id">
+            Hello, world!
+        </T>
+    )
+}
+```
+
+
 ## Why choose General Translation?
 
-**General Translation creates the entire i18n stack**, from developer libraries, to AI translations, to the infrastructure that serves your translations.
-Because we built the whole stack from scratch, it:
+**General Translation is an entire i18n stack**, from developer libraries, to AI translations, to the infrastructure that serves your translations.
+With GT libraries like `gt-react` and `gt-next`, you can:
 
-#### Translates entire React components, not just strings
+### 1. Translate entire React components, not just strings
 
-UI passed as the children of the `<T>` component will be translated, regardless of how complicated the JSX tree:
+UI passed as the children of the `<T>` component will be translated regardless of how complicated the JSX tree. For example:
 
 ```javascript
 import { T } from 'gt-next'
@@ -77,7 +92,50 @@ export default function Page() {
 }
 ```
 
-#### Supports translated content inline or in dictionaries
+### 2. Translate both client and server components
+
+With first class support for the Next.js [App Router](https://nextjs.org/docs/app) and [React Server Components](https://react.dev/reference/rsc/server-components).
+
+```jsx copy
+// server component
+
+import getName from '@/getName';
+import { T, Var } from 'gt-next;
+
+export default async function Page() {
+
+    const name = await getName();
+
+    return (
+        <T id='greeting'>
+            Hello, <Var value={name} />
+        </T>
+    )
+}
+```
+
+```jsx copy
+'use client'
+
+// client component
+// should be used inside <GTProvider>
+
+import { useState } from 'react';
+import { T, Var } from 'gt-next;
+
+export default function Page() {
+
+    const [name, setName] = useState("Alice");
+
+    return (
+        <T id='greeting'>
+            Hello, <Var value={name} />
+        </T>
+    )
+}
+```
+
+### 3. Write content inline or in dictionaries
 
 JSX content placed inside a `<T>` component is marked for translation:
 
@@ -141,52 +199,11 @@ Uniquely, General Translation libraries let you write dictionaries as objects co
     </Tab>
 </Tabs>
 
-#### Works across both client and server components
+### 4. Translate content on-demand
 
-With first class support for the Next.js [App Router](https://nextjs.org/docs/app) and [React Server Components](https://react.dev/reference/rsc/server-components).
-
-```jsx copy
-// server component
-
-import getName from '@/getName';
-import { T, Var } from 'gt-next;
-
-export default async function Page() {
-
-    const name = await getName();
-
-    return (
-        <T id='greeting'>
-            Hello, <Var value={name} />
-        </T>
-    )
-}
-```
-
-```jsx copy
-'use client'
-
-// client component
-// should be used inside <GTProvider>
-
-import { useState } from 'react';
-import { T, Var } from 'gt-next;
-
-export default function Page() {
-
-    const [name, setName] = useState("Alice");
-
-    return (
-        <T id='greeting'>
-            Hello, <Var value={name} />
-        </T>
-    )
-}
-```
-
-#### Supports on-demand translation
-
-(Experimental, currently `gt-next` server components only.)
+<Callout>
+    This is experimental and currently available in `gt-next` only.
+</Callout>
 
 Sometimes, your app needs a translation which doesn't already exist.
 
@@ -201,3 +218,4 @@ In this situation, `gt-next` can create a translation for you on demand, during 
 </Callout>
 
 Most projects should use the [CLI tool](/gt-next/cli) to create translations in advance, rather than relying on on-demand translations.
+
