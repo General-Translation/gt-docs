@@ -33,7 +33,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <RootProvider>{children}</RootProvider>
+        <RootProvider>
+          {children}
+        </RootProvider>
       </body>
     </html>
   );
