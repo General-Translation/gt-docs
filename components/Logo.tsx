@@ -16,9 +16,9 @@ export default function Logo() {
     if (!logoSrc) return;
 
     return (
-        <Link className="flex items-center gap-2 text-lg font-semibold" href="/">
+        <span className="flex items-center gap-2 text-lg font-semibold">
             <Image src={logoSrc} width={35} height={35} alt='GT, Inc.'/>
             <span className="sr-only">General Translation, Inc.</span>
-        </Link>
+        </span>
     )
 }

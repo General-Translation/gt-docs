@@ -5,6 +5,7 @@ import { BookCheck, Earth } from 'lucide-react';
 export const baseOptions: HomeLayoutProps = {
   nav: {
     title: <div style={{"display": "flex", "alignItems": "center"}}><Logo/>&nbsp;&nbsp;General Translation&nbsp;&nbsp;</div>,
+    url: '/docs'
   },
   links: [
     {

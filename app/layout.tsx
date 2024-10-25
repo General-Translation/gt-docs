@@ -32,7 +32,7 @@ export function generateMetadata(): Metadata {
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body>
+      <body suppressHydrationWarning>
         <RootProvider>{children}</RootProvider>
       </body>
     </html>
