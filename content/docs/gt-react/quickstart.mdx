@@ -37,7 +37,7 @@ To install `gt-react`, navigate to your project's root directory and run:
 
 ## Add `<GTProvider>`
 
-[`<GTProvider>`](/gt-react/provider#config) is used to configure the behavior of `gt-react`. It should be placed as high up in your app as possible, ideally at the root.
+[`<GTProvider>`](/docs/gt-react/provider#config) is used to configure the behavior of `gt-react`. It should be placed as high up in your app as possible, ideally at the root.
 
 To work out of the box, `<GTProvider>` needs the `projectID` you created earlier, plus a dictionary from which to load content.
 `projectID` is used to access the General Translation global cache, which serves translations around the world at millisecond speeds.
@@ -68,7 +68,7 @@ export default function App() {
 
 ```
 
-See a full list of `<GTProvider>` props [here](/gt-react/gt-provider#config).
+See a full list of `<GTProvider>` props [here](/docs/gt-react/gt-provider#config).
 
 ## Inline translation
 
@@ -109,9 +109,9 @@ export default function Page() {
 The children (and the fallback `value` prop) of a `<Var>` component will never be translated and will remain private.
 
 Learn how to include:
-- [Plural forms](/gt-react/plurals) with the `<Plural>` component
-- [Formatted variables](/gt-react/variables) like numbers, currencies, and dates
-- [Context](/gt-react#context) for the AI model to use while translating
+- [Plural forms](/docs/gt-react/plurals) with the `<Plural>` component
+- [Formatted variables](/docs/gt-react/variables) like numbers, currencies, and dates
+- [Context](/docs/gt-react#context) for the AI model to use while translating
 
 ## `gt-update`
 
@@ -143,11 +143,11 @@ Remote dictionary "default" updated: true. Languages: ["French", "Japanese", "Sp
 
 Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
 
-Learn more about `gt-update` [here](/gt-react/cli).
+Learn more about `gt-update` [here](/docs/gt-react/cli).
 
 ## Congratulations! Your app is now multilingual! 🥳
 
 ## Next steps
 
-- Learn more about the [`<T>`](/gt-react) component, or dictionaries with [`useGT()`](/gt-react/dictionaries)
+- Learn more about the [`<T>`](/docs/gt-react) component, or dictionaries with [`useGT()`](/docs/gt-react/dictionaries)
 - [Set up](/advanced/rtl) your app so that the UI is mirrored for languages like Arabic and Hebrew, which are written right-to-left.

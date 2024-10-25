@@ -21,9 +21,9 @@ To use translations in client components, you must pass them from the server to 
 
 The following hooks are available to the children of `<GTProvider>`:
 
-- [`getLocale()`](/gt-next/helpers#getlocale): Retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code.
-- [`getDefaultLocale()`](/gt-next/helpers#getdefaultlocale): Retrieves the application's default language as an ISO-639 language code.
-- [`getGT()`](/gt-next/dictionaries): Used to initialize the `t()` function, which loads a translation from the dictionary, if you are using a dictionary pattern.
+- [`getLocale()`](/docs/gt-next/helpers#getlocale): Retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code.
+- [`getDefaultLocale()`](/docs/gt-next/helpers#getdefaultlocale): Retrieves the application's default language as an ISO-639 language code.
+- [`getGT()`](/docs/gt-next/dictionaries): Used to initialize the `t()` function, which loads a translation from the dictionary, if you are using a dictionary pattern.
 
 ## Using `<GTProvider>` with `id`
 
@@ -80,4 +80,4 @@ export default function MyClientComponent() {
 ## Using `<GTProvider>` on the client side
 
 It's better to use `<GTProvider>` in a file not marked `'use client'`, so that it can fetch translations on the server-side. 
-If you really need to put `<GTProvider>` on the client, import `<GTProvider>` from `'gt-next/client'` (not recommended in server-first apps), and follow the [`gt-react`](/gt-react/quickstart#add-gtprovider) documentation.
+If you really need to put `<GTProvider>` on the client, import `<GTProvider>` from `'gt-next/client'` (not recommended in server-first apps), and follow the [`gt-react`](/docs/gt-react/quickstart#add-gtprovider) documentation.
