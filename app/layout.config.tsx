@@ -10,7 +10,7 @@ export const baseOptions: HomeLayoutProps = {
   links: [
     {
       text: 'Dashboard',
-      url: 'https://www.generaltranslation.com/dashboard',
+      url: '/dashboard',
       active: 'nested-url',
       icon: <Earth />,
     },
