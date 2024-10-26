@@ -1,6 +1,6 @@
 import Logo from '@/components/Logo';
 import { type HomeLayoutProps } from 'fumadocs-ui/home-layout';
-import { BookCheck, Earth } from 'lucide-react';
+import { BookCheck, Earth, MessageSquareText } from 'lucide-react';
 
 export const baseOptions: HomeLayoutProps = {
   nav: {
@@ -19,6 +19,12 @@ export const baseOptions: HomeLayoutProps = {
       url: 'https://www.generaltranslation.com/plans',
       active: 'nested-url',
       icon: <BookCheck />
+    },
+    {
+      text: 'Blog',
+      url: '/blog',
+      active: 'nested-url',
+      icon: <MessageSquareText />,
     },
   ],
   githubUrl: 'https://github.com/General-Translation',
