@@ -5,7 +5,7 @@ import { BookCheck, Earth, MessageSquareText } from 'lucide-react';
 export const baseOptions: HomeLayoutProps = {
   nav: {
     title: <div style={{"display": "flex", "alignItems": "center"}}><Logo/>&nbsp;&nbsp;General Translation&nbsp;&nbsp;</div>,
-    url: '/docs'
+    url: '/'
   },
   links: [
     {
