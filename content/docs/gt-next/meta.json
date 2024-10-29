@@ -1,4 +1,4 @@
 {
-    "title": "gt-next",
+    "title": "Next.js",
     "pages": ["quickstart", "gt-provider", "helpers", "routing", "advanced"]
 }
