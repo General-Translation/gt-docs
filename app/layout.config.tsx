@@ -1,6 +1,6 @@
 import Logo from '@/components/Logo';
 import { type HomeLayoutProps } from 'fumadocs-ui/home-layout';
-import { BookCheck, Earth, MessageSquareText } from 'lucide-react';
+import { BookCheck, Book, Earth, MessageSquareText } from 'lucide-react';
 
 export const baseOptions: HomeLayoutProps = {
   nav: {
@@ -13,6 +13,12 @@ export const baseOptions: HomeLayoutProps = {
       url: '/dashboard',
       active: 'nested-url',
       icon: <Earth />,
+    },
+    {
+      text: 'Docs',
+      url: '/docs',
+      active: 'nested-url',
+      icon: <Book />,
     },
     {
       text: 'Plans',
