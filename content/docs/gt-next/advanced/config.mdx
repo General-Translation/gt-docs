@@ -87,33 +87,18 @@ export default withGT({});
 
 ### Advanced Parameters
 
-#### `renderSettings`
-- **Type**: `{
-        fallbackToPrevious: boolean,
-        method: "skeleton" | "replace" | "hang" | "subtle",
-        timeout: number | null
-    }`
-- **Default**: `{ "fallbackToPrevious": true, "method": "skeleton", "timeout": null }`
-- **Description**: An object specifying [how on-demand translations should be rendered](/advanced/on-demand-rendering).
-
 #### `projectID`
 - **Type**: `string`
 - **Description**: Project ID, which can be included here or as an [environment variable](/docs/gt-next/config#set-environment-variables).
 
-#### `baseURL`
-- **Type**: `string`
-- **Default**: `https://prod.gtx.dev`
-- **Description**: Base URL for the GT API. To disable automatic translation, set this to an empty string.
-
-#### `cacheURL`
-- **Type**: `string`
-- **Default**: `https://cache.gtx.dev`
-- **Description**: URL where cached translations are stored. Can be customized to point to a custom cache server.
+#### `preferredModelProvider`
+- **Type**: `"anthropic"` | `"openai"`
+- **Description**: Your first choice AI model provider. Currently only [Anthropic](https://anthropic.com) or [OpenAI](https://openai.com) are enabled. Leave this blank and we'll figure out the best provider on a translation-by-translation basis. In periods of high usage or when a provider is disabled, we can't guarantee that your preferred provider will be used. 
 
 #### `dictionaryName`
 - **Type**: `string`
 - **Default**: `"default"`
-- **Description**: The user-defined name of the dictionary used for translation. Multiple dictionaries can exist within the same project if they each have different a `dictionaryName`.
+- **Description**: The user-defined name of the dictionary used for translation. Multiple dictionaries can exist within the same project if they each have different a `dictionaryName`. Only available to users on paid plans.
 
 ```javascript copy
 // one app
@@ -134,6 +119,26 @@ const withGT = initGT({
     dictionaryName: "marketing_site"
 });
 ```
+
+#### `baseURL`
+- **Type**: `string`
+- **Default**: `https://prod.gtx.dev`
+- **Description**: Base URL for the GT API. To disable automatic translation, set this to an empty string.
+
+#### `cacheURL`
+- **Type**: `string`
+- **Default**: `https://cache.gtx.dev`
+- **Description**: URL where cached translations are stored. Can be customized to point to a custom cache server.
+
+#### `renderSettings`
+- **Type**: `{
+        fallbackToPrevious: boolean,
+        method: "skeleton" | "replace" | "hang" | "subtle",
+        timeout: number | null
+    }`
+- **Default**: `{ "fallbackToPrevious": true, "method": "skeleton", "timeout": null }`
+- **Description**: An object specifying [how on-demand translations should be rendered](/advanced/on-demand-rendering).
+
 
 #### `_maxConcurrentRequests`
 - **Type**: `number`
