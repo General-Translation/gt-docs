@@ -95,18 +95,12 @@ export default withGT({});
 - **Type**: `"anthropic"` | `"openai"`
 - **Description**: Your first choice AI model provider. Currently only [Anthropic](https://anthropic.com) or [OpenAI](https://openai.com) are enabled. Leave this blank and we'll figure out the best provider on a translation-by-translation basis. In periods of high usage or when a provider is disabled, we can't guarantee that your preferred provider will be used. 
 
-#### `dictionaryName`
-- **Type**: `string`
-- **Default**: `"default"`
-- **Description**: The user-defined name of the dictionary used for translation. Multiple dictionaries can exist within the same project if they each have different a `dictionaryName`. Only available to users on paid plans.
-
 ```javascript copy
 // one app
 const withGT = initGT({
     defaultLocale: "en-US",
     locales: ["en-US", "de"]
-    description: "A B2B SaaS dashboard",
-    dictionaryName: "dashboard"
+    description: "A B2B SaaS dashboard"
 });
 ```
 
@@ -115,8 +109,7 @@ const withGT = initGT({
 const withGT = initGT({
     defaultLocale: "en",
     locales: ["en", "fr", "es", "de"]
-    description: "A B2B SaaS marketing site",
-    dictionaryName: "marketing_site"
+    description: "A B2B SaaS marketing site"
 });
 ```
 
