@@ -21,8 +21,8 @@ export const baseOptions: HomeLayoutProps = {
       icon: <Book />,
     },
     {
-      text: 'Plans',
-      url: 'https://www.generaltranslation.com/plans',
+      text: 'Pricing',
+      url: 'https://www.generaltranslation.com/pricing',
       active: 'nested-url',
       icon: <BookCheck />
     },
