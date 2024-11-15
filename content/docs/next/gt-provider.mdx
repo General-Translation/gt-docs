@@ -1,9 +1,10 @@
 ---
 title: <GTProvider>
+description: Providing translations and locale information from server to client components
 ---
 
 <Callout type="warn">
-    **In Next.js, you should use `<GTProvider>` in a server component**
+    **You should always use `<GTProvider>` in a server component**
 </Callout>
 
 **In the Next.js [App Router](https://nextjs.org/docs/app), components are server components by default.**
@@ -21,9 +22,9 @@ To use translations in client components, you must pass them from the server to 
 
 The following hooks are available to the children of `<GTProvider>`:
 
-- [`getLocale()`](/docs/gt-next/helpers#getlocale): Retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code.
-- [`getDefaultLocale()`](/docs/gt-next/helpers#getdefaultlocale): Retrieves the application's default language as an ISO-639 language code.
-- [`getGT()`](/docs/gt-next/dictionaries): Used to initialize the `t()` function, which loads a translation from the dictionary, if you are using a dictionary pattern.
+- [`getLocale()`](/docs/next/helpers#getlocale): Retrieves the user's current language as an [ISO-639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code.
+- [`getDefaultLocale()`](/docs/next/helpers#getdefaultlocale): Retrieves the application's default language as an ISO-639 language code.
+- [`getGT()`](/docs/next/dictionaries): Used to initialize the `t()` function, which loads a translation from the dictionary, if you are using a dictionary pattern.
 
 ## Using `<GTProvider>` with `id`
 

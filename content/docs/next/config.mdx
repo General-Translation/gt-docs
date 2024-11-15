@@ -1,5 +1,6 @@
 ---
 title: Configuration
+description: Specifying locales, loading dictionaries, and adding metadata
 ---
 
 ## Set environment variables
@@ -22,7 +23,12 @@ These environment variables will be used:
 - For [on-demand translation](/#what-happens-if-a-translation-doesnt-exist) (`GT_API_KEY`)
 - In the [`gt-update`](/cli) CLI tool so you can push dictionaries from the command line(`GT_API_KEY`)
 
+
 ## Install the plugin
+
+```javascript copy
+import { initGT } from 'gt-next/config'
+```
 
 In the root directory of your project, there should be a file called `next.config.js` (or `.ts`, `.mjs`, `.cjs`).
 
@@ -42,14 +48,34 @@ my-app/
 └── README.md
 ```
 
-Edit your `next.config.js` file to run `initGT()`. This function will let you add configuration options like a non-English default language (`defaultLocale`) or a list of approved languages to translate into (`locales`). Use the `withGT()` plugin it returns to configure [Webpack](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) to bundle your `dictionary.js` file into production builds of your app.
+Edit your `next.config.js` file to run the `initGT()` function. This is optional, but it lets you add useful configuration options like a non-English default language (`defaultLocale`) or a list of approved languages to translate into (`locales`). 
+
+<Callout>
+    If you are using a [`dictionary.js`](/docs/next/dictionaries) file, use the `withGT()` plugin returned by `initGT()` to configure [Webpack](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) to bundle your `dictionary.js` file into your app.
+</Callout>
 
 ```js copy
 // next.config.mjs
 
 import { initGT } from 'gt-next/config'
 
-const withGT = initGT();
+const withGT = initGT()
+
+export default withGT({});
+```
+
+Add parameters to `initGT()` to configure `gt-next`:
+
+```js copy
+// next.config.mjs
+
+import { initGT } from 'gt-next/config'
+
+const withGT = initGT({
+    defaultLocale: "en-US", // the default language of your app, usually "en" or "en-US"
+    locales: ["en-US", "es", "fr"] // the languages your app is available in
+    description: "A personal website for John Smith" // a natural language description of your site used to aid in translation
+});
 
 export default withGT({});
 ```
@@ -89,7 +115,7 @@ export default withGT({});
 
 #### `projectID`
 - **Type**: `string`
-- **Description**: Project ID, which can be included here or as an [environment variable](/docs/gt-next/config#set-environment-variables).
+- **Description**: Project ID, which can be included here or as an [environment variable](/docs/next/config#set-environment-variables).
 
 #### `preferredModelProvider`
 - **Type**: `"anthropic"` | `"openai"`
@@ -131,7 +157,6 @@ const withGT = initGT({
     }`
 - **Default**: `{ "fallbackToPrevious": true, "method": "skeleton", "timeout": null }`
 - **Description**: An object specifying [how on-demand translations should be rendered](/advanced/on-demand-rendering).
-
 
 #### `_maxConcurrentRequests`
 - **Type**: `number`
