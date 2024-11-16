@@ -1,4 +1,4 @@
 {
     "title": "React",
-    "pages": ["quickstart", "t", "gt-provider", "variables", "plurals", "helpers", "dictionaries", "cli", "advanced"]
+    "pages": ["quickstart", "t", "gt-provider", "helpers", "cli", "advanced"]
 }
