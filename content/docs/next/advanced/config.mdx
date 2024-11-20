@@ -178,8 +178,8 @@ const withGT = initGT({
 
 import { cookies } from "next/headers";
 
-export function getLocale() {
-    const cookieStore = cookies();
+export async function getLocale() {
+    const cookieStore = await cookies();
     return cookieStore.get('myCustomLocaleCookie') || 'en';
 }
 ```
