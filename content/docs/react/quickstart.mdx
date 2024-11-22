@@ -5,12 +5,12 @@ description: For any React app
 
 This guide describes how to add `gt-react` to a [React.js](https://react.dev) project. It assumes that all components are [client-rendered](https://react.dev/reference/rsc/use-client#noun-labs-1201738-(2)).
 
-## Create a secret key for `gt-react-cli`
+## Create a secret key for the CLI tool
 
-Because `gt-react` is entirely server-rendered, you will be using the CLI tool, [`gt-react-cli`](/cli) to translate your dictionaries.
+Because `gt-react` is entirely server-rendered, you will be using the [CLI tool](/cli) to translate your dictionaries.
 For this you will need a **API Key** and a **Project ID**.
 
-An API key is a 36-character string beginning `gtx-` which is used to authenticate `gt-react-cli` with our cloud translation service. Create one on the [API Keys](https://www.generaltranslation.com/dashboard/redirect/api-keys) page.
+An API key is a 36-character string beginning `gtx-` which is used to authenticate CLI tool with our cloud translation service. Create one on the [API Keys](https://www.generaltranslation.com/dashboard/redirect/api-keys) page.
 
 Your Project ID is a public identifier for your project. It can also be found on the Dashboard:
 
@@ -113,23 +113,16 @@ Learn how to include:
 - [Formatted variables](/docs/gt-react/variables) like numbers, currencies, and dates
 - [Context](/docs/gt-react#context) for the AI model to use while translating
 
-## `gt-react-cli`
+## CLI tool
 
 Now that content is loading in your `defaultLocale` (usually English), you can use the CLI tool to create translations.
-
-Install `gt-react-cli` globally or as a developer dependency, so it doesn't increase your app's production bundle size.
-
-```bash copy
-npm i -g gt-react-cli
-```
-
-To run a script that will scan through your project and send each item for translation, run `npx i18n`. This script requires your API key and projectID, but `gt-react-cli` automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them:
 
 ```bash copy
 npx i18n --languages fr es ja
 ```
 
-Or, with `projectID` and `apiKey`:
+This script requires your API key and projectID, but the CLI tool automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them.
+With `projectID` and `apiKey`:
 
 ```bash copy
 npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
@@ -143,7 +136,7 @@ Remote dictionary "default" updated: true. Languages: ["French", "Japanese", "Sp
 
 Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
 
-Learn more about `gt-react-cli` [here](/docs/gt-react/cli).
+Learn more about the CLI tool [here](/docs/gt-react/cli).
 
 ## Congratulations! Your app is now multilingual! 🥳
 
