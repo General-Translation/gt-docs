@@ -144,17 +144,17 @@ Now that content is loading in your `defaultLocale` (usually English), you can u
 Simply [change your browser language](https://support.google.com/chrome/answer/173424) and reload the page.
 The first time you do this, translations will take a few seconds to load. Afterwards, they will be cached, and load instantly.
 
-## `gt-update`
+## `gt-react-cli`
 
-**In production, we recommend using the `gt-update` CLI tool to request translations, rather than translating everything on demand.**
+**In production, we recommend using the `gt-react-cli` CLI tool to request translations, rather than translating everything on demand.**
 
-Install `gt-update` globally or as a developer dependency, so it doesn't increase your app's production bundle size.
+Install `gt-react-cli` globally or as a developer dependency, so it doesn't increase your app's production bundle size.
 
 ```bash copy
-npm i -g gt-update
+npm i -g gt-react-cli
 ```
 
-To run a script that will scan through your project and send each item for translation, run `npx i18n`. This script requires your API key and projectID, but `gt-update` automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them:
+To run a script that will scan through your project and send each item for translation, run `npx i18n`. This script requires your API key and projectID, but `gt-react-cli` automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them:
 
 ```bash copy
 npx i18n --languages fr es ja
@@ -174,7 +174,7 @@ Project "YOUR_PROJECT_ID" updated: true. Languages: ["French", "Japanese", "Span
 
 Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
 
-Learn more about `gt-update` [here](/docs/next/cli).
+Learn more about `gt-react-cli` [here](/docs/next/cli).
 
 ## Congratulations! Your app is now multilingual! 🥳
 
