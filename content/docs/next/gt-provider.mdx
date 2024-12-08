@@ -38,14 +38,13 @@ Every `<T>` component which is a child of `<GTProvider>` must have an `id` prefi
 // page.js
 
 import { GTProvider } from 'gt-next'
-import MyClientComponent from './MyClientComponent'
 
-export default function Page() {
+export default function Layout({ children }) {
     // using GTProvider with the 'id' prop to pass only a subset of the dictionary to the client
     return (
         <main>
-            <GTProvider id='client'>
-                <MyClientComponent />
+            <GTProvider id='dashboard'>
+                {children}
             </GTProvider>
         </main>
     )
