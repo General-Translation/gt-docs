@@ -9,7 +9,11 @@ import {
 import { notFound } from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
- 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+
 export default async function Page({
   params,
 }: {
@@ -21,11 +25,17 @@ export default async function Page({
   const MDX = page.data.body;
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage 
+      toc={page.data.toc} 
+      tableOfContent={{
+        style: 'clerk',
+      }}
+      full={page.data.full}
+    >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
-        <MDX components={{ ...defaultMdxComponents, Tab, Tabs }} />
+        <MDX components={{ ...defaultMdxComponents, Tab, Tabs, Step, Steps, Accordion, Accordions, TypeTable }} />
       </DocsBody>
     </DocsPage>
   );

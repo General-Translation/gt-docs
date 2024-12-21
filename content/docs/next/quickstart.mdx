@@ -3,32 +3,34 @@ title: Next.js Quickstart
 description: For the Next.js 13+ App Router
 ---
 
-This guide describes how to add `gt-next` to a [Next.js](https://nextjs.org) project which is using the [App Router](https://nextjs.org/docs#app-router-vs-pages-router).
+## Overview
 
-The two core components of the library are:
-- [`<T>`](/docs/next/t), with which you mark the content you want to translate
-- [`<GTProvider>`](/docs/next/gt-provider), which provides translations and language information from the server to client-side components using React's context API
+This guide describes how to internationalize an existing [Next.js](https://nextjs.org) project that uses the [App Router](https://nextjs.org/docs#app-router-vs-pages-router) with `gt-next`.
+We will cover four simple steps:
+<Steps>
+    <Step>
+        Install the `gt-next` library
+    </Step>
+    <Step>
+        Use the `<T>` component to translate your app
+    </Step>
+    <Step>
+        Add the `<GTProvider>` component
+    </Step>
+    <Step>
+        Update your env variables
+    </Step>
+</Steps>
+{/* TODO: This process should take under XX minutes. */}
 
-## Set up your local environment
+{/* TODO: link to example project */}
+{/* TODO: link to a youtube tutorial */}
+{/* TODO: link to other guides */}
 
-Navigate to your existing Next.js app, or follow the instructions [here](https://nextjs.org/docs/getting-started/installation) to create a new one.
+## Setup
+### 1. Install gt-next
 
-In your local environment, usually `.env.local`, set two environment variables:
-
-```.env copy
-GT_API_KEY=""
-GT_PROJECT_ID=""
-```
-
-An API key (`GT_API_KEY`) is a 36-character string beginning `gtx-` which is used to authenticate your app with our cloud translation service. Create one on the [API Keys](https://www.generaltranslation.com/dashboard/redirect/api-keys) page.
-
-Your Project ID can also be found on the Dashboard:
-
-![Code copy container entitled "projectID"](/screenshots/project_id.png)
-
-## Install the library
-
-To install `gt-next`, navigate to your Next.js project's root directory and run: 
+To install [gt-next](https://www.npmjs.com/package/gt-next), navigate to your Next.js project's root directory and run: 
 
 <Tabs items={['npm', 'yarn']}>
     <Tab value="npm">
@@ -43,138 +45,228 @@ To install `gt-next`, navigate to your Next.js project's root directory and run:
     </Tab>
 </Tabs>
 
-## Set the `<html>` language
 
+### 2. Translate with the `<T>` Component
+
+To translate your app, wrap the content you want to translate in a [`<T>` component](/docs/next/t).
+Just remember, every `<T>` component should have a unique `id` prop.
 <Callout>
-    To create a list of approved locales your app supports, use the [Next.js plugin](/docs/next/config#install-the-plugin) in your `next.config.js` file.
-    This is recommended but not required.
+    The text and structure of the tags inside your `<T>` component should be static.
+    For dynamic content, use the [`<Var>` component](/docs/next/variables).
+    {/* TODO:
+        The text and structure of the tags inside your `<T>` component should be static.
+        Translation of dynamic content is covered in in [this guide](/docs/next/dynamic-content).
+     */}
 </Callout>
+```js title="app/page.js" copy
+import { T } from 'gt-next'
+import { Card, CardHeader, CardContent } from '@components/ui/Card'
 
-Browsers read the `lang` attribute of the `<html>` tag to check the language of a site. 
-In Next.js, you set the `lang` attribute in your root `layout.js` file.
+export default function Page() {
+    return (
+        <T id='pages_quotes'>
+            {/* You can translate your text */}  // [!code highlight]
+            <b>Shakespeare&apos;s</b> quotes  // [!code highlight]
 
-`getLocale()` is a function which returns the current language of the page, based on the user's language preferences and the translations available.
+            { /* You can also translate any arbitrary components and their children */ }
+            <Card>  // [!code highlight]
+                <CardHeader>Hamlet</CardHeader>  // [!code highlight]
+                <CardContent>  // [!code highlight]
+                    <p>&quot;To be, or not to be: that is the question...&quot;</p>  // [!code highlight]
+                </CardContent>  // [!code highlight]
+            </Card>  // [!code highlight]
+        </T>
+    )
+}
+```
 
-Make sure the value of `lang` is the result of the `getLocale()` function.
 
-```js copy
-// app/layout.js
+### 3. Wrap Your App with the `<GTProvider>` Component
 
-import { getLocale } from 'gt-next';
+To add translations to client `<T>` components, wrap your app in the [`<GTProvider>` component](/docs/next/gt-provider).
+
+```javascript title="layout.js" copy
+import { GTProvider } from 'gt-next'
 
 export default function RootLayout({ children }) {
     return (
-        <html lang={getLocale()}>
-            <body>{children}</body>
+        <html lang="en">
+            <body>
+                <GTProvider> // [!code highlight]
+                    { children }
+                </GTProvider> // [!code highlight]
+            </body>
         </html>
-    );
-}
-```
-
-## Use the `<T>` component
-
-To mark JSX for translation, pass it as the children of your `<T>` component.
-Every `<T>` component you need translated should have a unique `id` prop:
-
-```js copy
-import { T } from 'gt-next'
-
-export default function Page() {
-    return (
-        <T id='my_id'>
-            Hello, world
-        </T>
     )
 }
 ```
+<Accordions>
+    <Accordion title="Should I update the <html> lang attribute?">
 
-The text and structure of the tags inside your `<T>` component should be static. 
-Attributes like `className` can be dynamic.
-To include dynamic variables inside your `<T>` component, use the `<Var>` component:
+        Browsers read the `lang` attribute of the `<html>` tag to check the language of a site. 
+        In Next.js, you can the `lang` attribute in your root `layout.js` file.
 
-```js copy
-import { T, Var } from 'gt-next'
+        While not required for your app to build, the correct application of the `lang` attribute is important for SEO, accessibility, and user experience.
+        Therefore, we strongly recommend setting the `lang` attribute to the user's preferred language.
 
-export default function Page() {
+        ```js title="app/layout.js" copy
+        import { getLocale, GTProvider } from 'gt-next'; // [!code highlight]
 
-    const name = "Alice"; // or "Bob", "Charlie", etc.
+        export default async function RootLayout({ children }) {
+            // Get the user's preferred language  // [!code highlight]
+            const locale = await getLocale(); // [!code highlight]
 
-    return (
-        <T id='my_other_id'>
-            Hello, <Var>{name}</Var>
-        </T>
-    )
-}
-```
+            return (
+                // Add the language to the DOM  // [!code highlight]
+                <html lang={locale}> // [!code highlight]
+                    <body>
+                        <GTProvider>
+                            { children }
+                        </GTProvider>
+                    </body>
+                </html>
+            );
+        }
+        ```
+    </Accordion>
+</Accordions>
 
-The children of a `<Var>` component will never be translated and will remain private.
 
-Learn how to include:
-- [Plural forms](/docs/next/plurals) with the `<Plural>` component
-- [Formatted variables](/docs/next/variables) like numbers, currencies, and dates
-- [Context](/docs/next/context) for the AI model to use while translating
-- [Translating strings](/docs/next/tx) rather than JSX elements
 
-## `<GTProvider>`
+### 4. Set up your local environment
 
-To provide translations to client components, you should use [`<GTProvider>`](/docs/next/gt-provider). Make sure every client component in which you use items from your dictionary is the descendant of a `<GTProvider>`.
+Add your API key and Project ID to your local environment.
 
-```javascript copy
-// layout.jsx
+<Steps>
 
-import { GTProvider } from 'gt-next'
-import MyClientApp from './MyClientApp'
+    <Step>
+        Navigate to your [GT Dashboard](https://www.generaltranslation.com/en-US/signin).
+            * Production Environments: Navigate to the **API Keys** page in the sidebar.
+            * Development Environments: Navigate to the **Developer Keys** page in the sidebar.
+            {/* TODO: Staging/testing envs */}
+    </Step>
 
-export default function Layout() {
-    return (
-        <main>
-            <GTProvider>
-                <MyClientApp />
-            </GTProvider>
-        </main>
-    )
-}
-```
+    <Step>
+        Click **Create Dev API Key** or **Create API Key** then copy the API key and Project ID to your clipboard.
+    </Step>
 
-## Try it out!
+    <Step>
+        Add the your Project ID and your API Key to your environment.
+            ```bash title=".env.local" copy
+            GT_API_KEY="YOUR_GT_API_KEY"
+            GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+    </Step>
 
-<Callout type="warn">As of 10/11/24, on-demand translation only works in server components.</Callout>
+</Steps>
+<Callout type="warn">
+    **Protect Your API Keys!**
 
-Now that content is loading in your `defaultLocale` (usually English), you can use **on-demand translation** to test it out. 
-Simply [change your browser language](https://support.google.com/chrome/answer/173424) and reload the page.
-The first time you do this, translations will take a few seconds to load. Afterwards, they will be cached, and load instantly.
+    Production API keys should only be used in production environments and **never** in non-production environments.
+    Likewise, development API keys should **only** be used for local environments.
 
-## CLI tool
+    *Never commit your API keys to a public repository!*
 
-**In production, we recommend using the built-in CLI tool to request translations, rather than translating everything on demand.**
+    {/* TODO: You can read more about configuring privacy here. */}
+    {/* TODO: talk about information that is made public for production but not dev */}
+    {/* TODO: talk about how dev is an auth cache (still under construction) */}
+    {/* TODO: talk about how we will eventually have authenticated caches (can be used for personal info only avail to anyone who has the app or for alpha/beta testing) */}
+</Callout>
 
-Run `npx i18n`, to run a script that will scan through your project and send each item for translation. 
-This script requires your API key and projectID. It will automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them:
 
+## Let's Try It Out!
+
+Congratulations! 🥳 Your app is now multilingual! Let's see it in action.
+
+### See Your App in a Different Language
+<Steps>
+    <Step>
+        Start by changing your preferred browser's language settings. This will change which language is displayed.
+            * Change your language in [Chrome](https://support.google.com/chrome/answer/173424)
+            * Change your language in [Firefox](https://support.mozilla.org/en-US/kb/use-firefox-another-language)
+            * Change your language in [Edge](https://support.microsoft.com/en-us/microsoft-edge/use-microsoft-edge-in-another-language-4da8b5e0-11ce-7ea4-81d7-4e332eec551f)
+            {/* TODO: safari */}
+    </Step>
+    <Step>
+        Start your Next.js app in development mode.
+            <Tabs items={['npm', 'yarn']}>
+                <Tab value="npm">
+                ```bash copy
+                npm run dev
+                ```
+                </Tab>
+                <Tab value="yarn">
+                ```bash copy
+                yarn run dev
+                ```
+                </Tab>
+            </Tabs>
+    </Step>
+    <Step>
+        Open up your app in your preferred browser (usually at [http://localhost:3000](http://localhost:3000)).
+        
+        *If you want to switch languages, just select a different language in your browser settings and refresh the page.*
+    </Step>
+</Steps>
+### Troubleshooting
+<Accordions>
+    <Accordion title="My app's language is not changing, even though I've changed my browser's language.">
+        **Browser Cookies**
+
+        Check your browser's cookies for your app.
+        General translation uses cookies to store the user's language preference.
+        The cookie is called `generaltranslation.locale`, and all you need to do is delete it.
+        Then, just double check you are using the desired perferred language and then
+        refresh the page.
+
+        How to check cookies:
+        * [Chrome](https://support.google.com/chrome/answer/95647)
+        * [Firefox](https://support.mozilla.org/en-US/kb/delete-cookies-remove-info-websites-stored)
+        * [Safari](https://support.apple.com/en-mn/guide/safari/sfri11471/16.0/mac/11.0)
+        * [Edge](https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09)
+    </Accordion>
+    <Accordion title="Why do new languages take a long time to load?">
+        **On-Demand Translation**
+
+        You may notice when loading new languages, translations will take a few seconds to be displayed.
+        This happens because your app has never been translated into that language before.
+        We refer to this process as an "on-demand translation".
+        All on-demand translations get cached in production environments,
+        so a delay will only occur the first time a new language is requested.
+
+        Luckily, this can be avoided by translating your app ahead of time for production deployments.
+        Doing so does not increase bundle size and significantly reduces load times.
+        See our instructions for how to [translate ahead of time](quickstart#cli-tool).
+    </Accordion>
+</Accordions>
+
+
+## Before Shipping to Production...
+
+### Perform Translation Ahead of Time [#cli-tool]
+
+In production, we **strongly** recommend translating your application ahead of time, rather than translating everything on demand.
+This has major performance benefits for your application, and can easily be integrated into your CI/CD pipeline.
+
+Just run the following command in your project's root directory.
+Make sure to use your production API key and project ID when you run this command.
 ```bash copy
-npx i18n --languages fr es ja
+npx i18n
 ```
 
-Or, with `projectID` and `apiKey`:
+For more information, see the [CLI tool documentation](/docs/next/cli).
+<Callout type="warn">
+    **For Production Only!**
 
-```bash copy
-npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
-```
+    This CLI tool is meant to *only be used for production deployments*.
+    Make sure you have the correct API key and project ID in your environment variables,
+    and make sure that you are translating the same content that is being used for production
+    (i.e., the branch you are on when you run this command is the branch used for production).
+</Callout>
 
-If the script is successful, you should see the following message in the console:
-
-```txt
-Project "YOUR_PROJECT_ID" updated: true. Languages: ["French", "Japanese", "Spanish"]. Translations are usually live within a minute. Check status: www.generaltranslation.com/dashboard.
-```
-
-Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
-
-Learn more about the CLI tool [here](/docs/next/cli).
-
-## Congratulations! Your app is now multilingual! 🥳
-
-### Next steps
+## Next steps
 
 - Learn more about the [`<T>`](/docs/next) component, or dictionaries with [`useElement()`](/docs/next/dictionaries)
-- Set up [i18n routing](/docs/next/routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`) for better SEO
-- [Set up](/docs/next/advanced/rtl) your app so that the UI is mirrored for languages like Arabic and Hebrew, which are written right-to-left.
+- Learn to improve SEO with [i18n routing](/docs/next/routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`)
+- Mirror your app to support [right-to-left languages](/docs/next/advanced/rtl) such as Arabic and Hebrew.
+- Create a list of approved languages for your app with the [Next.js plugin](/docs/next/config#install-the-plugin).
