@@ -2,3 +2,188 @@
 title: <Currency>
 description: Using the <Currency> component and dynamic content
 ---
+
+<Callout>
+    **TL;DR**
+    
+    The `<Currency>` component is used to display currency values in a locale-specific format.
+    All reformatting is performed locally, and therefore all data within the currency component is private.
+    The value provided to the `<Currency>` component will remain the same.
+</Callout>
+
+
+## Overview
+The `<Currency>` component is used to display currency values in a locale-specific format.
+Specifically, we use the [`Intl.NumberFormat` Internationalization API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) library to standardized currency formatting across all locales.
+This means that all currency value reformatting is performed locally and remains private.
+
+However, the value provided to the `<Currency>` component is **NOT** converted to a locale-specific currency value.
+The value provided to the `<Currency>` component will remain the same.
+
+## Usage
+
+### Example
+<Tabs items={['<T>', 'Dictionary (Advanced)']}>
+    <Tab value='<T>'>
+        Inline implementations of `<Currency>` are always inside of a `<T>` component.
+        {/* TODO: example app: https://www.geeksforgeeks.org/how-to-create-a-currency-converter-app-in-reactjs/ */}
+
+        ```jsx title="Balance.jsx" copy
+            import { T, Currency } from 'gt-next';
+
+            export default async function Balance(bal, currency) {
+
+                return (
+                    <T id='balance'>
+                        {/* the content of <Currency> will be reformatted, 
+                        but the value displayed will always be the same */}
+                        Your current balance is: <Currency currency={currency}>{bal}</Currency> // [!code highlight]
+                    </T>
+                );
+            }
+        ```
+    </Tab>
+    <Tab value="Dictionary (Advanced)">
+        You can read more about using dictionaries [here](/docs/next/advanced/dictionaries).
+
+        We apologize, `<Currency>` component example for dictionaries is not yet available.
+
+        {/* 
+        ```jsx title="Balance.jsx" copy
+            import { useElement } from 'gt-next';
+            import useAuth from 'hooks/useAuth';
+
+            export default function Balance(currency) {
+
+                // get user data
+                const { user } = useAuth();
+
+                // get the translation function
+                // for server-side, instead use await getElement()
+                const t = useElement(); // [!code highlight]
+
+                return (
+                    <p>
+                        { 
+                            // balance_id refers to a (nested) key in the dictionary
+                            // curr_bal tells the dictionary which <Currency> component to choose
+                            t( 'user.balance_id', { curr_bal: user.bal, currency: currency } ) // [!code highlight]
+                        }
+                    </p>
+                );
+            }
+        ```
+        ```jsx title="Dictionary.jsx" copy
+            import { Var } from 'gt-next'
+
+            const dictionary = {
+                user: {
+                    // user.balance_id will now point to this JSX content we want to translate
+                    // curr_bal will be replaced with the value of user.bal
+                    balance_id: <> Your current address is: <Currency name="curr_bal" /> </> // [!code highlight]
+                },
+            }
+
+            export default dictionary;
+        ``` */}
+    </Tab>
+</Tabs>
+
+## Reference
+
+### Props
+
+ 
+<TypeTable
+  type={{
+    "children?": {
+        description:
+            'The content to render inside the component. If provided, it will take precedence over value.',
+        type: 'JSX.Element',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        description:
+            'Optional name for the variable, used for metadata purposes.',
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "value?": {
+        description:
+            'The default value to be displayed if children is not provided.',
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+}}
+/>
+
+### Returns
+
+## When should I use `<Var>`?
+When deciding to use a `<Currency>` component, its easiest to ask if your content falls into two (somewhat overlapping) categories:
+[*dynamic content*](var#dynamic-content) and [*private information*](var#private-information).
+
+### Dynamic Content [#dynamic-content]
+Dynamic content is any content that can change based on the user, context, environment, etc. and should not be translated.
+A good example would be a user's email address and name.
+Such items are (1) not likely to need translation when your app is being rendered in a different language and (2) can vary (in this case between each user).
+
+```jsx title="Greeting.jsx" copy
+import { T, Var } from 'gt-next'
+
+export default function Greeting(name) {
+    return (
+        <T id='greeting'>
+            Hello, <Var>{name}</Var>!
+        </T>
+    );
+}
+```
+
+As far as translation goes this has two benefits:
+1. You do not have to create a translation for every possible name.
+    * Using `<Var>`, we only generate one translation that essentially would look like this:
+        * \`¡Hola, $\{name\}!\`
+    * If we do not use `<Var>`, we would have to perform an on-demand translation for every unique name:
+        * "¡Hola, Alice!", "¡Hola, Bob!", "¡Hola, Charlie!", "¡Hola, David!", ...
+2. You also don't have to worry about the names themselves changing into a translated form of their name: (i.e. "¡Hola, Alicia!", "¡Hola, Roberto!", ...).
+
+As you can see, the `<Var>` component should be used to wrap any contents that should remain the same regardless of locale.
+This way, we avoid the need to create translations for every possible value of the dynamic content.
+
+### Private information [#private-information]
+The `<Var>` component is also useful for displaying private information.
+
+```jsx title="PrivateInfo.jsx" copy
+import { T, Var } from 'gt-next'
+
+export default function PrivateInfo(email) {
+    return (
+        <T id='private-info'>
+            Your email address is <Var>{email}</Var>.
+        </T>
+    );
+}
+```
+The children of the `<Var>` component will not be translated.
+Its contents will never be passed to the General Tranlsation API.
+Its contents will not be distrubuted to the CDN.
+
+By wrapping private information in a `<Var>` component, you can ensure that the information is not sent to the General Translations API.
+<Callout>
+    **Exceptions**
+
+    The exceptions to the statement above is (1) in the case of a nested `<T>` component used inside of a `<Var>` component (ie, the children of the nested `<T>` component will be translated)
+    or (2) when data is passed intentionally to our API via some other means within a child of the `<Var>` component (i.e., a fetch call).
+    However, this is not the intended use of the `<Var>` component nor the General Translations API and doing so can harm load times and performance.
+
+    You can read more about nesting GT components [here](/docs/next/t). {/* TODO: add a page about nesting components */}
+</Callout>
+
+
+
+
+## Further Reading

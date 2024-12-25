@@ -59,23 +59,23 @@ Just remember, every `<T>` component should have a unique `id` prop.
      */}
 </Callout>
 ```js title="app/page.js" copy
-import { T } from 'gt-next'
+import { T } from 'gt-next' // [!code highlight]
 import { Card, CardHeader, CardContent } from '@components/ui/Card'
 
 export default function Page() {
     return (
-        <T id='pages_quotes'>
-            {/* You can translate your text */}  // [!code highlight]
-            <b>Shakespeare&apos;s</b> quotes  // [!code highlight]
+        <T id='pages_quotes'> // [!code highlight]
+            {/* You can translate your text */}
+            <b>Shakespeare&apos;s</b> quotes
 
             { /* You can also translate any arbitrary components and their children */ }
-            <Card>  // [!code highlight]
-                <CardHeader>Hamlet</CardHeader>  // [!code highlight]
-                <CardContent>  // [!code highlight]
-                    <p>&quot;To be, or not to be: that is the question...&quot;</p>  // [!code highlight]
-                </CardContent>  // [!code highlight]
-            </Card>  // [!code highlight]
-        </T>
+            <Card>
+                <CardHeader>Hamlet</CardHeader>
+                <CardContent>
+                    <p>&quot;To be, or not to be: that is the question...&quot;</p>
+                </CardContent>
+            </Card>
+        </T>  // [!code highlight]
     )
 }
 ```
@@ -86,7 +86,7 @@ export default function Page() {
 To add translations to client `<T>` components, wrap your app in the [`<GTProvider>` component](/docs/next/gt-provider).
 
 ```javascript title="layout.js" copy
-import { GTProvider } from 'gt-next'
+import { GTProvider } from 'gt-next' // [!code highlight]
 
 export default function RootLayout({ children }) {
     return (
