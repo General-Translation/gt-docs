@@ -1,0 +1,241 @@
+---
+title: <T> Reference
+description: This is a detailed dive into the <T> component and the gt-next library.
+---
+
+
+## Overview
+
+This article will take an indepth dive into how to use the `<T>` component in the `gt-next` library.
+We will cover the design patterns, best practices, and common pitfalls to avoid when using `<T>` in your application.
+
+
+## What is the `<T>` Component?
+
+The `<T>` component is the primary way to translate text and content in the `gt-next` library.
+It allows for inline translation of text and JSX structures, providing a more direct way to manage translations in your application.
+This is often times more convienient for the developer as it allows for more direct control over the translation content.
+
+The `<T>` component supports static text, JSX structures, and context-aware translations.
+When no translation is available, it gracefully falls back to displaying the content in the application's default locale.
+
+
+
+## Design Patterns
+
+Generally, `<T>` is used to translate static text and JSX structures.
+It is typically wrapped in a [`<GTProvider>`](/docs/next2/api/components/gtprovider) context at a higher level, but this is not always necessary.
+
+### Wrapping your `<T>` components in a `<GTProvider>` [#gtprovider]
+
+The `<T>` component relies on the `<GTProvider>` context to function in client-side components.
+Ensure your application is wrapped in a `<GTProvider>` at the root level to provide this context.
+
+```javascript copy
+import { GTProvider } from 'gt-next';
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang="en">
+            <body>
+                <GTProvider>{children}</GTProvider>
+            </body>
+        </html>
+    );
+}
+```
+
+#### Exceptions: Server-Side `<T>` Components [#server-t]
+
+For server-side rendering, `<T>` components do not require a `<GTProvider>`.
+Translations are generated directly during server rendering, based on the server's locale configuration.
+This ensures that `<T>` works seamlessly in server components or API routes.
+
+```javascript copy
+import { T } from 'gt-next/server';
+
+export default function ServerComponent() {
+    return (
+        <T id="welcome_message">
+            Welcome to the server-rendered page!
+        </T>
+    );
+}
+```
+
+## Examples
+
+### Basic Usage
+
+The simplest use case for `<T>` is to translate static text.
+Each `<T>` component requires a unique `id` to identify the content it translates.
+This helps loadtime performance by fetching translations only when needed.
+
+```javascript copy
+import { T } from 'gt-next';
+
+export default function BasicUsage() {
+    return (
+        <T id="greeting">
+            Hello, world!
+        </T>
+    );
+}
+```
+
+This example ensures that "Hello, world!" is translated based on the user's locale.
+For example, in a Spanish locale, it may render as "¡Hola, mundo!".
+
+
+### Context
+
+The `<T>` component supports additional context to refine translations.
+Adding a context prop allows the same id to resolve to different translations depending on the context provided.
+```javascript copy
+import { T } from 'gt-next';
+
+export default function FormalGreeting() {
+    return (
+        <T id="greeting" context="formal">
+            Hi there!
+        </T>
+    );
+}
+```
+
+For example, the context "formal" could yield a translation such as "Good day, everyone!", while the same `id` without context might yield "Hi there!" in the other language.
+This would remain the same for the base language.
+
+### Nested Components
+
+The `<T>` component can also translate JSX structures.
+Any children of the `<T>` will be translated.
+
+```javascript copy
+import { T } from 'gt-next';
+import CustomButton from './CustomButton';
+
+export default function Page() {
+    return (
+        <T id="jsx">
+            <div>
+                <p>Hello, world!</p>
+                <CustomButton>This is a complex button!</CustomButton>
+            </div>
+        </T>
+    );
+}
+```
+
+## Common Pitfalls
+
+### Direct Text Only [#direct-text]
+
+The `<T>` component only translates text passed directly as a child.
+This means that if you have content inside a component that is not directly passed to `<T>`, it will not be translated.
+
+Let's illustrate this with an example:
+
+```javascript copy
+function UntranslatedContent() {
+    return (
+        <p>Hello, world!</p>
+    );
+}
+
+export default function DisplayGreetings() {
+    return (
+        <T id="greeting">
+            <h1>Here is a greeting...</h1>
+            <UntranslatedContent />
+        </T>
+    );
+}
+```
+
+In this example, the content inside `<UntranslatedContent>` will not be translated.
+It will remain as "Hello, world!" in the output, even if the `id` "greeting" has a translation available.
+Only the content directly inside `<T>` will be translated, like the `<h1>` tag and its children.
+
+This occurs because translation happens at render time, so children that have not rendered, like `<UntranslatedContent>`, are not translated.
+However, the text inside `<T>` will be translated as expected.
+
+#### What's the fix?
+
+Your first instinct might be to add an additionaly `<T>` component inside `<UntranslatedContent>`, but this is not recommended.
+Read more about it [below](#nested-t).
+
+The solution is to always wrap the text in the `<T>` component directly, like so:
+
+```javascript copy
+function TranslatedContent() {
+    return (
+        <T id="greeting">
+            <p>Hello, world!</p>
+        </T>
+    );
+}
+
+export default function DisplayGreetings() {
+    return (
+        <>
+            <T id="greeting-title">
+                <h1>Here is a greeting...</h1>
+            </T>
+            <TranslatedContent />
+        </>
+    );
+}
+```
+
+
+#### What about variables?
+
+TL;DR: Variables will be translated, but please keep in mind using [Variable Components](/docs/next2/reference/using-variable-components) or [Branching Components](/docs/next2/reference/using-branching-components) for this purpose.
+
+Variables are a little more complicated because they have the tendency to change their values.
+The downstream effect is that a new translation will be generated each time the variable changes.
+This can lead to performance issues.
+
+To avoid this, we recommend using [Variable Components](/docs/next2/reference/using-variable-components) or [Branching Components](/docs/next2/reference/using-branching-components) for dynamic content.
+
+
+
+### Nested `<T>` Components [#nested-t]
+
+Nesting `<T>` components is not recommended.
+Because of react's rendering system, this can lead to unexpected behavior and performance issues when translating on-demand or new content.
+
+Here is an example of **what not to do**:
+
+```jsx copy
+function SomeComponent() {
+    return (
+        <T id="other-nested-greeting">
+            Hello, friend!
+        </T>
+    );
+}
+
+export default function NestedTranslation() {
+    return (
+        <T id="greeting">
+            <T id="nested-greeting"> {/* Don't do this! */} // [!code highlight]
+                Hello, world!
+            </T>
+            <SomeComponent /> {/* This still counts. Don't do this! */} // [!code highlight]
+        </T>
+    );
+}
+```
+The solution here would be to remove the `<T>` component wrapping the nested `<T>` components.
+
+## Notes
+ * `<T>` components are used to translate arbitrary JSX Content.
+ * Ensure every `<T>` component has a unique id for accurate translation tracking.
+ * Wrap your app with a [`<GTProvider>`](/docs/next2/api/components/gtprovider) to enable translations in client components.
+ * `<T>` directly translates its children and does not use the [dictionary-based system](/docs/next2/reference/template-dictionaries/template-dictionaries) employed by `useElement()`, `useGT()` or `getGT()`.
+
+## Next Steps
+ * Explore how to use variables in `<T>` translations in the [Variable Components article](/docs/next2/reference/using-variable-components).
+ * Discover how to manage pluralization and branching in the [Branching Components guide](/docs/next2/references/using-branching-components).

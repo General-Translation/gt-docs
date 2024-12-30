@@ -1,0 +1,40 @@
+---
+title: The CLI Tool
+description: The General Translations CLI tool 
+---
+
+## Overview
+In order to avoid translating everything on demand, we recommend using the CLI tool to translate your content and push it to the CDN before the user even sees your site.
+You can easily integrate this tool with your CI/CD pipeline or run it manually in your terminal.
+
+<Callout type="warn">
+    **For Production Only!**
+
+    Because this CLI tool publishes translated content to the CDN, it is meant to only be used for production builds, and should not be used in development.
+    Before running this command, please make sure you are on the branch that will be used for production.
+    Remember to also use your production API key and Project ID.
+</Callout>
+
+
+Run `npx i18n`, to run a script that will scan through your project and send each item for translation. 
+This script requires your API key and projectID.
+It will automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them:
+```bash copy
+npx i18n --languages fr es ja
+```
+
+Or, with `projectID` and `apiKey`:
+
+```bash copy
+npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+```
+
+If the script is successful, you should see the following message in the console:
+
+```txt
+Project "YOUR_PROJECT_ID" updated: true. Languages: ["French", "Japanese", "Spanish"]. Translations are usually live within a minute. Check status: www.generaltranslation.com/dashboard.
+```
+
+Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
+
+Learn more about the CLI tool [here](/docs/next/cli).

@@ -1,0 +1,12 @@
+{
+    "title": "Reference",
+    "pages": [
+        "---Key Concepts---",
+            "t-design-patterns", "using-variable-components", "using-branching-components",
+            "cli",
+            "locale-strings",
+        "---Advanced---",
+            "i18n-configuration", "i18n-routing",
+            "template-dictionaries"
+    ]
+}

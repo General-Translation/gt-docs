@@ -1,0 +1,15 @@
+{
+    "title": "API",
+    "pages": [
+        "---Components---",
+            "./components/t",
+            "./components/currency", "./components/datetime", "./components/num", "./components/var",
+            "./components/branch", "./components/plural",
+            "./components/gtprovider",
+        "---Methods---",
+            "./methods/useElement",
+            "./methods/client/useGT", "./methods/client/useDefaultLocale", "./methods/client/useLocale",
+            "./methods/server/getGT", "./methods/server/getDefaultLocale", "./methods/server/getLocale",
+            "./methods/server/tx"
+    ]
+}

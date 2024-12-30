@@ -117,72 +117,34 @@ The value provided to the `<Currency>` component will remain the same.
         optional: true,
         default: 'undefined',
     },
+    "currency?": {
+        description: 'The currency type (e.g., USD, EUR, etc.).',
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "options?": {
+        description: 'Optional formatting options to customize how the currency is displayed. These follow the `Intl.NumberFormatOptions` interface.',
+        type: 'Intl.NumberFormatOptions',
+        optional: true,
+        default: 'undefined',
+    }
 }}
 />
+{/* TODO: 
+"locales?": {
+    description: 'The locale(s) to use when formatting the currency. If not provided, the default locale is used.',
+    type: 'string[]',
+    optional: true,
+    default: 'undefined',
+}, */}
 
 ### Returns
+`JSX.Element` containing the reformatted currency value.
 
-## When should I use `<Var>`?
+## When should I use `<Currency>`?
 When deciding to use a `<Currency>` component, its easiest to ask if your content falls into two (somewhat overlapping) categories:
 [*dynamic content*](var#dynamic-content) and [*private information*](var#private-information).
-
-### Dynamic Content [#dynamic-content]
-Dynamic content is any content that can change based on the user, context, environment, etc. and should not be translated.
-A good example would be a user's email address and name.
-Such items are (1) not likely to need translation when your app is being rendered in a different language and (2) can vary (in this case between each user).
-
-```jsx title="Greeting.jsx" copy
-import { T, Var } from 'gt-next'
-
-export default function Greeting(name) {
-    return (
-        <T id='greeting'>
-            Hello, <Var>{name}</Var>!
-        </T>
-    );
-}
-```
-
-As far as translation goes this has two benefits:
-1. You do not have to create a translation for every possible name.
-    * Using `<Var>`, we only generate one translation that essentially would look like this:
-        * \`¡Hola, $\{name\}!\`
-    * If we do not use `<Var>`, we would have to perform an on-demand translation for every unique name:
-        * "¡Hola, Alice!", "¡Hola, Bob!", "¡Hola, Charlie!", "¡Hola, David!", ...
-2. You also don't have to worry about the names themselves changing into a translated form of their name: (i.e. "¡Hola, Alicia!", "¡Hola, Roberto!", ...).
-
-As you can see, the `<Var>` component should be used to wrap any contents that should remain the same regardless of locale.
-This way, we avoid the need to create translations for every possible value of the dynamic content.
-
-### Private information [#private-information]
-The `<Var>` component is also useful for displaying private information.
-
-```jsx title="PrivateInfo.jsx" copy
-import { T, Var } from 'gt-next'
-
-export default function PrivateInfo(email) {
-    return (
-        <T id='private-info'>
-            Your email address is <Var>{email}</Var>.
-        </T>
-    );
-}
-```
-The children of the `<Var>` component will not be translated.
-Its contents will never be passed to the General Tranlsation API.
-Its contents will not be distrubuted to the CDN.
-
-By wrapping private information in a `<Var>` component, you can ensure that the information is not sent to the General Translations API.
-<Callout>
-    **Exceptions**
-
-    The exceptions to the statement above is (1) in the case of a nested `<T>` component used inside of a `<Var>` component (ie, the children of the nested `<T>` component will be translated)
-    or (2) when data is passed intentionally to our API via some other means within a child of the `<Var>` component (i.e., a fetch call).
-    However, this is not the intended use of the `<Var>` component nor the General Translations API and doing so can harm load times and performance.
-
-    You can read more about nesting GT components [here](/docs/next/t). {/* TODO: add a page about nesting components */}
-</Callout>
-
 
 
 

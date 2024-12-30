@@ -1,0 +1,135 @@
+---
+title: <T>
+description: API Reference for the <T> component
+---
+
+## Overview
+
+The `<T>` component is the main translation component in `gt-next`.
+It translates its children into the user's configured language, based on a unique `id` and optional additional settings.
+Translations are created and cached dynamically to enhance localization in your application.
+
+The `<T>` component supports translating plain text as well as complex JSX structures.
+Additionally, it provides features for handling variables, plurals, and context-specific translations.
+
+<Callout>
+    To ensure translations are available, run the [CLI tool](/docs/next/cli) before building your app.
+</Callout>
+
+<Callout type="error">
+    Do not pass sensitive or private information to the `<T>` component.
+    Wrap all sensitive information with a `<Var>` or other [variable component](/docs/next2/reference/using-variable-components).
+</Callout>
+
+## Reference
+
+### Props
+
+<TypeTable
+  type={{
+    "children": {
+        description:
+            'The content to be translated. This can include plain text or JSX structures.',
+        type: 'any',
+        optional: false,
+    },
+    "id": {
+        description:
+            'A unique identifier for the translation string. This ensures consistent translation across your app.',
+        type: 'string',
+        optional: false,
+    },
+    "context?": {
+        description:
+            'Additional context to refine the translation. Useful for resolving ambiguous phrases.',
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "variables?": {
+        description:
+            'A mapping of variables to include in the translation. These are replaced dynamically in the output.',
+        type: 'Record<string, any>',
+        optional: true,
+        default: 'undefined',
+    },
+    "renderSettings?": {
+        description:
+            'Optional settings to control how fallback content is rendered during translation loading.',
+        type: 'object',
+        optional: true,
+        default: '{}',
+    },
+  }}
+/>
+
+### Returns
+
+`Promise<any>` resolving to the rendered translation or fallback content based on the provided configuration.
+
+## Example
+
+### Basic Usage
+
+The `<T>` component can translate simple strings using an `id` and its children.
+Remember, the `<T>` component must be used inside a [`<GTProvider>`](/docs/next2/reference/t-design-patterns#gtprovider) to access the translation context.
+
+```jsx title="SimpleTranslation.jsx" copy
+import { T } from 'gt-next'; // [!code highlight]
+
+export default function Greeting() {
+    return (
+        <T id="greeting"> // [!code highlight]
+            Hello, world!
+        </T> // [!code highlight]
+    );
+}
+```
+
+
+### With Variables
+The `<T>` component can include variables for dynamic content within translations.
+
+```jsx title="DynamicGreeting.jsx" copy
+import { T, Var } from 'gt-next'; // [!code highlight]
+
+export default function DynamicGreeting(user) {
+    return (
+        <T id="greeting">
+            Hello, <Var>{user.name}</Var>! // [!code highlight]
+        </T>
+    );
+}
+```
+
+### With Plurals
+The `<T>` component also supports pluralization using the `<Plural>` component.
+
+
+```jsx title="ItemCount.jsx" copy
+import { T, Plural, Num } from 'gt-next'; // [!code highlight]
+
+export default function ItemCount({ count }) {
+    return (
+        <T id="item_count">
+            <Plural n={count} singular={<>You have <Num>{count}</Num> item.</>}>  // [!code highlight]
+                You have <Num>{count}</Num> items.  // [!code highlight]
+            </Plural>  // [!code highlight] 
+        </T>
+    );
+}
+```
+
+<Callout type="warn">
+    Text must be passed directly as a child of `<T>` to be translated.
+    Wrapping text in other components without providing context will result in untranslated output.
+</Callout>
+
+## Notes
+ * The `<T>` component is designed for translating content in your application. It is the primary method for localization in `gt-next`.
+ * Use the `<T>` component to translate plain text or JSX structures, including variables and pluralization.
+ * Ensure the `<T>` component is wrapped in a [`<GTProvider>`](/docs/next2/reference/t-design-patterns#gtprovider) to access the translation context.
+
+## Next Steps
+ * Look into more advanced features like on-demand translation, variables, context, and handling plurals, refer to the [`<T>` Design Patterns](/docs/next2/reference/t-design-patterns) documentation.
+ * For translating strings, look into [`tx()`](/docs/next2/api/methods/server/tx) or [`getGT()`](/docs/next2/api/methods/server/getGT) for server-side translations and [`useGT()`](/docs/next2/api/methods/client/useGT) for client-side translations.
