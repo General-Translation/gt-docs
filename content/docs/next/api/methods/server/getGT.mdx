@@ -1,0 +1,140 @@
+---
+title: getGT()
+description: API Reference for the getGT server-side translation function
+---
+
+## Overview
+
+The `getGT()` function retrieves the server-side equivalent of the `t()` translation function, enabling translations from the [template dictionary](/docs/next/reference/template-dictionaries/template-dictionaries) during server-side rendering.
+It can perform translations for both strings and JSX content.
+This function supports optional key prefixes for namespace-based grouping and can dynamically insert variables or branching content into translations.
+
+<Callout>
+    The Template Dictionary Design Pattern is different from using the `<T>` component.
+    To read more about the Template Dictionary Design Pattern, see [this article](/docs/next/reference/template-dictionaries/template-dictionaries).
+</Callout>
+
+
+### When to Use
+
+- Use `getGT()` for server-side translations in Next.js API routes, middleware, or server components.
+
+## Reference
+
+### Parameters
+
+<TypeTable
+  type={{
+    "id?": {
+        description:
+            'An optional prefix to prepend to all translation keys. This is useful for working with namespaced dictionaries.',
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### Returns
+
+A promise that resolves to the `t()` translation function with the following signature:
+
+```jsx
+(id: string, options?: Record<string, any>) => any
+```
+* `id`: The identifier of the translation to fetch.
+* `options`: An optional object to provide dynamic variables or branching content.
+* Returns: The translated value.
+
+## Example
+
+### Basic Usage
+
+The `getGT()` function retrieves the `t()` translation function for server-side usage.
+
+```jsx title="src/server/translateGreeting.js" copy
+import { getGT } from 'gt-next/server';
+
+export default async function translateGreeting() {
+    
+    const t = await getGT(); // [!code highlight]
+
+    return <p>t('greeting')</p>; // Fetch 'name' translation // [!code highlight]
+}
+```
+```jsx title="src/dictionary.jsx" copy
+const dictionary = {
+        greeting: "Hello, World!",
+};
+export default dictionary;
+```
+
+## Using Variables
+
+The `getGT()` function can inject dynamic values into translations using the options parameter.
+Both [Variable Components](/docs/next/reference/template-dictionaries/variable-components)
+and [Branching Components](/docs/next/reference/template-dictionaries/branching-components)
+can be used to pass values to and elicit conditional behavior from the template entries via the `t` function.
+
+<Tabs items={["getGT()", "Dictionary"]}>
+    <Tab value="getGT()">
+        ```javascript title="src/server/translateGreeting.js" copy
+        import { getGT } from 'gt-next/server';
+
+        export default async function translateGreeting(user) {
+            
+            const t = await getGT();
+
+            return <p>t('greeting', { 'name-of-user': user.name })</p>; // Pass dynamic variable  // [!code highlight]
+        }
+        ```
+    </Tab>
+    <Tab value="Dictionary">
+        ```jsx title="src/dictionary.jsx" copy
+        const dictionary = {
+            greeting: <>Hello, <Var name="name-of-user" />!</>
+        };
+        export default dictionary;
+        ```
+    </Tab>
+</Tabs>
+
+## Using Namespaces
+
+<Tabs items={["getGT()", "Dictionary"]}>
+    <Tab value="getGT()">
+        ```jsx title="src/server/translateUser.js" copy
+        import { getGT } from 'gt-next/server';
+            export default async function translateUser(user) {
+                const t = await getGT('user'); // Prefix all keys with 'user.'
+
+                return {
+                    name: t('name'), // Fetch 'user.name' translation
+                    email: t('email') // Fetch 'user.email' translation
+                };
+            }
+        ```
+    </Tab>
+    <Tab value="Dictionary">
+        ```jsx title="src/dictionary.jsx" copy
+        const dictionary = {
+            user: {
+                name: "John Doe",
+                email: "email@example.com"
+            }
+        };
+        export default dictionary;
+        ```
+    </Tab>
+</Tabs>
+
+
+## Notes
+ * The `getGT()` function is asynchronous and must be awaited to retrieve the `t()` function.
+ * It is designed for server-side use. See [`useGT()`](/docs/next/api/methods/client/useGT) for client-side translations.
+ * Supports dynamic behavior and variable insertion with [Branching](/docs/next/reference/template-dictionaries/branching-components) and [Variable Components]((/docs/next/reference/template-dictionaries/variable-components)) respectively.
+
+## Next Steps
+ * Explore the [Template Dictionary Design Pattern](/docs/next/reference/template-dictionaries/template-dictionaries) for creating flexible and dynamic dictionaries.
+ * See [`useGT()`](/docs/next/api/methods/client/useGT) for the client-side equivalent of `getGT()`.
+ * Enhance server-side locale routing with [i18n Routing](/docs/next/reference/i18n-routing) and locale management with [i18n Configuration](/docs/next/reference/i18n-configuration).

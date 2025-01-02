@@ -1,4 +1,4 @@
 {
-    "title": "Next.js (old)",
-    "pages": ["quickstart", "t", "gt-provider", "helpers", "cli", "routing", "variables", "plurals", "advanced", "next"]
+    "title": "Next.js",
+    "pages": ["./tutorials/quickstart", "t", "tutorials", "guides", "reference", "api", "discussion"]
 }

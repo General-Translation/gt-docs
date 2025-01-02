@@ -1,0 +1,69 @@
+---
+title: <T>
+description: Using the <T> tag to translate your components
+---
+
+`<T>` is the translation tag in `gt-next`. Children of `<T>` will be translated into your [configured](/docs/oldnext/advanced/config) languages.
+
+<Callout>
+    To create translations, run the [CLI tool](/docs/oldnext/cli) before you build your app.
+</Callout>
+
+<Callout type="warn">
+    If it is being used in a client component, `<T>` must be able to access the context from a [`<GTProvider>`](/docs/oldnext/gt-provider).
+</Callout>
+
+It requires two props:
+- `id`, which is a unique string representing the content 
+- `children`, which is the content to translate
+
+For example, the following code would translate the content `"Hello, world"` with the id `"greeting"`.
+
+```javascript copy
+import { T } from 'gt-next'
+
+export default function Page() {
+    return (
+        <T id="greeting">
+            Hello, world
+        <T>
+    )
+}
+```
+
+The above would display `"Hello, world"` in the English version of the app, and `"Hola mundo"` in the Spanish version.
+
+The `<T>` component can also contain JSX, like:
+
+```javascript copy
+import { T } from 'gt-next'
+import CustomButton from './CustomButton'
+
+export default function Page() {
+    return (
+        <T id="jsx">
+            <div>
+                <p>Hello, world!</p>
+                <CustomButton>This is a complex button!</CustomButton>
+            </div>
+        <T>
+    )
+}
+```
+
+<Callout type="warn">
+    Text must be passed directly as a child of `<T>` to be translated.
+</Callout>
+
+`<T>` uses our cloud services to create and cache translations. If a translation is unavailable, `<T>` will default to displaying the content in your default locale ([`defaultLocale`](/docs/oldnext/advanced/config#defaultlocale)), usually English.
+
+### On-demand translation
+
+Testing `<T>` in server components is easy, just [change your browser language](https://support.google.com/chrome/answer/173424) and reload the page. 
+Translations will be created on-demand and load in within a few seconds.
+
+## Adding `context` to translations
+
+## Variables
+
+## Plurals

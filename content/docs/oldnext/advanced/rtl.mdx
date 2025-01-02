@@ -1,0 +1,58 @@
+---
+title: Right-to-left languages
+---
+
+Right-to-left (rtl) languages are those that are read and written from right to left.
+
+Languages written from right to left have a combined total of over 500 million speakers worldwide. They include:
+
+- Arabic (`ar`)
+- Hebrew (`he`)
+- Persian (`fa`)
+- Urdu (`ur`)
+
+The [`generaltranslation`](/docs/generaltranslation) language infrastructure library 
+offers a `getLanguageDirection()` function to determine if a language goes `"rtl"` or `"ltr"`.
+
+In `gt-next` use the `getLocale()` function to get the locale in the root layout, then add the `lang` and `dir` props to the `<html>` tag:
+
+```javascript copy
+import { getLocale } from 'gt-next'
+import { getLanguageDirection } from 'generaltranslation';
+
+export default function Layout({ children }) {
+        
+    const locale = getLocale(); // e.g. "ar"
+    const dir = getLanguageDirection(locale); // e.g. "rtl"
+
+    return (
+        <html lang={locale} dir={dir}>
+            <body> 
+                {children}
+            </body>
+        </html>
+    )
+}
+```
+    
+Alternately, if you're using [i18n routing](/docs/oldnext/routing), you could get the locale from the params:
+    
+```javascript copy
+import { getLanguageDirection } from 'generaltranslation';
+
+export default function Layout({ children, params }) {
+        
+    const locale = params.lang; // e.g. "he"
+    const dir = getLanguageDirection(locale); // e.g. "rtl"
+
+    return (
+        <html lang={locale} dir={dir}>
+            <body> 
+                {children}
+            </body>
+        </html>
+    )
+}
+```
+
+This will change the direction of the text on the screen when the website is accessed in certain languages.

@@ -1,0 +1,105 @@
+---
+title: <Branch>
+description: API Reference for the <Branch> component
+---
+
+## Overview
+
+The `<Branch>` component dynamically renders a specified branch of content based on the `branch` prop. It allows for flexible content switching by matching the `branch` value to a corresponding key in the provided branches. If no matching branch is found, the component renders the `children` as fallback content.
+
+This makes the `<Branch>` component ideal for implementing conditional rendering based on user preferences, application state, or other dynamic data. It operates similarly to `<Plural>`, but without locale-based pluralization logic.
+
+## Reference
+
+### Props
+
+<TypeTable
+  type={{
+    "branch": {
+        description:
+            'The name of the branch to render.',
+        type: 'string',
+        optional: false,
+    },
+    "children?": {
+        description:
+            'Fallback content to render if no matching branch is found.',
+        type: 'any',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        description:
+            'Optional name for the component, used for metadata or tracking purposes.',
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "[key]: string": {
+        description:
+            'Branches representing possible content for the given branch value. Each key corresponds to a branch, and its value is the content to render.',
+        type: 'string | JSX.Element',
+        optional: false,
+    },
+  }}
+/>
+
+The `[key]: string` syntax indicates dynamic keys representing potential branches. For example, branches like `male`, `female`, or `nonbinary` can be defined depending on the use case.
+
+### Returns
+
+`JSX.Element` containing the content corresponding to the specified branch or the fallback content.
+
+### Throws
+
+`Error` if the `branch` prop is not provided or is invalid.
+
+## Example
+
+### Basic Usage
+
+The `<Branch>` component can dynamically switch between branches based on the `branch` prop.
+
+```jsx title="BranchExample.jsx" copy
+import { Branch } from 'gt-next'; // [!code highlight]
+
+export default function GenderMessage({ user }) {
+    return (
+        <Branch
+            branch={user.gender}
+            female={<p>She is happy.</p>}
+            male={<p>He is happy.</p>}
+        >
+            <p>They are happy.</p>
+        </Branch>
+    );
+}
+```
+
+### Fallback Content
+
+If the branch value does not match any provided key, the `<Branch>` component renders the children as fallback content.
+
+```jsx title="FallbackExample.jsx" copy
+import { T, Branch } from 'gt-next'; // [!code highlight]
+
+export default function StatusMessage({ status }) {
+    return (
+        <T id="status">
+            <Branch
+                branch={status}
+                active={<p>The user is active.</p>}
+                inactive={<p>The user is inactive.</p>}
+            >
+                <p>Status unknown.</p> // [!code highlight]
+            </Branch>
+        </T>
+    );
+}
+```
+
+## Notes
+ * The keys for branches can be any string value that matches the branch prop. This flexibility makes it easy to adapt `<Branch>` to a wide range of use cases.
+ * Combine `<Branch>` with other components, such as `<T>` for translations or `<Num>` for dynamic content, to create rich and localized interfaces.
+
+For more advanced usage and examples, refer to [Using Branching Components](/docs/next/reference/using-branching-components).
