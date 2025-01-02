@@ -7,11 +7,12 @@ description: This is a detailed dive into the <T> component and the gt-next libr
 ## Overview
 
 This article will take an in depth dive into how to use the [`<T>` component](/docs/next/api/components/t) in the `gt-next` library.
+Please feel free to skip around this page as needed.
 We will cover the following:
- * The `<T>` component
- * Design patterns
- * Some examples
- * Common pitfalls
+ * [The `<T>` component](#what-is-the-t-component)
+ * [Design patterns](#design-patterns)
+ * [Some examples](#examples)
+ * [Common pitfalls](#common-pitfalls)
 
 If you are looking for how to use [Variable Components](/docs/next/reference/using-variable-components) or [Branching Components](/docs/next/reference/using-branching-components), please refer to the respective articles.
 
@@ -28,17 +29,9 @@ When no translation is available, it gracefully falls back to displaying the con
 
 ## Design Patterns
 
-### Pretranslating Common Languages
-
-Pretranslating high frequency languages is a common practice to improve load times.
-We have built a simple cli tool that allows you to specify which languages you would like to pretranslate.
-It can easily integrate with your CI/CD pipeline to ensure that translations are always up to date.
-
-```bash
-npx i18n --languages fr es ja
-```
-
-That's it! You have successfully pretranslated your application into French, Spanish, and Japanese.
+In this section, we will detail common design patterns used with the `<T>` component.
+This will also touch on that are tangentially related to the `<T>` component, but equally important, topics such as
+string translation, pre-translating content, and privacy concerns.
 
 ### Wrapping your `<T>` components in a `<GTProvider>` [#gtprovider]
 
@@ -181,12 +174,26 @@ Then you can call it using the [`useGT()`](/docs/next/api/methods/client/useGT) 
     We are currently working on an easier way to translate strings in the future that will involve inline translation of strings.
 </Callout>
 
+### Pretranslating Common Languages
+
+Pretranslating high frequency languages is a common practice to improve load times.
+We have built a simple CLI tool that allows you to specify which languages you would like to pretranslate.
+It can easily integrate with your CI/CD pipeline to ensure that translations are always up to date.
+
+```bash
+npx i18n --languages fr es ja
+```
+
+That's it! You have successfully pretranslated your application into French, Spanish, and Japanese.
+
+For more information, please refer to the [CLI Tool](/docs/next/reference/cli) reference guide.
+
 ### Privacy Concerns
 
 With some exceptions, all content wrapped in a `<T>` component is sent to the General Translation APIs for translation.
 This might not be desirable for rendering sensitive data, such as user names, account numbers, etc.
 
-To circumvent this issue, use [Variable Components](/docs/next/reference/using-variable-components#privacy) to handle all reformatting locally.
+To circumvent this issue, use [Variable Components](/docs/next/reference/using-variable-components#privacy) to handle private information.
 This ensures that no sensitive data is sent to the General Translation APIs for translation.
 The localization of all content wrapped in any Variable Component is handled locally.
 

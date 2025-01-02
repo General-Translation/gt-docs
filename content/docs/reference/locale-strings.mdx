@@ -17,6 +17,8 @@ Language tags are composed of one or more subtags separated by the `"-"` charact
 - **Script Subtag** (optional): Indicates the writing script, e.g., `Latn` for Latin script.
 - **Variant Subtag** (optional): Identifies a specific variation of a language, e.g., `arevela` for Eastern Armenian.
 
+When you combine these tags together, we refer to this as a **Locale** or **Locale tag**.
+
 ### Commonly Used Tags
 
 In practice, most language tags consist of two subtags: a language and a region. Here are some common examples:
@@ -46,8 +48,8 @@ This tag represents Eastern Armenian written in Latin script, as used in Italy.
 🚧 This section is currently under construction. 🚧
 
 ## Notes
+ * General Translations uses **Locale Tags (Locales)** to identify languages and regions internally.
  * The format of BCP 47 language tags makes them highly flexible and extensible.
- * Applications should prioritize using the language and region subtags for simplicity, while including script and variant subtags only when necessary.
  * When designing localized content or systems, understanding and leveraging BCP 47 tags ensures broad compatibility and clarity.
 
 ## Next Steps

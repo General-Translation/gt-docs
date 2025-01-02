@@ -27,6 +27,8 @@ We will cover four simple steps:
 {/* TODO: link to a youtube tutorial */}
 {/* TODO: link to other guides */}
 
+---
+
 ## Setup
 ### 1. Install gt-next
 
@@ -107,7 +109,7 @@ export default function RootLayout({ children }) {
         In Next.js, you can the `lang` attribute in your root `layout.js` file.
 
         While not required for your app to build, the correct application of the `lang` attribute is important for SEO, accessibility, and user experience.
-        Therefore, we strongly recommend setting the `lang` attribute to the user's preferred language.
+        Therefore, we recommend setting the `lang` attribute to the user's preferred language.
 
         ```js title="app/layout.js" copy
         import { GTProvider } from 'gt-next';
@@ -174,6 +176,7 @@ Add your API key and Project ID to your local environment.
     {/* TODO: talk about how we will eventually have authenticated caches (can be used for personal info only avail to anyone who has the app or for alpha/beta testing) */}
 </Callout>
 
+---
 
 ## Let's Try It Out!
 
@@ -209,6 +212,7 @@ Congratulations! 🥳 Your app is now multilingual! Let's see it in action.
         *If you want to switch languages, just select a different language in your browser settings and refresh the page.*
     </Step>
 </Steps>
+
 ### Troubleshooting
 <Accordions>
     <Accordion title="My app's language is not changing, even though I've changed my browser's language.">
@@ -241,6 +245,7 @@ Congratulations! 🥳 Your app is now multilingual! Let's see it in action.
     </Accordion>
 </Accordions>
 
+---
 
 ## Before Shipping to Production...
 
@@ -250,12 +255,12 @@ In production, we **strongly** recommend translating your application ahead of t
 This has major performance benefits for your application, and can easily be integrated into your CI/CD pipeline.
 
 Just run the following command in your project's root directory.
-Make sure to use your production API key and project ID when you run this command.
+Make sure to add your production API key and project ID to your environment before you run this command.
 ```bash copy
 npx i18n
 ```
 
-For more information, see the [CLI tool documentation](/docs/oldnext/cli).
+For more information, see the [CLI tool documentation](/docs/next/reference/cli).
 <Callout type="warn">
     **For Production Only!**
 
@@ -267,7 +272,7 @@ For more information, see the [CLI tool documentation](/docs/oldnext/cli).
 
 ## Next steps
 
-- Learn more about the [`<T>`](/docs/next) component, or dictionaries with [`useElement()`](/docs/oldnext/dictionaries)
-- Learn to improve SEO with [i18n routing](/docs/oldnext/routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`)
-- Mirror your app to support [right-to-left languages](/docs/oldnext/advanced/rtl) such as Arabic and Hebrew.
-- Create a list of approved languages for your app with the [Next.js plugin](/docs/oldnext/config#install-the-plugin).
+- Learn more about the [`<T>`](/docs/next/api/components/t) component, or dictionaries with [`useElement()`](/docs/next/reference/template-dictionaries/template-dictionaries)
+- Learn to improve SEO with [i18n routing](/docs/next/guides/i18n-routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`)
+- Mirror your app to support [right-to-left languages](/docs/next/guides/rtl) such as Arabic and Hebrew.
+- Create a list of approved languages for your app with the [Next.js plugin](/docs/next/guides/locale-management#include-locales).

@@ -5,7 +5,7 @@
             "t-reference", "using-variable-components", "using-branching-components",
             "cli",
         "---Advanced---",
-            "i18n-configuration", "i18n-routing",
-            "template-dictionaries"
+            "i18n-configuration",
+            "!template-dictionaries"
     ]
 }

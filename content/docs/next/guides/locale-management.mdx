@@ -1,5 +1,5 @@
 ---
-title: Locale Management
+title: Manage Locales
 description: How to manage and specify supported locales in your application
 ---
 
@@ -8,13 +8,14 @@ description: How to manage and specify supported locales in your application
 
 Managing locales is a critical step when building a multilingual application with `gt-next`.
 This guide will walk you through how to define, configure, manage supported locales.
+By default, your app can be translated into all available languages.
 
 In this guide, we will cover how to manage locales in your application, including:
- * Include locales
- * (Coming Soon) Exclude locales
+ * Select Supported Locales
+ * (Coming Soon) Select Excluded Locales
 
 
-## Include Locales
+## Including Locales [#include-locales]
 
 Including specific locales for translation ensures that only the languages you have specified will be translated.
 For instance, if you have selected English, Chinese, and Japanese as your supported locales, translations will only be performed for these languages.
@@ -22,7 +23,7 @@ Any other languages not included in your list of locales will not be translated.
 
 This approach helps to manage resources effectively and ensures that translations are only provided for the locales that are relevant to your application.
 
-These instructions assume that you have already integrated `gt-next` into your Next.js application.
+These instructions assume that you have already integrated `gt-next` into your Next.js application and you have added your API keys to your environment.
 
 <Steps>
     <Step>
@@ -32,7 +33,7 @@ These instructions assume that you have already integrated `gt-next` into your N
         Add the `locales` property to your `initGT` configuration object.
         This property should be an array of strings, each representing a locale.
         For example, to prioritize English, Chinese, and Japanese, you would write:
-        ```js
+        ```js copy
         import { initGT } from 'gt-next/config'
 
         const withGT = initGT({
@@ -42,6 +43,25 @@ These instructions assume that you have already integrated `gt-next` into your N
 
         export default withGT({});
         ```
+    </Step>
+    <Step>
+        **(Optional)**
+        If you are using the `gt-next` middleware in your application, you must also specify the supported locales in the `createNextMiddleware` function.
+        ```js copy
+        import { createNextMiddleware } from 'gt-next/middleware'
+
+        export default createNextMiddleware({
+            locales: ["en-US", "zh", "jp"]
+        });
+
+        export const config = {
+            matcher: [
+                "/((?!api|static|.*\\..*|_next).*)",
+            ],
+        }
+        ```
+
+        See [I18n Routing](/docs/guides/i18n-routing) for more information on how to set up the middleware.
     </Step>
 </Steps>
 
