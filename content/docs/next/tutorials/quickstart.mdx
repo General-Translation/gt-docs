@@ -50,11 +50,11 @@ To install [gt-next](https://www.npmjs.com/package/gt-next), navigate to your Ne
 
 ### 2. Translate with the `<T>` Component
 
-To translate your app, wrap the content you want to translate in a [`<T>` component](/docs/oldnext/t).
+To translate your app, wrap the content you want to translate in a [`<T>` component](/docs/next/api/components/t).
 Just remember, every `<T>` component should have a unique `id` prop.
 <Callout>
     The text and structure of the tags inside your `<T>` component should be static.
-    For dynamic content, use the [`<Var>` component](/docs/oldnext/variables).
+    For dynamic content, use the [`<Var>` component](/docs/next/api/components/var).
     {/* TODO:
         The text and structure of the tags inside your `<T>` component should be static.
         Translation of dynamic content is covered in in [this guide](/docs/oldnext/dynamic-content).
@@ -85,7 +85,7 @@ export default function Page() {
 
 ### 3. Wrap Your App with the `<GTProvider>` Component
 
-To add translations to client `<T>` components, wrap your app in the [`<GTProvider>` component](/docs/oldnext/gt-provider).
+To add translations to client `<T>` components, wrap your app in the [`<GTProvider>` component](/docs/next/api/components/gtprovider).
 
 ```javascript title="layout.js" copy
 import { GTProvider } from 'gt-next' // [!code highlight]
