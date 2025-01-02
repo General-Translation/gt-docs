@@ -1,3 +1,3 @@
 {
-    "pages": ["index", "next", "react", "generaltranslation", "keyConcepts", "faqs"]
+    "pages": ["index", "next", "!oldnext", "react", "generaltranslation", "reference", "!keyConcepts", "supported-locales", "faqs"]
 }

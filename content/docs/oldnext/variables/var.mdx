@@ -41,7 +41,7 @@ The `<Var>` component is used inside of a `<T>` component or as a dictionary ent
         ```
     </Tab>
     <Tab value="Dictionary (Advanced)">
-        You can read more about using dictionaries [here](/docs/next/advanced/dictionaries).
+        You can read more about using dictionaries [here](/docs/oldnext/advanced/dictionaries).
 
 
         ```jsx title="Address.jsx" copy
@@ -75,7 +75,7 @@ The `<Var>` component is used inside of a `<T>` component or as a dictionary ent
                 user: {
                     // user.address_id will now point to this JSX content we want to translate
                     // address_var will be replaced with the value of user.address
-                    address_id: <> Your current address is: <Var name="address_var">{address}</Var> </> // [!code highlight]
+                    address_id: <> Your current address is: <Var name="address_var" /> </> // [!code highlight]
                 },
             }
 
@@ -176,7 +176,7 @@ By wrapping private information in a `<Var>` component, you can ensure that the 
     or (2) when data is passed intentionally to our API via some other means within a child of the `<Var>` component (i.e., a fetch call).
     However, this is not the intended use of the `<Var>` component nor the General Translations API and doing so can harm load times and performance.
 
-    You can read more about nesting GT components [here](/docs/next/t). {/* TODO: add a page about nesting components */}
+    You can read more about nesting GT components [here](/docs/oldnext/t). {/* TODO: add a page about nesting components */}
 </Callout>
 
 

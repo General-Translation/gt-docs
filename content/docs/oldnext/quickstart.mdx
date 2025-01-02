@@ -48,34 +48,34 @@ To install [gt-next](https://www.npmjs.com/package/gt-next), navigate to your Ne
 
 ### 2. Translate with the `<T>` Component
 
-To translate your app, wrap the content you want to translate in a [`<T>` component](/docs/next/t).
+To translate your app, wrap the content you want to translate in a [`<T>` component](/docs/oldnext/t).
 Just remember, every `<T>` component should have a unique `id` prop.
 <Callout>
     The text and structure of the tags inside your `<T>` component should be static.
-    For dynamic content, use the [`<Var>` component](/docs/next/variables).
+    For dynamic content, use the [`<Var>` component](/docs/oldnext/variables).
     {/* TODO:
         The text and structure of the tags inside your `<T>` component should be static.
-        Translation of dynamic content is covered in in [this guide](/docs/next/dynamic-content).
+        Translation of dynamic content is covered in in [this guide](/docs/oldnext/dynamic-content).
      */}
 </Callout>
 ```js title="app/page.js" copy
-import { T } from 'gt-next'
+import { T } from 'gt-next' // [!code highlight]
 import { Card, CardHeader, CardContent } from '@components/ui/Card'
 
 export default function Page() {
     return (
-        <T id='pages_quotes'>
-            {/* You can translate your text */}  // [!code highlight]
-            <b>Shakespeare&apos;s</b> quotes  // [!code highlight]
+        <T id='pages_quotes'> // [!code highlight]
+            {/* You can translate your text */}
+            <b>Shakespeare&apos;s</b> quotes
 
             { /* You can also translate any arbitrary components and their children */ }
-            <Card>  // [!code highlight]
-                <CardHeader>Hamlet</CardHeader>  // [!code highlight]
-                <CardContent>  // [!code highlight]
-                    <p>&quot;To be, or not to be: that is the question...&quot;</p>  // [!code highlight]
-                </CardContent>  // [!code highlight]
-            </Card>  // [!code highlight]
-        </T>
+            <Card>
+                <CardHeader>Hamlet</CardHeader>
+                <CardContent>
+                    <p>&quot;To be, or not to be: that is the question...&quot;</p>
+                </CardContent>
+            </Card>
+        </T>  // [!code highlight]
     )
 }
 ```
@@ -83,10 +83,10 @@ export default function Page() {
 
 ### 3. Wrap Your App with the `<GTProvider>` Component
 
-To add translations to client `<T>` components, wrap your app in the [`<GTProvider>` component](/docs/next/gt-provider).
+To add translations to client `<T>` components, wrap your app in the [`<GTProvider>` component](/docs/oldnext/gt-provider).
 
 ```javascript title="layout.js" copy
-import { GTProvider } from 'gt-next'
+import { GTProvider } from 'gt-next' // [!code highlight]
 
 export default function RootLayout({ children }) {
     return (
@@ -110,7 +110,8 @@ export default function RootLayout({ children }) {
         Therefore, we strongly recommend setting the `lang` attribute to the user's preferred language.
 
         ```js title="app/layout.js" copy
-        import { getLocale, GTProvider } from 'gt-next'; // [!code highlight]
+        import { GTProvider } from 'gt-next';
+        import { getLocale } from 'gt-next/server'; // [!code highlight]
 
         export default async function RootLayout({ children }) {
             // Get the user's preferred language  // [!code highlight]
@@ -254,7 +255,7 @@ Make sure to use your production API key and project ID when you run this comman
 npx i18n
 ```
 
-For more information, see the [CLI tool documentation](/docs/next/cli).
+For more information, see the [CLI tool documentation](/docs/oldnext/cli).
 <Callout type="warn">
     **For Production Only!**
 
@@ -266,7 +267,7 @@ For more information, see the [CLI tool documentation](/docs/next/cli).
 
 ## Next steps
 
-- Learn more about the [`<T>`](/docs/next) component, or dictionaries with [`useElement()`](/docs/next/dictionaries)
-- Learn to improve SEO with [i18n routing](/docs/next/routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`)
-- Mirror your app to support [right-to-left languages](/docs/next/advanced/rtl) such as Arabic and Hebrew.
-- Create a list of approved languages for your app with the [Next.js plugin](/docs/next/config#install-the-plugin).
+- Learn more about the [`<T>`](/docs/next) component, or dictionaries with [`useElement()`](/docs/oldnext/dictionaries)
+- Learn to improve SEO with [i18n routing](/docs/oldnext/routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`)
+- Mirror your app to support [right-to-left languages](/docs/oldnext/advanced/rtl) such as Arabic and Hebrew.
+- Create a list of approved languages for your app with the [Next.js plugin](/docs/oldnext/config#install-the-plugin).

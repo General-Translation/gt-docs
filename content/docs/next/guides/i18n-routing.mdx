@@ -1,0 +1,136 @@
+---
+title: I18N Routing
+description: A step by step guide on adding internationalization (i18n) routing to your application
+---
+
+## Overview
+This guide will walk you through adding i18n routing to your Next.js application using `gt-next`'s built-in middleware.
+
+## What is i18n Routing?
+
+Creating new routes for each language has the advantage of making your website more SEO-friendly and statistics aggregation easier.
+i18n routing allows you to associate specific URLs with different locales.
+For example, you can have `www.example.com/en/landing` for English, `www.example.com/fr/landing` for French, and so on.
+
+
+## Guide
+
+We will take you through two easy steps to add i18n routing to your Next.js application:
+
+<Steps>
+    <Step>
+        Add a dynamic route to your app folder.
+    </Step>
+    <Step>
+        Create the middleware file.
+    </Step>
+    <Step>
+        (Optional) Specify supported locales.
+    </Step>
+</Steps>
+
+
+### Step 1: Add a Dynamic Route [#dynamic-route]
+
+Insert a directory in your app folder called `[locale]` (e.g., `app/[locale]`).
+Include all of your pages and layouts under this directory.
+
+```
+my-app/
+├── middleware.js
+├── app/
+│   ├── [locale]/     <-- Dynamic route
+│   │   ├── layout.js
+│   │   ├── page.js
+│   │   └── some-page/
+│   │       └── page.js
+│   └── api/
+│       └── route.js
+├── public/
+│   └── images/
+│       └── logo.png
+├── styles/
+│   └── globals.css
+└── next.config.js
+```
+
+Ensure all special files inside `app/` are nested under `app/[locale]`.
+
+
+
+### Step 2: Add the middleware file [#middleware]
+
+In Next.js, create a file called `middleware.js` (or `.ts` if you are using TypeScript) inside the root directory.
+If you are using the `src/` folder, place it in `src/middleware.js` (or `.ts`) instead.
+
+```js title="middleware.js" copy
+import { createNextMiddleware } from 'gt-next/middleware'
+
+export default createNextMiddleware();
+
+export const config = {
+  matcher: [
+      /*
+       * Match all request paths except for the ones starting with:
+       * - api (API routes)
+       * - _next (internal files)
+       * - static files
+       */
+      "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
+
+
+
+### Step 3: Adding Supported Locales
+
+If you decide to use a specific set of locales, you can pass them as an argument to `createNextMiddleware()`.
+You should include `defaultLocale` and `locales` in both `middleware.js` and [`next.config.js`](/docs/next/guides/locale-management#include-locales).
+
+```js title="middleware.js" copy
+
+import { createNextMiddleware } from 'gt-next/middleware'
+
+export default createNextMiddleware({
+  defaultLocale: "en-US",
+  locales: ["en-US", "fr", "es", "de", "ja"]
+});
+
+export const config = {
+  matcher: [
+      /*
+       * Match all request paths except for the ones starting with:
+       * - api (API routes)
+       * - _next (internal files)
+       * - static files
+       */
+      "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
+
+Make sure to also pass these to your configuration in `next.config.js`.
+
+```js title="next.config.js" copy
+import { initGT } from 'gt-next/config'
+
+const withGT = initGT({
+    defaultLocale: "en-US",
+    locales: ["en-US", "fr", "es", "de", "ja"]
+});
+
+export default withGT({});
+```
+
+For more in depth how to guide see [Locale Management](/docs/next/guides/locale-management).
+
+
+## Notes
+ * I18n routing changes the URL structure of your application. Each language has its own URL.
+ * The middleware file is required to handle the routing logic.
+ * You can specify the supported locales in the middleware configuration and next config file.
+
+## Next Steps
+ * Read more about [Locale Management](/docs/next/guides/locale-management).
+ * Learn how to [Translate Your Application](/docs/next/guides/translate-your-application).

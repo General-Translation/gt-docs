@@ -1,0 +1,79 @@
+---
+title: useDefaultLocale()
+description: API Reference for the useDefaultLocale hook
+---
+
+## Overview
+
+The `useDefaultLocale` hook retrieves the application's default locale from the [`<GTProvider>` context](/docs/next/api/components/gtprovider).
+This locale represents the fallback language for your app and is typically used when a user's preferred locale is unavailable.
+
+If no default locale is explicitly passed to the `<GTProvider>`, it defaults to `'en'`.
+
+<Callout>
+    `useDefaultLocale` is a client-side hook and *can only be used on client-side components*. Ensure your app is wrapped in a [`<GTProvider>`](/docs/next/api/components/gtprovider).
+</Callout>
+
+### When to Use
+
+- Use `useDefaultLocale` to determine the application's fallback locale.
+- Dynamically adjust content or behavior for cases where a user's preferred locale is unavailable.
+
+<Callout type="warn">
+    The `useDefaultLocale` hook can only be used within a component wrapped by a [`<GTProvider>`](/docs/next/api/components/gtprovider). Attempting to use it outside of a provider will result in an error.
+</Callout>
+
+## Reference
+
+### Returns
+
+A string representing the application's default locale, e.g., `'en-US'`.
+
+## Example
+
+### Basic Usage
+
+Retrieve the application's default locale and display it in your component.
+
+```jsx title="src/components/DefaultLocale.jsx" copy
+import { useDefaultLocale } from 'gt-next'; // [!code highlight]
+
+export default function DefaultLocale() {
+    const defaultLocale = useDefaultLocale(); // Get the default locale // [!code highlight]
+
+    return <p>Default locale: {defaultLocale}</p>; // Display the default locale
+}
+```
+
+### Using Default Locale for Fallbacks
+
+Use the useDefaultLocale hook to provide a fallback language when a user's preferred locale is unavailable.
+
+```jsx title="src/components/FallbackGreeting.jsx" copy
+import { useDefaultLocale } from 'gt-next'; // [!code highlight]
+
+export default function FallbackGreeting({ preferredLocale }) {
+    const defaultLocale = useDefaultLocale(); // Get the default locale // [!code highlight]
+
+    const greeting =
+        preferredLocale === 'es-ES'
+            ? '¡Hola, mundo!'
+            : preferredLocale === 'fr-FR'
+            ? 'Bonjour le monde!'
+            : defaultLocale === 'en-US'
+            ? 'Hello, world!'
+            : 'Welcome!';
+
+    return <p>{greeting}</p>;
+}
+```
+
+
+## Notes
+ * The `useDefaultLocale` hook relies on the [`<GTProvider>` component](/docs/next/api/components/gtprovider) to access the context.
+ * It is useful for defining consistent fallback behavior across your application.
+ * Learn more about locale strings and how to read them here: [Locale Strings](/docs/reference/locale-strings).
+## Next Steps
+ * See [`useLocale`](/docs/next/api/methods/client/useLocale) and [`getLocale`](/docs/next/api/methods/client/useLocale) to retrieve the active locale for the user.
+ * Explore the [i18n configuration](/docs/next/reference/i18n-configuration) to set up and manage locales.
+ * Enhance your app with [i18n Routing](/docs/next/guides/i18n-routing) for better SEO and localization

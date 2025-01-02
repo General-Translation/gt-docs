@@ -3,16 +3,19 @@ title: <T>
 description: Using the <T> tag to translate your components
 ---
 
-`<T>` is the translation tag in `gt-next`. Children of `<T>` will be translated into your [configured](/docs/next/advanced/config) languages.
+## Overview
+[`<T>`](/docs/next/components/t) is the translation tag in `gt-next`.
+Children of `<T>` will be translated into your [configured](/docs/next/reference/i18n-configuration) languages.
 
 <Callout>
-    To create translations, run the [CLI tool](/docs/next/cli) before you build your app.
+    To create translations, run the [CLI tool](/docs/oldnext/cli) before you build your app.
 </Callout>
 
 <Callout type="warn">
-    If it is being used in a client component, `<T>` must be able to access the context from a [`<GTProvider>`](/docs/next/gt-provider).
+    If it is being used in a client component, `<T>` must be able to access the context from a [`<GTProvider>`](/docs/next/api/components/gt-provider).
 </Callout>
 
+## Props
 It requires two props:
 - `id`, which is a unique string representing the content 
 - `children`, which is the content to translate
@@ -33,7 +36,9 @@ export default function Page() {
 
 The above would display `"Hello, world"` in the English version of the app, and `"Hola mundo"` in the Spanish version.
 
-The `<T>` component can also contain JSX, like:
+## Supporting JSX Content
+
+The `<T>` component can also translate JSX structures:
 
 ```javascript copy
 import { T } from 'gt-next'
@@ -55,15 +60,81 @@ export default function Page() {
     Text must be passed directly as a child of `<T>` to be translated.
 </Callout>
 
-`<T>` uses our cloud services to create and cache translations. If a translation is unavailable, `<T>` will default to displaying the content in your default locale ([`defaultLocale`](/docs/next/advanced/config#defaultlocale)), usually English.
+`<T>` uses our cloud services to create and cache translations.
+If a translation is unavailable, `<T>` will default to displaying the content in your default locale ([`defaultLocale`](/docs/next/reference/i18n-configuration#props)), usually English.
 
 ### On-demand translation
 
 Testing `<T>` in server components is easy, just [change your browser language](https://support.google.com/chrome/answer/173424) and reload the page. 
 Translations will be created on-demand and load in within a few seconds.
 
+
+## On-Demand Translation
+
+Testing `<T>` in server components is easy.
+You can [change your browser language](https://support.google.com/chrome/answer/173424) and reload the page.
+Translations will be created on-demand and displayed in the new language within a few seconds.
+
 ## Adding `context` to translations
+
+You can add additional context to your translations to refine their output.
+Context helps resolve ambiguities in content, ensuring accurate translations.
+
+```javascript copy
+import { T } from 'gt-next'
+
+export default function ContextExample() {
+    return (
+        <T id="greeting" context="formal">
+            Hello, world
+        </T>
+    )
+}
+```
+In this example, the context prop specifies that the greeting should be translated formally.
 
 ## Variables
 
+Dynamic variables can be injected into translations using components like [`<Var>`](/docs/next/api/components/var).
+These placeholders allow you to pass values such as user names or dates into the translation dynamically.
+
+```javascript copy
+import { T, Var } from 'gt-next'
+
+export default function DynamicGreeting({ user }) {
+    return (
+        <T id="greeting">
+            Hello, <Var name="name" value={user.name} />!
+        </T>
+    )
+}
+```
+
 ## Plurals
+The `<T>` component supports pluralization with the `<Plural>` component, allowing dynamic rendering of singular or plural forms based on a count.
+
+```javascript copy
+import { T, Num, Plural } from 'gt-next'
+
+export default function ItemCount({ count }) {
+    return (
+        <T id="item_count">
+            <Plural
+                n={count}
+                one={<>You have <Num>{count}</Num> item.</>}
+                other={<>You have <Num>{count}</Num> items.</>}
+            />
+        </T>
+    )
+}
+```
+
+
+## Notes
+ * Ensure every `<T>` component has a unique id for accurate translations.
+ * Wrap your app with a `<GTProvider>` to enable translations in client components.
+ * Combine `<T>` with [Variable Components](/docs/next/reference/using-variable-components) and [Branching Components](/docs/next/reference/using-branching-components) for more complex translation scenarios.
+
+## Next Steps
+ * Learn about setting up translations alternate design patterns such as [Template Dictionaries](/docs/next/reference/template-dictionaries/template-dictionaries).
+ * Explore other localization techniques like [i18n Configuration](/docs/next/reference/i18n-configuration) and [i18n Routing](/docs/next/guides/i18n-routing).

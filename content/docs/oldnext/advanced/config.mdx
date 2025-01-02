@@ -50,7 +50,7 @@ my-app/
 Edit your `next.config.js` file to run the `initGT()` function. This is optional, but it lets you add useful configuration options like a non-English default language (`defaultLocale`) or a list of approved languages to translate into (`locales`). 
 
 <Callout>
-    If you are using a [`dictionary.js`](/docs/next/dictionaries) file, use the `withGT()` plugin returned by `initGT()` to configure [Webpack](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) to bundle your `dictionary.js` file into your app.
+    If you are using a [`dictionary.js`](/docs/oldnext/dictionaries) file, use the `withGT()` plugin returned by `initGT()` to configure [Webpack](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) to bundle your `dictionary.js` file into your app.
 </Callout>
 
 ```js copy
@@ -114,7 +114,7 @@ export default withGT({});
 
 #### `projectID`
 - **Type**: `string`
-- **Description**: Project ID, which can be included here or as an [environment variable](/docs/next/config#set-environment-variables).
+- **Description**: Project ID, which can be included here or as an [environment variable](/docs/oldnext/config#set-environment-variables).
 
 #### `preferredModelProvider`
 - **Type**: `"anthropic"` | `"openai"`
