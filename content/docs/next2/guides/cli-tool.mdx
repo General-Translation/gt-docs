@@ -1,0 +1,86 @@
+---
+title: CLI Tool
+description: How to pre-load translations with the GT CLI tool
+---
+
+## Overview
+
+This is a guide on how to use the General Translation CLI tool to pre-translate for your site.
+This CLI tool scans through your project and looks for content to translate.
+It then sends this content to the General Translation API to be translated which gets distributed to the CDN once translation has been completed.
+Read more about the CLI tool [here](/docs/next2/reference/cli).
+
+This guide assumes that you have already integrated `gt-next` into your project.
+If you haven't, please follow the [Quick Start Guide](/docs/next2/tutorial/quick-start).
+
+<Callout type="error">
+    **For Production Only!**
+
+    Because this CLI tool publishes translated content to the CDN, it is meant to only be used for production builds, and should not be used in development.
+    Before running this command, please make sure you are on the branch that will be used for production.
+    Remember to also use your production API key and Project ID.
+</Callout>
+
+---
+
+## Usage
+
+### Basic Usage
+
+<Steps>
+    <Step>
+        Add your API key and Project ID to your environment variables.
+        You can do this by adding the following to your `.env` file or directly to your environment:
+
+        ```.env copy
+        GT_API_KEY=YOUR_API_KEY
+        GT_PROJECT_ID=YOUR_PROJECT_ID
+        ```
+    </Step>
+    <Step>
+        To pre-translate your content, you can run the following command:
+
+        ```bash copy
+        npx i18n
+        ```
+    </Step>
+</Steps>
+
+Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
+
+
+### Specifying Locales
+
+You can select which locales you want to pre-translate by specifying them in the command.
+
+```bash copy
+npx i18n --languages fr es ja
+```
+
+For more information specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
+
+
+### Specifying Credentials
+
+You can also specify your credentials directly in the command.
+Typically, this can be read directly from your environment.
+
+```bash copy
+npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+```
+If the script is successful, you should see the following message in the console:
+
+```txt
+Project "YOUR_PROJECT_ID" updated: true. Languages: ["French", "Japanese", "Spanish"]. Translations are usually live within a minute. Check status: www.generaltranslation.com/dashboard.
+```
+
+
+---
+
+
+## Notes
+ * The CLI tool allows you to pre-translate content.
+ * This is meant to be used for production builds only.
+ * You can specify which locales you want to pre-translate.
+
+## Next Steps

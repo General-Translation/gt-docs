@@ -4,8 +4,25 @@ description: The General Translations CLI tool
 ---
 
 ## Overview
-In order to avoid translating everything on demand, we recommend using the CLI tool to translate your content and push it to the CDN before the user even sees your site.
-You can easily integrate this tool with your CI/CD pipeline or run it manually in your terminal.
+
+This is a reference doc on the General Translation CLI tool.
+For a step by step guide, check out the [CLI Tool guide](/docs/next2/guides/cli-tool).
+
+
+## What is Pre-Translation?
+
+Pre-translation is a process where you send your content to be translated before the user requests it.
+This way, when the user requests a page, the translated content is already available in the CDN and can be served immediately.
+
+Of course, it is not always the best practice to pre-translate every single language.
+You should consider the languages that are most commonly used by your audience and pre-translate those.
+The rest can be translated on demand.
+
+The CLI tool is a script that will scan your entire app for content to be translated.
+It will then send this content to the General Translation API.
+Following translation, the translated content will be distributed to the CDN which will be ready for users to request when needed.
+
+## When Should You Pre-translate?
 
 <Callout type="warn">
     **For Production Only!**
@@ -15,26 +32,16 @@ You can easily integrate this tool with your CI/CD pipeline or run it manually i
     Remember to also use your production API key and Project ID.
 </Callout>
 
+You can easily integrate the CLI tool with your CI/CD pipeline or run it manually in your terminal.
 
-Run `npx i18n`, to run a script that will scan through your project and send each item for translation. 
-This script requires your API key and projectID.
-It will automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them:
-```bash copy
-npx i18n --languages fr es ja
-```
+## How to Pre-translate
 
-Or, with `projectID` and `apiKey`:
+It is as simple as running:
 
 ```bash copy
-npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+npx i18n
 ```
 
-If the script is successful, you should see the following message in the console:
-
-```txt
-Project "YOUR_PROJECT_ID" updated: true. Languages: ["French", "Japanese", "Spanish"]. Translations are usually live within a minute. Check status: www.generaltranslation.com/dashboard.
-```
-
-Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
-
-Learn more about the CLI tool [here](/docs/next/cli).
+This will scan through your project and generate translations for the default languages.
+Of course, you can specify which locales you want to pre-translate.
+Follow [this how-to guide](/docs/next2/guides/cli-tool) for more information on how to use the CLI tool.

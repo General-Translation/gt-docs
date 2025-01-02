@@ -1,0 +1,60 @@
+---
+title: Locale Management
+description: How to manage and specify supported locales in your application
+---
+
+
+## Overview
+
+Managing locales is a critical step when building a multilingual application with `gt-next`.
+This guide will walk you through how to define, configure, manage supported locales.
+
+In this guide, we will cover how to manage locales in your application, including:
+ * Include locales
+ * (Coming Soon) Exclude locales
+
+
+## Include Locales
+
+Including specific locales for translation ensures that only the languages you have specified will be translated.
+For instance, if you have selected English, Chinese, and Japanese as your supported locales, translations will only be performed for these languages.
+Any other languages not included in your list of locales will not be translated.
+
+This approach helps to manage resources effectively and ensures that translations are only provided for the locales that are relevant to your application.
+
+These instructions assume that you have already integrated `gt-next` into your Next.js application.
+
+<Steps>
+    <Step>
+        Locate your config file, typically `your-app/next.config.mjs` (or `.ts`, `.mjs`, `.cjs`)
+    </Step>
+    <Step>
+        Add the `locales` property to your `initGT` configuration object.
+        This property should be an array of strings, each representing a locale.
+        For example, to prioritize English, Chinese, and Japanese, you would write:
+        ```js
+        import { initGT } from 'gt-next/config'
+
+        const withGT = initGT({
+            defaultLocale: "en-US",
+            locales: ["en-US", "zh", "jp"]
+        });
+
+        export default withGT({});
+        ```
+    </Step>
+</Steps>
+
+
+## Excluding Locales
+
+🚧 This feature is coming soon. 🚧
+
+## Common Pitfalls
+
+### Supported Locales
+
+General Translations utilizes LLM models generate accurate translations.
+However, these models are not without their limitations.
+Certain resource languages may not be supported by the model provider you have selected or any of the available providers.
+To see a list of supported languages, you can refer to the [List of Supported Locales](/docs/reference/supported-locales).

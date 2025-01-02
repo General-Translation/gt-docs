@@ -10,6 +10,8 @@
             "./methods/useElement",
             "./methods/client/useGT", "./methods/client/useDefaultLocale", "./methods/client/useLocale",
             "./methods/server/getGT", "./methods/server/getDefaultLocale", "./methods/server/getLocale",
-            "./methods/server/tx"
+            "./methods/server/tx",
+        "---Config---",
+            "./config/initGT"
     ]
 }

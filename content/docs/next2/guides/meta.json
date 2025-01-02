@@ -1,6 +1,6 @@
 {
     "title": "How-To Guides",
     "pages": [
-        "locale-list"
+        "cli-tool", "locale-management"
     ]
 }

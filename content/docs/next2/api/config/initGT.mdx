@@ -1,0 +1,80 @@
+---
+title: initGT()
+description: API Reference for the initGT() method.
+---
+
+## Overview
+
+The `initGT()` function initializes General Translation (GT) settings for a Next.js application.
+It is used in `next.config.js` to configure translation behavior, supported locales, default language settings, and other translation-related options.
+This function returns a plugin for the Next.js configuration, enabling GT integration seamlessly.
+
+Use `initGT()` to:
+ * Configure supported languages and default locale (a.k.a fallback language).
+ * Set up API keys and project IDs for accessing GT services.
+ * Customize translation behavior, caching, and request batching.
+
+ <Callout>
+    `initGT()` must be used in your `next.config.js` file to enable translation functionality.
+</Callout>
+
+## Reference
+
+### Recommended Props [#props]
+| Parameter      | Type       | Default                  | Description                                                                 |
+|----------------|------------|--------------------------|-----------------------------------------------------------------------------|
+| `locales`      | `string[]` |                          | A list of supported locales for the application. If not provided, it defaults to the first locale or the default locale set. |
+| `defaultLocale`| `string`   | `locales[0] || 'en'`     | Default locale for the application. English will be the fallback language when none is specified. |
+| `description`  | `string`   |                          | A natural language description of the site, used to aid translation.         |
+
+### Advanced Props [#advanced-props]
+
+| Parameter                | Type                                                                 | Default                       | Description                                                                                                                                                                                                 |
+|--------------------------|----------------------------------------------------------------------|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `projectID`              | `string`                                                             |                               | Project ID, which can be included here or as an [environment variable](/docs/next/config#set-environment-variables).                                                                                         |
+| `preferredModelProvider` | `"anthropic"` \| `"openai"`                                          |                               | Your first choice AI model provider. Currently only [Anthropic](https://anthropic.com) or [OpenAI](https://openai.com) are enabled. Leave this blank and we'll figure out the best provider on a translation-by-translation basis. In periods of high usage or when a provider is disabled, we can't guarantee that your preferred provider will be used. |
+| `baseURL`                | `string`                                                             | `https://prod.gtx.dev`        | Base URL for the GT API. To disable automatic translation, set this to an empty string.                                                                                                                      |
+| `cacheURL`               | `string`                                                             | `https://cache.gtx.dev`       | URL where cached translations are stored. Can be customized to point to a custom cache server.                                                                                                               |
+| `renderSettings`         | `{ fallbackToPrevious: boolean, method: "skeleton" \| "replace" \| "hang" \| "subtle", timeout: number \| null }` | `{ "fallbackToPrevious": true, "method": "skeleton", "timeout": null }` | An object specifying [how on-demand translations should be rendered](/advanced/on-demand-rendering).                                                                                                         |
+| `_maxConcurrentRequests` | `number`                                                             | `2`                           | Maximum number of concurrent translation requests allowed to the GT API.                                                                                                                                    |
+| `_batchInterval`         | `number`                                                             | `1000`                        | Interval in milliseconds between batched translation requests. Helps control the rate at which requests are sent.                                                                                           |
+| `i18n`                   | `string`                                                             |                               | Optional configuration filepath for custom `getLocale()` functions. If provided as a string, it will be resolved as a path. Otherwise, defaults are used (recommended).                                      |
+| `dictionary`             | `string`                                                             |                               | Optional configuration filepath for the dictionary. Similar to `i18n`, it accepts a string to specify a custom path. Dictionaries called `dictionary.js` (or `.jsx`, `.ts`, `.tsx` etc.) and placed at the root or in the `src` folder are supported by default. |
+
+
+### Returns
+
+A function `(NextConfig) => NextConfig` that enhances the Next.js configuration object with the specified GT settings.
+
+---
+
+## Example
+
+### Basic Usage
+This example configures `gt-next` with English (`en-US`) as the default locale, supports translations in Spanish (`es`) and French (`fr`), and provides a description for context-aware translation.
+
+
+```js title="next.config.mjs" copy
+// next.config.mjs
+
+import { initGT } from 'gt-next/config';
+
+const withGT = initGT({
+    defaultLocale: 'en-US',
+    locales: ['en-US', 'es', 'fr'],
+    description: 'A personal blog about technology and travel',
+});
+
+export default withGT({});
+```
+
+---
+
+## Notes
+ * `initGT()` integrates GT translation functionality into your Next.js app and must be used in the root configuration file.
+ * Parameters like `apiKey` and `projectId` can be set directly in the configuration or as environment variables.
+ * Advanced parameters like `renderSettings` and `_batchInterval` allow fine-grained control over translation behavior and performance.
+
+## Next Steps
+ * Read more about [i18n configuration](/docs/next2/reference/i18n-configuration) in our reference guide.
+ * Use the [CLI tool](/docs/next2/guides/cli-tool) to pre-translate your app for better performance.
