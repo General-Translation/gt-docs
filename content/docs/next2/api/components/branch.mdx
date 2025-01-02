@@ -81,17 +81,19 @@ export default function GenderMessage({ user }) {
 If the branch value does not match any provided key, the `<Branch>` component renders the children as fallback content.
 
 ```jsx title="FallbackExample.jsx" copy
-import { Branch } from 'gt-next'; // [!code highlight]
+import { T, Branch } from 'gt-next'; // [!code highlight]
 
 export default function StatusMessage({ status }) {
     return (
-        <Branch
-            branch={status}
-            active={<p>The user is active.</p>}
-            inactive={<p>The user is inactive.</p>}
-        >
-            <p>Status unknown.</p> // [!code highlight]
-        </Branch>
+        <T id="status">
+            <Branch
+                branch={status}
+                active={<p>The user is active.</p>}
+                inactive={<p>The user is inactive.</p>}
+            >
+                <p>Status unknown.</p> // [!code highlight]
+            </Branch>
+        </T>
     );
 }
 ```

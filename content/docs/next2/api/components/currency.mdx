@@ -77,10 +77,10 @@ import { T, Currency } from 'gt-next'; // [!code highlight]
 /**
  * Renders the price of an item in a store.
  */
-export default function PriceDisplay(item) {
+export default function PriceDisplay(item, curr) {
     return (
         <T>
-            The price of the item is <Currency> {item.price} </Currency>. // [!code highlight]
+            The price of the item is <Currency currency={curr}> {item.price} </Currency>. // [!code highlight]
         </T>
     );
 }

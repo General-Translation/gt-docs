@@ -2,7 +2,7 @@
     "title": "Reference",
     "pages": [
         "---Key Concepts---",
-            "t-design-patterns", "using-variable-components", "using-branching-components",
+            "t-reference", "using-variable-components", "using-branching-components",
             "cli",
             "locale-strings",
         "---Advanced---",

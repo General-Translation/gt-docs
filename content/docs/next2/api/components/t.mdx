@@ -72,7 +72,7 @@ Additionally, it provides features for handling variables, plurals, and context-
 ### Basic Usage
 
 The `<T>` component can translate simple strings using an `id` and its children.
-Remember, the `<T>` component must be used inside a [`<GTProvider>`](/docs/next2/reference/t-design-patterns#gtprovider) to access the translation context.
+Remember, the `<T>` component must be used inside a [`<GTProvider>`](/docs/next2/reference/t-reference#gtprovider) to access the translation context.
 
 ```jsx title="SimpleTranslation.jsx" copy
 import { T } from 'gt-next'; // [!code highlight]
@@ -128,8 +128,8 @@ export default function ItemCount({ count }) {
 ## Notes
  * The `<T>` component is designed for translating content in your application. It is the primary method for localization in `gt-next`.
  * Use the `<T>` component to translate plain text or JSX structures, including variables and pluralization.
- * Ensure the `<T>` component is wrapped in a [`<GTProvider>`](/docs/next2/reference/t-design-patterns#gtprovider) to access the translation context.
+ * Ensure the `<T>` component is wrapped in a [`<GTProvider>`](/docs/next2/reference/t-reference#gtprovider) to access the translation context.
 
 ## Next Steps
- * Look into more advanced features like on-demand translation, variables, context, and handling plurals, refer to the [`<T>` Design Patterns](/docs/next2/reference/t-design-patterns) documentation.
+ * Look into more advanced features like on-demand translation, variables, context, and handling plurals, refer to the [`<T>` Design Patterns](/docs/next2/reference/t-reference) documentation.
  * For translating strings, look into [`tx()`](/docs/next2/api/methods/server/tx) or [`getGT()`](/docs/next2/api/methods/server/getGT) for server-side translations and [`useGT()`](/docs/next2/api/methods/client/useGT) for client-side translations.
