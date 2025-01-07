@@ -3,23 +3,25 @@ title: Introduction
 description: Docs for General Translation's localization libraries
 ---
 
-<Callout>
-    These docs are under construction. Please email [archie@generaltranslation.com](mailto:archie@generaltranslation.com?subject=Docs) if what you're looking for isn't here.
-</Callout>
 
 Welcome to the docs for [General Translation](https://www.generaltranslation.com) (GT). 
 
-We publish developer libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps which automate your entire internationalization ("i18n") stack.
+We publish developer libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps which automate your entire internationalization (i18n) stack.
 
 - Setup is simple, with no need for complex rewrites of your project.
 - Translations ship in seconds and load in milliseconds.
 - UI gets translated in context by powerful AI models.
 
+
+<Callout>
+    These docs are under construction. Please email [archie@generaltranslation.com](mailto:archie@generaltranslation.com?subject=Docs) if what you're looking for isn't here.
+</Callout>
+
 ## Get started
 
 <Tabs items={['Next.js', 'React']}>
     <Tab value="Next.js">
-    Follow the [Quickstart](/docs/oldnext/quickstart) guide to ship your first translations.
+    Follow the [Quickstart](/docs/next/tutorials/quickstart) guide to ship your first translations.
 
     **npm**
     ```bash copy
@@ -46,7 +48,7 @@ We publish developer libraries for [React](https://react.dev) and [Next.js](http
 
 ### Example
 
-```javascript
+```javascript title="MyComponent.js"
 import { T } from 'gt-next'
 
 export default function MyComponent() {
@@ -68,7 +70,7 @@ With GT libraries like `gt-react` and `gt-next`, you can:
 
 UI passed as the children of the `<T>` component will be translated regardless of how complicated the JSX tree. For example:
 
-```javascript
+```javascript title="page.js"
 import { T } from 'gt-next'
 import CustomButton from './CustomButton'
 
@@ -96,13 +98,12 @@ export default function Page() {
 
 With first class support for the Next.js [App Router](https://nextjs.org/docs/app) and [React Server Components](https://react.dev/reference/rsc/server-components).
 
-```jsx copy
-// server component
+```jsx title="src/components/MyServerComponent.js" copy
 
 import getName from '@/getName';
-import { T, Var } from 'gt-next;
+import { T, Var } from 'gt-next';
 
-export default async function Page() {
+export default async function MyServerComponent() {
 
     const name = await getName();
 
@@ -114,16 +115,14 @@ export default async function Page() {
 }
 ```
 
-```jsx copy
+```jsx title="src/components/MyClientComponent.js" copy
 'use client'
-
-// client component
-// should be used inside <GTProvider>
+// this should be used inside <GTProvider>
 
 import { useState } from 'react';
-import { T, Var } from 'gt-next;
+import { T, Var } from 'gt-next';
 
-export default function Page() {
+export default function MyClientComponent() {
 
     const [name, setName] = useState("Alice");
 
@@ -201,21 +200,16 @@ Uniquely, General Translation libraries let you write dictionaries as objects co
 
 ### 4. Translate content on-demand
 
-<Callout>
-    This is experimental and currently available in `gt-next` only.
-</Callout>
-
-Sometimes, your app needs a translation which doesn't already exist.
+No need to guess which languages your users will need.
+General Translation can create translations on-demand, during runtime.
 
 This can happen if:
-- You've enabled the language a user requests, but never created translations for it before.
-- You've changed some translated content in your project without requesting a new translation for it.
+ * A requested language has never been seen before
+ * Some cases where the content of a component cannot be known until render time
 
-In this situation, `gt-next` can create a translation for you on demand, during runtime. This translation will be streamed via your server to your user within a few seconds.
+In this situation, `gt-next` and `gt-react` can create a translation for you on demand, while your app is running.
+Once the translation is loaded, it will rewrite your component in real time with the new translation content.
 
 <Callout>
-**What this looks like:** the rest of the page loads, with your translated component loading in a few seconds later. The second time a user visits your page, the new translation will be cached, so it should load like any other component.
+    We recommend using the [CLI tool](/docs/guides/cli-tool) to create translations in advance, rather than relying on on-demand translations.
 </Callout>
-
-Most projects should use the [CLI tool](/docs/oldnext/cli) to create translations in advance, rather than relying on on-demand translations.
-

@@ -1,5 +1,172 @@
 ---
-title: Design Pattern
-description: An overview of the Template Dictionary Design Pattern
+title: Dictionary Design Pattern
+description: An overview of the Template Dictionary Design Pattern (TDDP)
 ---
-🚧 This section is currently under construction. 🚧
+
+## Overview
+
+In this reference guide, we will introduce you to the Template Dictionary Design Pattern (TDDP).
+We will explain what a Template Dictionary is and how to use it in your Next.js application.
+
+## What is a Template Dictionary?
+
+The Template Dictionary Design Pattern (TDDP) is, well, a design pattern for translating your app.
+All translatable content is stored in a dictionary or a JSON file.
+During build time or run time (depending on your implementation), our library will look at this dictionary and create an identical dictionary where we store translated content.
+
+Every value in the dictionary to be translated is called a **Template**.
+Hence, the original, untranslated dictionary is called the **Template Dictionary**.
+For each template, a **Translation** is created.
+These are stored in a mirror-image dictionary called the **Translation Dictionary**.
+
+It is important to mention this is a *different design pattern from using [`<T>` components](/docs/next/reference/t-reference)*.
+All content to be translated within the `<T>` component is written inline whereas the content to be translated in the TDDP is stored in the Template Dictionary.
+
+
+## TDDP vs Inline
+
+The template dictionary has a few advantages over the `<T>` component:
+
+1. **Performance**: The template dictionary is can be than the `<T>` component because it doesn't have to parse the content at runtime.
+2. **Flexibility**: Template dictionaries can contain either JSX or strings for translation whereas the `<T>` component can only translate React elements.
+3. **Historical Precedent**: The template dictionary is a common design pattern in the industry and is used by many other libraries.
+
+At the same time, it has some disadvantages as well:
+
+1. **Complexity**: The template dictionary is more complex to set up than the `<T>` component.
+2. **Readability**: The template dictionary is less readable than the `<T>` component because the content is not inline.
+
+Both design patterns are supported by our library and are not mutually exclusive.
+You can use a dictionary along side `<T>` components.
+
+### Our Advice
+We recommend using the `<T>` component because of its simplicity especially if you are new to internationalization (i18n).
+We offer TDDP for those who prefer this design pattern from past experiences or ease of integration with existing code bases.
+
+We go into the reasons and justifications for this recommendation in [this article](/docs/next/discussions/inline-vs-dictionary).
+
+
+## How to Use TDDP
+
+In this section, we will show you how to set up a bare-bones TDDP implementation in your Next.js application.
+We will walk through the following steps:
+
+<Steps>
+    <Step>
+        Create a Template Dictionary
+    </Step>
+    <Step>
+        Access the Translation Dictionary
+    </Step>
+</Steps>
+
+If you would like to follow a more detailed tutorial, check out our [step-by-step guide](/docs/next/tutorials/dictionary/setup)
+on setting up a NextJS project with a Template Dictionary.
+
+### Step 1: Create a Template Dictionary
+
+The first step is to create a Template Dictionary.
+This is a `dictionary.js` (or `.tsx`) file that contains all the content you want to translate.
+
+```
+my-app/
+├── middleware.js
+├── src/
+│   ├── app/
+│   │   ├── [locale]/
+│   │   │   ├── layout.js
+│   │   │   ├── page.js
+│   │   │   └── some-page/
+│   │   │       └── page.js
+│   │   └── api/
+│   │       └── route.js
+│   └── dictionary.js       <-- Template Dictionary
+├── public/
+│   └── images/
+│       └── logo.png
+├── styles/
+│   └── globals.css
+└── next.config.js
+```
+
+If you are not using a `src/` folder, you can also specify the directory of the dictionary in the [`next.config.js`](/docs/next/api/methods/config/initGT) file.
+If you are using i18n routing, make sure to also specify the directory of the dictionary in the [`middleware.js`](/docs/next/guides/i18n-routing) file.
+
+Add the following content to your `dictionary.js` file:
+
+```js title="src/dictionary.js" copy
+
+const dictionary = {
+    greetings: {
+        hello: <>Hello, World!</>, // JSX content
+        goodbye: 'Goodbye, World!'  // string content
+    },
+}
+
+export default dictionary;
+```
+
+
+### Step 2: Access the Translation Dictionary
+
+There are a few ways to access the translations in the Translation Dictionary.
+Mostly it depends on the context where you are trying to access the translations.
+For example, if you are in a client-side component, use the [`useGT()`](/docs/next/api/methods/client/useGT)
+hook and for server-side components use [`await getGT()`](/docs/next/api/methods/server/getGT) method.
+
+Here is an example of how to access the translations in a client-side component:
+
+```jsx
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+
+  const { t } = useGT(); // on the client side, you use the useGT hook
+
+  return (
+    <div>
+      {t('greetings.hello')}
+    </div>
+  );
+}
+```
+
+And here is an example of how to access the translations in a server-side component:
+
+```jsx
+import { useGT } from 'gt-next/server';
+
+export default async function MyComponent() {
+
+  const { t } = await getGT(); // on the server side, you have to await a promise
+
+  return (
+    <div>
+      {t('greetings.hello')}
+    </div>
+  );
+}
+```
+
+### `useElement()`
+
+The [`useElement()`](/docs/next/api/methods/useElement) allows you to access the translations in a React element.
+It works on both client and server side components, so it offers an alternative to [`useGT()`](/docs/next/api/methods/client/useGT) and [`getGT()`](/docs/next/api/methods/server/getGT).
+
+As its name suggests, *it only works in React elements*.
+String translation with this method is not supported.
+
+```jsx
+import { useElement } from 'gt-next';
+
+export default function MyComponent() {
+
+  const { t } = useElement();
+
+  return (
+    <div>
+      {t('greetings.hello')}
+    </div>
+  );
+}
+```

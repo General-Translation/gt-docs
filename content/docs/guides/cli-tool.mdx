@@ -5,16 +5,16 @@ description: How to pre-load translations with the GT CLI tool
 
 ## Overview
 
-This is a guide on how to use the General Translation CLI tool to pre-translate for your site.
+This is a guide on how to use the General Translation CLI tool to [pre-translate](/docs/reference/cli#pre-translation) for your site.
 This CLI tool scans through your project and looks for content to translate.
 It then sends this content to the General Translation API to be translated which gets distributed to the CDN once translation has been completed.
-Read more about the CLI tool [here](/docs/next/reference/cli).
+Read more about the CLI tool [here](/docs/reference/cli).
 
-This guide assumes that you have already integrated `gt-next` into your project.
-If you haven't, please follow the [Quick Start Guide](/docs/next/tutorial/quick-start).
+This guide assumes that you have already integrated `gt-next` or `gt-react` into your project.
+If you haven't, please follow the [NextJS Quick Start Guide](/docs/tutorial/quick-start) or the [React Quick Start Guide](/docs/react/tutorial/quick-start) before proceeding.
 
 <Callout type="error">
-    **For Production Only!**
+    **For production only!**
 
     Because this CLI tool publishes translated content to the CDN, it is meant to only be used for production builds, and should not be used in development.
     Before running this command, please make sure you are on the branch that will be used for production.
@@ -25,7 +25,7 @@ If you haven't, please follow the [Quick Start Guide](/docs/next/tutorial/quick-
 
 ## Usage
 
-### Basic Usage
+### Basic usage
 
 <Steps>
     <Step>
@@ -38,7 +38,7 @@ If you haven't, please follow the [Quick Start Guide](/docs/next/tutorial/quick-
         ```
     </Step>
     <Step>
-        To pre-translate your content, you can run the following command:
+        To [pre-translate](/docs/reference/cli#pre-translation) your content, you can run the following command:
 
         ```bash copy
         npx i18n
@@ -49,7 +49,7 @@ If you haven't, please follow the [Quick Start Guide](/docs/next/tutorial/quick-
 Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
 
 
-### Specifying Locales
+### Specifying locales
 
 You can select which locales you want to pre-translate by specifying them in the command.
 
@@ -60,7 +60,7 @@ npx i18n --languages fr es ja
 For more information specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
 
 
-### Specifying Credentials
+### Specifying credentials
 
 You can also specify your credentials directly in the command.
 Typically, this can be read directly from your environment.
@@ -83,4 +83,6 @@ Project "YOUR_PROJECT_ID" updated: true. Languages: ["French", "Japanese", "Span
  * This is meant to be used for production builds only.
  * You can specify which locales you want to pre-translate.
 
-## Next Steps
+## Next steps
+ * Learn more about the [CLI tool](/docs/reference/cli) and [pre-translation](/docs/reference/cli#pre-translation).
+ * Learn more about [locale strings](/docs/reference/locale-strings).

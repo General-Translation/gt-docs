@@ -82,7 +82,7 @@ A promise that resolves to a string containing the translated content, or the or
 Translate a simple string using the default locale.
 
 ```javascript title="src/components/translateGreeting.js" copy
-import tx from 'gt-next/server';
+import { tx } from 'gt-next/server';
 
 export default async function translateGreeting() {
     // though not required, adding an id improves translation time by caching
@@ -97,7 +97,7 @@ export default async function translateGreeting() {
 Customize the translation with specific options.
 
 ```javascript title="src/components/translateWithOptions.js" copy
-import tx from 'gt-next/server';
+import { tx } from 'gt-next/server';
 
 export default async function translateWithOptions() {
     const translation = await tx("Hello, world!", { id: 'tx-with-options', locale: 'es', context: 'Translate informally' });
@@ -111,7 +111,7 @@ export default async function translateWithOptions() {
 Inject variables into the translated string.
 
 ```jsx title="src/components/translateWithVariables.js" copy
-import tx from 'gt-next/server';
+import { tx } from 'gt-next/server';
 
 export default async function translateWithVariables() {
     const translation = await tx("The price is {price}", {

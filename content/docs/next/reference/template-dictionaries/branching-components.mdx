@@ -2,4 +2,148 @@
 title: Branching Components
 description: Conditional behavior with Branching Components in Template Entries
 ---
-🚧 This section is currently under construction. 🚧
+
+## Overview
+
+Branching Components in `gt-next` enable dynamic, conditional rendering of translations based on specific criteria or values.
+When combined with [Template Dictionaries](/docs/next/reference/template-dictionaries/template-dictionaries),
+these components provide a powerful way to handle content variations and localization logic directly in your dictionary entries.
+
+Branching Components include:
+ * [`<Branch>`](/docs/next/api/components/branch): Dynamically renders a specific branch of content based on a branch value.
+ * [`<Plural>`](/docs/next/api/components/plural): Handles pluralization rules based on a numerical value (`n`).
+
+ <Callout>
+    Branching Components are processed locally, ensuring that all logic and conditional rendering happens on the client or server without requiring additional translation API calls.
+</Callout>
+
+## Why Use Branching Components with Template Dictionaries?
+
+By using Branching Components in Template Dictionaries, you can:
+ * Implement conditional logic directly in your dictionary entries.
+ * Simplify the management of localized content variations.
+ * Automatically adapt translations to complex scenarios such as pluralization or application states.
+
+This approach eliminates the need for external conditional logic, consolidating both content and logic into the dictionary itself.
+
+---
+
+## Adding Branching Components to Template Dictionaries
+
+Branching Components can be included in dictionary entries to manage variations in content dynamically.
+
+### Example: Adding Branches to a Template Dictionary
+
+Below is an example of how you can use `<Branch>` and `<Plural>` components in a Template Dictionary.
+
+```jsx title="src/dictionary.js" copy
+import { Branch, Plural, Num } from 'gt-next';
+
+const dictionary = {
+    messages: {
+        // Conditional rendering with <Branch>
+        userStatus: (
+            <Branch
+                name="status-branch"
+                active={<p>The user is currently active.</p>}
+                inactive={<p>The user is currently inactive.</p>}
+                banned={<p>The user is banned.</p>}
+            >
+                <p>Status unknown.</p>
+            </Branch>
+        ),
+        // Handling pluralization with <Plural>
+        notifications: (
+            <Plural
+                name="notification-plural"
+                one={<>You have <Num name="notificationCount" /> new notification.</>}
+                other={<>You have <Num name="notificationCount" /> new notifications.</>}
+            />
+        ),
+    },
+};
+
+export default dictionary;
+```
+
+## Accessing Branching Templates
+
+When accessing dictionary entries that use Branching Components, you must pass the relevant dynamic data (e.g., `branch` value or `n`)
+through the options parameter. This can be thought of keys that map to a value that will be rendered.
+
+### Example: Client-Side Usage with `useGT()`
+
+```jsx title="src/components/UserStatus.js" copy
+import { useGT } from 'gt-next/client';
+
+export default function UserStatus({ status }) {
+    const t = useGT();
+
+    return (
+        <div>
+            {/* Passes the `status` as a branch value */}
+            {t('messages.userStatus', { "status-branch": status })}
+        </div>
+    );
+}
+```
+
+### Example: Server-Side Usage with `getGT()`
+
+```jsx title="src/pages/Notifications.js" copy
+import { getGT } from 'gt-next/server';
+
+export default async function handler(req, res) {
+    const t = await getGT();
+
+    const notificationCount = 5; // Example dynamic data
+    res.send(
+        // Passes `n` and `notificationCount` for pluralization
+        t('messages.notifications', { "notification-plural": notificationCount, "notificationCount": notificationCount })
+    );
+}
+```
+
+---
+
+## Best Practices
+
+### Define Clear Branch Keys
+
+When using `<Branch>`, define clear and meaningful branch keys that align with your application's state or logic.
+
+```jsx copy
+// Good Example
+<Branch active={<>Active</>} inactive={<>Inactive</>} banned={<>Banned</>} />
+
+// Bad Example
+<Branch a="Active" i="Inactive" b="Banned" />
+```
+
+### Include a Fallback
+
+Always include a fallback value in` <Branch>` and `<Plural>` components to ensure graceful handling of unexpected conditions or values.
+
+## Common Pitfalls
+
+### Missing Dynamic Values
+
+If dynamic values (e.g., branch or n) are not provided, the Branching Component may not render the expected content.
+Always ensure that the necessary options are passed when accessing dictionary entries.
+
+### Overloading Dictionary Entries
+
+Avoid combining too much logic or complexity into a single dictionary entry.
+Break down entries into smaller, manageable components to maintain clarity and flexibility.
+
+---
+
+## Notes
+ * Branching Components handle conditional logic locally, ensuring efficient and secure translations.
+ * Combine Branching Components with [Variable Components](/docs/next/reference/template-dictionaries/variable-components) for more complex scenarios involving dynamic content.
+ * The `<Plural>` component follows [Unicode CLDR pluralization rules](https://cldr.unicode.org/index/cldr-spec/plural-rules) for accurate localization.
+
+## Next Steps
+ * Explore the API Reference for [`Branching Components`](/docs/next/api/components/branch).
+ * Learn about [Unicode CLDR pluralization rules](https://cldr.unicode.org/index/cldr-spec/plural-rules) rules for pluralization support.
+ * Review the [Template Dictionary Design Pattern](/docs/next/reference/template-dictionaries/template-dictionaries) for creating scalable and maintainable translations.

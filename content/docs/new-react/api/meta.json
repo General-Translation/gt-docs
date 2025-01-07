@@ -9,10 +9,8 @@
         "---Helpers---",
             "./methods/server/tx",
             "./methods/client/useDefaultLocale", "./methods/client/useLocale",
-            "./methods/server/getDefaultLocale", "./methods/server/getLocale",
         "---Dictionary---",
-            "./methods/client/useGT", "./methods/server/getGT",
-            "./methods/useElement",
+            "./methods/client/useGT",
         "---Config---",
             "./config/initGT"
     ]
