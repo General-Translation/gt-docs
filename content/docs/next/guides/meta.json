@@ -1,6 +1,6 @@
 {
-    "title": "How-To Guides",
+    "title": "How to guides",
     "pages": [
-        "../tutorials/quickstart", "cli-tool", "locale-management", "rtl", "i18n-routing"
+        "locale-management", "rtl", "i18n-routing"
     ]
 }

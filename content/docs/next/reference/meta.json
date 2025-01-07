@@ -3,9 +3,8 @@
     "pages": [
         "---Key Concepts---",
             "t-reference", "using-variable-components", "using-branching-components",
-            "cli",
         "---Advanced---",
             "i18n-configuration",
-            "!template-dictionaries"
+            "template-dictionaries"
     ]
 }
