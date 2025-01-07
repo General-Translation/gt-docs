@@ -16,17 +16,17 @@ You can easily integrate this tool with your CI/CD pipeline or run it manually i
 </Callout>
 
 
-Run `npx i18n`, to run a script that will scan through your project and send each item for translation. 
+Run `npx translate`, to run a script that will scan through your project and send each item for translation. 
 This script requires your API key and projectID.
 It will automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them:
 ```bash copy
-npx i18n --languages fr es ja
+npx translate --languages fr es ja
 ```
 
 Or, with `projectID` and `apiKey`:
 
 ```bash copy
-npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+npx translate --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
 ```
 
 If the script is successful, you should see the following message in the console:

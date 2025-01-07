@@ -118,14 +118,14 @@ Learn how to include:
 Now that content is loading in your `defaultLocale` (usually English), you can use the CLI tool to create translations.
 
 ```bash copy
-npx i18n --languages fr es ja
+npx translate --languages fr es ja
 ```
 
 This script requires your API key and projectID, but the CLI tool automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them.
 With `projectID` and `apiKey`:
 
 ```bash copy
-npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+npx translate --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
 ```
 
 If the script is successful, you should see the following message in the console:

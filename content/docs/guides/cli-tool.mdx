@@ -41,7 +41,7 @@ If you haven't, please follow the [NextJS Quick Start Guide](/docs/tutorial/quic
         To [pre-translate](/docs/reference/cli#pre-translation) your content, you can run the following command:
 
         ```bash copy
-        npx i18n
+        npx translate
         ```
     </Step>
 </Steps>
@@ -54,7 +54,7 @@ Translations are usually ready within a minute, but could take up to five minute
 You can select which locales you want to pre-translate by specifying them in the command.
 
 ```bash copy
-npx i18n --languages fr es ja
+npx translate --languages fr es ja
 ```
 
 For more information specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
@@ -66,7 +66,7 @@ You can also specify your credentials directly in the command.
 Typically, this can be read directly from your environment.
 
 ```bash copy
-npx i18n --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+npx translate --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
 ```
 If the script is successful, you should see the following message in the console:
 
