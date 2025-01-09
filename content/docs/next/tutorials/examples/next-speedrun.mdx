@@ -6,8 +6,8 @@ description: Let's speedrun creating a new app and internationalizing it with GT
 ## Overview
 
 In this guide, we'll go over two things:
- - creating a new Next.js app
- - internationalizing it with General Translation
+ - Creating a new Next.js app
+ - Internationalizing it with General Translation
 
 In total, this should take less than 10 minutes.
 
@@ -82,7 +82,7 @@ export default function RootLayout({
 ## Step 5: Translate your app
 
 Okay, this is the step you have been waiting for.
-Wrap your content in the `<T>` component and give it an `id` prop.
+Wrap your content in the `<T>` component and give it a unique `id` prop.
 
 ```javascript title="src/app/page.tsx" copy
 
@@ -116,6 +116,7 @@ npm run dev
 ```
 
 Open up your app in your preferred browser (usually at [http://localhost:3000](http://localhost:3000)).
+If you have set up everything correctly, you should see your app in the language you set in your browser.
 
 ---
 
@@ -148,6 +149,6 @@ Open up your app in your preferred browser (usually at [http://localhost:3000](h
  * If translation is not working when you change your language, check your browser's cookies.
 
 ## Next steps
- * Star our [GitHub repo](https://github.com/General-Translation/gt-next)
- * Check out our really cool landing page at [generaltranslation.com](https://www.generaltranslation.com/)
- * Try a more [advanced example](/docs/tutorials/examples/currency-converter/setup)
+ * Star our GitHub repo [gt-next](https://github.com/General-Translation/gt-next).
+ * Check out our really cool landing page at [generaltranslation.com](https://www.generaltranslation.com/).
+ * Try a more [advanced example](/docs/tutorials/examples/currency-converter/setup).
