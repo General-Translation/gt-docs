@@ -39,12 +39,6 @@ export default async function Page({
       <DocsBody>
         <MDX components={{ ...defaultMdxComponents, Tab, Tabs, Step, Steps, Accordion, Accordions, TypeTable }} />
       </DocsBody>
-      <Banner variant='normal'>
-        <span style={{ fontWeight: 'normal' }}>
-        🚧 These docs are still under construction. 🚧 <br />
-        Please email <Link href="mailto:archie@generaltranslation.com" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">archie@generaltranslation.com</Link> or <Link href="https://github.com/General-Translation/gt-docs/issues/new" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">report an issue on our GitHub</Link> if you have any questions.
-        </span>
-      </Banner>
     </DocsPage>
   );
 }
