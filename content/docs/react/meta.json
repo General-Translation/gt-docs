@@ -1,0 +1,12 @@
+{
+  "title": "React",
+  "pages": [
+    "./tutorials/quickstart",
+    "t",
+    "tutorials",
+    "guides",
+    "reference",
+    "api",
+    "!discussion"
+  ]
+}

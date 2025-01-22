@@ -1,4 +1,4 @@
 {
-    "title": "Next.js",
-    "pages": ["./tutorials/quickstart", "t", "tutorials", "guides", "reference", "api", "!discussion"]
+  "title": "Next.js",
+  "pages": ["t", "tutorials", "guides", "reference", "api", "!discussion"]
 }

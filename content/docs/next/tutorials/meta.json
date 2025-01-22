@@ -1,4 +1,4 @@
 {
-    "title": "Tutorials",
-    "pages": ["quickstart", "examples", "!dictionary"]
+  "title": "Tutorials",
+  "pages": ["examples", "!dictionary"]
 }
