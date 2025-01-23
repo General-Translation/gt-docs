@@ -9,25 +9,25 @@ This is a reference doc on the General Translation CLI tool.
 For a step by step guide, check out the [CLI Tool guide](/docs/guides/cli-tool).
 
 
-## What is Pre-Translation? [#pre-translation]
+## What is eager translation? [#pre-translation]
 
-Pre-translation is a process where you send your content to be translated before the user requests it.
+Eager translation is the process of translating content in advance.
 This way, when the user requests a page, the translated content is already available in the CDN and can be served immediately.
 
-Of course, it is not always the best practice to pre-translate every single language.
-You should consider the languages that are most commonly used by your audience and pre-translate those.
-The rest can be translated on demand.
+Of course, it is not always the best practice to translate every single language in advance.
+You should consider the languages that are most commonly used by your audience and translate those.
+The rest can be translated at runtime as necessary.
 
 The CLI tool is a script that will scan your entire app for content to be translated.
 It will then send this content to the General Translation API.
-Following translation, the translated content will be distributed to the CDN which will be ready for users to request when needed.
+Then the newly translated content will be distributed to the CDN which will be ready for users to request when needed.
 
-## When Should You Pre-translate?
+## When translate in advance?
 
 <Callout type="warn">
     **For Production Only!**
 
-    Because this CLI tool publishes translated content to the CDN, it is meant to only be used for production builds, and should not be used in development.
+    Because this CLI tool publishes translated content to the CDN, it is meant to only be used for production builds and **should not be used in development**.
     Before running this command, please make sure you are on the branch that will be used for production.
     Remember to also use your production API key and Project ID.
 </Callout>
@@ -39,7 +39,7 @@ You can easily integrate the CLI tool with your CI/CD pipeline or run it manuall
 It is as simple as running:
 
 ```bash copy
-npx translate
+npx translate --locales en fr es
 ```
 
 This will scan through your project and generate translations for the default languages.

@@ -13,6 +13,7 @@
     "---Reference---",
     "reference/cli",
     "reference/supported-locales",
+    "reference/locale-strings",
     "faqs"
   ]
 }
