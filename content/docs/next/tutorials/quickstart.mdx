@@ -1,9 +1,9 @@
 ---
 title: Next.js Quickstart
-description: For the Next.js 13+ App Router
+description: Internationalize your Next.js App with General Translation
 ---
 
-## Overview
+# Overview
 
 This guide describes how to internationalize an existing [Next.js](https://nextjs.org) project that uses the [App Router](https://nextjs.org/docs#app-router-vs-pages-router) with `gt-next`.
 We will cover four simple steps:
@@ -37,8 +37,16 @@ We will cover four simple steps:
 To install [gt-next](https://www.npmjs.com/package/gt-next), navigate to your Next.js project's root directory and run:
 
 <Tabs items={["npm", "yarn"]}>
-  <Tab value="npm">```npm i gt-next``` </Tab>
-  <Tab value="yarn">```yarn add gt-next```</Tab>
+  <Tab value="npm">
+  ```bash 
+  npm i gt-next
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gt-next
+  ```
+  </Tab>
 </Tabs>
 
 ### 2. Translate with the `<T>` Component
@@ -187,8 +195,16 @@ Congratulations! 🥳 Your app is now multilingual! Let's see it in action.
   <Step>
     Start your Next.js app in development mode.
     <Tabs items={["npm", "yarn"]}>
-      <Tab value="npm">```npm run dev ```</Tab>
-      <Tab value="yarn">```yarn run dev ```</Tab>
+      <Tab value="npm">
+      ```bash
+      npm run dev 
+      ```
+      </Tab>
+      <Tab value="yarn">
+      ```bash 
+      yarn run dev 
+      ```
+      </Tab>
     </Tabs>
   </Step>
   <Step>
@@ -235,21 +251,29 @@ Congratulations! 🥳 Your app is now multilingual! Let's see it in action.
 
 ---
 
-## Before Shipping to Production...
+## Shipping to Production
 
-### Perform Translation Ahead of Time [#cli-tool]
+### CLI Tool [#cli-tool]
 
-In production, we **strongly** recommend translating your application ahead of time, rather than translating everything on demand.
-This has major performance benefits for your application, and can easily be integrated into your CI/CD pipeline.
+In order to ship your app to production, you will need to run our CLI tool to parse your codebase and validate your content.
+
+<Callout type="info">
+    **Security**
+
+    Due to the nature of client-sided rendering in React and Next.js client components,
+    we must pre-authorize your content before it can be translated.
+    This means that you must run the CLI tool before deploying to your production environment.
+
+</Callout>
 
 Just run the following command in your project's root directory.
-Make sure to add your production API key and project ID to your environment variables before you run this command.
+Make sure to add your **production** API key and project ID to your environment variables before you run this command.
 
 ```bash copy
 npx translate
 ```
 
-For more information, see the [CLI tool documentation](/docs/reference/cli).
+For more information, see the [CLI tool documentation](/docs/usage/cli-tool#usage).
 
 <Callout type="warn">
     **For Production Only!**
@@ -263,7 +287,8 @@ For more information, see the [CLI tool documentation](/docs/reference/cli).
 
 ## Next steps
 
-- Learn more about the [`<T>`](/docs/next/api/components/t) component, or dictionaries with [`useElement()`](/docs/next/reference/template-dictionaries/template-dictionaries)
+- See our [Next.js API reference](/docs/next/api/components/t) for detailed information about the `<T>` component and other available components.
+- Learn about how to use dictionaries with [`useGT()`](/docs/next/reference/template-dictionaries/template-dictionaries)
 - Learn to improve SEO with [i18n routing](/docs/next/guides/i18n-routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`)
 - Mirror your app to support [right-to-left languages](/docs/next/guides/rtl) such as Arabic and Hebrew.
 - Create a list of approved languages for your app with the [Next.js plugin](/docs/next/guides/locale-management#include-locales).

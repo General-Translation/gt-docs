@@ -1,17 +1,19 @@
 ---
-title: CLI Tool
-description: How to pre-load translations with the GT CLI tool
+title: Deploying
+description: How to deploy your project to production with General Translation
 ---
 
-## Overview
+# Overview
 
-This is a guide on how to use the General Translation CLI tool to [pre-translate](/docs/reference/cli#pre-translation) for your site.
-This CLI tool scans through your project and looks for content to translate.
-It then sends this content to the General Translation API to be translated which gets distributed to the CDN once translation has been completed.
+This is a guide on how to use the [General Translation CLI tool](/docs/reference/cli) to deploy your site to production.
+This CLI tool scans through your project and looks for content to translate. It handles both the dictionary and the `<T>` component formats.
+
+
+
 Read more about the CLI tool [here](/docs/reference/cli).
 
 This guide assumes that you have already integrated `gt-next` or `gt-react` into your project.
-If you haven't, please follow the [NextJS Quick Start Guide](/docs/tutorial/quick-start) or the [React Quick Start Guide](/docs/react/tutorial/quick-start) before proceeding.
+If you haven't, please follow the [NextJS Quick Start Guide](/docs/next/tutorials/quickstart) or the [React Quick Start Guide](/docs/react/tutorials/quickstart) before proceeding.
 
 <Callout type="error">
     **For production only!**
@@ -38,26 +40,44 @@ If you haven't, please follow the [NextJS Quick Start Guide](/docs/tutorial/quic
         ```
     </Step>
     <Step>
-        To [pre-translate](/docs/reference/cli#pre-translation) your content, you can run the following command:
+        Next, run the following command:
 
         ```bash copy
         npx translate
         ```
+
+        By default, running the command above will enable on-demand translation for all supported locales.
     </Step>
 </Steps>
 
-Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
 
+Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready you
+should be able to access them via the cache in both your local and production projects.
 
-### Specifying locales
+### Pre-Translation
+
+By default, your project will be translated on-demand depending on the locales of the users who visit your site. Since these
+on-demand translations may take a few seconds to complete, you can pre-translate your project to serve cached translations to your users.
 
 You can select which locales you want to pre-translate by specifying them in the command.
 
 ```bash copy
-npx translate --languages fr es ja
+npx translate --locales fr es ja
 ```
 
 For more information specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
+
+### Dry run
+
+To test a dry run of the CLI tool, you can use the `--dry-run` flag. Running the CLI tool with this flag allows
+you to validate proper usage of the `<T>` components or dictionary formats in your codebase, without actually sending data to our servers.
+
+```bash copy
+npx translate --dry-run
+```
+
+For more information specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
+
 
 
 ### Specifying credentials
@@ -66,12 +86,13 @@ You can also specify your credentials directly in the command.
 Typically, this can be read directly from your environment.
 
 ```bash copy
-npx translate --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+npx translate --api-key YOUR_API_KEY --project-id YOUR_PROJECT_ID --locales fr es ja
 ```
 If the script is successful, you should see the following message in the console:
 
-```txt
-Project "YOUR_PROJECT_ID" updated: true. Languages: ["French", "Japanese", "Spanish"]. Translations are usually live within a minute. Check status: www.generaltranslation.com/dashboard.
+```shell
+✓ Success! {number} tokens received and ready for translation at runtime.
+To translate your app in advance, rerun with the --locales flag. For example: `npx translate --locales fr`
 ```
 
 
