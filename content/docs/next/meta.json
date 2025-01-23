@@ -1,4 +1,4 @@
 {
   "title": "Next.js",
-  "pages": ["t", "tutorials", "guides", "reference", "api", "!discussion"]
+  "pages": ["tutorials", "guides", "reference", "api", "!discussion"]
 }
