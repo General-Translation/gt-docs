@@ -5,9 +5,9 @@ description: Using the <T> tag to translate your components
 
 ## Overview
 
-This is doc will go over inline translation components, like `<T>`.
+This doc will go over inline translation components, like `<T>`.
 We will look at some examples and explain common design practices.
-If you want to try out the `<T>` component in your Next.js app, check out our [Quickstart Guide](/docs/next/quickstart).
+If you want to try out the `<T>` component in your Next.js app, check out our [Quickstart Guide](/docs/next/tutorials/quickstart).
 
 ## The `<T>` Component
 
@@ -17,40 +17,21 @@ All you have to do is wrap your content in a `<T>` tag, and it will all be trans
 Let's translate this component:
 
 ```jsx title="src/components/MyComponent.js" copy
-import { T } from 'gt-next'
+import { T } from 'gt-next'; // [!code highlight]
 
 export default function MyComponent() {
-    return (
-        <T id="my_id"> // [!code highlight]
-            <h1> List of Shakespeare Plays: </h1>
-            <ul>
-                <li> Hamlet </li>
-                <li> A Midsummer Night's Dream </li>
-                {/* ... */}
-                <li> Macbeth </li>
-            </ul>
-            The End!
-        </T> // [!code highlight]
-    )
-}
-```
-
-```jsx title="src/components/MyComponent.js" copy
-import { T } from 'gt-next'
-
-export default function MyComponent() {
-    return (
-        <T id="my_id"> // [!code highlight]
-            <h1> List of Shakespeare Plays: </h1>
-            <ul>
-                <li> Hamlet </li>
-                <li> A Midsummer Night's Dream </li>
-                {/* ... */}
-                <li> Macbeth </li>
-            </ul>
-            The End!
-        </T> // [!code highlight]
-    )
+  return (
+    <T id='my_id'> // [!code highlight]
+      <h1> List of Shakespeare Plays: </h1>
+      <ul>
+        <li> Hamlet </li>
+        <li> A Midsummer Night's Dream </li>
+        {/* ... */}
+        <li> Macbeth </li>
+      </ul>
+      The End!
+    </T> // [!code highlight]
+  );
 }
 ```
 
@@ -58,17 +39,14 @@ export default function MyComponent() {
     Remember: if being used in a client component, `<T>` must be able to access the context from a [`<GTProvider>`](/docs/next/api/components/gt-provider).
 </Callout>
 
-
-
-
-
 [`<T>`](/docs/next/api/components/t) is the translation tag in `gt-next`.
 Children of `<T>` will be translated into your [configured](/docs/next/reference/i18n-configuration) languages.
 
-
 ### Props
-It requires two props:
-- `id`, which is a unique string representing the content 
+
+There are two required props:
+
+- `id`, which is a unique string representing the content
 - `children`, which is the content to translate
 
 For example, the following code would translate the content `"Hello, world"` with the id `"greeting"`.
@@ -77,11 +55,11 @@ For example, the following code would translate the content `"Hello, world"` wit
 import { T } from 'gt-next'
 
 export default function Page() {
-    return (
-        <T id="greeting">
-            Hello, world
-        <T>
-    )
+  return (
+    <T id="greeting">
+      Hello, world
+    </T>
+  )
 }
 ```
 
@@ -96,14 +74,14 @@ import { T } from 'gt-next'
 import CustomButton from './CustomButton'
 
 export default function Page() {
-    return (
-        <T id="jsx">
-            <div>
-                <p>Hello, world!</p>
-                <CustomButton>This is a complex button!</CustomButton>
-            </div>
-        <T>
-    )
+  return (
+    <T id="jsx">
+      <div>
+        <p>Hello, world!</p>
+        <CustomButton>This is a complex button!</CustomButton>
+      </div>
+    <T>
+  )
 }
 ```
 
@@ -117,18 +95,18 @@ You can add additional context to your translations to refine their output.
 Context helps resolve ambiguities in content, ensuring accurate translations.
 
 ```javascript copy
-import { T } from 'gt-next'
+import { T } from 'gt-next';
 
 export default function ContextExample() {
-    return (
-        <T id="greeting" context="formal">
-            Hello, world
-        </T>
-    )
+  return (
+    <T id='greeting' context='formal'>
+      Hello, world
+    </T>
+  );
 }
 ```
-In this example, the context prop specifies that the greeting should be translated formally.
 
+In this example, the context prop specifies that the greeting should be translated formally.
 
 ### On-Demand translation
 
@@ -151,42 +129,52 @@ Dynamic variables can be injected into translations using components like [`<Var
 These placeholders allow you to pass values such as user names or dates into the translation dynamically.
 
 ```javascript copy
-import { T, Var } from 'gt-next'
+import { T, Var } from 'gt-next';
 
 export default function DynamicGreeting({ user }) {
-    return (
-        <T id="greeting">
-            Hello, <Var name="name" value={user.name} />!
-        </T>
-    )
+  return (
+    <T id='greeting'>
+      Hello, <Var name='name' value={user.name} />!
+    </T>
+  );
 }
 ```
 
 ## Plurals
+
 The `<T>` component supports pluralization with the `<Plural>` component, allowing dynamic rendering of singular or plural forms based on a count.
 
 ```javascript copy
-import { T, Num, Plural } from 'gt-next'
+import { T, Num, Plural } from 'gt-next';
 
 export default function ItemCount({ count }) {
-    return (
-        <T id="item_count">
-            <Plural
-                n={count}
-                one={<>You have <Num>{count}</Num> item.</>}
-                other={<>You have <Num>{count}</Num> items.</>}
-            />
-        </T>
-    )
+  return (
+    <T id='item_count'>
+      <Plural
+        n={count}
+        one={
+          <>
+            You have <Num>{count}</Num> item.
+          </>
+        }
+        other={
+          <>
+            You have <Num>{count}</Num> items.
+          </>
+        }
+      />
+    </T>
+  );
 }
 ```
 
-
 ## Notes
- * Ensure every `<T>` component has a unique id for accurate translations.
- * Wrap your app with a `<GTProvider>` to enable translations in client components.
- * Combine `<T>` with [Variable Components](/docs/next/reference/using-variable-components) and [Branching Components](/docs/next/reference/using-branching-components) for more complex translation scenarios.
+
+- Ensure every `<T>` component has a unique id for accurate translations.
+- Wrap your app with a `<GTProvider>` to enable translations in client components.
+- Combine `<T>` with [Variable Components](/docs/next/reference/using-variable-components) and [Branching Components](/docs/next/reference/using-branching-components) for more complex translation scenarios.
 
 ## Next Steps
- * Learn about setting up translations alternate design patterns such as [Template Dictionaries](/docs/next/reference/template-dictionaries/template-dictionaries).
- * Explore other localization techniques like [i18n Configuration](/docs/next/reference/i18n-configuration) and [i18n Routing](/docs/next/guides/i18n-routing).
+
+- Learn about setting up translations alternate design patterns such as [Template Dictionaries](/docs/next/reference/template-dictionaries/template-dictionaries).
+- Explore other localization techniques like [i18n Configuration](/docs/next/reference/i18n-configuration) and [i18n Routing](/docs/next/guides/i18n-routing).

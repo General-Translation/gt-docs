@@ -26,11 +26,11 @@ For example, the following code would translate the content `"Hello, world"` wit
 import { T } from 'gt-next'
 
 export default function Page() {
-    return (
-        <T id="greeting">
-            Hello, world
-        <T>
-    )
+  return (
+    <T id="greeting">
+      Hello, world
+    </T>
+  )
 }
 ```
 
@@ -45,14 +45,14 @@ import { T } from 'gt-next'
 import CustomButton from './CustomButton'
 
 export default function Page() {
-    return (
-        <T id="jsx">
-            <div>
-                <p>Hello, world!</p>
-                <CustomButton>This is a complex button!</CustomButton>
-            </div>
-        <T>
-    )
+  return (
+    <T id="jsx">
+      <div>
+        <p>Hello, world!</p>
+        <CustomButton>This is a complex button!</CustomButton>
+      </div>
+    </T>
+  )
 }
 ```
 
@@ -78,11 +78,11 @@ Context helps resolve ambiguities in content, ensuring accurate translations.
 import { T } from 'gt-next'
 
 export default function ContextExample() {
-    return (
-        <T id="greeting" context="formal">
-            Hello, world
-        </T>
-    )
+  return (
+    <T id="greeting" context="formal">
+      Hello, world
+    </T>
+  )
 }
 ```
 In this example, the context prop specifies that the greeting should be translated formally.
@@ -96,11 +96,11 @@ These placeholders allow you to pass values such as user names or dates into the
 import { T, Var } from 'gt-next'
 
 export default function DynamicGreeting({ user }) {
-    return (
-        <T id="greeting">
-            Hello, <Var name="name" value={user.name} />!
-        </T>
-    )
+  return (
+    <T id="greeting">
+      Hello, <Var name="name" value={user.name} />!
+    </T>
+  )
 }
 ```
 
@@ -111,15 +111,15 @@ The `<T>` component supports pluralization with the `<Plural>` component, allowi
 import { T, Num, Plural } from 'gt-next'
 
 export default function ItemCount({ count }) {
-    return (
-        <T id="item_count">
-            <Plural
-                n={count}
-                one={<>You have <Num>{count}</Num> item.</>}
-                other={<>You have <Num>{count}</Num> items.</>}
-            />
-        </T>
-    )
+  return (
+    <T id="item_count">
+      <Plural
+        n={count}
+        one={<>You have <Num>{count}</Num> item.</>}
+        other={<>You have <Num>{count}</Num> items.</>}
+      />
+    </T>
+  )
 }
 ```
 

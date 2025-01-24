@@ -41,20 +41,20 @@ In this example, we can see how to add variables to a Template Dictionary using 
 import { Var, Num, Currency, DateTime } from 'gt-next';
 
 const dictionary = {
-    greetings: {
-        // Includes a variable for the user's name
-        hello: <>Hello, <Var name="username" />!</>,
-        // You can also provide a fallback value
-        hello2: <>Hello, <Var name="username">Alice</Var>!</>,
-    },
-    cart: {
-        // Includes a dynamic number
-        totalItems: <>You have <Num name="totalItems" /> items in your cart.</>,
-        // Formats currency dynamically
-        totalPrice: <>Your total is <Currency currency="USD" name="totalPrice" />.</>,
-        // Formats date dynamically
-        orderDate: <>Your order was placed on <DateTime name="orderDate" />.</>,
-    },
+  greetings: {
+    // Includes a variable for the user's name
+    hello: <>Hello, <Var name="username" />!</>,
+    // You can also provide a fallback value
+    hello2: <>Hello, <Var name="username">Alice</Var>!</>,
+  },
+  cart: {
+    // Includes a dynamic number
+    totalItems: <>You have <Num name="totalItems" /> items in your cart.</>,
+    // Formats currency dynamically
+    totalPrice: <>Your total is <Currency currency="USD" name="totalPrice" />.</>,
+    // Formats date dynamically
+    orderDate: <>Your order was placed on <DateTime name="orderDate" />.</>,
+  },
 };
 export default dictionary;
 ```
@@ -70,13 +70,13 @@ This is done through the options parameter in methods like [`useGT()`](/docs/nex
 import { useGT } from 'gt-next/client';
 
 export default function UserGreeting({ user }) {
-    const t = useGT();
+  const t = useGT();
 
-    return (
-        <div>
-            {t('greetings.hello', { username: user.name })} {/* Inserts the user's name */}
-        </div>
-    );
+  return (
+    <div>
+        {t('greetings.hello', { username: user.name })} {/* Inserts the user's name */}
+    </div>
+  );
 }
 ```
 
@@ -86,12 +86,12 @@ export default function UserGreeting({ user }) {
 import { getGT } from 'gt-next/server';
 
 export default async function handler(req, res) {
-    const t = await getGT();
-    const user = { name: 'Bob' }; // Example user data
+  const t = await getGT();
+  const user = { name: 'Bob' }; // Example user data
 
-    res.send(
-        t('greetings.hello', { username: user.name }) // Inserts the user's name
-    );
+  res.send(
+    t('greetings.hello', { username: user.name }) // Inserts the user's name
+  );
 }
 ```
 

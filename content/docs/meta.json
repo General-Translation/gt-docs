@@ -1,3 +1,20 @@
 {
-    "pages": ["index", "next", "!oldnext", "!new-react", "oldreact", "generaltranslation", "guides", "reference", "!keyConcepts", "supported-locales", "faqs"]
+  "pages": [
+    "---Quickstart---",
+    "index",
+    "next/tutorials/quickstart",
+    "react/tutorials/quickstart",
+    "---Usage---",
+    "usage/t",
+    "usage/dictionary",
+    "usage/cli-tool",
+    "---Libraries---",
+    "next",
+    "react",
+    "---Reference---",
+    "reference/cli",
+    "reference/supported-locales",
+    "reference/locale-strings",
+    "faqs"
+  ]
 }

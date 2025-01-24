@@ -1,0 +1,42 @@
+---
+title: <T>
+description: How to use the <T> component
+---
+
+# Overview
+
+The `<T>` component is the primary way to translate content in General Translation. It can be used alongside dictionaries, or standalone.
+
+The `<T>` component can be used to translate text, HTML, and React components in-line.
+
+
+### Our Advice
+
+We recommend using the `<T>` component because of its simplicity especially if you are new to internationalization (i18n).
+We offer dictionaries for those who prefer this design pattern from past experiences or ease of integration with existing code bases.
+
+We go into the reasons and justifications for this recommendation in [this article](/docs/next/discussions/inline-vs-dictionary).
+
+Here is an example of how to use the `<T>` component:
+
+```jsx title="src/components/MyComponent.js" copy
+export default function MyComponent() {
+  return (
+    <T id="my_id"> // [!code highlight]
+      <h1> List of Shakespeare Plays: </h1>
+      <ul>
+        <li> Hamlet </li>
+        <li> A Midsummer Night's Dream </li>
+        {/* ... */}
+        <li> Macbeth </li>
+      </ul>
+      The End!
+    </T> // [!code highlight]
+  );
+}
+```
+
+To learn more, see the specific reference for the corresponding framework:
+
+- [Next.js](/docs/next/reference/t-reference)
+- [React](/docs/react/t)

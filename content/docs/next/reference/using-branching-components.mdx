@@ -49,17 +49,17 @@ You can define multiple possible branches, and the component will render the con
 import { T, Branch } from 'gt-next';
 
 export default function UserStatus({ status }) {
-    return (
-        <T id="UserStatus">
-            <Branch
-                branch={status}
-                active={<p>The user is active.</p>}
-                inactive={<p>The user is inactive.</p>}
-            >
-                <p>Status unknown.</p>
-            </Branch>
-        </T>
-    );
+  return (
+    <T id="UserStatus">
+      <Branch
+        branch={status}
+        active={<p>The user is active.</p>}
+        inactive={<p>The user is inactive.</p>}
+      >
+        <p>Status unknown.</p>
+      </Branch>
+    </T>
+  );
 }
 ```
 ### Pluralization with `<Plural>` [#plural-logic]
@@ -71,15 +71,15 @@ The component dynamically chooses the appropriate plural form for the given numb
 import { T, Plural } from 'gt-next';
 
 export default function ItemCount({ count }) {
-    return (
-        <T id="item_count">
-            <Plural
-                n={count}
-                one="You have 1 item."
-                other={`You have ${count} items.`}
-            />
-        </T>
-    );
+  return (
+    <T id="item_count">
+      <Plural
+        n={count}
+        one="You have 1 item."
+        other={`You have ${count} items.`}
+      />
+    </T>
+  );
 }
 ```
 
@@ -97,16 +97,16 @@ In this example, it displays different descriptions based on the user's subscrip
 import { Branch } from 'gt-next';
 
 export default function SubscriptionDetails({ plan }) {
-    return (
-        <Branch
-            branch={plan}
-            free={<p>You are on the Free plan. Upgrade to unlock more features!</p>}
-            premium={<p>You are enjoying the Premium plan with full access to features.</p>}
-            enterprise={<p>You are on the Enterprise plan. Contact support for tailored solutions.</p>}
-        >
-            <p>No subscription plan detected.</p>
-        </Branch>
-    );
+  return (
+    <Branch
+      branch={plan}
+      free={<p>You are on the Free plan. Upgrade to unlock more features!</p>}
+      premium={<p>You are enjoying the Premium plan with full access to features.</p>}
+      enterprise={<p>You are on the Enterprise plan. Contact support for tailored solutions.</p>}
+    >
+      <p>No subscription plan detected.</p>
+    </Branch>
+  );
 }
 ```
 
@@ -124,15 +124,15 @@ This example displays the number of unread messages in a user's inbox.
 import { T, Plural, Num } from 'gt-next';
 
 export default function UnreadMessages({ unreadCount }) {
-    return (
-        <T id="unread_messages">
-            <Plural
-                n={unreadCount}
-                one={<>You have <Num>{unreadCount}</Num> unread message.</>}
-                other={<>You have <Num>{unreadCount}</Num> unread messages.</>}
-            />
-        </T>
-    );
+  return (
+    <T id="unread_messages">
+      <Plural
+        n={unreadCount}
+        one={<>You have <Num>{unreadCount}</Num> unread message.</>}
+        other={<>You have <Num>{unreadCount}</Num> unread messages.</>}
+      />
+    </T>
+  );
 }
 ```
  * The `n` prop specifies the number of unread messages.
@@ -152,15 +152,15 @@ Always ensure that the possible branch keys match the values passed to the branc
 import { Branch } from 'gt-next';
 
 export default function StatusMessage({ status }) {
-    return (
-        <Branch
-            branch={status}
-            active={<p>The user is active.</p>}
-            inactive={<p>The user is inactive.</p>}
-        >
-            <p>Status unknown.</p>
-        </Branch>
-    );
+  return (
+    <Branch
+      branch={status}
+      active={<p>The user is active.</p>}
+      inactive={<p>The user is inactive.</p>}
+    >
+      <p>Status unknown.</p>
+    </Branch>
+  );
 }
 ```
 If `status` is `undefined` or a value other than `active` or `inactive`, the fallback content `“Status unknown.”` will be displayed.

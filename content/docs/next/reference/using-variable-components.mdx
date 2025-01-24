@@ -55,11 +55,11 @@ This ensures that the surrounding content is translated while the variable conte
 import { T, Var } from 'gt-next';
 
 export default function UserGreeting({ user }) {
-    return (
-        <T id="greeting">
-            Hello, <Var>{user.name}</Var>!
-        </T>
-    );
+  return (
+    <T id="greeting">
+      Hello, <Var>{user.name}</Var>!
+    </T>
+  );
 }
 ```
 
@@ -105,12 +105,12 @@ As with any other component, the `<Var>` component can be used to wrap any arbit
 import { T, Var } from 'gt-next';
 
 export default function UserGreeting({ user }) {
-    return (
-        <T id="greeting">
-            Hello, <Var>{user.name}</Var>!
-            Your address is <Var value={user.addr} />
-        </T>
-    );
+  return (
+    <T id="greeting">
+      Hello, <Var>{user.name}</Var>!
+      Your address is <Var value={user.addr} />
+    </T>
+  );
 }
 ```
 
@@ -123,16 +123,16 @@ import { T, Num } from 'gt-next';
 import { Badge } from '@components/custom/cart/Badge';
 
 export default function OrderSummary({ order }) {
-    return (
-        <>
-            <T id="orderSummary">
-                You have <Num value={order.quantity} /> items in your cart.
-            </T>
-            <Badge>
-                <Num>{order.quantity}</Num>
-            </Badge>
-        </>
-    );
+  return (
+    <>
+      <T id="orderSummary">
+        You have <Num value={order.quantity} /> items in your cart.
+      </T>
+      <Badge>
+        <Num>{order.quantity}</Num>
+      </Badge>
+    </>
+  );
 }
 ```
 
@@ -145,16 +145,16 @@ import { T, Currency } from 'gt-next';
 import { Badge } from '@components/custom/cart/Badge';
 
 export default function OrderSummary({ order }) {
-    return (
-            <>
-            <T id="orderSummary">
-                Your total is <Currency currency={curr}>{order.total}</Currency>.
-            </T>
-            <Badge>
-                <Currency value={order.total} currency={curr} />
-            </Badge>
-        </>
-    );
+  return (
+    <>
+      <T id="orderSummary">
+        Your total is <Currency currency={curr}>{order.total}</Currency>.
+      </T>
+      <Badge>
+        <Currency value={order.total} currency={curr} />
+      </Badge>
+    </>
+  );
 }
 
 ```
@@ -168,12 +168,12 @@ Again, we see how the `<DateTime>` component can be used both as a child of a `<
 import { T, DateTime } from 'gt-next';
 
 export default function OrderSummary({ order }) {
-    return (
-        <T id="orderSummary">
-            Your order was placed on <DateTime value={order.date} />
-        </T>
-        <DateTime>{order.date}</DateTime>
-    );
+  return (
+    <T id="orderSummary">
+      Your order was placed on <DateTime value={order.date} />
+    </T>
+    <DateTime>{order.date}</DateTime>
+  );
 }
 ```
 

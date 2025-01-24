@@ -1,0 +1,132 @@
+---
+title: React Quickstart
+description: For any React app
+---
+
+This guide describes how to add `gt-react` to a [React.js](https://react.dev) project. It assumes that all components are [client-rendered](<https://react.dev/reference/rsc/use-client#noun-labs-1201738-(2)>).
+
+## Create a secret key for the CLI tool
+
+Because `gt-react` is entirely server-rendered, you will be using the [CLI tool](/cli) to translate your dictionaries.
+For this you will need a **API Key** and a **Project ID**.
+
+An API key is a 36-character string beginning `gtx-` which is used to authenticate CLI tool with our cloud translation service. Create one on the [API Keys](https://www.generaltranslation.com/dashboard/redirect/api-keys) page.
+
+Your Project ID is a public identifier for your project. It can also be found on the Dashboard:
+
+![Code copy container entitled "projectID"](/screenshots/project_id.png)
+
+Store these variables safely, and **make sure not to write your API key anywhere where it could be sent to the client**.
+
+## Install the library
+
+To install `gt-react`, navigate to your project's root directory and run:
+
+<Tabs items={["npm", "yarn"]}>
+  <Tab value="npm">```bash copy npm i gt-react ```</Tab>
+  <Tab value="yarn">```bash copy yarn add gt-react ```</Tab>
+</Tabs>
+
+## Add `<GTProvider>`
+
+[`<GTProvider>`](/docs/gt-react/provider#config) is used to configure the behavior of `gt-react`. It should be placed as high up in your app as possible, ideally at the root.
+
+To work out of the box, `<GTProvider>` needs the `projectID` you created earlier, plus a dictionary from which to load content.
+`projectID` is used to access the General Translation global cache, which serves translations around the world at millisecond speeds.
+
+Other useful `<GTProvider>` props include `locales`, which specifies the approved languages for your app, and `defaultLocale`, which specifies the application's default language.
+
+```js copy
+import dictionary from "./dictionary";
+import MyApp from "./MyApp";
+
+export default function App() {
+  // Initialize i18n with a dictionary
+  // The app's default language is US English
+  // Approved languages are US English, French, Spanish, and Japanese
+
+  return (
+    <GTProvider
+      projectID="abc-123"
+      dictionary={dictionary}
+      defaultLocale="en-US"
+      locales={["en-US", "fr", "es", "ja"]}
+    >
+      <MyApp />
+    </GTProvider>
+  );
+}
+```
+
+See a full list of `<GTProvider>` props [here](/docs/gt-react/gt-provider#config).
+
+## Inline translation
+
+To mark JSX for translation, pass it as the children of your `<T>` component.
+Every `<T>` component you need translated should have a unique `id` prop:
+
+```js copy
+import { T } from "gt-react";
+
+export default function Page() {
+  return <T id="my_id">Hello, world</T>;
+}
+```
+
+The text and structure of the tags inside your `<T>` component should be static.
+Attributes like `className` can be dynamic.
+To include dynamic variables inside your `<T>` component, use the `<Var>` component:
+
+```js copy
+import { T, Var } from "gt-react";
+
+export default function Page() {
+  const name = "Alice"; // or "Bob", "Charlie", etc.
+
+  return (
+    <T id="my_other_id">
+      Hello, <Var value={name} />
+    </T>
+  );
+}
+```
+
+The children (and the fallback `value` prop) of a `<Var>` component will never be translated and will remain private.
+
+Learn how to include:
+
+- [Plural forms](/docs/gt-react/plurals) with the `<Plural>` component
+- [Formatted variables](/docs/gt-react/variables) like numbers, currencies, and dates
+- [Context](/docs/gt-react#context) for the AI model to use while translating
+
+## CLI tool
+
+Now that content is loading in your `defaultLocale` (usually English), you can use the CLI tool to create translations.
+
+```bash copy
+npx gt-cli translate --languages fr es ja
+```
+
+This script requires your API key and projectID, but the CLI tool automatically reads your environment variables for `GT_API_KEY` and `GT_PROJECT_ID`, so you usually don't have to include them.
+With `projectID` and `apiKey`:
+
+```bash copy
+npx gt-cli translate --apiKey YOUR_API_KEY --projectID YOUR_PROJECT_ID --languages fr es ja
+```
+
+If the script is successful, you should see the following message in the console:
+
+```txt
+Project "your_project_id" updated in 3 languages. Languages: French, "Japanese, Spanish. Translations are usually live within a minute. Check status: www.generaltranslation.com/dashboard.
+```
+
+Translations are usually ready within a minute, but could take up to five minutes in periods of high demand. When translations are ready should be able to access them via the cache in both your local and production projects.
+
+Learn more about the CLI tool [here](/docs/gt-react/cli).
+
+## Congratulations! Your app is now multilingual! 🥳
+
+## Next steps
+
+- Learn more about the [`<T>`](/docs/gt-react) component, or dictionaries with [`useGT()`](/docs/gt-react/dictionaries)
+- [Set up](/advanced/rtl) your app so that the UI is mirrored for languages like Arabic and Hebrew, which are written right-to-left.
