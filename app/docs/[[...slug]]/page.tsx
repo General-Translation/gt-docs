@@ -12,8 +12,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
-import { Banner } from 'fumadocs-ui/components/banner';
-import Link from 'next/link'
+import { Card, Cards } from 'fumadocs-ui/components/card';
 
 
 export default async function Page({
@@ -37,7 +36,7 @@ export default async function Page({
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
-        <MDX components={{ ...defaultMdxComponents, Tab, Tabs, Step, Steps, Accordion, Accordions, TypeTable }} />
+        <MDX components={{ ...defaultMdxComponents, Tab, Tabs, Step, Steps, Accordion, Accordions, TypeTable, Card, Cards }} />
       </DocsBody>
     </DocsPage>
   );
