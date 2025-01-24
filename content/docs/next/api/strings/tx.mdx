@@ -20,10 +20,10 @@ This function is designed exclusively for server-side scenarios and non-componen
 ### When to Use
 
 - Use `tx()` for translating plain strings in server-side logic, such as API routes, middleware, or server components.
-- For JSX or client-side translations, consider using [`useElement()`](/docs/next/api/methods/use-element) or [`getGT()`](/docs/next/api/methods/server/getGT).
+- For JSX or client-side translations, consider using [`useElement()`](/docs/next/api/methods/use-element) or [`getGT()`](/docs/next/api/dictionary/getGT).
 
 <Callout>
-    The `tx()` function is server-side only and cannot be used in client-side components. For client-side translations, see [`useGT()`](/docs/next/api/methods/client/useGT).
+    The `tx()` function is server-side only and cannot be used in client-side components. For client-side translations, see [`useGT()`](/docs/next/api/dictionary/useGT).
 </Callout>
 
 ## Reference
@@ -132,5 +132,5 @@ export default async function translateWithVariables() {
 
 ## Next Steps
  * Learn more about using variables in translations with [Variable Components](/docs/next/reference/using-variable-components).
- * For JSX translations, see [`useElement()`](/docs/next/api/methods/useElement), [`useGT()`](/docs/next/api/methods/client/useGT) or [`getGT()`](/docs/next/api/methods/server/getGT).
+ * For JSX translations, see [`useElement()`](/docs/next/api/dictionary/useElement), [`useGT()`](/docs/next/api/dictionary/useGT) or [`getGT()`](/docs/next/api/dictionary/getGT).
  * Explore locale management with [i18n Configuration](/docs/next/references/i18n-configuration).

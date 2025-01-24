@@ -11,7 +11,7 @@ This method is essential for server-side locale management, such as determining 
 The returned locale is [formatted as a string](/docs/reference/locale-strings), e.g., `'en-US'`.
 
 <Callout>
-    `getLocale()` is a server-side method and cannot be used in client components. For client-side locale management, see [`useLocale()`](/docs/next/api/methods/client/useLocale).
+    `getLocale()` is a server-side method and cannot be used in client components. For client-side locale management, see [`useLocale()`](/docs/next/api//helpers/useLocale).
 </Callout>
 
 ### When to Use
@@ -44,9 +44,9 @@ export default async function getUserLocale() {
 
 ## Notes
  * The `getLocale()` function is asynchronous and must be awaited to retrieve the locale.
- * It is specifically designed for server-side use. See [`useLocale()`](/docs/next/api/methods/client/useLocale) for client-side components.
+ * It is specifically designed for server-side use. See [`useLocale()`](/docs/next/api//helpers/useLocale) for client-side components.
  * The returned locale adheres to the [Locale Strings](/docs/reference/locale-strings) format.
 
 ## Next Steps
  * Learn how to configure supported locales with [i18n Configuration](/docs/next/reference/i18n-configuration).
- * For managing fallback locales, see [`getDefaultLocale()`](/docs/next/api/methods/server/getDefaultLocale).
+ * For managing fallback locales, see [`getDefaultLocale()`](/docs/next/api/helpers/getDefaultLocale).
