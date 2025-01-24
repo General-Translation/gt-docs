@@ -25,7 +25,7 @@ See [here](/docs/next/discussion/useElement) for a discussion on this design cho
 - Use it in scenarios where translations include dynamic content, such as nested components or formatting.
 
 <Callout>
-For translating strings, consider using [`tx()`](/docs/next/api/methods/tx), [`useGT()`](/docs/next/api/methods/client/useGT), or [`getGT()`](/docs/next/api/methods/server/getGT) instead.
+For translating strings, consider using [`tx()`](/docs/next/api/methods/tx), [`useGT()`](/docs/next/api/dictionary/useGT), or [`getGT()`](/docs/next/api/dictionary/getGT) instead.
 </Callout>
 
 ## Reference
@@ -151,7 +151,7 @@ Provide an optional `id` parameter to prepend a prefix to all keys.
 ## Notes
  * It only translates JSX content. No strings.
  * `useElement()` is "platform agnostic", meaning it can be used in both client-side and server-side components. Read more about it [here](/docs/next/discussion/useElement).
- * For string-based translations, consider using [`tx()`](/docs/next/api/methods/tx), [`useGT()`](/docs/next/api/methods/client/useGT), [`getGT()`](/docs/next/api/methods/server/getGT).
+ * For string-based translations, consider using [`tx()`](/docs/next/api/methods/tx), [`useGT()`](/docs/next/api/dictionary/useGT), [`getGT()`](/docs/next/api/dictionary/getGT).
 
 ## Next Steps
  * See more examples and design patterns in the [Template Dictionary Design Pattern](/docs/next/reference/template-dictionaries/template-dictionaries).

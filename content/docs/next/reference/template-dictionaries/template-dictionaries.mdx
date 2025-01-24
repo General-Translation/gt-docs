@@ -110,8 +110,8 @@ export default dictionary;
 ### Step 2: Access the Translation Dictionary
 
 There are a few ways to access the translations in the Translation Dictionary, depending on the context where you are trying to access the translations.
-For example, if you are in a client-side component, use the [`useGT()`](/docs/next/api/methods/client/useGT)
-hook and for server-side components use [`await getGT()`](/docs/next/api/methods/server/getGT) method.
+For example, if you are in a client-side component, use the [`useGT()`](/docs/next/api/dictionary/useGT)
+hook and for server-side components use [`await getGT()`](/docs/next/api/dictionary/getGT) method.
 
 Here is an example of how to access the translations in a client-side component:
 
@@ -151,8 +151,8 @@ export default async function MyComponent() {
 
 ### `useElement()`
 
-The [`useElement()`](/docs/next/api/methods/useElement) allows you to access the translations in a React element.
-It works on both client and server side components, so it offers an alternative to [`useGT()`](/docs/next/api/methods/client/useGT) and [`getGT()`](/docs/next/api/methods/server/getGT).
+The [`useElement()`](/docs/next/api/dictionary/useElement) allows you to access the translations in a React element.
+It works on both client and server side components, so it offers an alternative to [`useGT()`](/docs/next/api/dictionary/useGT) and [`getGT()`](/docs/next/api/dictionary/getGT).
 
 As its name suggests, *it only works in React elements*.
 String translation with this method is not supported.
