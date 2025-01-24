@@ -6,8 +6,30 @@ description: The General Translations CLI tool
 ## Overview
 
 This is a reference doc on the General Translation CLI tool.
-For a step by step guide, check out the [CLI Tool guide](/docs/guides/cli-tool).
+For a step by step guide, check out the [Deploying to Production](/docs/usage/cli-tool) guide.
 
+### Installation
+
+<Tabs items={["npm", "yarn"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gt-react-cli
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gt-react-cli
+  ```
+  </Tab>
+</Tabs>
+
+## What does the CLI tool do?
+
+The CLI tool is a script that will scan your entire app for content to be translated.
+During this scan, it will parse and validate any `<T>` components or dictionaries that are used in your codebase.
+
+After parsing and validating content, the CLI tool will save the corresponding hashes and content on our servers.
+If eager translation is specified, the GT API will pre-translate the content in the specified locales and cache it on our CDN.
 
 ## What is eager translation? [#pre-translation]
 
@@ -18,11 +40,24 @@ Of course, it is not always the best practice to translate every single language
 You should consider the languages that are most commonly used by your audience and translate those.
 The rest can be translated at runtime as necessary.
 
-The CLI tool is a script that will scan your entire app for content to be translated.
-It will then send this content to the General Translation API.
-Then the newly translated content will be distributed to the CDN which will be ready for users to request when needed.
 
-## When translate in advance?
+## Is this required?
+
+Yes, you must run the CLI tool as part of your CI/CD pipeline in order to ensure that your content is able to be translated in production.
+
+Due to the nature of React (and Next.js client components) being rendered on the client side, API Keys and similar credentials
+cannot be passed to the client. The CLI tool is necessary to prevent abuse from malicious actors. 
+
+Running the CLI tool allows GT to pre-authorize your content for translation via hashing, eliminating security vulnerabilities.
+
+
+## Reference
+
+To use the CLI tool, run the following command from the root of your project:
+
+```bash title="shell" copy
+npx gt-cli translate
+```
 
 <Callout type="warn">
     **For Production Only!**
@@ -32,16 +67,66 @@ Then the newly translated content will be distributed to the CDN which will be r
     Remember to also use your production API key and Project ID.
 </Callout>
 
-You can easily integrate the CLI tool with your CI/CD pipeline or run it manually in your terminal.
+### Flags
 
-## How to Pre-translate
 
-It is as simple as running:
+<TypeTable
+  type={{
+    "--api-key": {
+        description:
+            'Production API key',
+        type: 'string',
+        optional: true,
+    },
+    "--project-id": {
+        description:
+            'The project ID',
+        type: 'string',
+        optional: true,
+    },
+    "--options": {
+        description:
+            'Path to the GT options file',
+        type: 'string',
+        optional: true,
+        default: 'gt.config.json',
+    },
+    "--locales": {
+        description:
+            'Locales to pre-translate',
+        type: 'string',
+        optional: true,
+    },
+    "--dictionary": {
+        description:
+            'Path to the dictionary file',
+        type: 'string',
+        optional: true,
+    },
+    "--dry-run": {
+        description:
+            'Dry run the command',
+        type: 'boolean',
+        optional: true,
+        default: 'false',
+    },
+    "--ignore-errors": {
+        description:
+            'Ignore errors and force translation for valid content',
+        type: 'boolean',
+        optional: true,
+        default: 'false',
+    },
+    "--inline": {
+        description:
+            'Include inline <T> tags in addition to the dictionary',
+        type: 'boolean',
+        optional: true,
+        default: 'true',
+    },
+  }}
+/>
 
-```bash copy
-npx translate --locales en fr es
-```
+When running the CLI tool for the first time, it will attempt to create a `gt.config.json` file in the root of your project.
+This file contains insensitive project data that is used to translate your content.
 
-This will scan through your project and generate translations for the default languages.
-Of course, you can specify which locales you want to pre-translate.
-Follow [this how-to guide](/docs/guides/cli-tool) for more information on how to use the CLI tool.

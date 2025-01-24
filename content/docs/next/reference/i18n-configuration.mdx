@@ -65,9 +65,9 @@ This description will accounted in every translation that is performed.
 import { initGT } from 'gt-next/config'
 
 const withGT = initGT({
-    defaultLocale: "en-US", // the default language of your app, usually "en" or "en-US"
-    locales: ["en-US", "es", "fr"] // the languages your app is available in
-    description: "A personal website for John Smith" // a natural language description of your site used to aid in translation
+  defaultLocale: "en-US", // the default language of your app, usually "en" or "en-US"
+  locales: ["en-US", "es", "fr"] // the languages your app is available in
+  description: "A personal website for John Smith" // a natural language description of your site used to aid in translation
 });
 
 export default withGT({});
@@ -90,8 +90,8 @@ For instance, if a user tries to access the app in a language not listed, the ap
 import { initGT } from 'gt-next/config'
 
 const withGT = initGT({
-    defaultLocale: "en-US",
-    locales: ["en-US", "zh", "jp"]
+  defaultLocale: "en-US",
+  locales: ["en-US", "zh", "jp"]
 });
 
 export default withGT({});
@@ -109,8 +109,8 @@ You can specify custom behavior for determining the user's locale by creating a 
 import { initGT } from 'gt-next/config'
 
 const withGT = initGT({
-    defaultLocale: "en-US", // the default language of your app, usually "en" or "en-US"
-    i18n: "./i18n.js"
+  defaultLocale: "en-US", // the default language of your app, usually "en" or "en-US"
+  i18n: "./i18n.js"
 });
 
 export default withGT({});
@@ -121,8 +121,8 @@ export default withGT({});
 import { cookies } from "next/headers";
 
 export async function getLocale() {
-    const cookieStore = await cookies();
-    return cookieStore.get('myCustomLocaleCookie') || 'en';
+  const cookieStore = await cookies();
+  return cookieStore.get('myCustomLocaleCookie') || 'en';
 }
 ```
 
@@ -137,8 +137,8 @@ We will route all your translations to your preferred LLM provider, but if your 
 import { initGT } from 'gt-next/config'
 
 const withGT = initGT({
-    defaultLocale: "en-US",
-    preferredModelProvider: "anthropic"
+  defaultLocale: "en-US",
+  preferredModelProvider: "anthropic"
 });
 ```
 

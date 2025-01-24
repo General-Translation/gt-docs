@@ -66,7 +66,7 @@ on setting up a NextJS project with a Template Dictionary.
 ### Step 1: Create a Template Dictionary
 
 The first step is to create a Template Dictionary.
-This is a `dictionary.js` (or `.tsx`) file that contains all the content you want to translate.
+This is a `dictionary.jsx` (or `.tsx`) file that contains all the content you want to translate.
 
 ```
 my-app/
@@ -80,7 +80,7 @@ my-app/
 │   │   │       └── page.js
 │   │   └── api/
 │   │       └── route.js
-│   └── dictionary.js       <-- Template Dictionary
+│   └── dictionary.jsx       <-- Template Dictionary
 ├── public/
 │   └── images/
 │       └── logo.png
@@ -92,15 +92,15 @@ my-app/
 If you are not using a `src/` folder, you can also specify the directory of the dictionary in the [`next.config.js`](/docs/next/api/methods/config/initGT) file.
 If you are using i18n routing, make sure to also specify the directory of the dictionary in the [`middleware.js`](/docs/next/guides/i18n-routing) file.
 
-Add the following content to your `dictionary.js` file:
+Add the following content to your `dictionary.jsx` file:
 
-```js title="src/dictionary.js" copy
+```js title="src/dictionary.jsx" copy
 
 const dictionary = {
-    greetings: {
-        hello: <>Hello, World!</>, // JSX content
-        goodbye: 'Goodbye, World!'  // string content
-    },
+  greetings: {
+    hello: <>Hello, World!</>, // JSX content
+    goodbye: 'Goodbye, World!'  // string content
+  },
 }
 
 export default dictionary;
@@ -109,14 +109,14 @@ export default dictionary;
 
 ### Step 2: Access the Translation Dictionary
 
-There are a few ways to access the translations in the Translation Dictionary.
-Mostly it depends on the context where you are trying to access the translations.
+There are a few ways to access the translations in the Translation Dictionary, depending on the context where you are trying to access the translations.
 For example, if you are in a client-side component, use the [`useGT()`](/docs/next/api/methods/client/useGT)
 hook and for server-side components use [`await getGT()`](/docs/next/api/methods/server/getGT) method.
 
 Here is an example of how to access the translations in a client-side component:
 
 ```jsx
+"use client";
 import { useGT } from 'gt-next/client';
 
 export default function MyComponent() {
@@ -134,7 +134,8 @@ export default function MyComponent() {
 And here is an example of how to access the translations in a server-side component:
 
 ```jsx
-import { useGT } from 'gt-next/server';
+"use server";
+import { getGT } from 'gt-next/server';
 
 export default async function MyComponent() {
 

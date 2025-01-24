@@ -1,5 +1,5 @@
 ---
-title: I18N Routing
+title: I18n Routing
 description: A step by step guide on adding internationalization (i18n) routing to your application
 ---
 
@@ -70,13 +70,13 @@ export default createNextMiddleware();
 
 export const config = {
   matcher: [
-      /*
-       * Match all request paths except for the ones starting with:
-       * - api (API routes)
-       * - _next (internal files)
-       * - static files
-       */
-      "/((?!api|static|.*\\..*|_next).*)",
+    /*
+      * Match all request paths except for the ones starting with:
+      * - api (API routes)
+      * - _next (internal files)
+      * - static files
+      */
+    "/((?!api|static|.*\\..*|_next).*)",
   ],
 }
 ```
@@ -99,13 +99,13 @@ export default createNextMiddleware({
 
 export const config = {
   matcher: [
-      /*
-       * Match all request paths except for the ones starting with:
-       * - api (API routes)
-       * - _next (internal files)
-       * - static files
-       */
-      "/((?!api|static|.*\\..*|_next).*)",
+    /*
+      * Match all request paths except for the ones starting with:
+      * - api (API routes)
+      * - _next (internal files)
+      * - static files
+      */
+    "/((?!api|static|.*\\..*|_next).*)",
   ],
 }
 ```
@@ -116,8 +116,8 @@ Make sure to also pass these to your configuration in `next.config.js`.
 import { initGT } from 'gt-next/config'
 
 const withGT = initGT({
-    defaultLocale: "en-US",
-    locales: ["en-US", "fr", "es", "de", "ja"]
+  defaultLocale: "en-US",
+  locales: ["en-US", "fr", "es", "de", "ja"]
 });
 
 export default withGT({});

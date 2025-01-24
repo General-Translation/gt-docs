@@ -40,27 +40,27 @@ Below is an example of how you can use `<Branch>` and `<Plural>` components in a
 import { Branch, Plural, Num } from 'gt-next';
 
 const dictionary = {
-    messages: {
-        // Conditional rendering with <Branch>
-        userStatus: (
-            <Branch
-                name="status-branch"
-                active={<p>The user is currently active.</p>}
-                inactive={<p>The user is currently inactive.</p>}
-                banned={<p>The user is banned.</p>}
-            >
-                <p>Status unknown.</p>
-            </Branch>
-        ),
-        // Handling pluralization with <Plural>
-        notifications: (
-            <Plural
-                name="notification-plural"
-                one={<>You have <Num name="notificationCount" /> new notification.</>}
-                other={<>You have <Num name="notificationCount" /> new notifications.</>}
-            />
-        ),
-    },
+  messages: {
+    // Conditional rendering with <Branch>
+    userStatus: (
+      <Branch
+        name="status-branch"
+        active={<p>The user is currently active.</p>}
+        inactive={<p>The user is currently inactive.</p>}
+        banned={<p>The user is banned.</p>}
+      >
+        <p>Status unknown.</p>
+      </Branch>
+    ),
+    // Handling pluralization with <Plural>
+    notifications: (
+      <Plural
+        name="notification-plural"
+        one={<>You have <Num name="notificationCount" /> new notification.</>}
+        other={<>You have <Num name="notificationCount" /> new notifications.</>}
+      />
+    ),
+  },
 };
 
 export default dictionary;
@@ -77,14 +77,14 @@ through the options parameter. This can be thought of keys that map to a value t
 import { useGT } from 'gt-next/client';
 
 export default function UserStatus({ status }) {
-    const t = useGT();
+  const t = useGT();
 
-    return (
-        <div>
-            {/* Passes the `status` as a branch value */}
-            {t('messages.userStatus', { "status-branch": status })}
-        </div>
-    );
+  return (
+    <div>
+      {/* Passes the `status` as a branch value */}
+      {t('messages.userStatus', { "status-branch": status })}
+    </div>
+  );
 }
 ```
 
@@ -94,13 +94,13 @@ export default function UserStatus({ status }) {
 import { getGT } from 'gt-next/server';
 
 export default async function handler(req, res) {
-    const t = await getGT();
+  const t = await getGT();
 
-    const notificationCount = 5; // Example dynamic data
-    res.send(
-        // Passes `n` and `notificationCount` for pluralization
-        t('messages.notifications', { "notification-plural": notificationCount, "notificationCount": notificationCount })
-    );
+  const notificationCount = 5; // Example dynamic data
+  res.send(
+    // Passes `n` and `notificationCount` for pluralization
+    t('messages.notifications', { "notification-plural": notificationCount, "notificationCount": notificationCount })
+  );
 }
 ```
 

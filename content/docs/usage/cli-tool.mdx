@@ -1,5 +1,5 @@
 ---
-title: Deploying
+title: Deploying to Production
 description: How to deploy your project to production with General Translation
 ---
 
@@ -40,10 +40,26 @@ If you haven't, please follow the [NextJS Quick Start Guide](/docs/next/tutorial
         ```
     </Step>
     <Step>
+        Install the CLI tool:
+
+        <Tabs items={["npm", "yarn"]}>
+          <Tab value="npm">
+          ```bash 
+          npm i gt-react-cli
+          ``` 
+          </Tab>
+          <Tab value="yarn">
+          ```bash 
+          yarn add gt-react-cli
+          ```
+          </Tab>
+        </Tabs>
+    </Step>
+    <Step>
         Next, run the following command:
 
-        ```bash copy
-        npx translate
+        ```bash title="shell" copy
+        npx gt-cli translate
         ```
 
         By default, running the command above will enable on-demand translation for all supported locales.
@@ -62,10 +78,10 @@ on-demand translations may take a few seconds to complete, you can pre-translate
 You can select which locales you want to pre-translate by specifying them in the command.
 
 ```bash copy
-npx translate --locales fr es ja
+npx gt-cli translate --locales fr es ja
 ```
 
-For more information specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
+For more information on specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
 
 ### Dry run
 
@@ -73,10 +89,10 @@ To test a dry run of the CLI tool, you can use the `--dry-run` flag. Running the
 you to validate proper usage of the `<T>` components or dictionary formats in your codebase, without actually sending data to our servers.
 
 ```bash copy
-npx translate --dry-run
+npx gt-cli translate --dry-run
 ```
 
-For more information specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
+For more information on specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
 
 
 
@@ -86,13 +102,13 @@ You can also specify your credentials directly in the command.
 Typically, this can be read directly from your environment.
 
 ```bash copy
-npx translate --api-key YOUR_API_KEY --project-id YOUR_PROJECT_ID --locales fr es ja
+npx gt-cli translate --api-key YOUR_API_KEY --project-id YOUR_PROJECT_ID --locales fr es ja
 ```
-If the script is successful, you should see the following message in the console:
+If the script is successful, you should see a similar message to the following:
 
 ```shell
 ✓ Success! {number} tokens received and ready for translation at runtime.
-To translate your app in advance, rerun with the --locales flag. For example: `npx translate --locales fr`
+To translate your app in advance, rerun with the --locales flag. For example: `npx gt-cli translate --locales fr`
 ```
 
 

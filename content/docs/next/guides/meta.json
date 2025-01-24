@@ -1,6 +1,4 @@
 {
-    "title": "How to guides",
-    "pages": [
-        "locale-management", "rtl", "i18n-routing"
-    ]
+  "title": "Guides",
+  "pages": ["locale-management", "rtl", "i18n-routing"]
 }

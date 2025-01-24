@@ -102,11 +102,11 @@ JSX content placed inside a `<T>` component is marked for translation:
 
         // translates <p>Hello, world</p>
         export default function Page() {
-            return (
-                <T id='hello'>
-                    <p>Hello, world!</p>
-                </T>
-            )
+          return (
+            <T id='hello'>
+              <p>Hello, world!</p>
+            </T>
+          )
         }
         ```
     </Tab>
@@ -116,7 +116,7 @@ JSX content placed inside a `<T>` component is marked for translation:
 Many projects have a central dictionary in which they store all translatable content.
 Uniquely, General Translation libraries let you write dictionaries as objects containing JSX:
 
-<Tabs items={['page.js', 'dictionary.js', 'next.config.js']}>
+<Tabs items={['page.js', 'dictionary.jsx', 'next.config.js']}>
     <Tab value="page.js">  
         ```jsx copy
         // dictionary translation
@@ -125,15 +125,15 @@ Uniquely, General Translation libraries let you write dictionaries as objects co
 
         // translates <p>Hello, world</p>
         export default function Page() {
-            const t = useElement();
-            return t('hello');
+          const t = useElement();
+          return t('hello');
         }
         ```
     </Tab>
-    <Tab value="dictionary.js">
+    <Tab value="dictionary.jsx">
         ```jsx copy
         const dictionary = {
-            "hello": <p>Hello, world</p>
+          "hello": <p>Hello, world</p>
         }
 
         export default dictionary;
@@ -185,32 +185,38 @@ Once the translation is loaded, it will rewrite your component in real time with
 
 ## Get started
 
+
 <Tabs items={['Next.js', 'React']}>
-    <Tab value="Next.js">
-    Follow the [Quickstart](/docs/next/tutorials/quickstart) guide to ship your first translations.
-
-    **npm**
-    ```bash copy
-    npm i gt-next
-    ```
-    **yarn**
-    ```bash copy
-    yarn add gt-next
-    ```
-    </Tab>
-    <Tab value="React">
-    Follow the [Quickstart](/docs/gt-react/quickstart) guide to ship your first translations.
-
-    **npm**
-    ```bash copy
-    npm i gt-react
-    ```
-    **yarn**
-    ```bash copy
-    yarn add gt-react
-    ```
-    </Tab>
-
+  <Tab value="Next.js">
+  Follow the [Quickstart](/docs/next/tutorials/quickstart) guide to ship your first translations.
+    <Tabs items={['npm', 'yarn']}>
+      <Tab value="npm">
+      ```bash 
+      npm i gt-next
+      ``` 
+      </Tab>
+      <Tab value="yarn">
+      ```bash 
+      yarn add gt-next
+      ```
+      </Tab>
+    </Tabs>
+  </Tab>
+  <Tab value="React">
+  Follow the [Quickstart](/docs/react/tutorials/quickstart) guide to ship your first translations.
+    <Tabs items={['npm', 'yarn']}>
+      <Tab value="npm">
+      ```bash 
+      npm i gt-react
+      ``` 
+      </Tab>
+      <Tab value="yarn">
+      ```bash 
+      yarn add gt-react
+      ```
+      </Tab>
+    </Tabs>
+  </Tab>
 </Tabs>
 
 ### Example

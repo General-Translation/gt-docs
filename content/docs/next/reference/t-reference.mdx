@@ -44,13 +44,13 @@ Our advice is to wrap your application in a `<GTProvider>` at the root level to 
 import { GTProvider } from 'gt-next';
 
 export default function RootLayout({ children }) {
-    return (
-        <html lang="en">
-            <body>
-                <GTProvider>{children}</GTProvider>
-            </body>
-        </html>
-    );
+  return (
+    <html lang="en">
+      <body>
+        <GTProvider>{children}</GTProvider>
+      </body>
+    </html>
+  );
 }
 ```
 
@@ -62,16 +62,16 @@ For server-side rendering, the `<GTProvider>` is optional for `<T>` components.
 import { GTProvider } from 'gt-next';
 
 export default function RootLayout({ children }) {
-    return (
-        <html lang="en">
-            <body>
-                <T id="heading">
-                    Hello, world!
-                </T>
-                <GTProvider>{children}</GTProvider>
-            </body>
-        </html>
-    );
+  return (
+    <html lang="en">
+      <body>
+        <T id="heading">
+          Hello, world!
+        </T>
+        <GTProvider>{children}</GTProvider>
+      </body>
+    </html>
+  );
 }
 ```
 
@@ -88,11 +88,11 @@ The contents that we want to translate is then wrapped inside of the Variable Co
 import { T, Var } from 'gt-next';
 
 export default function DynamicGreeting({ user }) {
-    return (
-        <T id="greeting">
-            Hello, <Var>{user.name}</Var>!
-        </T>
-    );
+  return (
+    <T id="greeting">
+      Hello, <Var>{user.name}</Var>!
+    </T>
+  );
 }
 ```
 
@@ -112,17 +112,17 @@ The contents that we want to translate is then wrapped inside of the `<Branch>` 
 import { T, Branch } from 'gt-next';
 
 export default function StatusMessage({ status }) {
-    return (
-        <T id="status">
-            <Branch
-                branch={status}
-                active={<p>The user is active.</p>}
-                inactive={<p>The user is inactive.</p>}
-            >
-                <p>Status unknown.</p>
-            </Branch>
-        </T>
-    );
+  return (
+    <T id="status">
+      <Branch
+        branch={status}
+        active={<p>The user is active.</p>}
+        inactive={<p>The user is inactive.</p>}
+      >
+        <p>Status unknown.</p>
+      </Branch>
+    </T>
+  );
 }
 ```
 
@@ -151,8 +151,8 @@ Then you can call it using the [`useGT()`](/docs/next/api/methods/client/useGT) 
 
     // This is a client-side component
     export default function TranslateGreeting() {
-        const t = useGT();
-        return <p>{t('greeting')}</p>;
+      const t = useGT();
+      return <p>{t('greeting')}</p>;
     }
     ```
     </Tab>
@@ -162,8 +162,8 @@ Then you can call it using the [`useGT()`](/docs/next/api/methods/client/useGT) 
 
     // This is a server-side component
     export default async function TranslateGreeting() {
-        const t = await getGT();
-        return <p>{t('greeting')}</p>;
+      const t = await getGT();
+      return <p>{t('greeting')}</p>;
     }
     ```
     </Tab>
@@ -181,7 +181,7 @@ We have built a simple CLI tool that allows you to specify which languages you w
 It can easily integrate with your CI/CD pipeline to ensure that translations are always up to date.
 
 ```bash
-npx translate --languages fr es ja
+npx gt-cli translate --languages fr es ja
 ```
 
 That's it! You have successfully translated your application into French, Spanish, and Japanese.
@@ -209,11 +209,11 @@ This helps loadtime performance by fetching translations only when needed.
 import { T } from 'gt-next';
 
 export default function BasicUsage() {
-    return (
-        <T id="greeting">
-            Hello, world!
-        </T>
-    );
+  return (
+    <T id="greeting">
+      Hello, world!
+    </T>
+  );
 }
 ```
 
@@ -229,11 +229,11 @@ Adding a context prop allows the same id to resolve to different translations de
 import { T } from 'gt-next';
 
 export default function FormalGreeting() {
-    return (
-        <T id="greeting" context="formal">
-            Hi there!
-        </T>
-    );
+  return (
+    <T id="greeting" context="formal">
+      Hi there!
+    </T>
+  );
 }
 ```
 
@@ -250,20 +250,20 @@ import { T } from 'gt-next';
 import CustomButton from './CustomButton';
 
 export default function Page() {
-    return (
-        <T id="jsx">
-            This will be translated
+  return (
+    <T id="jsx">
+      This will be translated
+      <div>
+        <div>
+          <div>
             <div>
-                <div>
-                    <div>
-                        <div>
-                            <CustomButton>This text will also be translated!</CustomButton>
-                        </div>
-                    </div>
-                </div>
+              <CustomButton>This text will also be translated!</CustomButton>
             </div>
-        </T>
-    );
+          </div>
+        </div>
+      </div>
+    </T>
+  );
 }
 ```
 
@@ -278,18 +278,18 @@ Let's illustrate this with an example:
 
 ```javascript copy
 function UntranslatedContent() {
-    return (
-        <p>This content is not translated</p>
-    );
+  return (
+    <p>This content is not translated</p>
+  );
 }
 
 export default function DisplayGreetings() {
-    return (
-        <T id="greeting">
-            <h1>Hello, this text will be translated</h1>
-            <UntranslatedContent />
-        </T>
-    );
+  return (
+    <T id="greeting">
+      <h1>Hello, this text will be translated</h1>
+      <UntranslatedContent />
+    </T>
+  );
 }
 ```
 
@@ -310,22 +310,22 @@ The solution is to always wrap the text in the `<T>` component directly, like so
 
 ```javascript copy
 function TranslatedContent() {
-    return (
-        <T id="greeting">
-            <p>This content <b>IS</b> translated</p>
-        </T>
-    );
+  return (
+    <T id="greeting">
+      <p>This content <b>IS</b> translated</p>
+    </T>
+  );
 }
 
 export default function DisplayGreetings() {
-    return (
-        <>
-            <T id="greeting-title">
-                <h1>Hello, this text will be translated</h1>
-            </T>
-            <TranslatedContent />
-        </>
-    );
+  return (
+    <>
+      <T id="greeting-title">
+        <h1>Hello, this text will be translated</h1>
+      </T>
+      <TranslatedContent />
+    </>
+  );
 }
 ```
 
@@ -350,22 +350,22 @@ Here is an example of **what not to do**:
 
 ```jsx copy
 function SomeComponent() {
-    return (
-        <T id="other-nested-greeting">
-            Hello, friend!
-        </T>
-    );
+  return (
+    <T id="other-nested-greeting">
+      Hello, friend!
+    </T>
+  );
 }
 
 export default function NestedTranslation() {
-    return (
-        <T id="greeting">
-            <T id="nested-greeting"> {/* Don't do this! */} // [!code highlight]
-                Hello, world!
-            </T>
-            <SomeComponent /> {/* This still counts. Don't do this! */} // [!code highlight]
-        </T>
-    );
+  return (
+    <T id="greeting">
+      <T id="nested-greeting"> {/* Don't do this! */} // [!code highlight]
+        Hello, world!
+      </T>
+      <SomeComponent /> {/* This still counts. Don't do this! */} // [!code highlight]
+    </T>
+  );
 }
 ```
 The solution here would be to remove the `<T>` component wrapping the nested `<T>` components.
@@ -379,17 +379,17 @@ It is always best practice to wrap the conditional content in a [Branching Compo
 import { T, Branch } from 'gt-next';
 
 export default function Header({ user }) {
-    return (
-        <T id="header">
-            <h2>
-                <Branch
-                    branch={user.hasAccount}
-                    true={<p>Welcome back, {user.name}!</p>}
-                    false={<p>Please log in to continue.</p>}
-                />
-            </h2>
-        </T>
-    );
+  return (
+    <T id="header">
+      <h2>
+        <Branch
+          branch={user.hasAccount}
+          true={<p>Welcome back, {user.name}!</p>}
+          false={<p>Please log in to continue.</p>}
+        />
+      </h2>
+    </T>
+  );
 }
 
 ```

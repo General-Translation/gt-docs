@@ -33,33 +33,33 @@ These instructions assume that you have already integrated `gt-next` into your N
         Add the `locales` property to your `initGT` configuration object.
         This property should be an array of strings, each representing a locale.
         For example, to prioritize English, Chinese, and Japanese, you would write:
-        ```js copy
-        import { initGT } from 'gt-next/config'
+```js copy
+import { initGT } from 'gt-next/config'
 
-        const withGT = initGT({
-            defaultLocale: "en-US",
-            locales: ["en-US", "zh", "jp"]
-        });
+const withGT = initGT({
+  defaultLocale: "en-US",
+  locales: ["en-US", "zh", "jp"]
+});
 
-        export default withGT({});
-        ```
+export default withGT({});
+```
     </Step>
     <Step>
         **(Optional)**
         If you are using the `gt-next` middleware in your application, you must also specify the supported locales in the `createNextMiddleware` function.
-        ```js copy
-        import { createNextMiddleware } from 'gt-next/middleware'
+```js copy
+import { createNextMiddleware } from 'gt-next/middleware'
 
-        export default createNextMiddleware({
-            locales: ["en-US", "zh", "jp"]
-        });
+export default createNextMiddleware({
+  locales: ["en-US", "zh", "jp"]
+});
 
-        export const config = {
-            matcher: [
-                "/((?!api|static|.*\\..*|_next).*)",
-            ],
-        }
-        ```
+export const config = {
+  matcher: [
+    "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
 
         See [I18n Routing](/docs/guides/i18n-routing) for more information on how to set up the middleware.
     </Step>

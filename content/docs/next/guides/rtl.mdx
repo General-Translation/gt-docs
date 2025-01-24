@@ -27,15 +27,15 @@ import { getLanguageDirection } from 'generaltranslation';
 
 export default async function RootLayout({ children }) {
         
-    const locale = await getLocale(); // e.g. "ar" for Arabic
-    const dir = getLanguageDirection(locale); // e.g. "rtl" for "right-to-left"
+  const locale = await getLocale(); // e.g. "ar" for Arabic
+  const dir = getLanguageDirection(locale); // e.g. "rtl" for "right-to-left"
 
-    return (
-        <html lang={locale} dir={dir}>
-            <body> 
-                {children}
-            </body>
-        </html>
-    )
+  return (
+    <html lang={locale} dir={dir}>
+      <body> 
+        {children}
+      </body>
+    </html>
+  )
 }
 ```

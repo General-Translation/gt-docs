@@ -1,4 +1,8 @@
 {
   "title": "Tutorials",
-  "pages": ["examples", "!dictionary"]
+  "pages": [
+    "examples/next-speedrun",
+    "examples/currency-converter",
+    "!dictionary"
+  ]
 }
