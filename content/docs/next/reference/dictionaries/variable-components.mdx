@@ -1,41 +1,41 @@
 ---
 title: Variable Components
-description: Inserting variables into Template Entries with Variable Components
+description: Inserting variables into dictionary entries with variable components
 ---
 
 ## Overview
 
 Variable Components in `gt-next` allow you to insert dynamic or private content into translations.
-When combined with [Template Dictionaries](/docs/next/reference/template-dictionaries/template-dictionaries),
+When combined with [dictionaries](/docs/next/reference/dictionaries/dictionaries),
 these components enable flexible and secure translations for content that includes user-specific or localized dynamic data.
 
-This guide will show you how to use Variable Components like [`<Var>`](/docs/next/api/components/var), [`<Num>`](/docs/next/api/components/num),
-[`<Currency>`](/docs/next/api/components/currency), and [`<DateTime>`](/docs/next/api/components/datetime) within Template Dictionaries.
+This guide will show you how to use variable components like [`<Var>`](/docs/next/api/components/var), [`<Num>`](/docs/next/api/components/num),
+[`<Currency>`](/docs/next/api/components/currency), and [`<DateTime>`](/docs/next/api/components/datetime) within dictionaries.
 
 <Callout>
-    Variable Components handle dynamic content locally, ensuring sensitive data is not sent to translation services.
+    Variable components handle dynamic content locally, ensuring sensitive data is not sent to translation services.
     Learn more in the [Variable Components Reference](/docs/next/reference/using-variable-components).
 </Callout>
 
-## Why Use Variable Components with Template Dictionaries?
+## Why Use Variable Components with dictionaries?
 
-Using Variable Components with Template Dictionaries allows you to:
+Using variable components with dictionaries allows you to:
  * **Insert Dynamic Content:** Include variables like user names, numbers, dates, or currencies in your translations.
- * **Secure Sensitive Data:** Ensure private information stays local.
+ * **Secure Sensitive Data:** Ensure private information stays on the server.
  * **Leverage Localization:** Format numbers, dates, and currencies based on the user's locale.
 
-This approach combines the scalability of Template Dictionaries with the flexibility of Variable Components.
+This approach combines the scalability of dictionaries with the flexibility of variable components.
 
 ---
 
-## Adding Variable Components to Template Dictionaries
+## Adding Variable Components to Dictionaries
 
-You can use Variable Components inside dictionary templates by including them as part of your dictionary entries.
+You can use variable components inside dictionary templates by including them as part of your dictionary entries.
 These components work seamlessly with both string and JSX content.
 
-### Example: Adding Variables to a Template Dictionary
+### Example: Adding Variables to a Dictionary
 
-In this example, we can see how to add variables to a Template Dictionary using Variable Components.
+In this example, we can see how to add variables to a dictionary using variable components.
 
 ```jsx title="src/dictionary.js"
 import { Var, Num, Currency, DateTime } from 'gt-next';
@@ -61,7 +61,7 @@ export default dictionary;
 
 ## Accessing Variable Templates
 
-Variable Components in Template Dictionaries require you to pass dynamic data when fetching the translation.
+Variable components in dictionaries require you to pass dynamic data when fetching the translation.
 This is done through the options parameter in methods like [`useGT()`](/docs/next/api/methods/client/useGT) or [`getGT()`](/docs/next/api/methods/server/getGT).
 
 ### Example: Client-Side Usage with `useGT()`
@@ -111,10 +111,10 @@ Keep dictionary entries concise. Avoid combining too many variables or complex J
 
 ## Notes
  * Variable Components ensure that sensitive and dynamic content is rendered locally.
- * Combine Variable Components with [Branching Components](/docs/next/reference/template-dictionaries/branching-components) for more advanced logic.
+ * Combine Variable Components with [Branching Components](/docs/next/reference/dictionaries/branching-components) for more advanced logic.
  * Use the options parameter in [`useGT()`](/docs/next/api/methods/client/useGT) or [`getGT()`](/docs/next/api/methods/server/getGT) to pass dynamic data when accessing dictionary entries.
 
 ## Next Steps
- * Explore how to use [Branching Components](/docs/next/reference/template-dictionaries/branching-components) for conditional logic in translations.
- * Learn more about [Template Dictionary Design Pattern](/docs/next/reference/template-dictionaries/template-dictionaries).
+ * Explore how to use [Branching Components](/docs/next/reference/dictionaries/branching-components) for conditional logic in translations.
+ * Learn more about [Template Dictionary Design Pattern](/docs/next/reference/dictionaries/dictionaries).
  * Review the API Reference for [Variable Components](/docs/next/api/components/var).

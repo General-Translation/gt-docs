@@ -81,7 +81,18 @@ You can select which locales you want to pre-translate by specifying them in the
 npx gt-cli translate --locales fr es ja
 ```
 
+<Callout>
 For more information on specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
+
+</Callout>
+
+If the script is successful, you should see a similar message to the following:
+
+```shell
+✓ Success! {number} tokens received and ready for translation at runtime.
+To translate your app in advance, rerun with the --locales flag. For example: `npx gt-cli translate --locales fr`
+```
+
 
 ### Dry run
 
@@ -92,24 +103,6 @@ you to validate proper usage of the `<T>` components or dictionary formats in yo
 npx gt-cli translate --dry-run
 ```
 
-For more information on specifying locales, read our article about locale strings [here](/docs/reference/locale-strings).
-
-
-
-### Specifying credentials
-
-You can also specify your credentials directly in the command.
-Typically, this can be read directly from your environment.
-
-```bash copy
-npx gt-cli translate --api-key YOUR_API_KEY --project-id YOUR_PROJECT_ID --locales fr es ja
-```
-If the script is successful, you should see a similar message to the following:
-
-```shell
-✓ Success! {number} tokens received and ready for translation at runtime.
-To translate your app in advance, rerun with the --locales flag. For example: `npx gt-cli translate --locales fr`
-```
 
 
 ---

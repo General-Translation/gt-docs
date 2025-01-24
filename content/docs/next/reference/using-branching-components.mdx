@@ -75,8 +75,8 @@ export default function ItemCount({ count }) {
     <T id="item_count">
       <Plural
         n={count}
-        one="You have 1 item."
-        other={`You have ${count} items.`}
+        one={<>You have <Num>1</Num> item.</>}
+        other={<>You have <Num>{count}</Num> items.</>}
       />
     </T>
   );

@@ -5,13 +5,13 @@ description: API Reference for the getGT server-side translation function
 
 ## Overview
 
-The `getGT()` function retrieves the server-side equivalent of the `t()` translation function, enabling translations from the [template dictionary](/docs/next/reference/template-dictionaries/template-dictionaries) during server-side rendering.
+The `getGT()` function retrieves the server-side equivalent of the `t()` translation function, enabling translations from the [template dictionary](/docs/next/reference/dictionaries/dictionaries) during server-side rendering.
 It can perform translations for both strings and JSX content.
 This function supports optional key prefixes for namespace-based grouping and can dynamically insert variables or branching content into translations.
 
 <Callout>
     The Template Dictionary Design Pattern is different from using the `<T>` component.
-    To read more about the Template Dictionary Design Pattern, see [this article](/docs/next/reference/template-dictionaries/template-dictionaries).
+    To read more about the Template Dictionary Design Pattern, see [this article](/docs/next/reference/dictionaries/dictionaries).
 </Callout>
 
 
@@ -72,8 +72,8 @@ export default dictionary;
 ## Using Variables
 
 The `getGT()` function can inject dynamic values into translations using the options parameter.
-Both [Variable Components](/docs/next/reference/template-dictionaries/variable-components)
-and [Branching Components](/docs/next/reference/template-dictionaries/branching-components)
+Both [Variable Components](/docs/next/reference/dictionaries/variable-components)
+and [Branching Components](/docs/next/reference/dictionaries/branching-components)
 can be used to pass values to and elicit conditional behavior from the template entries via the `t` function.
 
 <Tabs items={["getGT()", "Dictionary"]}>
@@ -132,9 +132,9 @@ can be used to pass values to and elicit conditional behavior from the template 
 ## Notes
  * The `getGT()` function is asynchronous and must be awaited to retrieve the `t()` function.
  * It is designed for server-side use. See [`useGT()`](/docs/next/api/methods/client/useGT) for client-side translations.
- * Supports dynamic behavior and variable insertion with [Branching](/docs/next/reference/template-dictionaries/branching-components) and [Variable Components]((/docs/next/reference/template-dictionaries/variable-components)) respectively.
+ * Supports dynamic behavior and variable insertion with [Branching](/docs/next/reference/dictionaries/branching-components) and [Variable Components]((/docs/next/reference/dictionaries/variable-components)) respectively.
 
 ## Next Steps
- * Explore the [Template Dictionary Design Pattern](/docs/next/reference/template-dictionaries/template-dictionaries) for creating flexible and dynamic dictionaries.
+ * Explore the [Template Dictionary Design Pattern](/docs/next/reference/dictionaries/dictionaries) for creating flexible and dynamic dictionaries.
  * See [`useGT()`](/docs/next/api/methods/client/useGT) for the client-side equivalent of `getGT()`.
  * Enhance server-side locale routing with [i18n Routing](/docs/next/guides/i18n-routing) and locale management with [i18n Configuration](/docs/next/reference/i18n-configuration).

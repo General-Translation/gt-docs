@@ -11,14 +11,13 @@ Contrary to to the `<T>` component, dictionaries store all translations in a sin
 
 There are a few advantages to using dictionaries over the `<T>` component:
 
-1. **Performance**: The dictionary is faster than the `<T>` component because it doesn't have to parse the content at runtime.
-3. **Historical Precedent**: The dictionary is a common design pattern in the industry and is used by many other libraries.
+1. **Centralized Storage**: Dictionaries store all translatable content in a single file, making it easier to manage and update.
+2. **Historical Precedent**: The dictionary pattern is a common design pattern in the industry and is used by many other libraries.
 
 At the same time, it has some disadvantages as well:
 
-1. **Complexity**: The template dictionary is more complex to set up than the `<T>` component.
-2. **Readability and Maintainability**: The template dictionary is less readable and maintainable than the `<T>` component because the content is not inline.
-3. **Ease of Use**: The template dictionary is less intuitive to use than using the `<T>` component inline as a React component.
+1. **Complexity**: Dictionaries are more complex to set up and use than the `<T>` component.
+2. **Readability**: Dictionaries are less readable than the `<T>` component because the content is not inline.
 
 Both design patterns are supported by our library and are not mutually exclusive.
 You can use a dictionary alongside `<T>` components.
@@ -34,8 +33,32 @@ const dictionary = {
 } 
 export default dictionary;
 ```
+Here's how you would use the dictionary in a component:
+
+<Tabs items={["Client Component"]}>
+  <Tab value="client-component">
+  ```jsx copy
+"use client";
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+
+  const { t } = useGT(); // on the client side, you use the useGT hook
+
+  return (
+    <GTProvider>
+      <div>
+        {t('greetings.hello')}
+      </div>
+    </GTProvider>
+  );
+}
+  ```
+  </Tab>
+</Tabs>
+
 
 To learn more, see the specific reference for the corresponding framework:
 
-- [Next.js](/docs/next/reference/template-dictionaries/template-dictionaries)
-- [React](/docs/next/reference/template-dictionaries/template-dictionaries)
+- [Next.js](/docs/next/reference/dictionaries/dictionaries)
+- [React](/docs/next/reference/dictionaries/dictionaries)

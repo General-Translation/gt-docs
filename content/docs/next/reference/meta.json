@@ -1,10 +1,12 @@
 {
-    "title": "Reference",
-    "pages": [
-        "---Key Concepts---",
-            "t-reference", "using-variable-components", "using-branching-components",
-        "---Advanced---",
-            "i18n-configuration",
-            "template-dictionaries"
-    ]
+  "title": "Reference",
+  "pages": [
+    "---Key Concepts---",
+    "t-reference",
+    "using-variable-components",
+    "using-branching-components",
+    "---Advanced---",
+    "i18n-configuration",
+    "dictionaries"
+  ]
 }

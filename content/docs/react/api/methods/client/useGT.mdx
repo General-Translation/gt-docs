@@ -6,7 +6,7 @@ description: API Reference for the useGT hook
 ## Overview
 
 The `useGT` hook provides access to the `t` translation function from the [`<GTProvider>` context](/docs/next/api/components/gtprovider).
-This function enables you to retrieve the translated version of an entry from your [template dictionary](/docs/next/reference/template-dictionaries/template-dictionaries).
+This function enables you to retrieve the translated version of an entry from your [template dictionary](/docs/next/reference/dictionaries/dictionaries).
 It supports optional key prefixes for namespace-based template grouping and the insertion of dynamic values into the translation content.
 
 By passing the key of a template dictionary entry to the `t` function, you can retrieve the translated value.
@@ -15,7 +15,7 @@ This value can either be a simple string or an arbitrary JSX structure that can 
 
 <Callout>
     The Template Dictionary Design Pattern is different from using the `<T>` component.
-    To read more about the Template Dictionary Design Pattern, see [this article](/docs/next/reference/template-dictionaries/template-dictionaries).
+    To read more about the Template Dictionary Design Pattern, see [this article](/docs/next/reference/dictionaries/dictionaries).
 </Callout>
 
 ## Reference
@@ -51,7 +51,7 @@ A translation function `t` with the following signature:
 
 ### Basic Usage
 
-The `useGT` hook retrieves the `t` function, which can translate any key from your [template dictionary](/docs/next/reference/template-dictionaries/template-dictionaries).
+The `useGT` hook retrieves the `t` function, which can translate any key from your [template dictionary](/docs/next/reference/dictionaries/dictionaries).
 ```jsx title="src/components/Greeting.jsx" copy
 import { useGT } from 'gt-next';
 
@@ -77,8 +77,8 @@ export default dictionary;
 ## Using Variables
 
 Dynamic values can also be used alongside the `t` function to insert variables into the translated content via the [`<Var>` component](/docs/next/api/components/var).
-Both [Variable Components](/docs/next/reference/template-dictionaries/variable-components)
-and [Branching Components](/docs/next/reference/template-dictionaries/branching-components)
+Both [Variable Components](/docs/next/reference/dictionaries/variable-components)
+and [Branching Components](/docs/next/reference/dictionaries/branching-components)
 can be used to pass values to and elicit conditional behavior from the template entries via the `t` function.
 
 <Tabs items={['useGT', 'Dictionary']}>
@@ -154,6 +154,6 @@ Provide an optional `id` parameter to prepend a prefix to all keys.
  * The `useGT` hook can only be used within a component wrapped by a [`<GTProvider>` component](/docs/next/api/components/gtprovider). Ensure your application is properly set up with a provider.
 
 ## Next Steps
- * See more examples and design patterns in the [Template Dictionary Design Pattern](/docs/next/reference/template-dictionaries/template-dictionaries).
+ * See more examples and design patterns in the [Template Dictionary Design Pattern](/docs/next/reference/dictionaries/dictionaries).
  * Explore [i18n configuration](/docs/next/reference/i18n-configuration) to manage your dictionaries effectively.
  * Combine `useGT` with context hooks like [`useLocale`](/docs/next/api/methods/client/useLocale) for more dynamic translation workflows.

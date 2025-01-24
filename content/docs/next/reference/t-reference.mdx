@@ -20,7 +20,7 @@ If you are looking for how to use [Variable Components](/docs/next/reference/usi
 
 The `<T>` component is the primary way to translate text and content in the `gt-next` library.
 It allows for inline translation of text and JSX structures, providing a more direct way to manage translations in your application.
-This is often times more convienient for the developer as it allows for more direct control over the translation content.
+This is often times more convenient for the developer as it allows for more direct control over the translation content.
 
 The `<T>` component supports static text, JSX structures, and context-aware translations.
 When no translation is available, it gracefully falls back to displaying the content in the application's default locale.
@@ -131,7 +131,7 @@ Read more about it in the [Branching Components](/docs/next/reference/using-bran
 
 ### Translating Strings [#translating-strings]
 
-Right now, the best way to translate a string is to use the [Dictionary Design Pattern](/docs/next/reference/template-dictionaries/template-dictionaries).
+Right now, the best way to translate a string is to use the [Dictionary Design Pattern](/docs/next/reference/dictionaries/dictionaries).
 This stands in contrast to the inline translation design pattern using the `<T>` component, but these two systems can be used in tandem, as we will see here.
 
 To give a quick overview, you can define the string (or jsx) content in a dictionary file:
@@ -368,7 +368,7 @@ export default function NestedTranslation() {
   );
 }
 ```
-The solution here would be to remove the `<T>` component wrapping the nested `<T>` components.
+The solution here would be to remove the `<T id="nested-greeting">` component wrapping the nested `<T>` components.
 
 ### Conditional Content [#conditional-content]
 
@@ -413,7 +413,7 @@ If you want to translate dynamic content, there are a few options available for 
     If the content is dynamic (like displaying some integer, date, etc.), use a Variable Component to render the content.
     Furthermore, this can be combined with the Branching Component to conditionally render content if necessary.
 
-3. If you want to render a string, please use the [Dictionary Design Pattern](/docs/next/reference/template-dictionaries/template-dictionaries).
+3. If you want to render a string, please use the [Dictionary Design Pattern](/docs/next/reference/dictionaries/dictionaries).
 
 You can read more about these design patterns in their respective reference guides or above in the [Design Patterns](#design-patterns) section.
 
