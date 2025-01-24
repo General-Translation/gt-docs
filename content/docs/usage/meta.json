@@ -1,4 +1,4 @@
 {
-  "title": "Guides",
-  "pages": ["t", "dictionary", "cli-tool"]
+  "title": "Usage",
+  "pages": ["t", "dictionary", "cli-tool", "apikeys"]
 }

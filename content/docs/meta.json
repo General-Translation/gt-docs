@@ -8,6 +8,7 @@
     "usage/t",
     "usage/dictionary",
     "usage/cli-tool",
+    "usage/apikeys",
     "---Libraries---",
     "next",
     "react",

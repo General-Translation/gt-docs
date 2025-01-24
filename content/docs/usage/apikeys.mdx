@@ -1,0 +1,63 @@
+---
+title: API Keys
+description: How to use API keys with General Translation
+---
+
+# Overview
+
+There are two types of API keys used with General Translation:
+
+- **Production API Key**: This is used to translate your content in production.
+- **Development API Key**: This is used to translate your content in development.
+
+The behavior between the two types of keys are different, so you should be careful to use the correct key for the environment you are in.
+
+## How to obtain
+
+<Steps>
+    <Step>
+        Navigate to your project dashboard on the [General Translation website](https://generaltranslation.com).
+    </Step>
+    <Step>
+        Click on the "API Keys" or "Developer Keys" tab.
+    </Step>
+    <Step>
+        Click on the "Create API Key" button.
+    </Step>
+    <Step>
+        Copy the API key and paste it into your project's `.env` file.
+    </Step>
+</Steps>
+
+## Behavior
+
+The main difference between the two types of keys is in the persistence of translation data. 
+
+### Development API Key
+
+When using a development API key, translations are done on-demand and only memoized in memory. 
+Translations **will not be saved** in any database or cache. Therefore, it is not recommended to use this key in production.
+
+This type of key is useful for testing and development purposes.
+
+<Callout type="error">
+  **Warning!**
+
+  Development API keys are passed to the client side, to facilitate client-side translation in development. 
+  This is fine in development environments, but is a security risk in production environments. If your application
+  is open to the internet, you should not use a development API key.
+</Callout>
+
+### Production API Key
+
+When using a production API key, translations **are persisted** in both the GT database and global CDN. 
+This means that the translations will be viewable by anyone on the internet who visits your site.
+
+<Callout type="warn">
+  In order to deploy your application to production, you must use a production API key with the CLI tool.
+</Callout>
+
+## When to use which key
+
+* **Development API Key**: When you are running your application locally, such as via `npm run dev` or `yarn dev`.
+* **Production API Key**: When you are running your application in production, with traffic exposed to the internet.
