@@ -33,7 +33,7 @@ These instructions assume that you have already integrated `gt-next` into your N
         Add the `locales` property to your `initGT` configuration object.
         This property should be an array of strings, each representing a locale.
         For example, to prioritize English, Chinese, and Japanese, you would write:
-```js copy
+```js title="next.config.js" copy
 import { initGT } from 'gt-next/config'
 
 const withGT = initGT({
@@ -47,7 +47,7 @@ export default withGT({});
     <Step>
         **(Optional)**
         If you are using the `gt-next` middleware in your application, you must also specify the supported locales in the `createNextMiddleware` function.
-```js copy
+```js title="middleware.js" copy
 import { createNextMiddleware } from 'gt-next/middleware'
 
 export default createNextMiddleware({
