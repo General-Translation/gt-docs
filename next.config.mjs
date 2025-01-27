@@ -1,5 +1,4 @@
 import { createMDX } from 'fumadocs-mdx/next';
-import { remarkInstall } from 'fumadocs-docgen';
 
 const withMDX = createMDX();
 
@@ -7,7 +6,6 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   assetPrefix: '/docs-static',
-  remarkPlugins: [remarkInstall],
   async rewrites() {
     return {
       beforeFiles: [
