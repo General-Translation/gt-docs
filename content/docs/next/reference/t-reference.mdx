@@ -35,19 +35,20 @@ string translation, translating content in advanced, and privacy concerns.
 
 ### Wrapping your `<T>` components in a `<GTProvider>` [#gtprovider]
 
-Generally, `<T>` is used to translate static text and JSX structures.
-It is typically wrapped in a [`<GTProvider>`](/docs/next/api/components/gtprovider) context at a higher level, but this is not always necessary.
-The `<T>` component relies on the `<GTProvider>` context to function in client-side components.
+`<T>` is used to translate static text and JSX structures.
+For client-side components, `<T>` **MUST** be wrapped in a [`<GTProvider>`](/docs/next/api/components/gtprovider) at a higher level.
 Our advice is to wrap your application in a `<GTProvider>` at the root level to provide this context.
 
 ```javascript copy
 import { GTProvider } from 'gt-next';
+import { getLocale } from "gt-next/server";
 
 export default function RootLayout({ children }) {
+  const locale = await getLocale();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body>
-        <GTProvider>{children}</GTProvider>
+        <GTProvider>{children}</GTProvider> // [!code highlight]
       </body>
     </html>
   );
@@ -60,15 +61,16 @@ For server-side rendering, the `<GTProvider>` is optional for `<T>` components.
 
 ```javascript copy
 import { GTProvider } from 'gt-next';
+import { getLocale } from "gt-next/server";
 
 export default function RootLayout({ children }) {
+  const locale = await getLocale();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body>
-        <T id="heading">
-          Hello, world!
-        </T>
-        <GTProvider>{children}</GTProvider>
+        <T id="heading"> Hello, world! </T>  // [!code highlight]
+        
+        <GTProvider>{children}</GTProvider> // [!code highlight]
       </body>
     </html>
   );

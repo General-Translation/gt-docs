@@ -5,12 +5,15 @@ description: API Reference for the <GTProvider> component
 
 ## Overview
 
-The `<GTProvider>` component provides General Translation (GT) context to its children, enabling them to access essential translation utilities like `useGT`, `useLocale`, and `useDefaultLocale`. It serves as the root translation provider for your application and is required for `<T>` and other translation-related components to function in client-side components.
+The `<GTProvider>` component provides General Translation (GT) context to its children, enabling them to access translated content.
+It is required for any client-side translations on your application.
 
 ### When to Use
 
-- Wrap your entire application in `<GTProvider>` to enable translations.
-- Specify an `id` to limit the dictionary data sent to the client, optimizing performance for large dictionaries.
+- Wrap your entire application in `<GTProvider>` to enable translations on the client.
+- Optionally specify an `id` to limit the dictionary data sent to the client, optimizing performance for large dictionaries.
+
+You can read more about its application [here](/docs/next/reference/t-reference#gtprovider).
 
 ## Reference
 
@@ -19,14 +22,10 @@ The `<GTProvider>` component provides General Translation (GT) context to its ch
 <TypeTable
   type={{
     "children": {
-        description:
-            'The child components that will use the translation context. These should include any components using `<T>`, `useGT`, or other translation utilities.',
         type: 'ReactNode',
         optional: false,
     },
     "id?": {
-        description:
-            'The ID of a nested dictionary to limit the data sent to the client. This is useful for large projects with extensive dictionaries.',
         type: 'string',
         optional: true,
         default: 'undefined',
@@ -34,9 +33,16 @@ The `<GTProvider>` component provides General Translation (GT) context to its ch
   }}
 />
 
+### Description
+
+| Prop | Description |
+|-----------|-------------|
+| `children` | Any component or the parents of any component that needs to translate or access translation information on the client side. These should include any components using `<T>`, `useGT`, or other translation utilities. |
+| `id?` | The ID of a nested dictionary to limit the data sent to the client. This is useful for large projects with extensive dictionaries. |
+
 ### Returns
 
-`Promise<JSX.Element>` containing the provider component, which sets up the translation context for all child components.
+`JSX.Element|undefined` containing the children that were passed to this component.
 
 ## Example
 
@@ -45,7 +51,7 @@ The `<GTProvider>` component provides General Translation (GT) context to its ch
 Wrap your application in `<GTProvider>` to provide translation context to your app.
 
 ```jsx title="layout.js" copy
-import { GTProvider } from 'gt-next'; // [!code highlight]
+import { GTProvider } from 'gt-next';
 
 export default function RootLayout({ children }) {
     return (
@@ -65,7 +71,7 @@ export default function RootLayout({ children }) {
 Specify the `id` prop to optimize performance by sending only a subset of the dictionary to the client.
 
 ```jsx title="layout.js" copy
-import { GTProvider } from 'gt-next'; // [!code highlight]
+import { GTProvider } from 'gt-next';
 
 export default function RootLayout({ children }) {
     return (
@@ -81,8 +87,8 @@ export default function RootLayout({ children }) {
 ```
 
 ## Notes
- * The `<GTProvider>` must wrap all `<T>` components and other translation-related components in client components.
- * For server-side translations, `<GTProvider>` is not required but can still be used for consistency in rendering.
+ * The `<GTProvider>` must wrap all `<T>` components and other translation-related components in client components. Read more about it [here](/docs/next/reference/t-reference#gtprovider).
+ * For server-side translations, `<GTProvider>` is not required but can still be used.
 
 ## Next Steps
  * Learn more about the [`<T>` component] to translate text and components.

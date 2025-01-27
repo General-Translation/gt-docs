@@ -6,7 +6,7 @@ description: API Reference for the <T> component
 ## Overview
 
 The `<T>` component is the main translation method in `gt-next`.
-Its contents will be translated into a target language.
+Its contents are translated into a target language.
 Every `<T>` component has a unique `id` which are used to cache translations.
 
 The `<T>` component supports translating plain text as well as complex JSX structures.
@@ -23,39 +23,32 @@ Additionally, it provides features for handling variables, plurals, and context-
 
 ## Reference
 
-### Props
 
+### Types
 <TypeTable
   type={{
     "children": {
-        description:
-            'The content to be translated. This can include plain text or JSX structures.',
+        description: 'Content for translation',
         type: 'any',
         optional: false,
     },
     "id": {
-        description:
-            'A unique identifier for the translation string. This ensures consistent translation across your app.',
+        description: 'Unique identifier',
         type: 'string',
         optional: false,
     },
     "context?": {
-        description:
-            'Additional context to refine the translation. Useful for resolving ambiguous phrases.',
+        description: 'Additional context to refine the translation',
         type: 'string',
         optional: true,
         default: 'undefined',
     },
     "variables?": {
-        description:
-            'A mapping of variables to include in the translation. These are replaced dynamically in the output.',
         type: 'Record<string, any>',
         optional: true,
         default: 'undefined',
     },
     "renderSettings?": {
-        description:
-            'Optional settings to control how fallback content is rendered during translation loading.',
         type: 'object',
         optional: true,
         default: '{}',
@@ -63,19 +56,27 @@ Additionally, it provides features for handling variables, plurals, and context-
   }}
 />
 
+### Descriptions
+- **`children`**: The content to be translated. This can include plain text or JSX structures.
+- **`id`**: A unique identifier for the translation string. This ensures consistent translation across your app.
+- **`context`**: Additional context to refine the translation. Useful for resolving ambiguous phrases.
+- **`variables`**: A mapping of variables to include in the translation. These are replaced dynamically in the output.
+- **`renderSettings`**: Optional settings to control how fallback content is rendered during translation loading.
+
 ### Returns
 
-`Promise<any>` resolving to the rendered translation or fallback content based on the provided configuration.
+
+`React.JSX.Element|undefined` which contains the rendered translation or fallback content based on the provided configuration.
 
 ## Example
 
 ### Basic Usage
 
 The `<T>` component can translate simple strings using an `id` and its children.
-Remember, the `<T>` component must be used inside a [`<GTProvider>`](/docs/next/reference/t-reference#gtprovider) to access the translation context.
+Remember, the `<T>` component must be used inside a [`<GTProvider>`](/docs/next/reference/t-reference#gtprovider) to access the translations.
 
 ```jsx title="SimpleTranslation.jsx" copy
-import { T } from 'gt-next'; // [!code highlight]
+import { T } from 'gt-next';
 
 export default function Greeting() {
     return (
@@ -91,7 +92,7 @@ export default function Greeting() {
 The `<T>` component can include variables for dynamic content within translations.
 
 ```jsx title="DynamicGreeting.jsx" copy
-import { T, Var } from 'gt-next'; // [!code highlight]
+import { T, Var } from 'gt-next';
 
 export default function DynamicGreeting(user) {
     return (
@@ -105,16 +106,16 @@ export default function DynamicGreeting(user) {
 ### With Plurals
 The `<T>` component also supports pluralization using the `<Plural>` component.
 
-
 ```jsx title="ItemCount.jsx" copy
-import { T, Plural, Num } from 'gt-next'; // [!code highlight]
+import { T, Plural } from 'gt-next';
 
 export default function ItemCount({ count }) {
     return (
         <T id="item_count">
-            <Plural n={count} singular={<>You have <Num>{count}</Num> item.</>}>  // [!code highlight]
-                You have <Num>{count}</Num> items.  // [!code highlight]
-            </Plural>  // [!code highlight] 
+            <Plural n={count}  // [!code highlight] 
+                singular={<>You have an item.</>}  // [!code highlight] 
+                plural={<>You have items.</>}  // [!code highlight] 
+            />  // [!code highlight]
         </T>
     );
 }
@@ -133,3 +134,4 @@ export default function ItemCount({ count }) {
 ## Next Steps
  * Look into more advanced features like on-demand translation, variables, context, and handling plurals, refer to the [`<T>` Design Patterns](/docs/next/reference/t-reference) documentation.
  * For translating strings, look into [`tx()`](/docs/next/api/strings/tx) or [`getGT()`](/docs/next/api/dictionary/getGT) for server-side translations and [`useGT()`](/docs/next/api/dictionary/useGT) for client-side translations.
+ * Checkout [using variable components](/docs/next/reference/using-variable-components) and [using branchign components](/docs/next/reference/using-branching-components) for more advanced translation patterns.
