@@ -55,3 +55,7 @@ export function generateMetadata({ params }: { params: { slug?: string[] } }) {
     description: page.data.description,
   } satisfies Metadata;
 }
+function useTheme(): { resolvedTheme: any; } {
+  throw new Error('Function not implemented.');
+}
+

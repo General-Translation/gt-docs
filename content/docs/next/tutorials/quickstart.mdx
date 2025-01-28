@@ -3,7 +3,7 @@ title: Next.js Quickstart
 description: Internationalize your Next.js App with General Translation
 ---
 
-# Overview
+## Overview
 
 This guide describes how to internationalize an existing [Next.js](https://nextjs.org) project that uses the [App Router](https://nextjs.org/docs#app-router-vs-pages-router) with `gt-next`.
 We will cover four simple steps:
@@ -93,13 +93,17 @@ export default function Page() {
 ### 3. Wrap Your App with the `<GTProvider>` Component
 
 To add translations to client `<T>` components, wrap your app in the [`<GTProvider>` component](/docs/next/api/components/gtprovider).
+It is also helpful to add the html `lang` attribute to your root layout.
 
 ```javascript title="layout.js" copy
-import { GTProvider } from "gt-next"; // [!code highlight]
+import { GTProvider, getLocale } from "gt-next";
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+
+  const locale = await getLocale();
+
   return (
-    <html lang="en">
+    <html lang={locale}> // [!code highlight]
       <body>
         <GTProvider> // [!code highlight]
           {children}
@@ -110,37 +114,6 @@ export default function RootLayout({ children }) {
 }
 ```
 
-<Accordions>
-    <Accordion title="Should I update the <html> lang attribute?">
-
-        Browsers read the `lang` attribute of the `<html>` tag to check the language of a site.
-        In Next.js, you can the `lang` attribute in your root `layout.js` file.
-
-        While not required for your app to build, the correct application of the `lang` attribute is important for SEO, accessibility, and user experience.
-        Therefore, we recommend setting the `lang` attribute to the user's preferred language.
-
-```js title="app/layout.js" copy
-import { GTProvider } from "gt-next";
-import { getLocale } from "gt-next/server"; // [!code highlight]
-
-export default async function RootLayout({ children }) {
-  // Get the user's preferred language  // [!code highlight]
-  const locale = await getLocale(); // [!code highlight]
-
-  return (
-    // Add the language to the DOM  // [!code highlight]
-    <html lang={locale}> // [!code highlight]
-      <body>
-        <GTProvider>{children}</GTProvider>
-      </body>
-    </html>
-  );
-}
-```
-
-    </Accordion>
-
-</Accordions>
 
 ### 4. Set up your local environment
 
