@@ -14,14 +14,14 @@ t('greeting.hello'); // pass the id to get a translation
 ```
 
 `useGT()` supports:
-  * translation of string and JSX content
+  * translation of string and jsx content
   * variable insertion and conditional logic within translations
-  * optional id prefixing for optimizing runtime translations
+  * optional id prefixing
 
 For server-side translations, see [`getGT()`](/docs/next/api/dictionary/getGT).
 
 <Callout>
-  `getGT()` and `useGT()` use a [dictionary](/docs/next/reference/dictionaries/dictionaries) to store all content for translation.
+  `getGT()`, `useGT()`, and `useElement()` use a [dictionary](/docs/next/reference/dictionaries/dictionaries) to store all content for translation.
   This is different from using the [`<T>` component](/docs/next/reference/t-reference) for translation.
   If you are interested in only using `<T>` components for translation, then this document is not relevant.
 </Callout>
@@ -51,10 +51,10 @@ For server-side translations, see [`getGT()`](/docs/next/api/dictionary/getGT).
 A translation function `t` with the following signature:
 
 ```jsx
-(key: string) => string
+(key: string) => React.ReactNode
 ```
 - `key`: The identifier of the translation to fetch.
-- Returns: The translated value as a `string`.
+- Returns: The translated value as a `React.ReactNode`.
 
 ---
 
@@ -116,7 +116,7 @@ export default dictionary;
 ```
 In the component, we pass the values `userName: "Alice"` and `userName: "Bob"`.
 
-```jsx title="translateGreeting.js" copy
+```jsx title="translateGreeting.jsx" copy
 "use client";
 import { useGT } from 'gt-next/client';
 
@@ -211,5 +211,6 @@ export default function UserDetails() {
 
 ## Next Steps
  * For server-side translations, see [`getGT()`](/docs/next/api/dictionary/getGT).
+ * See [`useElement()`](/docs/next/api/element/useElement) for rendering jsx content (client/server agnostic).
  * Learn more about using dictionaries in the [dictionaries reference](/docs/next/reference/dictionaries/dictionaries).
  * Enhance server-side locale routing with [i18n Routing](/docs/next/guides/i18n-routing) and locale management with [i18n Configuration](/docs/next/reference/i18n-configuration).

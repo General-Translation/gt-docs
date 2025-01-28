@@ -1,23 +1,21 @@
 ---
-title: useGT()
-description: API Reference for the useGT hook
+title: useElement()
+description: API Reference for the useElement hook
 ---
 
 ## Overview
 
-`useGT()` is used to access translations from the [translation dictionary](/docs/react/reference/dictionaries/dictionaries).
-It must be used within a component wrapped by a [`<GTProvider>`](/docs/react/api/components/gtprovider).
+The `useElement()` hook allows you to access jsx content from your [translation dictionary](/docs/react/reference/dictionaries/dictionaries).
 
 ```jsx
-const t = useGT(); // Get the translation function
+const t = useElement(); // Get the JSX translation function
 t('greeting.hello'); // pass the id to get a translation
 ```
 
-`useGT()` supports:
-  * translation of string and jsx content
+`useElement()` supports:
+  * jsx translation only (no string support)
   * variable insertion and conditional logic within translations
   * optional id prefixing
-
 
 <Callout>
   `useGT()` and `useElement()` use a [dictionary](/docs/react/reference/dictionaries/dictionaries) to store all content for translation.
@@ -25,9 +23,12 @@ t('greeting.hello'); // pass the id to get a translation
   If you are interested in only using `<T>` components for translation, then this document is not relevant.
 </Callout>
 
+
+For accessing both strings and jsx content, use [`useGT()`](/docs/react/api/dictionary/useGT).
+
 ## Reference
 
-### Parameters
+### Props
 
 <TypeTable
   type={{
@@ -40,20 +41,20 @@ t('greeting.hello'); // pass the id to get a translation
 />
 
 ### Description
-
 | Prop | Description |
 | ---- | ----------- |
-| `id` | An optional prefix to prepend to all translation keys. This is useful for working with nested dictionary values.|
+| `id` | An optional prefix to prepend to all translation keys. This is useful for working with nested dictionary values. |
 
 ### Returns
 
 A translation function `t` with the following signature:
 
 ```jsx
-(key: string) => React.ReactNode
+(key: string) => React.ReactElement
 ```
 - `key`: The identifier of the translation to fetch.
-- Returns: The translated value as a `React.ReactNode`.
+- Returns: The translated value as a `React.ReactElement`.
+
 
 ---
 
@@ -61,29 +62,27 @@ A translation function `t` with the following signature:
 
 ### Basic Usages
 Every entry in your dictionary gets translated.
-Entries can be either JSX or a string.
+`useElement()` can only resolve jsx entries.
+Strings are forbidden.
 
 ```jsx title="dictionary.jsx" copy
 const dictionary = {
-  greeting1: <>Hello, Alice</>, // [!code highlight]
-  greeting2: "Hello, Bob", // [!code highlight]
+  greeting: <>Hello, Alice</>, // [!code highlight]
 };
 export default dictionary;
 ```
 
-When we want to access these entries, we call `useGT()`.
+When we want to access these entries, we call `useElement()`.
 This returns a function that accepts the key of a translation from the dictionary.
 
 ```jsx title="translateGreeting.jsx" copy
-"use client";
-import { useGT } from 'gt-react';
+import { useElement } from 'gt-react';
 
 export default async function translateGreeting() {
-  const t = useGT(); // [!code highlight]
+  const t = useElement(); // [!code highlight]
   return (
     <p>
-      {t('greeting1')} // [!code highlight]
-      {t('greeting2')} // [!code highlight]
+      {t('greeting')} // [!code highlight]
     </p>
   );
 }
@@ -92,8 +91,7 @@ export default async function translateGreeting() {
 ### Using variables
 
 You can pass variables to dictionary translations.
-For jsx content, just use a [variable component](/docs/react/reference/dictionaries/variable-components).
-For string content, add curley braces `{}` to the string.
+Just use a [variable component](/docs/react/reference/dictionaries/variable-components).
 
 <Callout type="error">
   Whenever you have a variable in your jsx translations,
@@ -103,36 +101,25 @@ For string content, add curley braces `{}` to the string.
 </Callout>
 
 In order to pass values, you must (1) assign an identifier and (2) reference the identifier when calling the `t()` function.
-In this example, we use `<Var>` and `{}` to pass variables to the translations.
-In the dictionary, we assign identifiers `name="userName"` and `{userName}`.
+In this example, we use `<Var>` to pass a variable to the translation.
+
+In the dictionary, we assign `<Var>` the identifier `name="userName"`.
 
 ```jsx title="dictionary.jsx" copy
 const dictionary = {
-  greeting1: <>Hello, <Var name="userName"/> !</>, // [!code highlight]
-  greeting2: "Hello, {userName}!", // [!code highlight]
+  greeting: <>Hello, <Var name="userName"/> !</>, // [!code highlight]
 };
 export default dictionary;
 ```
-In the component, we pass the values `userName: "Alice"` and `userName: "Bob"`.
+In the component, we pass the value by invoking the identifier `userName: "Alice"`.
 
 ```jsx title="translateGreeting.jsx" copy
-"use client";
-import { useGT } from 'gt-react';
+import { useElement } from 'gt-react';
 
 export default async function translateGreeting() {
-  const t = useGT();
-  
-  // Hello Alice!
-  const greetingAlice = t('greeting1', { userName: "Alice" }); // [!code highlight]
-  // Hello Bob!
-  const greetingBob = t('greeting2', { userName: "Bob" }); // [!code highlight]
+  const t = useElement();
 
-  return (
-    <p>
-      {greetingAlice}
-      {greetingBob}
-    </p>
-  );
+  return (<p> {t('greeting', { userName: "Alice" })} </p>); // [!code highlight]
 }
 ```
 
@@ -160,11 +147,10 @@ const dictionary = {
 ```
 
 ```jsx title="HairColor.jsx" copy
-"use client";
-import { useGT } from 'gt-react';
+import { useElement } from 'gt-react';
 
 export default function HairColor() {
-  const t = useGT();
+  const t = useElement();
   return (
     <div>
       { t('hairColor', { hairColor: 'brown' }) } // [!code highlight]
@@ -180,35 +166,31 @@ We can use prefixes to only translate a subset of the dictionary.
 const dictionary = {
   prefix1: { // [!code highlight]
     prefix2: { // [!code highlight]
-      greeting1: <>Hello, Alice</>,
-      greeting2: "Hello, Bob",
+      greeting: <>Hello, Alice</>,
     }
   }
 };
 export default dictionary;
 ```
-Because we added the value `'prefix1.prefix2'` to the `useGT` hook, all of the keys are prefixed with `prefix1.prefix2`:
+Because we added the value `'prefix1.prefix2'` to the `useElement()` hook, all of the keys are prefixed with `prefix1.prefix2`:
 ```jsx title="UserDetails.jsx" copy
-"use client";
-import { useGT } from 'gt-react';
+import { useElement } from 'gt-react';
 
 export default function UserDetails() {
-  const t = useGT('prefix1.prefix2'); // [!code highlight]
+  const t = useElement('prefix1.prefix2'); // [!code highlight]
   return (
     <div>
-      <p>{t('greeting1')}</p> {/* greeting1 => prefix1.prefix2.greeting1 */} // [!code highlight]
-      <p>{t('greeting2')}</p> {/* greeting2 => prefix1.prefix2.greeting2 */} // [!code highlight]
+      <p>{t('greeting')}</p> {/* greeting1 => prefix1.prefix2.greeting1 */} // [!code highlight]
     </div>
   );
 }
 ```
---- 
+---
+
 ## Notes
- * The `useGT()` function allows you to access dictionary translations.
- * The `useGT()` hook can only be used within a component wrapped by a [`<GTProvider>` component](/docs/react/api/components/gtprovider).
- * Supports dynamic behavior and variable insertion with [Branching](/docs/react/reference/template-dictionaries/branching-components) and [Variable Components]((/docs/react/reference/template-dictionaries/variable-components)) respectively.
+ * `useElement()` only translates JSX content from the dictionary. No strings.
+ * For string-based translations, consider using [`useGT()`](/docs/react/api/dictionary/useGT).
 
 ## Next Steps
- * Learn more about using dictionaries in the [dictionaries reference](/docs/react/reference/dictionaries/dictionaries).
- * See [`useElement()`](/docs/next/api/element/useElement) for rendering jsx content.
- * Enhance server-side locale routing with [i18n Routing](/docs/react/guides/i18n-routing) and locale management with [i18n Configuration](/docs/react/reference/i18n-configuration).
+ * Read more about the [dictionary design pattern](/docs/react/reference/dictionaries/dictionaries).
+ * Combine `useElement()` with [Variable Components](/docs/react/reference/dictionaries/variable-components) and [Branching Components](/docs/react/reference/dictionaries/branching-components) for advanced translation scenarios.

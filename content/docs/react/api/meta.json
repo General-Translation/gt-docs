@@ -1,16 +1,22 @@
 {
-    "title": "API",
-    "pages": [
-        "---Components---",
-            "./components/t",
-            "./components/currency", "./components/datetime", "./components/num", "./components/var",
-            "./components/branch", "./components/plural",
-            "./components/gtprovider",
-        "---Dictionary---",
-            "./dictionary/useGT",
-        "---Helpers---",
-            "./helpers/useDefaultLocale", "./helpers/useLocale",
-        "---Config---",
-            "./config/initGT"
-    ]
+  "title": "API",
+  "pages": [
+    "---Components---",
+    "./components/t",
+    "./components/currency",
+    "./components/datetime",
+    "./components/num",
+    "./components/var",
+    "./components/branch",
+    "./components/plural",
+    "./components/gtprovider",
+    "---Dictionary---",
+    "./dictionary/useGT",
+    "./dictionary/useElement",
+    "---Helpers---",
+    "./helpers/useDefaultLocale",
+    "./helpers/useLocale",
+    "---Config---",
+    "./config/initGT"
+  ]
 }

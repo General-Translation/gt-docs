@@ -5,38 +5,40 @@ description: API Reference for the useElement hook
 
 ## Overview
 
-The `useElement()` hook provides access to the `t()` translation function, which translates entries from your [template dictionary](/docs/next/reference/dictionaries/dictionaries) into JSX elements.
+The `useElement()` method allows you to access jsx content from your [translation dictionary](/docs/next/reference/dictionaries/dictionaries).
 
-Unlike `useGT()`, which is used to retrieve string or JSX translations, `useElement()` strictly returns JSX components.
+```jsx
+const t = useElement(); // Get the JSX translation function
+t('greeting.hello'); // pass the id to get a translation
+```
 
-Despite its prefix `use`, `useElement()` can be used in both client-side and server-side components.
-This means that when you use this function, you don't have to worry about what type of component you're working with.
-See [here](/docs/next/discussion/useElement) for a discussion on this design choice.
-
-<Callout>
-    The Template Dictionary Design Pattern is different from using the `<T>` component.
-    To read more about the Template Dictionary Design Pattern, see [this article](/docs/next/reference/dictionaries/dictionaries).
-</Callout>
-
-
-### When to Use
-
-- Use `useElement()` in functional components to retrieve translations as JSX elements for rendering complex structures.
-- Use it in scenarios where translations include dynamic content, such as nested components or formatting.
+`useElement()` supports:
+  * jsx translation only (no string support, use [`getGT()`](/docs/next/api/dictionary/getGT), [`useGT()`](/docs/next/api/dictionary/useGT), or [`tx()`](/docs/next/api/strings/tx) for string translations).
+  * variable insertion and conditional logic within translations
+  * optional id prefixing
+  * identical syntactic implementation on both client and server side
 
 <Callout>
-For translating strings, consider using [`tx()`](/docs/next/api/strings/tx), [`useGT()`](/docs/next/api/dictionary/useGT), or [`getGT()`](/docs/next/api/dictionary/getGT) instead.
+  `getGT()`, `useGT()`, and `useElement()` use a [dictionary](/docs/next/reference/dictionaries/dictionaries) to store all content for translation.
+  This is different from using the [`<T>` component](/docs/next/reference/t-reference) for translation.
+  If you are interested in only using `<T>` components for translation, then this document is not relevant.
 </Callout>
+
+Despite its name, `useElement()` is not always a hook.
+When used on the client side, it is implemented as a hook.
+When used on the server side, it synchonously resolves the translations and streams the result.
+
+`useElement()` excludes strings as this allows for identical syntax in both client and server side components.
+For accessing both strings and jsx content, use [`getGT()`](/docs/next/api/dictionary/getGT) or [`useGT()`](/docs/next/api/dictionary/useGT).
+
 
 ## Reference
 
-### Parameters
+### Props
 
 <TypeTable
   type={{
     "id?": {
-        description:
-            'An optional prefix to prepend to all translation keys. This is useful for working with namespaced dictionaries.',
         type: 'string',
         optional: true,
         default: 'undefined',
@@ -44,116 +46,158 @@ For translating strings, consider using [`tx()`](/docs/next/api/strings/tx), [`u
   }}
 />
 
+### Description
+| Prop | Description |
+| ---- | ----------- |
+| `id` | An optional prefix to prepend to all translation keys. This is useful for working with nested dictionary values. |
+
 ### Returns
 
-A translation function `t()` with the following signature:
+A translation function `t` with the following signature:
 
 ```jsx
-(id: string, options?: Record<string, any>) => JSX.Element
+(key: string) => React.ReactElement
+```
+- `key`: The identifier of the translation to fetch.
+- Returns: The translated value as a `React.ReactElement`.
+
+
+---
+
+## Examples
+
+### Basic Usages
+Every entry in your dictionary gets translated.
+`useElement()` can only resolve jsx entries.
+Strings are forbidden.
+
+```jsx title="dictionary.jsx" copy
+const dictionary = {
+  greeting: <>Hello, Alice</>, // [!code highlight]
+};
+export default dictionary;
 ```
 
-* `id`: The identifier of the translation to fetch.
-* `options`: An optional object to provide dynamic variables or branching content.
-* Returns: The translated content as a `JSX.Element`.
+When we want to access these entries, we call `useElement()`.
+This returns a function that accepts the key of a translation from the dictionary.
 
-## Example
+```jsx title="translateGreeting.jsx" copy
+import { useElement } from 'gt-next';
 
-### Basic Usage
+export default async function translateGreeting() {
+  const t = useElement(); // [!code highlight]
+  return (
+    <p>
+      {t('greeting')} // [!code highlight]
+    </p>
+  );
+}
+```
 
-The useElement hook retrieves the `t` function, which translates dictionary entries into JSX elements.
+### Using variables
 
-<Tabs items={["useElement", "Dictionary"]}>
-    <Tab value="useElement">
-        ```jsx title="src/components/UserCard.jsx” copy
-        import { useElement } from "gt-next";
-        export default function UserCard() {
-            const t = useElement(); // Get the JSX translation function
+You can pass variables to dictionary translations.
+Just use a [variable component](/docs/next/reference/dictionaries/variable-components).
 
-            return <div>{t('user.description')}</div>; // Renders the JSX translation for 'user.description'
-        }
-        ```
-    </Tab>
-    <Tab value="Dictionary">
-        ```jsx title="src/dictionary.jsx" copy
-        const dictionary = {
-            user: {
-                description: <>This is a user card.</>
-            }
-        }
-        export default dictionary;
-        ```
-    </Tab>
-</Tabs>
+<Callout type="error">
+  Whenever you have a variable in your jsx translations,
+  NEVER insert variables directly into the jsx.
+  ALWAYS use a [variable component](/docs/next/reference/dictionaries/variable-components#motive):
+  `<Currency>`, `<DateTime>`, `<Num>`, or `<Var>`.
+</Callout>
 
+In order to pass values, you must (1) assign an identifier and (2) reference the identifier when calling the `t()` function.
+In this example, we use `<Var>` to pass a variable to the translation.
 
-### Using Dynamic Variables
+In the dictionary, we assign `<Var>` the identifier `name="userName"`.
 
-Dynamic content can be injected into JSX translations using the options parameter alongside components like `<Var>`.
-Both [Variable Components](/docs/next/reference/dictionaries/variable-components)
-and [Branching Components](/docs/next/reference/dictionaries/branching-components)
-can be used to pass values to and elicit conditional behavior from the template entries via the `t()` function.
+```jsx title="dictionary.jsx" copy
+const dictionary = {
+  greeting: <>Hello, <Var name="userName"/> !</>, // [!code highlight]
+};
+export default dictionary;
+```
+In the component, we pass the value by invoking the identifier `userName: "Alice"`.
 
-<Tabs items={["useElement", "Dictionary"]}>
-    <Tab value="useElement">
-        ```jsx title=“src/components/UserGreeting.jsx” copy
-        import { useElement } from "gt-next";
-            export default function UserGreeting({ user }) {
-                const t = useElement(); // Get the JSX translation function
+```jsx title="translateGreeting.jsx" copy
+import { useElement } from 'gt-next';
 
-                return <p>{t('greeting', { 'name-of-user': user.name })}</p>;  // [!code highlight]
-            }
-        ```
-    </Tab>
-    <Tab value="Dictionary">
-        ```jsx title="src/dictionary.jsx" copy
-        const dictionary = {
-            greeting: <>Hello, <Var name="name-of-user" />!</>
-        }
-        export default dictionary;
-        ```
-    </Tab>
-</Tabs>
+export default async function translateGreeting() {
+  const t = useElement();
 
-### Using Namespaces
+  return (<p> {t('greeting', { userName: "Alice" })} </p>); // [!code highlight]
+}
+```
 
-Provide an optional `id` parameter to prepend a prefix to all keys.
+### Using branches
+[Branching components](/docs/next/reference/dictionaries/branching-components), such as [`<Branch>`](/docs/next/api/components/branch) and [`<Plural>`](/docs/next/api/components/plural),
+can be used to handle control logic in a translation.
 
-<Tabs items={["useElement", "Dictionary"]}>
-    <Tab value="useElement">
-        ```jsx title="src/components/UserDetails.jsx" copy
-        import { useElement } from "gt-next";
-        export default function UserDetails() {
-            const t = useElement('user'); // Prefixes all keys with 'user.'
+In order to pass values, you must (1) assign an identifier and (2) reference the identifier when calling the `t()` function.
+In this example, we see that `hairColor` is passed to both `<Branch>` and `<Var>` components.
+```jsx title="dictionary.jsx" copy
+import { Branch, Var } from 'gt-next';
 
-            return (
-                <div>
-                    <h1>{t('name')}</h1> {/* name -> user.name */}
-                    <p>{t('description')}</p> {/* description -> user.description */}
-                </div>
-            );
-        }
-        ```
-    </Tab>
-    <Tab value="Dictionary">
-        ```jsx title="src/dictionary.jsx" copy
-        const dictionary = {
-            user: {
-                name: <>John Doe</>,
-                description: <>This user has administrative privileges.</>
-            }
-        }
-        export default dictionary;
-        ```
-    </Tab>
-</Tabs>
+const dictionary = {
+  hairColor: <>
+    <Branch name="hairColor" // [!code highlight]
+      black={<>Their hair is dark.</>}
+      brown={<>Their hair is in the middle.</>}
+      blonde={<>Their hair is light.</>}
+      >
+        {/* fallback incase no branch is matched */}
+        <p>Unhandled hair color: <Var name="hairColor"/></p> // [!code highlight]
+      </Branch>
+  </>,
+};
+```
 
+```jsx title="HairColor.jsx" copy
+import { useElement } from 'gt-next';
+
+export default function HairColor() {
+  const t = useElement();
+  return (
+    <div>
+      { t('hairColor', { hairColor: 'brown' }) } // [!code highlight]
+    </div>
+  );
+}
+```
+
+### Using prefixes
+
+We can use prefixes to only translate a subset of the dictionary.
+```jsx  title="dictionary.jsx" copy
+const dictionary = {
+  prefix1: { // [!code highlight]
+    prefix2: { // [!code highlight]
+      greeting: <>Hello, Alice</>,
+    }
+  }
+};
+export default dictionary;
+```
+Because we added the value `'prefix1.prefix2'` to the `useElement()` method, all of the keys are prefixed with `prefix1.prefix2`:
+```jsx title="UserDetails.jsx" copy
+import { useElement } from 'gt-next';
+
+export default function UserDetails() {
+  const t = useElement('prefix1.prefix2'); // [!code highlight]
+  return (
+    <div>
+      <p>{t('greeting')}</p> {/* greeting1 => prefix1.prefix2.greeting1 */} // [!code highlight]
+    </div>
+  );
+}
+```
+---
 
 ## Notes
- * It only translates JSX content. No strings.
- * `useElement()` is "platform agnostic", meaning it can be used in both client-side and server-side components. Read more about it [here](/docs/next/discussion/useElement).
- * For string-based translations, consider using [`tx()`](/docs/next/api/strings/tx), [`useGT()`](/docs/next/api/dictionary/useGT), [`getGT()`](/docs/next/api/dictionary/getGT).
+ * `useElement()` only translates JSX content from the dictionary. No strings.
+ * `useElement()` is "platform agnostic", meaning it can be used in both client-side and server-side components.
+ * For string-based translations, consider using [`useGT()`](/docs/next/api/dictionary/useGT), [`getGT()`](/docs/next/api/dictionary/getGT), or [`tx()`](/docs/next/api/strings/tx).
 
 ## Next Steps
- * See more examples and design patterns in the [Template Dictionary Design Pattern](/docs/next/reference/dictionaries/dictionaries).
- * Explore the [Template Dictionary Design Pattern](/docs/next/reference/dictionaries/dictionaries) for creating flexible and dynamic dictionaries.
- * Combine `useElement()` with [Variable Components]((/docs/next/reference/dictionaries/variable-components)) and [Branching Components]((/docs/next/reference/dictionaries/branching-components)) for advanced translation scenarios.
+ * Read more about the [dictionary design pattern](/docs/next/reference/dictionaries/dictionaries).
+ * Combine `useElement()` with [Variable Components](/docs/next/reference/dictionaries/variable-components) and [Branching Components](/docs/next/reference/dictionaries/branching-components) for advanced translation scenarios.
