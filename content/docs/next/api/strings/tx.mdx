@@ -5,25 +5,20 @@ description: API Reference for the tx string translation function
 
 ## Overview
 
-The `tx()` function translates content strings based on the specified locale and options.
-It is a server-side method that supports advanced features like variable injection, locale-specific formatting, and context-based translations.
-If no translation is required, the original content is returned as is.
+The `tx()` function is a server-side function for translating strings.
+```jsx
+await tx('Hello, world!', {id: 'exampleId'}); // returns 'Hola, mundo!'
+```
 
-This function is designed exclusively for server-side scenarios and non-component contexts where translating plain strings is required.
-
+ * String translation only (no jsx).
+ * Server side components only.
+ * High performance caching.
+ * Support variable injections.
+ * Static content only, dynamically constructed strings are invalid.
 
 <Callout>
     You can leverage caching by passing an `id` parameter to `tx()`.
     This helps optimize translation performance by reusing previously fetched translations.
-</Callout>
-
-### When to Use
-
-- Use `tx()` for translating plain strings in server-side logic, such as API routes, middleware, or server components.
-- For JSX or client-side translations, consider using [`useElement()`](/docs/next/api/dictionary/use-element) or [`getGT()`](/docs/next/api/dictionary/getGT).
-
-<Callout>
-    The `tx()` function is server-side only and cannot be used in client-side components. For client-side translations, see [`useGT()`](/docs/next/api/dictionary/useGT).
 </Callout>
 
 ## Reference
@@ -33,43 +28,47 @@ This function is designed exclusively for server-side scenarios and non-componen
 <TypeTable
   type={{
     "content": {
-        description: 'The string that needs to be translated.',
         type: 'string',
         optional: false,
     },
     "options?": {
-        description: 'Translation options to customize the behavior of `tx()`.',
         type: 'Object',
         optional: true,
         default: '{}',
     },
     "options.id?": {
-        description: 'A unique identifier for the content, used for caching and fetching translations.',
         type: 'string',
         optional: true,
     },
     "options.locale?": {
-        description: 'The target locale for translation. Defaults to the current locale if not provided.',
         type: 'string',
         optional: true,
     },
     "options.context?": {
-        description: 'Additional context for the translation process, which may influence the translation\'s outcome.',
         type: 'string',
         optional: true,
     },
     "options.variables?": {
-        description: 'A map of variables to inject into the translated content.',
         type: 'Record<string, any>',
         optional: true,
     },
     "options.variableOptions?": {
-        description: 'Options for formatting numbers and dates using `Intl.NumberFormat` or `Intl.DateTimeFormat`.',
-        type: 'Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>',
+        type: 'Record<string, Intl.NumberFormatOptions|Intl.DateTimeFormatOptions>',
         optional: true,
     },
   }}
 />
+
+
+| Name                  | Description                                                                 |
+|-----------------------|-----------------------------------------------------------------------------|
+| `content`             | The string that needs to be translated.                                     |
+| `options`            | Translation options to customize the behavior of `tx()`.                    |
+| `options.id`         | A unique identifier for the content, used for caching and fetching translations. |
+| `options.locale`     | The target locale for translation. Defaults to the current locale if not provided. |
+| `options.context`    | Additional context for the translation process, which may influence the translation's outcome. |
+| `options.variables`  | A map of variables to inject into the translated content.                   |
+| `options.variableOptions` | Options for formatting numbers and dates using `Intl.NumberFormat` or `Intl.DateTimeFormat`. |
 
 ### Returns
 
@@ -79,48 +78,49 @@ A promise that resolves to a string containing the translated content, or the or
 
 ### Basic Usage
 
-Translate a simple string using the default locale.
+You can use `tx()` to translate strings.
 
 ```javascript title="src/components/translateGreeting.js" copy
 import { tx } from 'gt-next/server';
 
 export default async function translateGreeting() {
-    // though not required, adding an id improves translation time by caching
-    const translation = await tx("Hello, world!", { id: 'translate-greeting' }); // [!code highlight]
-    console.log(translation); // Example: 'Hola, mundo!'
-    return translation;
+    return await tx("Hello, world!", { id: 'translateGreeting' }); // [!code highlight]
 }
 ```
 
 ### Specifying Translation Options
 
-Customize the translation with specific options.
+You can customize the translation by providing a target locale and a context to be considered when translating.
 
 ```javascript title="src/components/translateWithOptions.js" copy
 import { tx } from 'gt-next/server';
 
 export default async function translateWithOptions() {
-    const translation = await tx("Hello, world!", { id: 'tx-with-options', locale: 'es', context: 'Translate informally' });
-    console.log(translation); // Example: '¡Hola, mundo!'
-    return translation;
+    return await tx("Hello, world!", {
+        id: 'translateWithOptions',
+        locale: 'es', // [!code highlight]
+        context: 'Translate informally' // [!code highlight]
+    });
 }
 ```
 
 ### Using Variables
 
-Inject variables into the translated string.
+In order to pass values to your string, you must (1) assign an identifier and (2) reference the identifier in the `variables` field.
 
+
+In this example, we have created a variable with the identifier `{price}`.
+We have assigned it a value `price: 29.99`, and given it options `price: { style: 'currency', currency: 'MXN' }`.
 ```jsx title="src/components/translateWithVariables.js" copy
 import { tx } from 'gt-next/server';
 
 export default async function translateWithVariables() {
-    const translation = await tx("The price is {price}", {
+    return await tx("The price is {price}", {
+        id: 'translateWithVariables',
         locale: 'es-MX', 
-        variables: { price: 29.99 },
-        variableOptions: { price: { style: 'currency', currency: 'MXN' } }
+        variables: { price: 29.99 },  // [!code highlight]
+        variableOptions: { price: { style: 'currency', currency: 'MXN' } }  // [!code highlight]
     });
-    console.log(translation); // Example: 'El precio es $29.99'
-    return translation;
 }
 ```
 
