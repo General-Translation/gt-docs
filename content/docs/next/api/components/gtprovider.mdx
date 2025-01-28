@@ -11,9 +11,8 @@ It is required for any client-side translations on your application.
 ### When to Use
 
 - Wrap your entire application in `<GTProvider>` to enable translations on the client.
-- Optionally specify an `id` to limit the dictionary data sent to the client, optimizing performance for large dictionaries.
-
-You can read more about its application [here](/docs/next/reference/t-reference#gtprovider).
+- When working with dictionaries, optionally specify an `id` to limit the dictionary data sent to the client, optimizing performance for large dictionaries.
+- The `<GTProvider>` component is used for both [inline `<T>`](/docs/next/reference/t-reference) and [dictionary design patterns](/docs/next/reference/dictionaries/dictionaries).
 
 ## Reference
 
@@ -22,13 +21,13 @@ You can read more about its application [here](/docs/next/reference/t-reference#
 <TypeTable
   type={{
     "children": {
-        type: 'ReactNode',
-        optional: false,
+      type: 'ReactNode',
+      optional: false,
     },
     "id?": {
-        type: 'string',
-        optional: true,
-        default: 'undefined',
+      type: 'string',
+      optional: true,
+      default: 'undefined',
     },
   }}
 />
@@ -79,7 +78,7 @@ export default function RootLayout({ children }) {
             <body>
                 <GTProvider id="nested.dictionary.key"> // [!code highlight]
                     {children}
-                </GTProvider> // [!code highlight]
+                </GTProvider>
             </body>
         </html>
     );
@@ -91,5 +90,5 @@ export default function RootLayout({ children }) {
  * For server-side translations, `<GTProvider>` is not required but can still be used.
 
 ## Next Steps
- * Learn more about the [`<T>` component] to translate text and components.
+ * Learn more about the [`<T>` component](/docs/next/reference/t-reference) for translating text and components.
  * See [i18n configuration](/docs/next/reference/i18n-configuration) for advanced customization options.

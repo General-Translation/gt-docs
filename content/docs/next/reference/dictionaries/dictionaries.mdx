@@ -222,6 +222,25 @@ export default async function MyComponent() {
 }
 ```
 
+#### Prefixing with `<GTProvider>` (#prefixing-with-gtprovider)
+
+You can also specify a prefix in the `<GTProvider>` component.
+Just like with `useGT()`, `getGT()`, and `useElement()`, this prefix will be used to specify a subset of the dictionary.
+
+```jsx
+import { GTProvider } from 'gt-next';
+
+export default function Layout({ children }) {
+    return (
+      <GTProvider id="nested.dictionary.key"> // [!code highlight]
+          {children}
+      </GTProvider>
+    );
+}
+
+
+```
+
 ## Notes
 
 - Dictionaries are an alternative to the `<T>` component.

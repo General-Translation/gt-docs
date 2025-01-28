@@ -4,11 +4,13 @@ description: API Reference for the <Num> component
 ---
 ## Overview
 
-The `<Num>` component renders a formatted number string, providing options for customization such as a name, default value, and formatting options.
-The number is formatted based on the current locale and any optional formatting options passed.
+The `<Num>` component renders a formatted number string in the user's locale, and can be customized with formatting options.
+```jsx
+<Num>{100}</Num>
+// Output: 100
+```
+All reformatting is handled locally using the [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) library.
 
-This is useful for rendering numbers with proper localization, such as currency, percentages, or custom formats.
-Additionally, the contents of the `<Num>` component will remain private.
 
 ## Reference
 
@@ -17,36 +19,26 @@ Additionally, the contents of the `<Num>` component will remain private.
 <TypeTable
   type={{
     "children?": {
-        description:
-            'The content to render inside the component. Typically a number, which will be formatted according to the current locale and options. If provided, it takes precedence over the `value` prop.',
         type: 'any',
         optional: true,
         default: 'undefined',
     },
     "name?": {
-        description:
-            'Optional name for the number field, used for metadata purposes.',
         type: 'string',
         optional: true,
         default: 'undefined',
     },
     "value?": {
-        description:
-            'The default value for the number. Can be a string or number. Strings will be parsed into numbers before formatting.',
         type: 'string | number',
         optional: true,
         default: 'undefined',
     },
     "options?": {
-        description:
-            'Optional formatting options for the number, following the `Intl.NumberFormatOptions` specification. Use this to define styles such as currency, decimal precision, etc.',
         type: 'Intl.NumberFormatOptions',
         optional: true,
         default: '{}',
     },
     "locales?": {
-        description:
-            'Optional locales to specify the formatting locale. If not provided, the default application locale is used.',
         type: 'string[]',
         optional: true,
         default: 'undefined',
@@ -54,29 +46,136 @@ Additionally, the contents of the `<Num>` component will remain private.
   }}
 />
 
+### Description
+| Prop     | Description                                                                                                                                       |
+|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `children` | The content to render inside the component. Typically a number, which will be formatted according to the current locale and options. If provided, it takes precedence over the `value` prop. |
+| `name`     | Optional name for the number field, used for metadata purposes.                                                                                   |
+| `value`    | The default value for the number. Can be a string or number. Strings will be parsed into numbers before formatting.                               |
+| `options`  | Optional formatting options for the number, following the [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) specification. Use this to define styles such as currency, decimal precision, etc. |
+| `locales`   | Optional locales to specify the formatting locale. If not provided, the default user's locale is used. Read more about specifying locales [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).                                            |
+
 ### Returns
 
 `JSX.Element` containing the formatted number as a string.
 
-## Example
+---
 
-The `<Num>` component can be used to format numbers with localization and optional customization.
-It must be used inside of a `<T>` component or in a dictionary entry.
+## Examples
+
+### Basic Example
+In this example, `item.quantity` will be reformatted according to the user's locale.
 
 ```jsx title="QuantityDisplay.jsx" copy
-import { T, Num } from 'gt-next'; // [!code highlight]
+import { Num } from 'gt-next';
 
-/**
- * Renders the quantity of an item in the inventory.
- */
 export default function Inventory(item) {
-    return (
-        <T>
-            There are currently <Num> {item.quantity} </Num> units in stock.  // [!code highlight]
-        </T>
-    );
+  return (
+    <Num> {item.quantity} </Num>  // [!code highlight]
+  );
 }
 ```
 
-For more details and usage examples of the `<Num>` component and other variable components like `<Currency>`, `<DateTime>`, and `<Var>`,
-see the [Using Variable Components](/docs/next/reference/using-variable-components) documentation.
+### Specifying locales
+By default, locales are determined by the user's browser settings,
+but you can explicitly set the locale for the `<Num>` component.
+
+```jsx title="PriceDisplay.jsx" copy
+import { Num } from 'gt-next';
+
+export default function CountDisplay(item) {
+  return (
+    <Num locales={['fr-FR']}> {item.count} </Num> // [!code highlight]
+  );
+}
+```
+
+### Translating `<Num>` components
+Let's say that you want your number to be in a larger sentence that gets translated.
+Just add the `<T>` components around the content.
+
+```jsx title="DynamicPriceDisplay.jsx" copy
+import { T, Num } from 'gt-next';
+
+export default function DynamicPriceDisplay(item) {
+  return (
+    <T id="price">
+      There are <Num> {item.count} </Num> units available. // [!code highlight]
+    </T>
+  );
+}
+```
+
+### Custom formatting
+`<Num>` uses the [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) library for formatting.
+```jsx
+import { Num } from 'gt-next';
+
+export default function CustomFormat(number) {
+  return (
+    <Num
+      options={{ style: "decimal", maximumFractionDigits: 2 }}
+    >
+      {number}
+    </Num>
+  );
+}
+```
+
+### Dictionary examples
+The `<Num>` component can also be used in a dictionary entry.
+
+#### Basic usage
+
+```jsx title="dictionary.jsx"
+import { Num } from 'gt-next';
+
+const dictionary = {
+  itemCount: <>You have <Num>1</Num> item.</>
+}
+export default dictionary;
+```
+
+```jsx title="ItemCount.jsx" copy
+import { useGT } from 'gt-next';
+
+export default function ItemCount({ count }) {
+  const t = useGT();
+  return (
+    <>{t('itemCount')}</>
+  );
+}
+```
+
+#### Passing values to dictionary entries
+If you want to pass values to the dictionary entry, you must specify a name for the `<Num>` component and reference it when calling the `t()` function.
+
+```jsx title="dictionary.jsx"
+import { Num } from 'gt-next';
+
+const dictionary = {
+  itemCount: <>You have <Num name='count'/> item(s).</>
+}
+export default dictionary;
+```
+
+```jsx title="ItemCount.jsx" copy
+import { useGT } from 'gt-next';
+
+export default function ItemCount({ count }) {
+  const t = useGT();
+  return (
+    <>{t('itemCount', { count: 1 })}</>
+  );
+}
+```
+
+---
+
+## Notes
+ * The `<Num>` component is used to format numbers according to a user's locale.
+ * When inside of a `<T>` component, make sure to wrap all dynamic numbers in a `<Num>` component.
+
+## Next steps
+ * For more details and usage examples of the `<Num>` component and other variable components like `<Currency>`, `<DateTime>`, and `<Var>`,
+   see the [Using Variable Components](/docs/next/reference/using-variable-components) documentation.
