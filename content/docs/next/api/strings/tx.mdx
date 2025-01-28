@@ -80,7 +80,7 @@ A promise that resolves to a string containing the translated content, or the or
 
 You can use `tx()` to translate strings.
 
-```javascript title="src/components/translateGreeting.js" copy
+```javascript title="src/components/translateGreeting.jsx" copy
 import { tx } from 'gt-next/server';
 
 export default async function translateGreeting() {
@@ -92,12 +92,12 @@ export default async function translateGreeting() {
 
 You can customize the translation by providing a target locale and a context to be considered when translating.
 
-```javascript title="src/components/translateWithOptions.js" copy
+```javascript title="TranslateWithOptions.jsx" copy
 import { tx } from 'gt-next/server';
 
-export default async function translateWithOptions() {
+export default async function TranslateWithOptions() {
     return await tx("Hello, world!", {
-        id: 'translateWithOptions',
+        id: 'TranslateWithOptions',
         locale: 'es', // [!code highlight]
         context: 'Translate informally' // [!code highlight]
     });
@@ -111,7 +111,7 @@ In order to pass values to your string, you must (1) assign an identifier and (2
 
 In this example, we have created a variable with the identifier `{price}`.
 We have assigned it a value `price: 29.99`, and given it options `price: { style: 'currency', currency: 'MXN' }`.
-```jsx title="src/components/translateWithVariables.js" copy
+```jsx title="translateWithVariables.js" copy
 import { tx } from 'gt-next/server';
 
 export default async function translateWithVariables() {

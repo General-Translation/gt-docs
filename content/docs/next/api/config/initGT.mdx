@@ -183,7 +183,7 @@ This design decision is to facilitate vercel users who have a default 10-second 
 ## Examples
 
 
-### Supported locales
+### Supported locales [#supported-locales]
 This example configures `gt-next` with English (`en-US`) as the default locale,
 supports translations in Spanish (`es`) and French (`fr`), and provides a description for context-aware translation.
 
@@ -191,6 +191,7 @@ The site will fallback to a supported language if the requested language is not 
 
 <Callout>
     If you want to support all languages, leave `locales` blank.
+    Additionally, locales can be configured on the GT dashboard.
 </Callout>
 
 ```js title="next.config.mjs" copy

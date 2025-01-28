@@ -9,10 +9,14 @@ The `getDefaultLocale()` function retrieves the application's default locale.
 This locale is determined when the server starts and is used as the fallback language for translations.
 It returns a [locale string](/docs/reference/locale-strings), e.g., `'en-US'`.
 
-### When to Use
 
-- Use `getDefaultLocale()` in server-side code where the fallback locale is required.
-- Dynamically configure locale-sensitive server-side logic with the application's default locale.
+<Callout>
+    `getDefaultLocale()` is a server-side method and can only be used on server-side components.
+</Callout>
+
+See [`initGT()`](/docs/next/api/config/initGT) for configuration.
+If no default locale is specified in [`initGT()`](/docs/next/api/config/initGT) it defaults to `'en'`.
+For client-side, see [`useDefaultLocale()`](/docs/next/api/helpers/useDefaultLocale).
 
 ## Reference
 
@@ -26,20 +30,18 @@ A string representing the application's default locale, e.g., `'en-US'`.
 
 Retrieve the application's default locale and use it in your server-side logic.
 
-```jsx title="src/server/getDefaultLocale.js" copy
-import getDefaultLocale from 'gt-next/server'; // [!code highlight]
+```jsx title="GetDefaultLocale.jsx" copy
+import getDefaultLocale from 'gt-next/server';
 
-export default function logDefaultLocale() {
-    const defaultLocale = getDefaultLocale(); // Retrieve the default locale
-    console.log(defaultLocale); // Example: 'en-US'
-
-    return defaultLocale;
+export default function GetDefaultLocale() {
+    const defaultLocale = getDefaultLocale(); // [!code highlight]
+    return <p>Default locale: {defaultLocale}</p>;
 }
 ```
 
 ## Notes
- * The g`etDefaultLocale()` function is synchronous and provides a reliable default value determined at server startup.
- * The returned locale adheres to the [BCP-47](https://www.techonthenet.com/js/language_tags.php) format. Read more about locale strings [here](/docs/next/api/reference/locale-strings.mdx).
+ * The `getDefaultLocale()` function is synchronous and provides a reliable default value determined at server startup.
+ * The returned locale adheres to the [locale strings](/docs/reference/locale-strings) format.
  * This method is designed for server-side use and complements `getLocale()` for determining the user's active locale.
 
 ## Next Steps
