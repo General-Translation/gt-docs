@@ -6,11 +6,10 @@
             "./components/currency", "./components/datetime", "./components/num", "./components/var",
             "./components/branch", "./components/plural",
             "./components/gtprovider",
-        "---Helpers---",
-            "./methods/server/tx",
-            "./methods/client/useDefaultLocale", "./methods/client/useLocale",
         "---Dictionary---",
-            "./methods/client/useGT",
+            "./dictionary/useGT",
+        "---Helpers---",
+            "./helpers/useDefaultLocale", "./helpers/useLocale",
         "---Config---",
             "./config/initGT"
     ]

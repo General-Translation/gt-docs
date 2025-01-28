@@ -5,8 +5,8 @@ description: API Reference for the useGT hook
 
 ## Overview
 
-The `useGT` hook provides access to the `t` translation function from the [`<GTProvider>` context](/docs/next/api/components/gtprovider).
-This function enables you to retrieve the translated version of an entry from your [dictionary](/docs/next/reference/dictionaries/dictionaries).
+The `useGT` hook provides access to the `t` translation function from the [`<GTProvider>` context](/docs/react/api/components/gtprovider).
+This function enables you to retrieve the translated version of an entry from your [dictionary](/docs/react/reference/dictionaries/dictionaries).
 
 By passing the id of of an entry in your dictionary to the `t` function, you can retrieve the translated value.
 The translated value can either be a simple string or an arbitrary JSX structure that can include variables and branching logic.
@@ -21,7 +21,7 @@ It also supports optional key prefixes for namespace-based template grouping and
 
 <Callout>
     Using a dictionary design pattern is different from using the `<T>` component.
-    To read more about the dictionary pattern, see [this article](/docs/next/reference/dictionaries/dictionaries).
+    To read more about the dictionary pattern, see [this article](/docs/react/reference/dictionaries/dictionaries).
 
     If you are only using `<T>` components for translation, then this document is not relevant.
 </Callout>
@@ -62,7 +62,7 @@ A translation function `t` with the following signature:
 
 ### Basic Usages
 
-The `useGT` hook retrieves the `t` function, which can translate any key from your [dictionary](/docs/next/reference/dictionaries/dictionaries).
+The `useGT` hook retrieves the `t` function, which can translate any key from your [dictionary](/docs/react/reference/dictionaries/dictionaries).
 ```jsx title="src/dictionary.jsx" copy
 const dictionary = {
     greeting: {
@@ -72,7 +72,7 @@ const dictionary = {
 export default dictionary;
 ```
 ```jsx title="src/components/Greeting.jsx" copy
-import { useGT } from 'gt-next';
+import { useGT } from 'gt-react';
 
 export default function Greeting() {
 
@@ -86,7 +86,7 @@ export default function Greeting() {
 }
 ```
 ### Using variables
-Variable components ([`<Currency>`](/docs/next/api/components/currency), [`<DateTime>`](/docs/next/api/components/datetime), [`<Num>`](/docs/next/api/components/num), and [`<Var>`](/docs/next/api/components/var))
+Variable components ([`<Currency>`](/docs/react/api/components/currency), [`<DateTime>`](/docs/react/api/components/datetime), [`<Num>`](/docs/react/api/components/num), and [`<Var>`](/docs/react/api/components/var))
 allow us to inject dynamic values into translations.
 
 We can pass variables to the translation via the `t` function.
@@ -101,7 +101,7 @@ export default dictionary;
 ```
 
 ```jsx title="src/components/UserGreeting.jsx" copy
-import { useGT } from 'gt-next';
+import { useGT } from 'gt-react';
 
 export default function UserGreeting({ user }) {
     const t = useGT();
@@ -116,13 +116,13 @@ export default function UserGreeting({ user }) {
 ```
 
 ### Using branches
-Branching components, such as [`<Branch>`](/docs/next/api/components/branch) and [`<Plural>`](/docs/next/api/components/plural),
+Branching components, such as [`<Branch>`](/docs/react/api/components/branch) and [`<Plural>`](/docs/react/api/components/plural),
 can be used to handle control logic in a translation.
 
 In order to pass values, you must specify a name for the components and reference it when calling the `t()` function.
 In this example, we see that `hairColor` is passed to both `<Branch>` and `<Var>` components.
 ```jsx title="dictionary.jsx" copy
-import { Branch, Var } from 'gt-next';
+import { Branch, Var } from 'gt-react';
 
 const dictionary = {
   hairColor: <>
@@ -138,7 +138,7 @@ const dictionary = {
 ```
 
 ```jsx title="HairColor.jsx" copy
-import { useGT } from 'gt-next';
+import { useGT } from 'gt-react';
 
 export default function HairColor(user) {
   const t = useGT();
@@ -154,7 +154,7 @@ export default function HairColor(user) {
 
 Provide an optional `id` parameter to prepend a prefix to all keys.
 ```jsx  title="src/dictionary.jsx" copy
-import { Var } from 'gt-next';
+import { Var } from 'gt-react';
 
 const dictionary = {
   user: {     // Namespace called user  // [!code highlight]
@@ -165,7 +165,7 @@ const dictionary = {
 export default dictionary;
 ```
 ```jsx title="src/components/UserDetails.jsx" copy
-import { useGT } from 'gt-next';
+import { useGT } from 'gt-react';
 
 export default function UserDetails() {
   const t = useGT('user'); // [!code highlight]
@@ -179,9 +179,9 @@ export default function UserDetails() {
 ```
 --- 
 ## Notes
- * The `useGT` hook can only be used within a component wrapped by a [`<GTProvider>` component](/docs/next/api/components/gtprovider). Ensure your application is properly set up with a provider.
+ * The `useGT` hook can only be used within a component wrapped by a [`<GTProvider>` component](/docs/react/api/components/gtprovider). Ensure your application is properly set up with a provider.
 
 ## Next Steps
- * See more examples and design patterns in the [Template Dictionary Design Pattern](/docs/next/reference/dictionaries/dictionaries).
- * Explore [i18n configuration](/docs/next/reference/i18n-configuration) to manage your dictionaries effectively.
- * Combine `useGT` with context hooks like [`useLocale`](/docs/next/api//helpers/useLocale) for more dynamic translation workflows.
+ * See more examples and design patterns in the [Template Dictionary Design Pattern](/docs/react/reference/dictionaries/dictionaries).
+ * Explore [i18n configuration](/docs/react/reference/i18n-configuration) to manage your dictionaries effectively.
+ * Combine `useGT` with context hooks like [`useLocale`](/docs/react/api//helpers/useLocale) for more dynamic translation workflows.
