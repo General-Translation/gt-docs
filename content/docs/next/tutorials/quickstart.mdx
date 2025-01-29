@@ -1,6 +1,6 @@
 ---
 title: Next.js Quickstart
-description: Internationalize your Next.js App with General Translation
+description: Internationalize your Next.js App in 5 minutes with General Translation
 ---
 
 ## Overview
@@ -10,18 +10,21 @@ We will cover four simple steps:
 
 <Steps>
     <Step>
-        Install the `gt-next` library
+        Installing the required libraries
     </Step>
     <Step>
-        Use the `<T>` component to translate your app
+        Run the CLI tool to scan your codebase
     </Step>
     <Step>
-        Add the `<GTProvider>` component
+        Modify the root layout
     </Step>
     <Step>
         Update your env variables
     </Step>
 </Steps>
+
+This entire process should take under **5 minutes**.
+
 {/* TODO: This process should take under XX minutes. */}
 
 {/* TODO: link to example project */}
@@ -32,42 +35,60 @@ We will cover four simple steps:
 
 ## Setup
 
-### 1. Install gt-next
+### 1. Install libraries
 
-To install [gt-next](https://www.npmjs.com/package/gt-next), navigate to your Next.js project's root directory and run:
+Install the [gt-next](https://www.npmjs.com/package/gt-next) and [gt-react-cli](https://www.npmjs.com/package/gt-react-cli) libraries.
+
 
 <Tabs items={["npm", "yarn", "bun", "pnpm"]}>
   <Tab value="npm">
   ```bash 
-  npm i gt-next
+  npm i gt-next gt-react-cli
   ``` 
   </Tab>
   <Tab value="yarn">
   ```bash 
-  yarn add gt-next
+  yarn add gt-next gt-react-cli
   ```
   </Tab>
   <Tab value="bun">
   ```bash 
-  bun add gt-next
+  bun add gt-next gt-react-cli
   ```
   </Tab>
   <Tab value="pnpm">
   ```bash 
-  pnpm add gt-next
+  pnpm add gt-next gt-react-cli
   ```
   </Tab>
 </Tabs>
 
-### 2. Translate with the `<T>` Component
+### 2. Run our CLI tool
 
-To translate your app, wrap the content you want to translate in a [`<T>` component](/docs/next/api/components/t).
-Just remember, every `<T>` component should have a unique `id` prop.
+Run the [gt-react-cli](https://www.npmjs.com/package/gt-react-cli) tool to scan your codebase for translatable content and automatically wrap it in `<T>` components.
+
+```bash title="shell" copy
+npx gt-react-cli scan
+```
+
+See the [CLI tool documentation](/docs/reference/cli#scanning) for more information.
+
+<Callout type="warn">
+    **Experimental**
+
+    This feature is currently experimental and may not work perfectly. 
+    If you run into any issues, please let us know by creating an issue on our [GitHub repository](https://github.com/General-Translation/gt-libraries/issues).
+    In particular, note that some manual edits may be required.
+</Callout>
+
 
 <Callout>
-    The text and structure of the tags inside your `<T>` component should be static.
-    For dynamic content, use the [`<Var>` component](/docs/next/api/components/var).
-</Callout>
+    **Example**
+
+    The CLI tool will wrap any JSX elements containing translatable content in `<T>` components.
+    Each component will be given a unique `id` prop.
+
+See the [`<T>` component documentation](/docs/usage/t) for more information.
 
 ```js title="app/page.js" copy
 import { T } from "gt-next"; // [!code highlight]
@@ -89,26 +110,31 @@ export default function Page() {
   );
 }
 ```
+</Callout>
 
-### 3. Wrap Your App with the `<GTProvider>` Component
 
-To add translations to client `<T>` components, wrap your app in the [`<GTProvider>` component](/docs/next/api/components/gtprovider).
-It is also helpful to add the html `lang` attribute to your root layout.
+### 3. Modify the root layout
 
+Add the `lang` attribute to your root layout with `await getLocale()`.
+
+<Callout>
+    The CLI tool should automatically add the [`<GTProvider>`](/docs/next/api/components/gtprovider) component to your root layout.
+    If it did not, you should add it manually. This is necessary to enable translations for client-side `<T>` components.
+</Callout>
 ```javascript title="layout.js" copy
 import { GTProvider, getLocale } from "gt-next";
 
 export default async function RootLayout({ children }) {
 
-  const locale = await getLocale();
+  const locale = await getLocale(); // [!code highlight]
 
   return (
     <html lang={locale}> // [!code highlight]
-      <body>
-        <GTProvider> // [!code highlight]
+      <GTProvider>
+        <body>
           {children}
-        </GTProvider> // [!code highlight]
-      </body>
+        </body>
+      </GTProvider>
     </html>
   );
 }
@@ -133,7 +159,7 @@ Add your API key and Project ID to your local environment.
     </Step>
 
     <Step>
-        Add the your Project ID and your API Key to your environment.
+        Add the Project ID and API Key to your environment.
             ```bash title=".env.local" copy
             GT_API_KEY="YOUR_GT_API_KEY"
             GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
@@ -253,6 +279,8 @@ Make sure to add your **production** API key and project ID to your environment 
 ```bash copy
 npx gt-cli translate
 ```
+
+Additionally, if your project has CI/CD, you should add this command to your deployment pipeline.
 
 For more information, see the [CLI tool documentation](/docs/usage/cli-tool#usage).
 

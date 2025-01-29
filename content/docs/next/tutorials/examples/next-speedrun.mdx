@@ -29,13 +29,13 @@ npx create-next-app next-quickstart --ts --tailwind --eslint --app --use-npm --s
 A set up wizard will appear, you can just select the default value for each option.
 
 
-## Step 2: Install the `gt-next` library
+## Step 2: Install the libraries
 
 Navigate to your Next.js project's root directory and run:
 
 ```bash copy
 cd next-quickstart
-npm i gt-next
+npm i gt-next gt-react-cli
 ```
 
 ## Step 3: Add your environment variables.
@@ -49,55 +49,43 @@ GT_API_KEY="YOUR_GT_API_KEY"
 GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
 ```
 
-## Step 4: Add the provider
+## Step 4: Run the CLI tool
 
-Wrap your app in the `<GTProvider>` component.
-This only needs to happen once for your entire app.
+Run the CLI tool to scan your codebase and wrap your content in `<T>` components.
+
+```bash copy
+npx gt-cli scan
+```
+
+## Step 5: Modify the root layout
+
+Modify the `lang` prop in the `<html>` tag in the `src/app/layout.tsx` file.
+
+It should use `await getLocale()` to get the current locale.
 
 ```javascript title="src/app/layout.tsx" copy
-
-import { GTProvider } from "gt-next"; // [!code highlight]
-
+import { GTProvider, getLocale } from "gt-next"; // [!code highlight]
 ...
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale(); // [!code highlight]
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <GTProvider> // [!code highlight]
+    <html lang={locale}> // [!code highlight]
+      <GTProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
         {children}
-        </GTProvider> // [!code highlight]
-      </body>
+        </body>
+      </GTProvider>
     </html>
   );
 }
 ```
 
-## Step 5: Translate your app
-
-Okay, this is the step you have been waiting for.
-Wrap your content in the `<T>` component and give it a unique `id` prop.
-
-```javascript title="src/app/page.tsx" copy
-
-import { T } from "gt-next"; // [!code highlight]
-
-...
-
-export default function Home() {
-  return (
-    <T id="home"> // [!code highlight]
-        ...
-    </T> // [!code highlight]
-  );
-};
-```
 
 ## Step 6: Start your app
 

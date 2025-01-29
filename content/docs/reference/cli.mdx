@@ -140,3 +140,127 @@ npx gt-cli translate
 When running the CLI tool for the first time, it will attempt to create a `gt.config.json` file in the root of your project.
 This file contains metadata about your project that is used to translate your content.
 
+---
+
+## Scanning
+
+Additionally, the CLI tool can automatically scan your codebase for content to be translated.
+
+```bash title="shell" copy
+npx gt-cli scan
+```
+
+The scan will wrap `<T>` components around the top level of JSX elements which contain translatable content.
+
+It will also wrap any non-static content with `<Var>` components. 
+
+Here are some examples of what the scan will convert:
+
+
+<Tabs items={["Example 1", "Example 2", "Example 3", "Example 4", "Example 5"]}>
+  <Tab value="Example 1">
+
+
+  ```jsx
+  <div>Hello, World!</div>
+  ```
+
+  Will be converted to:
+
+  ```jsx
+  <T id="">Hello, World!</T>
+  ```
+
+  </Tab>
+  <Tab value="Example 2">
+
+
+  ```jsx
+  <div>Hello, {name}</div>
+  ```
+
+  Will be converted to:
+
+  ```jsx
+  <T id="">Hello, <Var>{name}</Var></T>
+  ```
+
+  </Tab>
+  <Tab value="Example 3">
+
+
+  ```jsx
+  <p>{true && "Hello, World!"}</p>;
+  ```
+
+  Will be converted to:
+
+  ```jsx
+  <T id=""><p><Var>{true && <T id="">{"Hello, World!"}</T>}</Var></p></T>;
+  ```
+
+  </Tab>
+  <Tab value="Example 4">
+
+
+  ```jsx
+  <p>{"Hello," + " World!"}</p>
+  ```
+
+  Will be converted to:
+
+  ```jsx
+  <T id=""><p>{"Hello," + " World!"}</p></T>
+  ```
+
+  </Tab>
+  <Tab value="Example 5">
+
+
+  ```jsx
+  <p>{`${temp}`}</p>
+  ```
+
+  Will be converted to:
+
+  ```jsx
+  <T id=""><p><Var>{`${temp}`}</Var></p></T>
+  ```
+
+  </Tab>
+</Tabs>
+
+The CLI will only wrap direct children inside JSX elements. It will wrap other JSX elements separately with their own `<T>` components.
+
+
+<Callout type="warn">
+    **Experimental**
+
+    This feature is currently experimental and may not work perfectly.
+    After running the scan, you should manually review the output and make sure it is correct.
+    In particular, note that any non-static JSX Expressions `{...}` will be wrapped in `<Var>` components.
+    You may need to manually review and edit these cases.
+    Please report any issues you run into [here](https://github.com/General-Translation/gt-libraries/issues).
+</Callout>
+
+Additionally, the CLI tool will automatically detect the framework you are using. If your project is
+a Next.js app, it will also automatically wrap `<GTProvider>` components at the top level `layout.tsx` of your app.
+
+### Flags
+
+<TypeTable
+  type={{
+    "--framework": {
+        description:
+            'next | react',
+        type: 'string',
+        optional: true,
+    },
+    "--src": {
+        description:
+            'The source directory to scan',
+        type: 'string',
+        optional: true,
+    },
+  }}
+/>
