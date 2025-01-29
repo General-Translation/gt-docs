@@ -49,40 +49,99 @@ It is required for any client-side translations on your application.
 
 Wrap your application in `<GTProvider>` to provide translation context to your app.
 
-```jsx title="layout.js" copy
-import { GTProvider } from 'gt-react';
+If you are in development, you can use the `devApiKey` prop to specify a development API key.
+This will give you access to fast translations and will not cache any content in the CDN.
 
-export default function RootLayout({ children }) {
-    return (
-        <html lang="en">
-            <body>
-                <GTProvider> // [!code highlight]
-                    {children}
-                </GTProvider> // [!code highlight]
-            </body>
-        </html>
-    );
-}
+Once you are ready to deploy you can just leave the `devApiKey` prop as `undefined`,
+and add your production api key to your environment.
+Any translations created with the production api key will be distributed to the global CDN.
+
+```jsx title="layout.js" copy
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import { GTProvider } from "gt-react";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <GTProvider
+      projectId={GT_PROJECT_ID} // [!code highlight]
+      devApiKey={GT_API_KEY} // for development builds use a dev key // [!code highlight]
+    >
+      <App />
+    </GTProvider>
+  </StrictMode>
+);
 ```
+
+
+### Supported locales [#supported-locales]
+This example configures `gt-react` with English (`en-US`) as the default locale.
+It exclusively supports translations in Spanish (`es`) and French (`fr`), and provides a description for context-aware translation.
+
+The site will fallback to the best suited language if none of the locales match.
+It will look for matching languages (i.e., `en-US` and `en-GB`), as well as the other preferred languages the user has set in their browser.
+If all else fails, then it will fallback to the default language.
+
+<Callout>
+    If you want to support all languages, leave `locales` blank.
+    Additionally, locales can be configured on the GT dashboard.
+</Callout>
+
+```jsx title="main.jsx" copy
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import { GTProvider } from "gt-react";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <GTProvider
+      projectId={GT_PROJECT_ID}
+      devApiKey={GT_API_KEY}
+      locales={['en-US', 'es', 'fr']} // [!code highlight]
+    >
+      <App />
+    </GTProvider>
+  </StrictMode>
+);
+```
+
 
 ### Using the `id` Prop for Subsets
 
-Specify the `id` prop to optimize performance by sending only a subset of the dictionary to the client.
+Specify the `id` prop to select a subset of the [`dictionaries`](/docs/react/reference/dictionaries/dictionaries) for translation.
 
-```jsx title="layout.js" copy
-import { GTProvider } from 'gt-react';
+In this example, any `useGT()` and `useElement()` hooks will only have access to the `prefix1.prefix2` subset of the dictionary.
+```jsx  title="dictionary.jsx" copy
+const dictionary = {
+  prefix1: { // [!code highlight]
+    prefix2: { // [!code highlight]
+      greeting: <>Hello, Alice</>,
+    }
+  }
+};
+```
+```jsx title="main.jsx" copy
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import { GTProvider } from "gt-react";
 
-export default function RootLayout({ children }) {
-    return (
-        <html lang="en">
-            <body>
-                <GTProvider id="nested.dictionary.key"> // [!code highlight]
-                    {children}
-                </GTProvider>
-            </body>
-        </html>
-    );
-}
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <GTProvider
+      projectId={GT_PROJECT_ID}
+      devApiKey={GT_API_KEY}
+      id="prefix1.prefix2" // [!code highlight]
+    >
+      <App />
+    </GTProvider>
+  </StrictMode>
+);
 ```
 
 ## Notes

@@ -184,10 +184,12 @@ This design decision is to facilitate vercel users who have a default 10-second 
 
 
 ### Supported locales [#supported-locales]
-This example configures `gt-next` with English (`en-US`) as the default locale,
-supports translations in Spanish (`es`) and French (`fr`), and provides a description for context-aware translation.
+This example configures `gt-next` with English (`en-US`) as the default locale.
+It exclusively supports translations in Spanish (`es`) and French (`fr`), and provides a description for context-aware translation.
 
-The site will fallback to a supported language if the requested language is not English, French, or Spanish.
+The site will fallback to the best suited language if none of the locales match.
+It will look for matching languages (i.e., `en-US` and `en-GB`), as well as the other preferred languages the user has set in their browser.
+If all else fails, then it will fallback to the default language.
 
 <Callout>
     If you want to support all languages, leave `locales` blank.
