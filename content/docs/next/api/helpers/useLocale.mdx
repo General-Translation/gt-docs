@@ -14,7 +14,6 @@ The returned locale is [formatted as a string](/docs/reference/locale-strings), 
     Ensure your app is wrapped in a [`<GTProvider>`](/docs/next/api/components/gtprovider).
 </Callout>
 
-See [`initGT()`](/docs/next/api/config/initGT) for configuration.
 For server-side locale management, see [`getLocale()`](/docs/next/api/helpers/getLocale).
 
 ## Reference
@@ -43,7 +42,7 @@ See [`initGT()`](/docs/next/api/config/initGT#supported-locales) for information
 
 ---
 
-## Example
+## Examples
 
 ### Basic Usage
 
@@ -58,6 +57,9 @@ export default function CurrentLocale() {
     return <p>Current locale: {locale}</p>;
 }
 ```
+
+---
+
 
 ## Notes
  * The `useLocale()` hook relies on the [`<GTProvider>`](/docs/next/api/components/gtprovider) to access the context. Ensure your app is wrapped with a provider at the root level.

@@ -5,23 +5,11 @@ description: API Reference for the useLocale hook
 
 ## Overview
 
-The `useLocale` hook retrieves the user's current locale from the [`<GTProvider>` context](/docs/next/api/components/gtprovider).
-This is essential for determining the active language and locale settings of the application.
-The returned locale is [formatted as a string]((/docs/reference/locale-strings)), e.g., `'en-US'`.
+The `useLocale` hook retrieves the user's current locale from the [`<GTProvider>` context](/docs/react/api/components/gtprovider).
+The returned locale is [formatted as a string](/docs/reference/locale-strings), e.g., `'en-US'`.
 
 <Callout>
-    `useLocale` is a client-side hook and *can only be used on client-side components*.
-    For server-side locale management, see [getLocale](/docs/next/api/helpers/getLocale).
-</Callout>
-
-### When to Use
-
-- Use `useLocale` to get the active locale in client components.
-- Use it to dynamically adjust content, styles, or behavior based on the user's language settings.
-
-<Callout type="warn">
-    The `useLocale` hook can only be used within a component wrapped by a [`<GTProvider>`](/docs/next/api/components/gtprovider).
-    Attempting to use it outside of a provider will result in an error.
+    Ensure your app is wrapped in a [`<GTProvider>`](/docs/react/api/components/gtprovider).
 </Callout>
 
 ## Reference
@@ -30,49 +18,49 @@ The returned locale is [formatted as a string]((/docs/reference/locale-strings))
 
 A string representing the user's current locale, e.g., `'en-US'`.
 
-## Example
+---
+
+## Fallback behavior
+When an unsupported locale is requested, a fallback locale will be selected.
+
+For instance, in the event of an unsupported locale,
+if (1) the user has configured multiple preferred locales in their browser settings,
+and (2) one of these locales are supported by your application,
+then the locale will fallback to the best language.
+
+Additionally, if no possible fallback locales are available,
+but two locales share the same language (e.g., `en-US` and `en-GB`),
+then the locale will fallback to the supported locale that shares the same language.
+
+If neither condition can be met, then the the default locale will be used.
+
+See [`<GTProvider>`](/docs/react/api/config/gtprovider) for information on configuring supported locales.
+
+---
+
+## Examples
 
 ### Basic Usage
 
 Retrieve the current locale and display it in your component.
 
-```jsx title="src/components/CurrentLocale.jsx" copy
-import { useLocale } from 'gt-next'; // [!code highlight]
+```jsx title="CurrentLocale.jsx" copy
+import { useLocale } from 'gt-react';
 
 export default function CurrentLocale() {
-    const locale = useLocale(); // Get the user's locale
-
-    return <p>Current locale: {locale}</p>; // Display the locale
+    const locale = useLocale(); // [!code highlight]
+    return <p>Current locale: {locale}</p>;
 }
 ```
 
-## Adjusting Content Based on Locale
+---
 
-Use the `useLocale` hook to render locale-specific content dynamically.
-
-```jsx title="src/components/LocalizedGreeting.jsx" copy
-import { useLocale } from 'gt-next'; // [!code highlight]
-
-export default function LocalizedGreeting() {
-    const locale = useLocale(); // Get the user's locale // [!code highlight]
-
-    return (
-        <p>
-            { locale === 'fr-FR'
-                ? 'French is not supported!'
-                : 'Hello, world!'}
-        </p>
-    );
-}
-```
 
 ## Notes
- * The `useLocale` hook relies on the [`<GTProvider>`](/docs/next/api/components/gtprovider) to access the context. Ensure your app is wrapped with a provider at the root level.
- * Use this hook for client-side locale based behavior.
- * Learn more about locale strings and how to read them here: [Locale Strings](/docs/reference/locale-strings).
+ * The `useLocale()` hook relies on the [`<GTProvider>`](/docs/react/api/components/gtprovider) to access the context.
+   Ensure your app is wrapped with a provider at the root level.
+ * Learn more about locale strings [here](/docs/reference/locale-strings).
 
 ## Next Steps
-* Learn how to manage and specify supported locales in your application with [Locale Management](/docs/next/guides/locale-management).
- * To access the fallback language, see [`useDefaultLocale`](/docs/next/api/helpers/useDefaultLocale).
- * Explore other locale-based routing with [i18n Routing](/docs/next/guides/i18n-routing) to enhance SEO.
- * Enhance your app with [i18n Routing](/docs/next/guides/i18n-routing) for better SEO and localization
+ * Learn how to manage and specify supported locales in your application with [locale management](/docs/react/guides/locale-management).
+ * To access the fallback language, see [`useDefaultLocale()`](/docs/react/api/helpers/useDefaultLocale).

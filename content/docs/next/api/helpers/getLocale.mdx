@@ -12,7 +12,6 @@ The returned locale is [formatted as a string](/docs/reference/locale-strings), 
     `getLocale()` is a server-side method and can only be used on server-side components.
 </Callout>
 
-See [`initGT()`](/docs/next/api/config/initGT) for configuration.
 For client-side usage, see [`useLocale()`](/docs/next/api/helpers/useLocale).
 
 ## Reference
@@ -41,7 +40,7 @@ See [`initGT()`](/docs/next/api/config/initGT#supported-locales) for information
 
 ---
 
-## Example
+## Examples
 
 ### Basic Usage
 
@@ -55,6 +54,9 @@ export default async function GetUserLocale() {
     return <p>User locale: {locale}</p>;
 }
 ```
+
+---
+
 
 ## Notes
  * The `getLocale()` function is asynchronous and must be awaited to retrieve the locale.
