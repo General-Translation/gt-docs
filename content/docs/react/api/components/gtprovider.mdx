@@ -43,9 +43,9 @@ It is required for any client-side translations on your application.
 
 `JSX.Element|undefined` containing the children that were passed to this component.
 
-## Example
+## Examples
 
-### Basic Usage
+### Basic usage
 
 Wrap your application in `<GTProvider>` to provide translation context to your app.
 
@@ -110,7 +110,7 @@ createRoot(document.getElementById("root")!).render(
 ```
 
 
-### Using the `id` Prop for Subsets
+### Using the `id` prop for subsets
 
 Specify the `id` prop to select a subset of the [`dictionaries`](/docs/react/reference/dictionaries/dictionaries) for translation.
 
@@ -148,6 +148,6 @@ createRoot(document.getElementById("root")!).render(
  * The `<GTProvider>` must wrap all `<T>` components and other translation-related components in client components. Read more about it [here](/docs/react/reference/t-reference#gtprovider).
  * For server-side translations, `<GTProvider>` is not required but can still be used.
 
-## Next Steps
+## Next steps
  * Learn more about the [`<T>` component](/docs/react/reference/t-reference) for translating text and components.
  * See [i18n configuration](/docs/react/reference/i18n-configuration) for advanced customization options.
