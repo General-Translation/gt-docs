@@ -1,6 +1,7 @@
 {
   "title": "Tutorials",
   "pages": [
+    "quickstart",
     "examples/next-speedrun",
     "examples/currency-converter",
     "!dictionary"
