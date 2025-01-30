@@ -14,7 +14,7 @@ We will cover 3 simple steps:
         Installing the required libraries
     </Step>
     <Step>
-        Run the CLI tool to scan your codebase
+        Run the CLI tool to setup your codebase
     </Step>
     <Step>
         Update your env variables
@@ -63,13 +63,15 @@ Install the [gt-next](https://www.npmjs.com/package/gt-next) and [gt-react-cli](
 
 ### 2. Run our CLI tool
 
-Run the [gt-react-cli](https://www.npmjs.com/package/gt-react-cli) tool to scan your codebase for translatable content and automatically wrap it in `<T>` components.
+Run the [gt-react-cli](https://www.npmjs.com/package/gt-react-cli) tool to setup your project for translation.
+
+This will scan your codebase for translatable content and automatically wrap it in `<T>` components.
 
 ```bash title="shell" copy
-npx gt-cli scan
+npx gt-cli setup
 ```
 
-See the [CLI tool documentation](/docs/reference/cli#scanning) for more information.
+See the [CLI tool documentation](/docs/reference/cli#setup) for more information.
 
 <Callout type="warn">
     **Experimental**
