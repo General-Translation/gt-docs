@@ -5,8 +5,9 @@ description: Internationalize your Next.js App in 5 minutes with General Transla
 
 ## Overview
 
-This guide describes how to internationalize an existing [Next.js](https://nextjs.org) project that uses the [App Router](https://nextjs.org/docs#app-router-vs-pages-router) with `gt-next`.
-We will cover four simple steps:
+This guide describes how to internationalize an existing [Next.js](https://nextjs.org) project that uses the [App Router](https://nextjs.org/docs#app-router-vs-pages-router).
+
+We will cover 3 simple steps:
 
 <Steps>
     <Step>
@@ -14,9 +15,6 @@ We will cover four simple steps:
     </Step>
     <Step>
         Run the CLI tool to scan your codebase
-    </Step>
-    <Step>
-        Modify the root layout
     </Step>
     <Step>
         Update your env variables
@@ -68,7 +66,7 @@ Install the [gt-next](https://www.npmjs.com/package/gt-next) and [gt-react-cli](
 Run the [gt-react-cli](https://www.npmjs.com/package/gt-react-cli) tool to scan your codebase for translatable content and automatically wrap it in `<T>` components.
 
 ```bash title="shell" copy
-npx gt-react-cli scan
+npx gt-cli scan
 ```
 
 See the [CLI tool documentation](/docs/reference/cli#scanning) for more information.
@@ -96,10 +94,10 @@ import { Card, CardHeader, CardContent } from "@components/ui/Card";
 
 export default function Page() {
   return (
-    <T id="pages_quotes"> // [!code highlight]
-      {/* You can translate your text */}
+    <T id="app.page.0"> // [!code highlight]
+      {/* This text will be translated */}
       <b>Shakespeare&apos;s</b> quotes
-      {/* You can also translate any arbitrary components and their children */}
+      {/* Any arbitrary components and their children will also be translated */}
       <Card>
         <CardHeader>Hamlet</CardHeader>
         <CardContent>
@@ -113,35 +111,7 @@ export default function Page() {
 </Callout>
 
 
-### 3. Modify the root layout
-
-Add the `lang` attribute to your root layout with `await getLocale()`.
-
-<Callout>
-    The CLI tool should automatically add the [`<GTProvider>`](/docs/next/api/components/gtprovider) component to your root layout.
-    If it did not, you should add it manually. This is necessary to enable translations for client-side `<T>` components.
-</Callout>
-```javascript title="layout.js" copy
-import { GTProvider, getLocale } from "gt-next";
-
-export default async function RootLayout({ children }) {
-
-  const locale = await getLocale(); // [!code highlight]
-
-  return (
-    <html lang={locale}> // [!code highlight]
-      <GTProvider>
-        <body>
-          {children}
-        </body>
-      </GTProvider>
-    </html>
-  );
-}
-```
-
-
-### 4. Set up your local environment
+### 3. Set up your local environment
 
 Add your API key and Project ID to your local environment.
 
@@ -268,7 +238,7 @@ In order to ship your app to production, you will need to run our CLI tool to pa
     **Security**
 
     Due to the nature of client-sided rendering in React and Next.js client components,
-    you must pre-authorize your content before it can be translated.
+    you must pre-authorize your content with the CLI tool before it can be translated.
     This means that you must run the CLI tool before deploying to your production environment.
 
 </Callout>
@@ -295,9 +265,10 @@ For more information, see the [CLI tool documentation](/docs/usage/cli-tool#usag
 </Callout>
 
 ## Next steps
-
+{/* - Learn about how to use dictionaries with [`useGT()`](/docs/next/reference/dictionaries/dictionaries) */}
 - See our [Next.js API reference](/docs/next/api/components/t) for detailed information about the `<T>` component and other available components.
-- Learn about how to use dictionaries with [`useGT()`](/docs/next/reference/dictionaries/dictionaries)
-- Learn to improve SEO with [i18n routing](/docs/next/guides/i18n-routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`)
+- Improve your content with [`<Num>`](/docs/next/api/components/num), [`<Currency>`](/docs/next/api/components/currency),
+ [`<Branch>`](/docs/next/api/components/branch), and [`<Plural>`](/docs/next/api/components/plural) components.
+- Learn how to improve SEO with [i18n routing](/docs/next/guides/i18n-routing) (adding routes for each locale, e.g. `example.com/en`, `example.com/fr`)
 - Mirror your app to support [right-to-left languages](/docs/next/guides/rtl) such as Arabic and Hebrew.
 - Create a list of approved languages for your app with the [Next.js plugin](/docs/next/guides/locale-management#include-locales).

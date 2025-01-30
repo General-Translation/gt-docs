@@ -61,7 +61,7 @@ cannot be passed to the client. The CLI tool is necessary to prevent abuse from 
 Running the CLI tool allows GT to pre-authorize your content for translation via hashing, eliminating security vulnerabilities.
 
 
-## Reference
+## Translating
 
 To use the CLI tool, run the following command from the root of your project:
 
@@ -70,11 +70,11 @@ npx gt-cli translate
 ```
 
 <Callout type="warn">
-    **For Production Only!**
+    **For Production Use Only!**
 
     Because this CLI tool publishes translated content to the CDN, it is meant to only be used for production builds and **should not be used in development**.
     Before running this command, please make sure you are on the branch that will be used for production.
-    Remember to also use your production API key and Project ID.
+    Remember to also specify your production API key and Project ID in your environment variables.
 </Callout>
 
 ### Flags
@@ -144,13 +144,20 @@ This file contains metadata about your project that is used to translate your co
 
 ## Scanning
 
-Additionally, the CLI tool can automatically scan your codebase for content to be translated.
+Additionally, the CLI tool can automatically scan and setup your project for translation.
+If you are using General Translation for the first time, we recommend running the scan to get started.
 
 ```bash title="shell" copy
 npx gt-cli scan
 ```
 
-The scan will wrap `<T>` components around the top level of JSX elements which contain translatable content.
+<Callout type="warn">
+    **Stash your changes!**
+
+    This will modify your codebase, so make sure to either stash or commit your changes first.
+</Callout>
+
+Running this command will wrap `<T>` components around the top level of JSX elements which contain translatable content.
 
 It will also wrap any non-static content with `<Var>` components. 
 
@@ -244,7 +251,8 @@ The CLI will only wrap direct children inside JSX elements. It will wrap other J
 </Callout>
 
 Additionally, the CLI tool will automatically detect the framework you are using. If your project is
-a Next.js app, it will also automatically wrap `<GTProvider>` components at the top level `layout.tsx` of your app.
+a Next.js app, it will automatically wrap `<GTProvider>` components at the top level `layout.tsx` of your app, as well as
+modify the `lang` attribute in the `<html>` tag to dynamically set the language of your app.
 
 ### Flags
 
