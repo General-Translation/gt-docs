@@ -176,14 +176,34 @@ export default function App() {
 <Callout>
 In development, you should also pass your Development API key to the `devApiKey` prop.
 
-For example, if your project uses [Vite](https://vitejs.dev), you can add the API key as follows:
+<Tabs items={["vite", "webpack", "create-react-app"]}>
+  <Tab value="vite">
+  ```jsx copy
+  <GTProvider
+    projectID="abc-123"
+    devApiKey={process.env.VITE_GT_DEV_API_KEY}
+  >
+  ```
+  </Tab>
+  <Tab value="webpack">
+  ```jsx copy
+  <GTProvider
+    projectID="abc-123"
+    devApiKey={process.env.GT_DEV_API_KEY}
+  >
+  ```
+  </Tab>
+  <Tab value="create-react-app">
+  ```jsx copy
+  <GTProvider
+    projectID="abc-123"
+    devApiKey={process.env.REACT_APP_GT_DEV_API_KEY}
+  >
+  ```
+  </Tab>
+</Tabs>
 
-```jsx copy
-<GTProvider
-  projectID="abc-123"
-  devApiKey={import.meta.env.VITE_GT_DEV_API_KEY}
->
-```
+
 Make sure to remove this environment variable when shipping to production!
 </Callout>
 
