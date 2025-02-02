@@ -36,7 +36,7 @@ The main difference between the two types of keys is in the persistence of trans
 ### Development API Key
 
 When using a development API key, translations are done on-demand and only memoized in memory. 
-Translations **will not be saved** in any database or cache. Therefore, it is not recommended to use this key in production.
+Translations **will not be saved**. Therefore, it is not recommended to use this key in production.
 
 This type of key is useful for testing and development purposes.
 
@@ -50,7 +50,7 @@ This type of key is useful for testing and development purposes.
 
 ### Production API Key
 
-When using a production API key, translations **are persisted** in both the GT database and global CDN. 
+When using a production API key, translations **are persisted** in the global CDN. 
 This means that the translations will be viewable by anyone on the internet who visits your site.
 
 <Callout type="warn">
