@@ -3,9 +3,10 @@ title: Introduction
 description: Docs for General Translation's localization libraries
 ---
 
-Welcome to the docs for [General Translation](https://www.generaltranslation.com)! (GT)
+Welcome to the docs for [General Translation, Inc.](https://www.generaltranslation.com) (GT)! 
 
-We publish developer libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps which automate your entire internationalization (i18n) stack.
+We publish developer libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps. 
+Plus, we provide a [platform](https://generaltranslation.com/dashboard) for automating your entire internationalization (i18n) stack.
 
 ## Getting started
 Follow our quickstart guides:
@@ -21,9 +22,9 @@ Follow our quickstart guides:
 </Cards>
 
 - Setup is simple and can be done in minutes.
-- There is no need for complex rewrites of your application.
+- No need need for complex refactoring.
 - UI and HTML elements are translated in context by powerful AI models.
-- Translations occur both on-demand and in CI/CD.
+- Translations occur both live and in CI/CD.
 - Translations ship in seconds and load in milliseconds.
 
 <Callout>
@@ -36,7 +37,8 @@ Follow our quickstart guides:
 
 ## Why choose General Translation?
 
-**General Translation is an entire i18n stack**, including developer libraries, AI translations, and the entire infrastructure that serves translated content.
+**General Translation is an entire i18n stack**, including developer libraries, AI translations, and a complete infrastructure package for multilingual apps.
+
 With GT libraries like `gt-react` and `gt-next`, you can:
 
 ### 1. Translate entire React components, not just strings
@@ -45,13 +47,8 @@ UI passed as the children of the `<T>` component will be translated regardless o
 
 ```javascript title="page.js"
 import { T } from "gt-next";
-import CustomButton from "./CustomButton";
 
 export default function Page() {
-  const myFunction = () => {
-    console.log("myValue");
-  };
-
   return (
     <T id="my_id">
       <p>You can write any JSX as children of the {"<T>"} component.</p>
@@ -59,10 +56,6 @@ export default function Page() {
         For example, you could write a <a href="/">link</a> and have the text be
         translated in context.
       </p>
-      <CustomButton onClick={myFunction}>
-        Or you could translate the children of a complex component like this
-        one!
-      </CustomButton>
     </T>
   );
 }
