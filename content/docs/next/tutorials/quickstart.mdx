@@ -7,17 +7,21 @@ description: Internationalize your Next.js App in 5 minutes with General Transla
 
 This guide describes how to internationalize an existing [Next.js](https://nextjs.org) project that uses the [App Router](https://nextjs.org/docs#app-router-vs-pages-router).
 
-We will cover 3 simple steps:
+We will cover 4 simple steps:
 
 <Steps>
     <Step>
         Installing the required libraries
     </Step>
+
     <Step>
-        Run the CLI tool to setup your codebase
+        Setting up your local environment
     </Step>
     <Step>
-        Update your env variables
+        Adding `<GTProvider>` to your app
+    </Step>
+    <Step>
+        Running the CLI tool to tag translatable content
     </Step>
 </Steps>
 
@@ -35,8 +39,7 @@ This entire process should take under **5 minutes**.
 
 ### 1. Install libraries
 
-Install the [gt-next](https://www.npmjs.com/package/gt-next) and [gt-react-cli](https://www.npmjs.com/package/gt-react-cli) libraries.
-
+Install the [gt-next](https://www.npmjs.com/package/gt-next) and [gt-next-cli](https://www.npmjs.com/package/gt-next-cli) libraries.
 
 <Tabs items={["npm", "yarn", "bun", "pnpm"]}>
   <Tab value="npm">
@@ -65,9 +68,80 @@ Install the [gt-next](https://www.npmjs.com/package/gt-next) and [gt-react-cli](
   </Tab>
 </Tabs>
 
-### 2. Run our CLI tool
+### 2. Set up your local environment
 
-Run the [gt-react-cli](https://www.npmjs.com/package/gt-react-cli) tool to setup your project for translation.
+Add your API key and Project ID to your local environment.
+
+<Steps>
+
+    <Step>
+        Navigate to the [Dashboard](https://www.generaltranslation.com/en-US/signin).
+            * For Production Environments: Navigate to the **API Keys** page in the sidebar.
+            * For Development Environments: Navigate to the **Developer Keys** page in the sidebar.
+            {/* TODO: Staging/testing envs */}
+    </Step>
+
+    <Step>
+        Click **Create Dev API Key** or **Create API Key** then copy the API key and Project ID to your clipboard.
+    </Step>
+
+    <Step>
+        Add the Project ID and API Key to your environment.
+            ```bash title=".env.local" copy
+            GT_API_KEY="YOUR_GT_API_KEY"
+            GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+    </Step>
+
+</Steps>
+<Callout type="warn">
+    **Protect Your API Keys!**
+
+    Production API keys should only be used in production environments and **never** in non-production environments.
+    Likewise, development API keys should **only** be used for local environments.
+
+    *Never commit your API keys to a public repository!*
+
+    {/* TODO: You can read more about configuring privacy here. */}
+    {/* TODO: talk about information that is made public for production but not dev */}
+    {/* TODO: talk about how dev is an auth cache (still under construction) */}
+    {/* TODO: talk about how we will eventually have authenticated caches (can be used for personal info only avail to anyone who has the app or for alpha/beta testing) */}
+
+</Callout>
+
+### 3. Add `<GTProvider>`
+
+[`<GTProvider>`](/docs/next/api/components/gtprovider) is used to configure the behavior of `gt-next` in client components. 
+It should be placed in the [`layout.tsx`](https://nextjs.org/docs/app/getting-started/layouts-and-pages#creating-a-layout) file at the root of your app directory.
+
+```jsx copy
+// layout.js
+
+import { GTProvider } from 'gt-next'
+import { getLocale } from 'gt-next/server'
+
+export default async function RootLayout() {
+
+  // ensures the html lang attribute is correct
+  const locale = await getLocale(); 
+
+  return (
+    <html lang={lang}>
+      <body>
+        <GTProvider>
+          {children}
+        </GTProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+For a full list of `<GTProvider>` props and extended documentation, see the [API reference](/docs/next/api/components/gtprovider).
+
+### 4. Run our CLI tool
+
+Run the [gt-next-cli](https://www.npmjs.com/package/gt-next-cli) to setup your project for translation.
 
 This will scan your codebase for translatable content and automatically wrap it in `<T>` components.
 
@@ -114,48 +188,6 @@ export default function Page() {
   );
 }
 ```
-</Callout>
-
-
-### 3. Set up your local environment
-
-Add your API key and Project ID to your local environment.
-
-<Steps>
-
-    <Step>
-        Navigate to the [Dashboard](https://www.generaltranslation.com/en-US/signin).
-            * For Production Environments: Navigate to the **API Keys** page in the sidebar.
-            * For Development Environments: Navigate to the **Developer Keys** page in the sidebar.
-            {/* TODO: Staging/testing envs */}
-    </Step>
-
-    <Step>
-        Click **Create Dev API Key** or **Create API Key** then copy the API key and Project ID to your clipboard.
-    </Step>
-
-    <Step>
-        Add the Project ID and API Key to your environment.
-            ```bash title=".env.local" copy
-            GT_API_KEY="YOUR_GT_API_KEY"
-            GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
-            ```
-    </Step>
-
-</Steps>
-<Callout type="warn">
-    **Protect Your API Keys!**
-
-    Production API keys should only be used in production environments and **never** in non-production environments.
-    Likewise, development API keys should **only** be used for local environments.
-
-    *Never commit your API keys to a public repository!*
-
-    {/* TODO: You can read more about configuring privacy here. */}
-    {/* TODO: talk about information that is made public for production but not dev */}
-    {/* TODO: talk about how dev is an auth cache (still under construction) */}
-    {/* TODO: talk about how we will eventually have authenticated caches (can be used for personal info only avail to anyone who has the app or for alpha/beta testing) */}
-
 </Callout>
 
 ---
