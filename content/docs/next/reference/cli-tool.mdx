@@ -5,15 +5,15 @@ description: How to deploy your project to production with General Translation
 
 # Overview
 
-This is a guide on how to use the [General Translation CLI tool](/docs/reference/cli) to deploy your site to production.
+This is a guide on how to use the [General Translation CLI tool](/docs/next/reference/cli) to deploy your site to production.
 This CLI tool scans through your project and looks for content to translate. It handles both the dictionary and the `<T>` component formats.
 
 
 
-Read more about the CLI tool [here](/docs/reference/cli).
+Read more about the CLI tool [here](/docs/next/reference/cli).
 
-This guide assumes that you have already integrated `gt-next` or `gt-react` into your project.
-If you haven't, please follow the [NextJS Quick Start Guide](/docs/next/tutorials/quickstart) or the [React Quick Start Guide](/docs/react/tutorials/quickstart) before proceeding.
+This guide assumes that you have already integrated `gt-next` into your project.
+If you haven't, please follow the [Next Quick Start Guide](/docs/next/tutorials/quickstart) before proceeding.
 
 <Callout type="error">
     **For production only!**
@@ -45,22 +45,22 @@ If you haven't, please follow the [NextJS Quick Start Guide](/docs/next/tutorial
         <Tabs items={["npm", "yarn", "bun", "pnpm"]}>
           <Tab value="npm">
           ```bash 
-          npm i gt-react-cli
+          npm i gt-next-cli
           ``` 
           </Tab>
           <Tab value="yarn">
           ```bash 
-          yarn add gt-react-cli
+          yarn add gt-next-cli
           ```
           </Tab>
           <Tab value="bun">
           ```bash 
-          bun add gt-react-cli
+          bun add gt-next-cli
           ```
           </Tab>
           <Tab value="pnpm">
           ```bash 
-          pnpm add gt-react-cli
+          pnpm add gt-next-cli
           ```
           </Tab>
         </Tabs>
@@ -88,7 +88,7 @@ on-demand translations may take a few seconds to complete, you can pre-translate
 You can select which locales you want to pre-translate by specifying them in the command.
 
 ```bash copy
-npx gt-cli translate --locales fr es ja
+npx gt-next-cli translate --locales fr es ja
 ```
 
 <Callout>
@@ -110,10 +110,8 @@ To test a dry run of the CLI tool, you can use the `--dry-run` flag. Running the
 you to validate proper usage of the `<T>` components or dictionary formats in your codebase, without actually sending data to our servers.
 
 ```bash copy
-npx gt-cli translate --dry-run
+npx gt-next-cli translate --dry-run
 ```
-
-
 
 ---
 
@@ -124,5 +122,5 @@ npx gt-cli translate --dry-run
  * You can specify which locales you want to pre-translate.
 
 ## Next steps
- * Learn more about the [CLI tool](/docs/reference/cli) and [pre-translation](/docs/reference/cli#pre-translation).
+ * Learn more about the [CLI tool](/docs/next/reference/cli) and [pre-translation](/docs/next/reference/cli#pre-translation).
  * Learn more about [locale strings](/docs/reference/locale-strings).

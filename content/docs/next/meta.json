@@ -12,6 +12,8 @@
     "reference/t-reference",
     "reference/using-variable-components",
     "reference/using-branching-components",
+    "reference/cli",
+    "reference/cli-tool",
     "reference/dictionaries",
     "---Advanced---",
     "reference/i18n-configuration",

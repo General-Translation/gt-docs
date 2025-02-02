@@ -6,7 +6,7 @@ description: The General Translations CLI tool
 ## Overview
 
 This is a reference doc on the General Translation CLI tool.
-For a step by step guide, check out the [Deploying to Production](/docs/usage/cli-tool) guide.
+For a step by step guide, check out the [Deploying to Production](/docs/react/reference/cli-tool) guide.
 
 ### Installation
 
@@ -55,7 +55,7 @@ The rest can be translated at runtime as necessary.
 
 Yes, you must run the CLI tool as part of your CI/CD pipeline in order to ensure that your content is able to be translated in production.
 
-Due to the nature of React (and Next.js client components) being rendered on the client side, API Keys and similar credentials
+Due to the nature of React being rendered on the client side, API Keys and similar credentials
 cannot be passed to the client. The CLI tool is necessary to prevent abuse from malicious actors. 
 
 Running the CLI tool allows GT to pre-authorize your content for translation via hashing, eliminating security vulnerabilities.
@@ -66,7 +66,7 @@ Running the CLI tool allows GT to pre-authorize your content for translation via
 To use the CLI tool, run the following command from the root of your project:
 
 ```bash title="shell" copy
-npx gt-cli translate
+npx gt-react-cli translate
 ```
 
 <Callout type="warn">
@@ -148,7 +148,7 @@ Additionally, the CLI tool can automatically scan and setup your project for tra
 If you are using General Translation for the first time, we recommend running the setup to get started.
 
 ```bash title="shell" copy
-npx gt-cli setup
+npx gt-react-cli setup
 ```
 
 <Callout type="warn">
@@ -258,12 +258,6 @@ modify the `lang` attribute in the `<html>` tag to dynamically set the language 
 
 <TypeTable
   type={{
-    "--framework": {
-        description:
-            'next | react',
-        type: 'string',
-        optional: true,
-    },
     "--src": {
         description:
             'The source directory to scan',

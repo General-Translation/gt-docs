@@ -1,4 +1,4 @@
 {
-    "title": "Reference",
-    "pages": ["supported-locales", "locale-strings", "cli"]
+  "title": "Reference",
+  "pages": ["supported-locales", "locale-strings"]
 }
