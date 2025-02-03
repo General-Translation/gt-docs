@@ -4,7 +4,12 @@ import { BookCheck, Book, Earth, MessageSquareText } from 'lucide-react';
 
 export const baseOptions: HomeLayoutProps = {
   nav: {
-    title: <div style={{"display": "flex", "alignItems": "center"}}><Logo/>&nbsp;&nbsp;General Translation&nbsp;&nbsp;</div>,
+    title: (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Logo />
+        &nbsp;&nbsp;General Translation&nbsp;&nbsp;
+      </div>
+    ),
     url: 'https://www.generaltranslation.com',
   },
   links: [
@@ -22,9 +27,9 @@ export const baseOptions: HomeLayoutProps = {
     },
     {
       text: 'Pricing',
-      url: 'https://www.generaltranslation.com/pricing',
+      url: 'https://generaltranslation.com/pricing',
       active: 'nested-url',
-      icon: <BookCheck />
+      icon: <BookCheck />,
     },
     {
       text: 'Blog',
