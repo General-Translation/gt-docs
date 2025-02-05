@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 import './global.css';
 import { RootProvider } from 'fumadocs-ui/provider';
 import { Inter } from 'next/font/google';
@@ -11,7 +11,7 @@ const inter = Inter({
 export function generateMetadata(): Metadata {
   return {
     title: 'Docs — General Translation',
-    description: "Documentation for the General Translation i18n stack.",
+    description: 'Documentation for the General Translation i18n stack.',
     icons: {
       icon: [
         {
@@ -25,17 +25,25 @@ export function generateMetadata(): Metadata {
           href: '/dark-favicon.ico',
         },
       ],
-    }
-  }
+    },
+    keywords: [
+      'translation',
+      'localization',
+      'i18n',
+      'internationalization',
+      'automate',
+      'next.js',
+      'nextjs',
+      'react',
+    ],
+  };
 }
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body suppressHydrationWarning >
-        <RootProvider>
-          {children}
-        </RootProvider>
+      <body suppressHydrationWarning>
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
   );
