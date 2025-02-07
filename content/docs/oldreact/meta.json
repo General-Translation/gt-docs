@@ -1,6 +1,0 @@
-{
-  "title": "React",
-  "icon": "react",
-  "defaultOpen": true,
-  "pages": ["quickstart", "t", "gt-provider", "helpers", "cli", "advanced"]
-}
