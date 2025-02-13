@@ -14,10 +14,10 @@ We will cover 4 simple steps:
         Installing the required libraries
     </Step>
     <Step>
-        Setting up your local environment
+        Adding `<GTProvider>` to your app
     </Step>
     <Step>
-        Adding `<GTProvider>` to your app
+        Setting up your local environment
     </Step>
     <Step>
         Running the CLI tool to tag translatable content
@@ -67,14 +67,33 @@ Install the [gt-react](https://www.npmjs.com/package/gt-react) and [gt-react-cli
   </Tab>
 </Tabs>
 
-### 2. Set up your local environment
+### 2. Add `<GTProvider>`
 
-Add your API key and Project ID to your local environment.
+[`<GTProvider>`](/docs/react/api/components/gtprovider) is used to configure the behavior of `gt-react`. 
+It should be placed as high up in your app as possible, ideally at the root.
+
+```jsx copy
+import MyApp from "./MyApp";
+
+export default function App() {
+  return (
+    <GTProvider>
+      <MyApp />
+    </GTProvider>
+  );
+}
+```
+
+For a full list of `<GTProvider>` props and extended documentation, see the [API reference](/docs/react/api/components/gtprovider).
+
+### 3. Set up your local environment
+
+Add your API key and Project ID to your environment variables.
 
 <Steps>
 
     <Step>
-        Navigate to the [Dashboard](https://generaltranslation.com/en-US/signin).
+        Navigate to the [Dashboard](https://generaltranslation.com/dashboard).
             * Navigate to the **Developer Keys** page in the sidebar.
             {/* TODO: Staging/testing envs */}
     </Step>
@@ -84,11 +103,43 @@ Add your API key and Project ID to your local environment.
     </Step>
 
     <Step>
-        Add the Project ID and API Key to your environment variables.
+        Add the Project ID and API Key to your environment variables. Depending on your React framework, the environment variables may look slightly different.
+        <Tabs items={["Vite", "Gatsby", "create-react-app"]}>
+            <Tab value="Vite">
             ```bash copy
-            GT_API_KEY="YOUR_GT_API_KEY"
-            GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            VITE_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            VITE_GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
             ```
+            </Tab>
+            <Tab value="Gatsby">
+            ```bash copy
+            GATSBY_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            GATSBY_GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+            <Tab value="create-react-app">
+            ```bash copy
+            REACT_APP_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            REACT_APP_GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+        </Tabs>
+    </Step>
+
+    <Step>
+    **(Optional)** 
+    The following steps are only required for shipping your app to production.
+
+        Navigate to the [Dashboard](https://generaltranslation.com/dashboard).
+        * Navigate to the **API Keys** page in the sidebar.
+        * Click **Create API Key** then copy the API key to your clipboard.
+    </Step>
+    <Step>
+        Add your API key and Project ID to your environment variables.
+        ```bash copy
+        GT_API_KEY="YOUR_GT_API_KEY"
+        GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+        ```
     </Step>
 
 </Steps>
@@ -98,33 +149,10 @@ Add your API key and Project ID to your local environment.
     All React environment variables are bundled into your application at build time and are publicly visible in the client-side code. For security reasons, you should:
     
     - Only use development API keys during local development
-    - Never include production API keys in your environment variables
     - Use production API keys only with the CLI tool for deployment
+    - **Never include any API keys as environment variables in production**
 </Callout>
 
-### 3. Add `<GTProvider>`
-
-[`<GTProvider>`](/docs/react/api/components/gtprovider) is used to configure the behavior of `gt-react`. 
-It should be placed as high up in your app as possible, ideally at the root.
-
-To work out of the box, `<GTProvider>` needs the `projectID`.
-
-```jsx copy
-import MyApp from "./MyApp";
-
-export default function App() {
-  return (
-    <GTProvider
-      projectID={process.env.GT_PROJECT_ID}
-      devApiKey={process.env.GT_API_KEY}
-    >
-      <MyApp />
-    </GTProvider>
-  );
-}
-```
-
-For a full list of `<GTProvider>` props and extended documentation, see the [API reference](/docs/react/api/components/gtprovider).
 
 ### 4. Run our CLI tool
 
@@ -151,7 +179,7 @@ See the [CLI tool documentation](/docs/react/reference/cli#setup) for more infor
     **Example**
 
     The CLI tool will wrap any JSX elements containing translatable content in `<T>` components.
-    Each component will be given a unique `id` prop.
+    Each component will be given a unique `id` prop. This prop is not required!
 
 See the [`<T>` component documentation](/docs/usage/t) for more information.
 
@@ -161,7 +189,7 @@ import { Card, CardHeader, CardContent } from "@components/ui/Card";
 
 export default function Page() {
   return (
-    <T id="app.page.0"> // [!code highlight]
+    <T> // [!code highlight]
       {/* This text will be translated */}
       <b>Shakespeare&apos;s</b> quotes
       {/* Any arbitrary components and their children will also be translated */}
