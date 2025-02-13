@@ -125,23 +125,6 @@ Add your API key and Project ID to your environment variables.
             </Tab>
         </Tabs>
     </Step>
-
-    <Step>
-    **(Optional)** 
-    The following steps are only required for shipping your app to production.
-
-        Navigate to the [Dashboard](https://generaltranslation.com/dashboard).
-        * Navigate to the **API Keys** page in the sidebar.
-        * Click **Create API Key** then copy the API key to your clipboard.
-    </Step>
-    <Step>
-        Add your API key and Project ID to your environment variables.
-        ```bash copy
-        GT_API_KEY="YOUR_GT_API_KEY"
-        GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
-        ```
-    </Step>
-
 </Steps>
 <Callout type="warn">
     **Protect Your API Keys!**
@@ -296,16 +279,35 @@ In order to ship your app to production, you will need to run our CLI tool to pa
 
 </Callout>
 
-Run the following command in your deployment process:
+<Steps>
+    <Step>
+        Navigate to the [Dashboard](https://generaltranslation.com/dashboard).
+        * Navigate to the **API Keys** page in the sidebar.
+        * Click **Create API Key** then copy the API key to your clipboard.
+    </Step>
+    <Step>
+        Add your API key and Project ID to your environment variables.
+        ```bash copy
+        GT_API_KEY="YOUR_GT_API_KEY"
+        GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+        ```
+        <Callout type="info">
+            
+        The CLI tool expects a production API key and project ID. There are a few ways to set these:
 
-```bash copy
-npx gt-react-cli translate
-```
+        - Set the `GT_API_KEY` and `GT_PROJECT_ID` environment variables in your deployment environment.
+        - Pass the `--api-key` and `--project-id` flags to the CLI tool.
+        </Callout>
+    </Step>
+    <Step>
+      Run the CLI tool to translate your app.
+      ```bash copy
+      npx gt-react-cli translate
+      ```
+    </Step>
+</Steps>
 
-The CLI tool expects a production API key and project ID. There are a few ways to set these:
-
-- Set the `GT_API_KEY` and `GT_PROJECT_ID` environment variables in your deployment environment.
-- Pass the `--api-key` and `--project-id` flags to the CLI tool.
+Additionally, if your project has CI/CD, you should add this command to your deployment pipeline.
 
 For more information, see the [CLI tool documentation](/docs/react/reference/cli-tool#usage).
 
