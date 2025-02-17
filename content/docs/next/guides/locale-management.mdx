@@ -1,80 +1,86 @@
 ---
 title: Manage Locales
-description: How to manage and specify supported locales in your application
+description: How to manage your App's locales
 ---
 
 
 ## Overview
 
-Managing locales is a critical step when building a multilingual application with `gt-next`.
-This guide will walk you through how to define, configure, manage supported locales.
-By default, your app can be translated into all available languages.
+This document provides guidance on how to manage locales in your Next.js application with the `gt-next`.
 
-In this guide, we will cover how to manage locales in your application, including:
- * Select Supported Locales
- * (Coming Soon) Select Excluded Locales
+This library uses the [BCP-47 standard](/docs/reference/locale-strings) to define locales.
+See a list of currently supported locales [here](/docs/reference/supported-locales).
 
+---
 
-## Including Locales [#include-locales]
+## Managing Locales
 
-Including specific locales for translation ensures that only the languages you have specified will be translated.
-For instance, if you have selected English, Chinese, and Japanese as your supported locales, translations will only be performed for these languages.
-Any other languages not included in your list of locales will not be translated.
+In order for translation to be performed, you must add the translate command to your build script:
 
-This approach helps to manage resources effectively and ensures that translations are only provided for the locales that are relevant to your application.
-
-These instructions assume that you have already integrated `gt-next` into your Next.js application and you have added your API keys to your environment.
-
-<Steps>
-    <Step>
-        Locate your config file, typically `your-app/next.config.mjs` (or `.ts`, `.mjs`, `.cjs`)
-    </Step>
-    <Step>
-        Add the `locales` property to your `initGT` configuration object.
-        This property should be an array of strings, each representing a locale.
-        For example, to prioritize English, Chinese, and Japanese, you would write:
-```js title="next.config.js" copy
-import { initGT } from 'gt-next/config'
-
-const withGT = initGT({
-  defaultLocale: "en-US",
-  locales: ["en-US", "zh", "jp"]
-});
-
-export default withGT({});
-```
-    </Step>
-    <Step>
-        **(Optional)**
-        If you are using the `gt-next` middleware in your application, you must also specify the supported locales in the `createNextMiddleware` function.
-```js title="middleware.js" copy
-import { createNextMiddleware } from 'gt-next/middleware'
-
-export default createNextMiddleware({
-  locales: ["en-US", "zh", "jp"]
-});
-
-export const config = {
-  matcher: [
-    "/((?!api|static|.*\\..*|_next).*)",
-  ],
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gt-next-cli translate && next build"
+  }
 }
 ```
 
-        See [I18n Routing](/docs/guides/i18n-routing) for more information on how to set up the middleware.
-    </Step>
-</Steps>
+This will generate the necessary translations and store them in the cloud or in your local filesystem depending on your configuration.
+
+### Managing locales through your dashboard
+
+Navigate to your [project dashboard](https://generaltranslation.com/en-US/signin).
+Click on **Manage Locales** in the sidebar.
+
+From there you can add and remove locales from your project.
+If your project uses the General Translation CDN to serve translations (default behavior),
+this will automatically update your production application to only include the configured locales.
+
+You must omit the `locales` property from your `gt.config.json` file to use this feature.
+
+### Managing locales locally
+
+You also have the ability to add new locales using the `gt.config.js` file as well.
+Just specify the list of locales you want to support in the `locales` property.
+
+```json title="gt.config.json" copy
+{
+  "locales": ["en-US", "zh", "jp"],
+}
+```
+
+<Callout type="info">
+    **Note:** When you specify locales in your `gt.config.json` file, you cannot use the **Manage Locales** feature in the dashboard.
+    In order to change your supported locales, you must update your `gt.config.json` file and redeploy.
+</Callout>
 
 
-## Excluding Locales
+### Managing locales with the CLI tool
 
-🚧 This feature is coming soon. 🚧
+You can also add the list of locales to your `npx gt-next-cli translate` command by using the `--locales` flag.
 
-## Common Pitfalls
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gt-next-cli translate --locales en-US zh jp && next build"
+  }
+}
+```
 
-### Supported Locales
+This will behave just like adding the `locales` property in the `gt.config.json` file.
 
-General Translations utilizes LLM models generate accurate translations.
-However, these models are not without their limitations.
-Certain resource languages may not be supported by the model provider you have selected or any of the available providers.
-To see a list of supported languages, you can refer to the [List of Supported Locales](/docs/reference/supported-locales).
+
+## Whitelisted locales
+
+As an optional feature, you can add a list of whitelisted locales.
+If you enable this feature, any attempts to call npx translate on a non-whitelisted locale will fail.
+
+---
+
+## Notes
+ * You can manage locales through the dashboard, the `gt.config.json` file, or the CLI tool.
+ * Using `gt.config.json` or CLI tool to manage locales will disable the **Manage Locales** feature in the dashboard.
+
+
+ ## Next Steps
+ * Learn about the locale syntax in the [Locale Strings](/docs/reference/locale-strings) reference.
