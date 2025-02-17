@@ -2,6 +2,7 @@
   "title": "Tutorials",
   "pages": [
     "quickstart",
+    "quickdeploy",
     "examples/next-speedrun",
     "examples/currency-converter",
     "!dictionary"
