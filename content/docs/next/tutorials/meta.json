@@ -3,6 +3,7 @@
   "pages": [
     "quickstart",
     "quickdeploy",
+    "translating-strings",
     "examples/next-speedrun",
     "examples/currency-converter",
     "!dictionary"

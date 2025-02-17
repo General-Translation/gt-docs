@@ -8,6 +8,8 @@ description: An overview of the Dictionary Pattern
 In this reference guide, we will introduce you to the dictionary pattern.
 We will explain what a dictionary is and how to use it in your Next.js application.
 
+---
+
 ## What is a dictionary?
 
 General Translation allows translatable content to be stored in a dictionary file.
@@ -34,10 +36,9 @@ You can use a dictionary along side `<T>` components.
 ### Our advice
 
 We recommend using the `<T>` component because of its simplicity especially if you are new to internationalization (i18n).
-
 We offer dictionary support for those who prefer this design pattern from past experiences or for ease of integration with existing code bases.
 
-We go into the reasons and justifications for this recommendation in [this article](/docs/next/discussions/inline-vs-dictionary).
+---
 
 
 ## How to use dictionaries
@@ -87,9 +88,9 @@ my-app/
 If you are not using a `src/` folder, you can also specify the directory of the dictionary in the [`next.config.js`](/docs/next/api/config/initGT) file.
 If you are using i18n routing, make sure to also specify the directory of the dictionary in the [`middleware.js`](/docs/next/guides/i18n-routing) file.
 
-Add the following content to your `dictionary.[jsx|tsx]` file:
+Add the following content to your `dictionary.js` file:
 
-```js title="src/dictionary.[jsx|tsx]" copy
+```js title="src/dictionary.js" copy
 
 const dictionary = {
   greetings: {
@@ -227,7 +228,7 @@ export default async function MyComponent() {
 🚧 This section is currently under construction. 🚧
 
 
-#### Prefixing with `<GTProvider>` (#prefixing-with-gtprovider)
+#### Prefixing with `<GTProvider>` [#prefixing-with-gtprovider]
 
 You can also specify a prefix in the `<GTProvider>` component.
 Just like with `useGT()`, `getGT()`, and `useElement()`, this prefix will be used to specify a subset of the dictionary.
@@ -246,12 +247,14 @@ export default function Layout({ children }) {
 
 ```
 
+---
+
 ## Notes
 
 - Dictionaries are an alternative to the `<T>` component.
 - They can be used in conjunction with `<T>` components or standalone.
 
-## Next Steps
+## Next steps
 
 - [Learn more about using variables in dictionaries](/docs/next/reference/dictionaries/variable-components)
 - [Learn more about using branches in dictionaries](/docs/next/reference/dictionaries/branching-components)

@@ -13,7 +13,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
 import { Card, Cards } from 'fumadocs-ui/components/card';
-
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
 
 export default async function Page({
   params,
@@ -26,8 +26,8 @@ export default async function Page({
   const MDX = page.data.body;
 
   return (
-    <DocsPage 
-      toc={page.data.toc} 
+    <DocsPage
+      toc={page.data.toc}
       tableOfContent={{
         style: 'clerk',
       }}
@@ -36,7 +36,23 @@ export default async function Page({
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
-        <MDX components={{ ...defaultMdxComponents, Tab, Tabs, Step, Steps, Accordion, Accordions, TypeTable, Card, Cards }} />
+        <MDX
+          components={{
+            ...defaultMdxComponents,
+            Tab,
+            Tabs,
+            Step,
+            Steps,
+            Accordion,
+            Accordions,
+            TypeTable,
+            Card,
+            Cards,
+            File,
+            Folder,
+            Files,
+          }}
+        />
       </DocsBody>
     </DocsPage>
   );
@@ -55,7 +71,6 @@ export function generateMetadata({ params }: { params: { slug?: string[] } }) {
     description: page.data.description,
   } satisfies Metadata;
 }
-function useTheme(): { resolvedTheme: any; } {
+function useTheme(): { resolvedTheme: any } {
   throw new Error('Function not implemented.');
 }
-
