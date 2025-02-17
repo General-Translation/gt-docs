@@ -11,13 +11,13 @@ We will cover 4 simple steps:
 
 <Steps>
     <Step>
-        Installing the required libraries
-    </Step>
-    <Step>
-        Adding `<GTProvider>` to your app
+        Installing `gt-next` and `gt-next-cli`
     </Step>
     <Step>
         Setting up your local environment
+    </Step>
+    <Step>
+        Adding `<GTProvider>` to your app
     </Step>
     <Step>
         Running the CLI tool to tag translatable content
@@ -119,41 +119,6 @@ export default async function RootLayout() {
 ```
 
 For a full list of `<GTProvider>` props and extended documentation, see the [API reference](/docs/next/api/components/gtprovider).
-
-
-### 3. Set up your local environment
-
-Add your API key and Project ID to your local environment.
-
-<Steps>
-
-    <Step>
-        Navigate to the [Dashboard](https://generaltranslation.com/dashboard).
-            * Navigate to the **Developer Keys** page in the sidebar.
-            {/* TODO: Staging/testing envs */}
-    </Step>
-
-    <Step>
-        Click **Create Dev API Key** then copy the API key and Project ID to your clipboard.
-    </Step>
-
-    <Step>
-        Add the Project ID and API Key to your environment variables. 
-        ```bash copy
-        GT_API_KEY="YOUR_GT_DEV_API_KEY"
-        GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
-        ```
-    </Step>
-</Steps>
-
-<Callout type="warn">
-    **Protect Your API Keys!**
-
-    Production API keys should only be used in production environments and **never** in non-production environments.
-    Likewise, development API keys should **only** be used for local environments.
-
-    *Never commit your API keys to a public repository!*
-</Callout>
 
 ### 4. Run the CLI tool
 
