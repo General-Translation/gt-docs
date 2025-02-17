@@ -13,10 +13,10 @@ This guide will show you how to setup local translations for your Next.js app.
 By default, your app will use General Translation's API and CDN to translate your app.
 This has many benefits, but also a few drawbacks:
 
-- Users are required to use General Translation's services (API and CDN)
+- Your app is required to use General Translation's services (API and CDN)
 - In production, translations may take slightly longer to load (~100-200ms)
 
-Local translations solve both of these problems. However, please note that there are also a few drawbacks:
+Local translations solve both of these problems. However, please note that there are also a few tradeoffs:
 
 - They may increase your bundle size
 - Your project will not be able to use on-demand translations in production
@@ -40,14 +40,15 @@ There are a few pros and cons to using local translations:
 
 - **Cons:**
   - They may increase your bundle size
-  - You will need to manually update translations as your app changes
+  - You will not be able to modify translations in production
+    - With the GT CDN, you can modify translations in production without needing to re-publish your app. Changes go live within 1 minute.
 
 
 ## Setup
 
 <Steps>
   <Step>
-    Add a `loadTranslation.[ts|js]` file under `./src` or at your project's root with the following content:
+    Add a `loadTranslation.[ts|js]` file under `./src` with the following content:
 
     <Tabs items={["ts", "js"]}>
       <Tab value="ts">
@@ -67,18 +68,18 @@ There are a few pros and cons to using local translations:
         ```
       </Tab>
     </Tabs>
+
+    <Callout>
+      If you are not using a `src` directory, you can place this file at your project's root. Modify the filepaths accordingly.
+    </Callout>
   </Step>
   <Step>
     Make sure you call `initGT()` in your `next.config.[ts|js]` file.
 
-    <Tabs items={["ts", "js"]}>
-      <Tab value="ts">
-        ```ts title="next.config.ts" copy
-        const withGT = initGT({});
-        export default withGT(nextConfig);
-        ```
-      </Tab>
-    </Tabs>
+    ```ts title="next.config.[ts|js]" copy
+    const withGT = initGT({});
+    export default withGT(nextConfig);
+    ```
   </Step>
   <Step>
     Add the flags `--no-publish` and `--translations-dir` to the `translate` command. 
@@ -100,4 +101,8 @@ That's it! Your app will now only load translations from your local files.
 
 You can customize `loadTranslation()` to also load translations from other sources, such as your database or your own CDN.
 
+## Additional Resources
+
 See the `loadTranslation` function in the [API Reference](/docs/next/api/config/load-translation) for more information.
+
+See the [Examples](/docs/reference/examples) page for some example projects.

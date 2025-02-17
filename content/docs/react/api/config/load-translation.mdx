@@ -33,10 +33,19 @@ The `loadTranslation` function should return a promise that resolves to an objec
 
 GT libraries expect the function to have type `(locale: string) => Promise<any>`.
 
-It should be exported as the default export of a file called `loadTranslation.ts` or `loadTranslation.js`.
+You must manually import the `loadTranslation` function and assign it as a prop to the `<GTProvider>` component.
 
-<Callout>
-Please note that `loadTranslation` will only be called by the server side in a Next.js environment.
+```tsx
+import loadTranslation from './loadTranslation';
+
+<GTProvider loadTranslation={loadTranslation}>
+  <App />
+</GTProvider>
+```
+
+<Callout type="warn">
+Please note that in a React environment, `loadTranslation` will be called by the client side.
+Do not include any secrets or environment variables in the function.
 </Callout>
 
 ## Examples
@@ -45,7 +54,7 @@ Please note that `loadTranslation` will only be called by the server side in a N
 
 ```js title="loadTranslation.js"
 export default async function loadTranslation(locale) {
-  const translations = await import(`../public/_gt/${locale}.json`);
+  const translations = await import(`./_gt/${locale}.json`);
   return translations;
 };
 ```
@@ -59,17 +68,3 @@ export default async function loadTranslation(locale) {
   return data;
 };
 ```
-
-### Load translations from your own database
-
-```js title="loadTranslation.js"
-export default async function loadTranslation(locale) {
-  const translations = await prisma.translation.findUnique({
-    where: {
-      locale: locale,
-    },
-  });
-  return translations;
-};
-```
-
