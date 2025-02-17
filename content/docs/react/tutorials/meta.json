@@ -1,4 +1,4 @@
 {
   "title": "Tutorials",
-  "pages": ["quickstart", "quickdeploy", "local-tx"]
+  "pages": ["quickstart", "quickdeploy", "translating-strings", "local-tx"]
 }
