@@ -5,8 +5,54 @@ description: Docs for General Translation's localization libraries
 
 Welcome to the docs for [General Translation, Inc.](https://www.generaltranslation.com) (GT)! 
 
-We publish developer libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps. 
+We publish open-source libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps. 
 Plus, we provide a [platform](https://generaltranslation.com/dashboard) for automating your entire internationalization (i18n) stack.
+
+See our [Github repo](https://github.com/General-Translation/gt-libraries) for the source code and some example projects.
+
+## Features
+
+### ⚛️ Translate entire React components, not just strings
+- A single opening and closing `<T>` component is all you need to translate an entire React component.
+- No need for complex refactoring or messy function calls.
+
+```tsx title="page.js"
+export default function Page() {
+  return (
+    <T> // [!code highlight]
+      <p>You can write any JSX as children of the {"<T>"} component.</p>
+      <p>
+        For example, you could write a <a href="/">link</a> and have the text be
+        translated in context.
+      </p>
+      <div>
+        <div>
+          <p>Even deeply nested components are translated in context.</p>
+          <button>Click me!</button>
+        </div>
+      </div>
+    </T> // [!code highlight]
+  );
+}
+```
+
+### 🧠 AI-powered translations
+- Translations are created in seconds.
+- UI and HTML elements are translated in context by state of the art AI models.
+- HTML content are re-arranged and customized according to the language.
+
+### 🔧 Developer-friendly
+- Setup is simple and can be done in minutes, no need for complex refactoring.
+- Never have to worry about localization while coding, ever again.
+- No more wasting time managing translation keys like `t('menu.header.title')`.
+  - Just write everything in-line!
+
+
+<Callout>
+  These docs are under construction. Please email
+  [archie@generaltranslation.com](mailto:archie@generaltranslation.com?subject=Docs)
+  if what you're looking for isn't here.
+</Callout>
 
 ## Getting started
 Follow our quickstart guides:
@@ -20,18 +66,6 @@ Follow our quickstart guides:
     href="/docs/react/tutorials/quickstart"
   />
 </Cards>
-
-- Setup is simple and can be done in minutes.
-- No need need for complex refactoring.
-- UI and HTML elements are translated in context by powerful AI models.
-- Translations occur both live and in CI/CD.
-- Translations ship in seconds and load in milliseconds.
-
-<Callout>
-  These docs are under construction. Please email
-  [archie@generaltranslation.com](mailto:archie@generaltranslation.com?subject=Docs)
-  if what you're looking for isn't here.
-</Callout>
 
 ---
 

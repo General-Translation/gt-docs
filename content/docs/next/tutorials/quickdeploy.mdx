@@ -1,5 +1,5 @@
 ---
-title: Quick Deploy
+title: Deploy to Production
 description: Let's deploy your Next.js app with GT.
 ---
 
@@ -59,9 +59,15 @@ Make sure that the translate command comes before the build command.
 ```json title="package.json" copy
 {
   "scripts": {
-    "build": "npx gt-next-cli translate && next build"
+    "build": "npx gt-next-cli translate && <YOUR_BUILD_COMMAND>"
   }
 }
 ```
 
-That's it! You are now ready to deploy your Next.js app with GT!
+That's it! You are now ready to deploy your Next.js with GT!
+
+---
+
+## Next steps
+ * Learn more about [Locale Strings](/docs/reference/locale-strings) in GT.
+ * Learn more about the CLI tool in the [CLI Reference](/docs/next/reference/cli).

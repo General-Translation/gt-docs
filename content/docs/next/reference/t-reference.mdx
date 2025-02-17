@@ -68,7 +68,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang={locale}>
       <body>
-        <T id="heading"> Hello, world! </T>  // [!code highlight]
+        <T> Hello, world! </T>  // [!code highlight]
         
         <GTProvider>{children}</GTProvider> // [!code highlight]
       </body>
@@ -91,7 +91,7 @@ import { T, Var } from 'gt-next';
 
 export default function DynamicGreeting({ user }) {
   return (
-    <T id="greeting">
+    <T>
       Hello, <Var>{user.name}</Var>!
     </T>
   );
@@ -115,7 +115,7 @@ import { T, Branch } from 'gt-next';
 
 export default function StatusMessage({ status }) {
   return (
-    <T id="status">
+    <T>
       <Branch
         branch={status}
         active={<p>The user is active.</p>}
@@ -204,8 +204,11 @@ The localization of all content wrapped in any Variable Component is handled loc
 ### Basic Usage
 
 The simplest use case for `<T>` is to translate static text.
-Each `<T>` component requires a unique `id` to identify the content it translates.
-This helps loadtime performance by fetching translations only when needed.
+
+<Callout>
+    **Note:** The `id` prop is optional, but may be useful for debugging and observability.
+    Additionally, the translation editor feature on the platform will be easier to use if you provide a period separated `id`.
+</Callout>
 
 ```javascript copy
 import { T } from 'gt-next';

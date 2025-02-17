@@ -1,0 +1,108 @@
+---
+title: React Local Translations
+description: Setup local translations for your React app
+---
+
+## Overview
+
+This guide assumes you have already followed most of the steps in the [React Quickstart](/docs/react/tutorials/quickstart).
+If you haven't, please do so first.
+
+This guide will show you how to setup local translations for your React app.
+
+By default, your app will use General Translation's API and CDN to translate your app.
+This has many benefits, but also a few drawbacks:
+
+- Users are required to use General Translation's services (API and CDN)
+- In production, translations may take slightly longer to load (~100-200ms)
+
+Local translations solve both of these problems. However, please note that there are also a few drawbacks:
+
+- They may increase your bundle size
+- Your project will not be able to use on-demand translations in production
+
+<Callout type="warn">
+  To enable on-demand translations in development and production, you will still need to use GT services.
+</Callout>
+
+### What are local translations?
+
+Local translations are JSON source files containing translations for your content that are stored in your project's codebase.
+
+They can be used alongside, or in replacement of, the GT CDN. 
+
+There are a few pros and cons to using local translations:
+
+- **Pros:**
+  - You do not need to rely on General Translation's services for your production app
+    - Translations will load slightly faster (~100-200ms)
+  - You can use your own translation services
+
+- **Cons:**
+  - They may increase your bundle size
+  - You will need to manually update translations as your app changes
+
+
+## Setup
+
+<Steps>
+  <Step>
+    Add a `loadTranslation.[ts|js]` file under `./src` with the following content:
+
+    <Tabs items={["ts", "js"]}>
+      <Tab value="ts">
+        ```ts title="src/loadTranslation.ts" copy
+        export default async function loadTranslation(locale: string) {
+          const t = await import(`./_gt/${locale}.json`);
+          return t.default;
+        }
+        ```
+      </Tab>
+      <Tab value="js">
+        ```js title="src/loadTranslation.js" copy
+        export default async function loadTranslation(locale) {
+          const t = await import(`./_gt/${locale}.json`);
+          return t.default;
+        }
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step>
+    Pass `loadTranslation` as a prop to the `<GTProvider>` component.
+
+    ```tsx title="src/App.tsx" copy
+    import { GTProvider } from 'gt-react';
+    import loadTranslation from './loadTranslation';
+
+    export default function App() {
+      return (
+        <GTProvider loadTranslation={loadTranslation}>
+          <YourApp />
+        </GTProvider>
+      );
+    }
+        ```
+  </Step>
+  <Step>
+    Add the flags `--no-publish` and `--translations-dir` to the `translate` command. 
+    Add the flags `--no-publish` and `--translations-dir` to the `translate` command. 
+    
+    This will prevent translations from being published to the GT CDN, and will save them to the specified directory.
+
+    ```bash
+    npx gt-react-cli translate --no-publish --translations-dir ./src/_gt
+    ```
+
+    <Callout>
+      Depending on the specific framework you are using, you may need to ensure that the translation JSONs are included in the
+      final bundle.
+    </Callout>
+  </Step>
+</Steps>
+
+That's it! Your app will now only load translations from your local files.
+
+You can customize `loadTranslation()` to also load translations from other sources, such as your database or your own CDN.
+
+See the `loadTranslation` function in the [API Reference](/docs/react/api/config/load-translation) for more information.
