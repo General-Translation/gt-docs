@@ -5,16 +5,30 @@ description: Docs for General Translation's localization libraries
 
 Welcome to the docs for [General Translation, Inc.](https://www.generaltranslation.com) (GT)! 
 
-We publish open-source libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps. 
-Plus, we provide a [platform](https://generaltranslation.com/dashboard) for automating your entire internationalization (i18n) stack.
+{/* We publish open-source internationalization libraries for [React](https://react.dev) and [Next.js](https://nextjs.org) apps. 
+Plus, we provide a [platform](https://generaltranslation.com/dashboard) for automating your entire internationalization (i18n) stack. */}
 
 See our [Github repo](https://github.com/General-Translation/gt-libraries) for the source code and some example projects.
 
+## What is General Translation?
+
+General Translation is an entire i18n stack, including developer SDKs, AI translation services, and a complete infrastructure package for multilingual apps.
+
+General Translation manages everything for you, so you can focus on shipping features and new content.
+
+We currently support the following frameworks:
+- [Next.js](/docs/next/tutorials/quickstart) (Both the [App Router](/docs/next/tutorials/quickstart) and [Pages Router](/docs/react/tutorials/quickstart))
+- [React](/docs/react/tutorials/quickstart)
+- [Vite](/docs/react/tutorials/quickstart)
+- [Gatsby](/docs/react/tutorials/quickstart)
+
 ## Features
 
-### ⚛️ Translate entire React components, not just strings
+### ⚛️ Translate entire React components in-line
 - A single opening and closing `<T>` component is all you need to translate an entire React component.
 - No need for complex refactoring or messy function calls.
+- Content is in-line and in the same location as your code.
+- The library manages all i18n logic behind the scenes, so you don't have to.
 
 ```tsx title="page.js"
 export default function Page() {
@@ -36,26 +50,30 @@ export default function Page() {
 }
 ```
 
-### 🧠 AI-powered translations
-- Translations are created in seconds.
-- UI and HTML elements are translated in context by state of the art AI models.
-- HTML content are re-arranged and customized according to the language.
+### 🔎 Feature parity with existing libraries
+- GT libraries also support the same features as existing libraries like `next-intl` and `next-i18next`.
+  - Features such as dictionaries, plurals, currencies, and automatic routing are all supported.
 
 ### 🔧 Developer-friendly
-- Setup is simple and can be done in minutes, no need for complex refactoring.
-- Never have to worry about localization while coding, ever again.
+- Setup is simple and can be done in minutes.
+- All GT libraries are open-source and work standalone.
 - No more wasting time managing translation keys like `t('menu.header.title')`.
   - Just write everything in-line!
+- All GT libraries have simple interfaces and are easy to use.
+
+### 🧠 Free AI-powered translation service
+- Translations are created in seconds.
+- UI and HTML elements are translated in context by state of the art AI models.
+- HTML content is re-arranged and customized according to the language.
 
 
 <Callout>
-  These docs are under construction. Please email
-  [archie@generaltranslation.com](mailto:archie@generaltranslation.com?subject=Docs)
+  These docs are under construction. Please create an issue on our [GitHub repository](https://github.com/General-Translation/gt-docs/issues)
   if what you're looking for isn't here.
 </Callout>
 
 ## Getting started
-Follow our quickstart guides:
+Follow our quickstart guides. Each guide should take no more than 10 minutes to complete:
 <Cards>
   <Card
     title="Next.js"
