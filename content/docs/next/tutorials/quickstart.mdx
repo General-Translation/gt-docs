@@ -14,13 +14,10 @@ We will cover 4 simple steps:
         Installing `gt-next` and `gt-next-cli`
     </Step>
     <Step>
+        Running the CLI setup tool
+    </Step>
+    <Step>
         Setting up your local environment
-    </Step>
-    <Step>
-        Adding `<GTProvider>` to your app
-    </Step>
-    <Step>
-        Running the CLI tool to tag translatable content
     </Step>
 </Steps>
 
@@ -61,7 +58,34 @@ Install the [gt-next](https://www.npmjs.com/package/gt-next) and [gt-next-cli](h
   </Tab>
 </Tabs>
 
-### 2. Add your development API keys
+
+### 2. Run the CLI tool
+
+Use the [gt-next-cli](https://www.npmjs.com/package/gt-next-cli) to setup your project for translation.
+
+```bash title="shell" copy
+npx gt-next-cli setup
+```
+
+This will scan your codebase for translatable content and automatically wrap it in `<T>` components.
+
+Additionally, this will setup the necessary `next.config.js` plugin and insert `<GTProvider>` components where necessary.
+
+See the [CLI tool documentation](/docs/next/reference/cli#setup) for more information.
+
+<Callout type="warn">
+  **Experimental**
+
+  This feature is currently experimental and may not work perfectly. 
+  If you run into any issues, please let us know by creating an issue on our [GitHub repository](https://github.com/General-Translation/gt-libraries/issues).
+  In particular, note that some manual edits may be required.
+
+  - We are currently experiencing issues with automated translations setup for string content.
+  If you run into issues, please follow [this guide](/docs/next/tutorials/translating-strings) for translating strings.
+</Callout>
+
+
+### 3. Add your development API keys
 
 Add your API key and Project ID to your local environment.
 
@@ -92,7 +116,7 @@ Add your API key and Project ID to your local environment.
     *Never commit your API keys to a public repository!*
 </Callout>
 
-### 3. Add `<GTProvider>`
+{/* ### 3. Add `<GTProvider>`
 
 [`<GTProvider>`](/docs/next/api/components/gtprovider) is used to configure the behavior of `gt-next` in client components. 
 It should be placed in the [`layout.js`](https://nextjs.org/docs/app/getting-started/layouts-and-pages#creating-a-layout) file at the root of your app directory.
@@ -118,26 +142,7 @@ export default async function RootLayout() {
 }
 ```
 
-For a full list of `<GTProvider>` props and extended documentation, see the [API reference](/docs/next/api/components/gtprovider).
-
-### 4. Run the CLI tool
-
-Use the [gt-next-cli](https://www.npmjs.com/package/gt-next-cli) to setup your project for translation.
-
-```bash title="shell" copy
-npx gt-next-cli setup
-```
-
-This will scan your codebase for translatable content and automatically wrap it in `<T>` components.
-See the [CLI tool documentation](/docs/next/reference/cli#setup) for more information.
-
-<Callout type="warn">
-  **Experimental**
-
-  We are currently experiencing issues with automated translations setup for string content.
-  If you run into issues, please follow [this guide](/docs/next/tutorials/translating-strings) for translating strings.
-</Callout>
-
+For a full list of `<GTProvider>` props and extended documentation, see the [API reference](/docs/next/api/components/gtprovider). */}
 
 ---
 

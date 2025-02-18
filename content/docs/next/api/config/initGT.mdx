@@ -1,14 +1,36 @@
 ---
-title: initGT()
-description: API Reference for the initGT() method.
+title: initGT / withGTConfig
+description: API Reference for the initGT() / withGTConfig() functions.
 ---
 
 ## Overview
 
-`initGT()` allows you to customize the behavior of the `gt-next` library.
-It is not required to use `initGT()` to enable translation functionality, but it is recommended to configure the library to suit your needs.
+`withGTConfig()` is the primary way to configure the `gt-next` library.
+It directly wraps a `NextConfig` object.
 
-Use `initGT()` to:
+```js title="next.config.mjs"
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {
+    // your existing next.config.js
+}
+
+export default withGTConfig(nextConfig, {
+  defaultLocale: 'en-US',
+  locales: ['en-US', 'es', 'fr'],
+});
+```
+
+<Callout>
+**Legacy**
+
+`initGT()` is the legacy way to configure the `gt-next` library. It returns a function callback which is then called on the `NextConfig` object.
+The props for both functions are the same, with the exception that `withGTProps` requires `NextConfig` to also be passed in.
+</Callout>
+
+It is not required to use `withGTConfig()` to enable translation functionality, but it is recommended to configure the library to suit your needs.
+
+Use `withGTConfig()` to:
  * Configure supported languages and default locale (a.k.a fallback language).
  * Set API keys and project IDs for accessing GT services.
  * Set loading behavior.
@@ -17,10 +39,21 @@ Use `initGT()` to:
  * Customize translation behavior, caching, and request batching.
 
  <Callout>
-    `initGT()` must be used in your `next.config.js` file to enable translation functionality.
+    `withGTConfig()` must be used in your `next.config.js` file to enable translation functionality.
 </Callout>
 
 ## Reference
+
+### Required Props 
+
+<TypeTable
+  type={{
+    "nextConfig": {
+      type: 'NextConfig',
+      optional: false,
+    },
+  }}
+/>
 
 ### Recommended Props [#props]
 <TypeTable
@@ -197,38 +230,42 @@ If all else fails, then it will fallback to the default language.
 </Callout>
 
 ```js title="next.config.mjs" copy
-import { initGT } from 'gt-next/config';
+import { withGTConfig } from 'gt-next/config';
 
-const withGT = initGT({
-    defaultLocale: 'en-US',
-    locales: ['en-US', 'es', 'fr'],
-    description: 'A personal blog about technology and travel',
+const nextConfig = {
+  // Your other next.js configurations
+}
+
+export default withGTConfig(nextConfig, {
+  defaultLocale: 'en-US',
+  locales: ['en-US', 'es', 'fr'],
+  description: 'A personal blog about technology and travel',
 });
-
-export default withGT({});
 ```
 ### Render settings
 This example configures `gt-next` to render a skeleton while waiting for translations to load.
 If the translation takes longer than 8 seconds, the method will time out and render the default language content.
 
 ```js title="next.config.mjs" copy
-import { initGT } from 'gt-next/config';
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {
+  // Your other next.js configurations
+};
 
 // locales field is left empty, so this configuration supports all 100+ languages
-const withGT = initGT({
-    defaultLocale: 'en-US',
-    renderSettings: {
-        method: 'skeleton',
-        timeout: 10000,
-    },
+export default withGTConfig(nextConfig, {
+  defaultLocale: 'en-US',
+  renderSettings: {
+    method: 'skeleton',
+    timeout: 10000,
+  },
 });
-
-export default withGT({});
 ```
 ---
 
 ## Notes
- * `initGT()` integrates GT translation functionality into your Next.js app and must be used in the root configuration file.
+ * `withGTConfig()` integrates GT translation functionality into your Next.js app and must be used in the root configuration file.
  * Parameters like `apiKey` and `projectId` can be set directly in the configuration or as environment variables.
  * Advanced parameters like `renderSettings` and `_batchInterval` allow fine-grained control over translation behavior and performance.
 

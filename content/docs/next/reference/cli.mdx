@@ -250,9 +250,10 @@ The CLI will only wrap direct children inside JSX elements. It will wrap other J
     Please report any issues you run into [here](https://github.com/General-Translation/gt-libraries/issues).
 </Callout>
 
-Additionally, the CLI tool will automatically detect the framework you are using. If your project is
-a Next.js app, it will automatically wrap `<GTProvider>` components at the top level `layout.tsx` of your app, as well as
+The CLI tool will also optionally wrap `<GTProvider>` components at the top level `layout.tsx` of your app, as well as
 modify the `lang` attribute in the `<html>` tag to dynamically set the language of your app.
+
+Lastly, it will optionally add the [`withGTConfig`](/docs/next/api/config/initGT) plugin to your `next.config.js` file.
 
 ### Flags
 
