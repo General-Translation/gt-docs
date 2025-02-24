@@ -134,6 +134,12 @@ npx gt-next-cli translate
         optional: true,
         default: 'true',
     },
+    "--src": {
+        description:
+            'The source directory to scan',
+        type: 'string',
+        optional: true,
+    },
   }}
 />
 
@@ -244,14 +250,12 @@ The CLI will only wrap direct children inside JSX elements. It will wrap other J
     **Experimental**
 
     This feature is currently experimental and may not work perfectly.
-    After running the scan, you should manually review the output and make sure it is correct.
-    In particular, note that any non-static JSX Expressions `{...}` will be wrapped in `<Var>` components.
-    You may need to manually review and edit these cases.
     Please report any issues you run into [here](https://github.com/General-Translation/gt-libraries/issues).
 </Callout>
 
 The CLI tool will also optionally wrap `<GTProvider>` components at the top level `layout.tsx` of your app, as well as
 modify the `lang` attribute in the `<html>` tag to dynamically set the language of your app.
+<<<<<<< Updated upstream
 
 Lastly, it will optionally add the [`withGTConfig`](/docs/next/api/config/initGT) plugin to your `next.config.js` file.
 
@@ -267,3 +271,5 @@ Lastly, it will optionally add the [`withGTConfig`](/docs/next/api/config/initGT
     },
   }}
 />
+=======
+>>>>>>> Stashed changes
