@@ -1,6 +1,4 @@
 {
   "title": "Dictionary",
-  "pages": [
-    "./useGT", "./getGT", "./useElement"
-  ]
+  "pages": ["./useDict", "./getDict"]
 }
