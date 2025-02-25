@@ -43,7 +43,7 @@ Promise<(content: string, options?: InlineTranslationOptions) => string>
 
 ### Production
 During the CD process, any content inside of a `t()` function will be translated before your application is deployed.
-This ensures fast load times for all locales.
+This ensures fast load times for all locales, but it can only translate content known at build time.
 
 Once generated, translations are either (1) stored in the CDN or (2) stored in your app's build output, according to your configuration.
 From there, the translated content is served to your users.
@@ -54,11 +54,11 @@ Make sure to follow the [deployment guide here](/docs/next/tutorials/quickdeploy
 ### Development
 During development, the `t()` function will translate content on demand.
 This is useful for prototyping what your app will look like in different languages.
-Remember to add a development API key to your environment to enable this behavior.
+Remember to add a Dev API key to your environment to enable this behavior.
 
 You will see a delay during on demand translation in development.
 This will not occur during for production builds unless content is explicitly being translated on demand,
-see [`<Tx>`](/docs/next/api/components/tx) or [`tx()`](/docs/next/api/strings/tx) for more information.
+i.e., using [`tx()`](/docs/next/api/strings/tx) or [`<Tx>`](/docs/next/api/components/tx).
 
 ---
 
