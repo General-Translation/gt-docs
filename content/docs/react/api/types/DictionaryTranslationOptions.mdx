@@ -6,13 +6,14 @@ description: API Reference for the DictionaryTranslationOptions type
 ## Overview
 
 The `DictionaryTranslationOptions` type is used to pass variables to dictionary entries and specify their render behavior.
-It is used with [`useDict()`](/docs/next/api/dictionary/useDict) and [`getDict()`](/docs/next/api/dictionary/getDict) to pass variables to dictionary entries.
+It is used with [`useDict()`](/docs/react/api/dictionary/useDict) to pass variables to dictionary entries.
 
 
 <Callout>
-**Buildtime Translation:**
-Variables are not translated with [`useDict()`](/docs/next/api/dictionary/useDict) and [`getDict()`](/docs/next/api/dictionary/getDict), only the original string.
-See [`tx()`](/docs/next/api/strings/tx) for translating strings with dyanmic content.
+  **Buildtime Translation:**
+  `useDict()` translations occur at buildtime; however, variables are never translated.
+  Instead, they are inserted into the translation with formatting.
+  Make sure to follow the [deployment guide here](/docs/next/tutorials/quickdeploy).
 </Callout>
 
 
@@ -50,7 +51,7 @@ See [`tx()`](/docs/next/api/strings/tx) for translating strings with dyanmic con
 
 ### Passing variables
 
-In order to pass a variable to the dictionary entry, we need to do two things: (1) add a variable to the entry and (2) reference said variable in the [`d()`](/docs/next/api/dictionary/useGT) invocation.
+In order to pass a variable to the dictionary entry, we need to do two things: (1) add a variable to the entry and (2) reference said variable in the [`d()`](/docs/react/api/dictionary/useGT) invocation.
 
 First, we add a variable to the dictionary entry with the following syntax: `{username}`.
 `username` is the name of the variable.
@@ -68,7 +69,7 @@ export default dictionary;
 Next, we reference the variable:
 ```jsx title="Component.tsx"
 // [!code word:username]
-import { useDict } from 'gt-next/client';
+import { useDict } from 'gt-react';
 
 const Component = () => {
   const d = useDict();
@@ -95,7 +96,7 @@ export default dictionary;
 Next, we reference the variable:
 ```jsx title="Component.tsx"
 // [!code word:account-balance]
-import { useDict } from 'gt-next/client';
+import { useDict } from 'gt-react';
 
 const Component = () => {
   const d = useDict();
@@ -120,6 +121,6 @@ const Component = () => {
  * The `variablesOptions` object defines the behavior of the variables.
 
 ### Next steps
- * See [dictionaries](/docs/next/reference/dictionaries/dictionaries) for more information on dictionaries and common practices.
- * See [`useDict()`](/docs/next/api/dictionary/useDict) or [`getDict()`](/docs/next/api/dictionary/getDict) for more information on dictionaries interface.
+ * See [dictionaries](/docs/react/reference/dictionaries/dictionaries) for more information on dictionaries and common practices.
+ * See [`useDict()`](/docs/react/api/dictionary/useDict) for more information on dictionaries interface.
  * See [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) and [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) for more information on formatting options.
