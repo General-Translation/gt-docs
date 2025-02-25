@@ -5,139 +5,101 @@ description: How to translate strings
 
 ## Overview
 
-This guide is a step by step tutorial on how to translate strings in your Next.js app
-using General Translation using [translation dictionaries](/docs/next/reference/dictionaries/dictionaries).
-
-We will also discuss how to add variables to your strings.
-
-<Callout>
-  **Coming up:**
-  We are currently working on a new feature that will expedite the process of translating strings.
-  For now, please use the dictionary pattern for string translation.
-</Callout>
+This guide is a step by step tutorial on how to translate strings in your Next.js app using
+[`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT), and [`tx()`](/docs/next/api/strings/tx).
 
 ---
 
-## Setup
-
-### Prerequisites
+## Prerequisites
 
 We assume that you already have installed `gt-next` in your project and have followed the [Quick Start Guide](/docs/next/tutorials/quickstart).
 
-### Steps
+## Translating Strings
 
-<Steps>
-  <Step>
-    **Add the `initGT()` plugin**
+### Server Side Components
+For any server side strings, use [`getGT()`](/docs/next/api/strings/getGT).
 
-    In your `next.config.mjs` file, add the [`initGT()` plugin](/docs/next/api/config/initGT) to your Next.js app.
-    This allows `gt-next` to access your translation dictionary.
+```jsx title="src/pages/index.jsx" copy
+import { getGT } from 'gt-next/server';
 
-    ```js title="next.config.mjs" copy
-    import { initGT } from 'gt-next/config';
-
-    const withGT = initGT();
-
-    export default withGT({});
-
-    ```
-  </Step>
-  <Step>
-  **Create a dictionary file**
-
- This file will store all of the string content that you want to translate.
-
-  ```jsx title="src/dictionary.jsx" copy
-    const dictionary = {
-      id: 'here is a string' // [!code highlight]
-    }
-    export default dictionary;
-  ```
-  </Step>
-  <Step>
-  **Reference the string in your component**
-
-  Now that you have centralized all of the content you want to translate,
-  you can reference the string in your component.
-
-  <Tabs items={["Client Components", "Server Components"]}>
-    <Tab value="Client Components">
-
-      Client components use the [`useGT()`](/docs/next/api/dictionary/useGT) hook to access the translation function `t()`.
-
-      ```jsx title="src/components/MyComponent.jsx" copy
-      import { useGT } from 'gt-next/client';
-      export default function MyComponent() {
-        const { t } = useGT();
-        return (
-          <div>
-            <h1>{t('id')}</h1> // [!code highlight]
-          </div>
-        );
-      }
-      ```
-
-    </Tab>
-    <Tab value="Server Components">
-
-      Server components use the [`getGT()`](/docs/next/api/dictionary/getGT) function to access the translation function `t()`.
-
-      ```jsx title="src/pages/index.jsx" copy
-      import { getGT } from 'gt-next/server';
-      export default function Home() {
-        const t = await getGT();
-        return (
-          <div>
-            <h1>{t('id')}</h1> // [!code highlight]
-          </div>
-        );
-      }
-      ```
-    </Tab>
-  
-  </Tabs>
-  </Step>
-</Steps>
-
-You have now internationalized your strings!
-Try [loading your app in a different language](/docs/next/tutorials/quickstart#see-your-app-in-a-different-language) and watch the magic happen.
-
----
-
-## Adding Variables
-
-You can add variables to your strings through a pattern very similar to string formatting.
-
-Inside of your dictionary file, add an identifier where you want to insert the variable.
-
-```jsx title="src/dictionary.jsx" copy
-// [!code word:{identifier}]
-const dictionary = {
-  id: ' here is a string with a variable: {identifier} '
-}
-export default dictionary;
-```
-
-Then, in your component, pass the variable as a second argument to the `t()` function.
-
-```jsx title="src/components/MyComponent.jsx" copy
-// [!code word:identifier]
-import { useGT } from 'gt-next/client';
-export default function MyComponent() {
-  const { t } = useGT();
+export default async function Home() {
+  const t = await getGT(); // [!code highlight]
   return (
     <div>
-      <h1>{t('id', { identifier : 'variable content' })}</h1> // [!code highlight]
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
     </div>
   );
 }
 ```
 
+
+### Client Side Components
+For any client side strings, use [`useGT()`](/docs/next/api/strings/useGT).
+Remember that `useGT()` must be called within a child component of [`<GTProvider>`](/docs/next/api/components/gtprovider).
+
+```jsx title="src/components/MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+### Adding Variables
+Variables are values that may change, but do not get translated.
+To add variables to your strings, use the following pattern:
+
+```jsx title="MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT();
+  return (
+    <div>
+      <h1>{t('Hello there, {username}', { variables: { username: 'Brian123' }})}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+This works with both [`useGT()`](/docs/next/api/strings/useGT) and [`getGT()`](/docs/next/api/strings/getGT).
+
+### Dynamic Content
+Say that you have a string that changes.
+You can use the [`tx()`](/docs/next/api/strings/tx) function to translate the string at runtime.
+
+```jsx title="MyComponent.jsx" copy
+import { tx } from 'gt-next/server';
+
+export default function MyComponent({ username }) {
+  const translation = await tx(`Hello, ${username}. How is your day?`); // [!code highlight]
+  return (
+    <div>
+      <h1>{translation}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+<Callout type="warn">
+  **Note:**
+  The [`tx()`](/docs/next/api/strings/tx) function is only available on the server side, and should only be used when necessary.
+  Runtime translation often creates a delay.
+  Use [`getGT()`](/docs/next/api/strings/getGT) or [`useGT()`](/docs/next/api/strings/useGT) whenever possible to translate before deployment.
+</Callout>
+
 ---
 
 ## Notes
- * In order to use the dictionary pattern, you must add the [`initGT()` plugin](/docs/next/api/config/initGT).
- * Reference the string content using [`useGT()`](/docs/next/api/dictionary/useGT) for client components and [`getGT()`](/docs/next/api/dictionary/getGT) for server components.
+ * For translating strings, use [`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT), and [`tx()`](/docs/next/api/strings/tx).
+ * `useGT()` and `getGT()` translate before deployment, whereas `tx()` translates at runtime. Use `tx()` sparingly.
+ * Variables can be added to strings using the `{ variables: { key: value }}` pattern.
 
 ## Next Steps
- * Dictionaries also work with JSX content. For more information, see the [Dictionaries Reference](/docs/next/reference/dictionaries/dictionaries).
+ * Return to the [Quick Start Guide](/docs/next/tutorials/quickstart) to finish setting up your project for translation.
+ * See the API reference for [`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT), and [`tx()`](/docs/next/api/strings/tx).
