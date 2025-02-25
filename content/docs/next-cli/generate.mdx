@@ -1,0 +1,48 @@
+---
+title: Generate Source Template
+description: How to generate a source template for your project
+---
+## Usage
+
+```bash
+npx gt-next-cli generate
+```
+
+## Overview
+
+The `gt-next-cli generate` command generates a source file for your project for your default locale.
+
+This source file has the same data structure as your project's translations, and should be used as a template for you
+to create your own translation files.
+
+To create your own translation files, you can duplicate the source template and translate the content strings.
+
+Then, you can rename the translation files to the corresponding locale and use [local translations](/docs/next/tutorials/local-tx) to serve the translations to your users.
+
+<Callout type="info">
+    This command is only useful if you are using your own translation service.
+
+    If you are using the General Translation API, you should use the `translate` command instead.
+</Callout>
+
+## Parameters
+
+| Parameter       | Description                                      | Type    | Optional | Default         |
+|-----------------|--------------------------------------------------|---------|----------|-----------------|
+| `--src <paths>`   | Specify the source directory(s) to scan                     | `[string]`  | `true`     | `./src && ./app && ./pages && ./components`      |
+| `--dictionary <path>`    | Specify a path to the dictionary file                | `string`  | `true`     |                 |
+| `--tsconfig, --jsconfig <path>`| Specify a path to the TS or JS config file | `string`  | `true`     |                 |
+| `--inline`        | Include inline `<T>` tags in addition to the dictionary     | `boolean` | `true`     | `true`            |
+| `--default-locale <locale>`| The source locale for the project                  | `string`  | `true`     |  `en`               |
+| `--ignore-errors` | Ignore errors and force translation for valid content       | `flag` | `true`     | `false`           |
+| `-t, --translations-dir <path>`    | The directory to save the translations to  | `string`  | `false`     |            |
+
+The `-t` parameter is required, as it specifies the directory to save the source template to.
+
+
+### Configuration file
+
+When running the CLI tool for the first time, it will attempt to create a `gt.config.json` file in the root of your project.
+This file contains metadata about your project that is used to translate your content.
+
+Read more about the `gt.config.json` file [here](/docs/next/reference/gt-config).

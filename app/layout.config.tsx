@@ -38,5 +38,5 @@ export const baseOptions: HomeLayoutProps = {
       icon: <MessageSquareText />,
     },
   ],
-  githubUrl: 'https://github.com/General-Translation',
+  githubUrl: 'https://github.com/General-Translation/gt-libraries',
 };

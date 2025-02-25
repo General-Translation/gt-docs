@@ -1,0 +1,12 @@
+{
+  "title": "React CLI Tool",
+  "pages": [
+    "index",
+    "setup",
+    "scan",
+    "translate",
+    "generate",
+    "---Reference---",
+    "reference/wrapping"
+  ]
+}
