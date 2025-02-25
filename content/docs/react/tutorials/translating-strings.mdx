@@ -6,15 +6,7 @@ description: How to translate strings
 ## Overview
 
 This guide is a step by step tutorial on how to translate strings in your React app
-using General Translation using [translation dictionaries](/docs/react/reference/dictionaries/dictionaries).
-
-We will also discuss how to add variables to your strings.
-
-<Callout>
-  **Coming up:**
-  We are currently working on a new feature that will expedite the process of translating strings.
-  For now, please use the dictionary pattern for string translation.
-</Callout>
+with [`useGT()`](/docs/react/api/strings/useGT).
 
 ---
 
@@ -24,79 +16,36 @@ We will also discuss how to add variables to your strings.
 
 We assume that you already have installed `gt-react` in your project and have followed the [Quick Start Guide](/docs/react/tutorials/quickstart).
 
-### Steps
 
-<Steps>
-  <Step>
-  **Create a dictionary file**
-
- This file will store all of the string content that you want to translate.
-
-  ```jsx title="src/dictionary.jsx" copy
-    const dictionary = {
-      id: 'here is a string' // [!code highlight] 
-    }
-    export default dictionary;
-  ```
-  </Step>
-  <Step>
-    **Pass the dictionary to the `<GTProvider>`**
-
-    ```js copy
-    <GTProvider dictionary={dictionary}>
-      ...
-    </GTProvider>
-    ```
-  </Step>
-  <Step>
-  **Reference the string in your component**
-
-  Now that you have centralized all of the content you want to translate,
-  you can reference the string in your component with the [`useGT()`](/docs/react/api/dictionary/useGT) hook.
-
-  ```jsx title="src/components/MyComponent.jsx" copy
-  import { useGT } from 'gt-react';
-  export default function MyComponent() {
-    const { t } = useGT();
-    return (
-      <div>
-        <h1>{t('id')}</h1> // [!code highlight]
-      </div>
-    );
-  }
-  ```
-  </Step>
-</Steps>
-
-You have now internationalized your strings!
-Try [loading your app in a different language](/docs/react/tutorials/quickstart#see-your-app-in-a-different-language) and watch the magic happen.
-
----
-
-## Adding Variables
-
-You can add variables to your strings through a pattern very similar to string formatting.
-
-Inside of your dictionary file, add an identifier where you want to insert the variable.
-
-```jsx title="src/dictionary.jsx" copy
-// [!code word:{identifier}]
-const dictionary = {
-  id: ' here is a string with a variable: {identifier} '
-}
-export default dictionary;
-```
-
-Then, in your component, pass the variable as a second argument to the `t()` function.
+### Translating Strings
+For any strings, use [`useGT()`](/docs/react/api/strings/useGT).
+Remember that `useGT()` must be called within a child component of [`<GTProvider>`](/docs/react/api/components/gtprovider).
 
 ```jsx title="src/components/MyComponent.jsx" copy
-// [!code word:identifier]
-import { useGT } from 'gt-react/client';
+import { useGT } from 'gt-react';
+
 export default function MyComponent() {
-  const { t } = useGT();
+  const t = useGT(); // [!code highlight]
   return (
     <div>
-      <h1>{t('id', { identifier : 'variable content' })}</h1> // [!code highlight]
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+### Adding Variables
+Variables are values that may change, but do not get translated.
+To add variables to your strings, use the following pattern:
+
+```jsx title="MyComponent.jsx" copy
+import { useGT } from 'gt-react';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('Hello there, {username}', { variables: { username: 'Brian123' }})}</h1> // [!code highlight]
     </div>
   );
 }
@@ -105,8 +54,9 @@ export default function MyComponent() {
 ---
 
 ## Notes
- * In order to use the dictionary pattern, you must add the [`initGT()` plugin](/docs/react/api/config/initGT).
- * Reference the string content using [`useGT()`](/docs/react/api/dictionary/useGT) for client components and [`getGT()`](/docs/react/api/dictionary/getGT) for server components.
+ * For string translation, use [`useGT()`](/docs/react/api/strings/useGT).
+ * Variables can be added to strings using the `{ variables: { key: value }}` pattern.
 
 ## Next Steps
- * Dictionaries also work with JSX content. For more information, see the [Dictionaries Reference](/docs/react/reference/dictionaries/dictionaries).
+ * Return to the [Quick Start Guide](/docs/react/tutorials/quickstart) to finish setting up your project for translation.
+ * See the API reference for [`useGT()`](/docs/next/react/strings/useGT).

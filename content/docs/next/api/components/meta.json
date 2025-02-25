@@ -2,6 +2,7 @@
   "title": "Components",
   "pages": [
     "./t",
+    "./tx",
     "./gtprovider",
     "./currency",
     "./datetime",

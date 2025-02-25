@@ -75,13 +75,10 @@ npx gt-react-cli setup
 See the [CLI tool documentation](/docs/react/reference/cli#setup) for more information.
 
 <Callout type="warn">
-  **Experimental**
-
-  This feature is currently experimental and may not work perfectly. 
-  If you run into any issues, please let us know by creating an issue on our [GitHub repository](https://github.com/General-Translation/gt-libraries/issues).
-  In particular, note that some manual edits may be required.
+  **Experimental:**
+  We are currently experiencing issues with automated translations setup for string content.
+  If you run into issues, please follow [this guide](/docs/react/tutorials/translating-strings) for translating strings.
 </Callout>
-
 
 
 ### 3. Add `<GTProvider>`
@@ -223,22 +220,20 @@ Congratulations! 🥳 Your app is now multilingual! Let's see it in action.
   <Accordion title="Why do new languages take a long time to load?">
     **On-Demand Translation**
 
-    You may notice when loading new languages, translations will take a few seconds to be displayed.
-    This happens because your app has never been translated into that language before.
+    You may notice when loading languages in development, translations will take a few seconds to be displayed.
+    This happens because your app is being translated in real time.
     We refer to this process as an "on-demand translation".
-    All on-demand translations get cached in production environments,
-    so a delay will only occur the first time a new language is requested.
-
-    Luckily, this can be avoided by translating your app ahead of time for production deployments.
-    Doing so does not increase bundle size and significantly reduces load times.
-    See our instructions for how to [translate ahead of time](quickstart#cli-tool).
+    
+    This **only happens in dev** so you can easily prototype your website in different languages.
+    All translations are preloaded in production, so there will be no delay.
+    Follow our guide on [shipping to production](/docs/next/tutorials/quickdeploy).
   </Accordion>
   <Accordion title="Why are some things translating and others not?">
     **JSX Translation**
 
     Right now, the setup tool automatically adds `<T>` components around text content.
     We are currently working on a solution that will automatically setup string translations.
-    Until then, if you are rendering a string, try using the [`useGT()`](/docs/react/api/dictoinary/useGT) for string translation.
+    Until then, if you are rendering a string, please follow [this guide](/docs/react/tutorials/translating-strings) for translating strings.
   </Accordion>
 </Accordions>
 
