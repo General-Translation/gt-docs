@@ -1,0 +1,46 @@
+---
+title: Introduction
+description: Next.js CLI tool
+---
+
+## Overview
+
+The `gt-next-cli` is a command-line interface (CLI) for managing your Next.js application's translations.
+
+
+## Installation
+
+To install `gt-next-cli`, run the following command:
+
+<Tabs items={['npm', 'yarn', 'bun', 'pnpm']}>
+  <Tab value="npm">
+  ```bash 
+  npm i gt-next-cli
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gt-next-cli
+  ```
+  </Tab>
+
+  <Tab value="bun">
+  ```bash 
+  bun add gt-next-cli
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gt-next-cli
+  ```
+  </Tab>
+</Tabs>
+
+## Usage
+
+| Command | Description |
+| --- | --- |
+| [`npx gt-next-cli setup`](/docs/next-cli/setup) | Step by step setup guide that prepares your project for translation. |
+| [`npx gt-next-cli scan`](/docs/next-cli/scan) | Scans your project for translatable content. Can be used repeatedly to update your project. |
+| [`npx gt-next-cli translate`](/docs/next-cli/translate) | Translates your project via the GT API. |
+| [`npx gt-next-cli generate`](/docs/next-cli/generate) | Generates a new translation data JSON file. Should be used when using the library standalone. |
