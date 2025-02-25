@@ -35,7 +35,7 @@ GT libraries expect the function to have type `(locale: string) => Promise<any>`
 
 You must manually import the `loadTranslation` function and assign it as a prop to the `<GTProvider>` component.
 
-```tsx
+```jsx
 import loadTranslation from './loadTranslation';
 
 <GTProvider loadTranslation={loadTranslation}>
@@ -44,8 +44,8 @@ import loadTranslation from './loadTranslation';
 ```
 
 <Callout type="warn">
-Please note that in a React environment, `loadTranslation` will be called by the client side.
-Do not include any secrets or environment variables in the function.
+  Please note that in a React environment, `loadTranslation()` will be invoked by the browser.
+  Do not include any secrets or environment variables in the function.
 </Callout>
 
 ## Examples

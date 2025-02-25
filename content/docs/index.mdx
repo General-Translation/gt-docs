@@ -30,7 +30,7 @@ We currently support the following frameworks:
 - Content is in-line and in the same location as your code.
 - The library manages all i18n logic behind the scenes, so you don't have to.
 
-```tsx title="page.js"
+```js copy
 export default function Page() {
   return (
     <T> // [!code highlight]
@@ -73,7 +73,7 @@ export default function Page() {
 </Callout>
 
 ## Getting started
-Follow our quickstart guides. Each guide should take no more than 10 minutes to complete:
+Follow our quickstart guides. Each guide should take no more than 5 minutes to complete:
 <Cards>
   <Card
     title="React"
@@ -102,20 +102,23 @@ import { T } from "gt-next";
 
 export default function Page() {
   return (
-    <T id="my_id">
-      <p>You can write any JSX as children of the {"<T>"} component.</p>
+    <T> // [!code highlight]
+      <p>Any children of <b>the {`<T>`} component</b> will be translated.</p>
       <p>
-        For example, you could write a <a href="/">link</a> and have the text be
-        translated in context.
+        Things like <a href="/">links</a>{', '}
+        <button>buttons</button>{', '}
+        and even <div> <div> <div> deeply nested components </div> </div> </div>  are translated.
       </p>
-    </T>
+    </T> // [!code highlight]
   );
 }
 ```
 
 ### 2. Translate both client and server components
 
-With first class support for the Next.js [App Router](https://nextjs.org/docs/app) and [React Server Components](https://react.dev/reference/rsc/server-components), you can translate both client and server components.
+With first class support for the Next.js [App Router](https://nextjs.org/docs/app) and
+[React Server Components](https://react.dev/reference/rsc/server-components),
+you can translate both client and server components.
 
 ```jsx title="src/components/MyServerComponent.js" copy
 import getName from "@/getName";
@@ -125,8 +128,8 @@ export default async function MyServerComponent() {
   const name = await getName();
 
   return (
-    <T id="greeting">
-      Hello, <Var value={name} />
+    <T>
+      Hello, <Var>{name}</Var>  // [!code highlight]
     </T>
   );
 }
@@ -134,7 +137,6 @@ export default async function MyServerComponent() {
 
 ```jsx title="src/components/MyClientComponent.js" copy
 "use client";
-// this should be used inside <GTProvider>
 
 import { useState } from "react";
 import { T, Var } from "gt-next";
@@ -143,8 +145,8 @@ export default function MyClientComponent() {
   const [name, setName] = useState("Alice");
 
   return (
-    <T id="greeting">
-      Hello, <Var value={name} />
+    <T>
+      Hello, <Var>{name}</Var>  // [!code highlight]
     </T>
   );
 }
@@ -154,67 +156,45 @@ export default function MyClientComponent() {
 
 JSX content placed inside a `<T>` component is marked for translation:
 
-<Tabs items={['page.js']}>
-    <Tab value="page.js">  
-        ```jsx copy
-        // inline translation
+```jsx copy
+import { T } from "gt-next";
 
-        import { T } from 'gt-next;
+export default function Page() {
+  return (
+    <T>
+      <p>Hello, World!</p>  {/* translates <p>Hello, World!</p> */} // [!code highlight]
+    </T>
+  )
+}
+```
 
-        // translates <p>Hello, world</p>
-        export default function Page() {
-          return (
-            <T id='hello'>
-              <p>Hello, world!</p>
-            </T>
-          )
-        }
-        ```
-    </Tab>
+Alternatively, if you prefer using the historic dictionary approach, you can write your content in a dictionary file:
+<Tabs items={['.json', '.js']}>
+  <Tab value=".json">
+  ```json title="dictionary.json" copy
+  {
+    "greeting": "Hello, World!" // [!code highlight]
+  }
+  ```
+  </Tab>
+  <Tab value=".js">
+  ```jsx title="dictionary.js" copy
+  const dictionary = {
+    greeting: "Hello, World!" // [!code highlight]
+  }
 
+  export default dictionary;
+  ```
+  </Tab>
 </Tabs>
+```jsx title="page.js" copy
+import { useDict } from "gt-next";
 
-Many projects have a central dictionary in which they store all translatable content.
-Uniquely, General Translation libraries let you write dictionaries as objects containing JSX:
-
-<Tabs items={['page.js', 'dictionary.jsx', 'next.config.js']}>
-    <Tab value="page.js">  
-        ```jsx copy
-        // dictionary translation
-
-        import { useElement } from 'gt-next;
-
-        // translates <p>Hello, world</p>
-        export default function Page() {
-          const t = useElement();
-          return t('hello');
-        }
-        ```
-    </Tab>
-    <Tab value="dictionary.jsx">
-        ```jsx copy
-        const dictionary = {
-          "hello": <p>Hello, world</p>
-        }
-
-        export default dictionary;
-        ```
-    </Tab>
-    <Tab value="next.config.js">
-        ```jsx copy
-        import { initGT } from 'gt-next/config'
-
-        const nextConfig = {};
-
-        // initialize the GT plugin
-        const withGT = initGT();
-
-        // bundles your JSX dictionary into your app
-        export default withGT(nextConfig);
-        ```
-    </Tab>
-
-</Tabs>
+export default function Page() {
+  const d = useDict();
+  return d('greeting'); // translates "Hello, World!" // [!code highlight]
+}
+```
 
 ### 4. View translated content in development
 
@@ -228,21 +208,16 @@ Need to see how your UI elements look in German before deploying? No problem, Ge
 
 ### 5. Translate content on-demand
 
-No need to guess which languages your users will need.
-General Translation can create translations on-demand, during runtime in production.
+Apps often need to translate content only known at runtime.
+For Next.js, GT libraries support the ability to translate content on demand.
 
-This can happen if:
+Some common examples include:
+ - User-specific information
+ - Remotely stored content
+ - Content that is generated dynamically
 
-- A requested language has never been seen before
-- Some cases where the content of a component cannot be known until render time
-
-In this situation, `gt-next` and `gt-react` can create a translation for you on demand, while your app is running.
 Once the translation is loaded, it will rewrite your component in real time with the new translation content.
 
-<Callout>
-  We recommend using the [React CLI tool](/docs/react/reference/cli) or the [Next.js CLI tool](/docs/next/reference/cli) to create
-  translations in advance, rather than relying on on-demand translations.
-</Callout>
 
 ## Get started
 
