@@ -2,6 +2,7 @@
   "title": "React CLI Tool",
   "pages": [
     "introduction",
+    "---Commands---",
     "setup",
     "scan",
     "translate",

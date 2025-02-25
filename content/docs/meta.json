@@ -2,8 +2,8 @@
   "pages": [
     "---Quickstart---",
     "index",
-    "next/tutorials/quickstart",
     "react/tutorials/quickstart",
+    "next/tutorials/quickstart",
     "---Usage---",
     "usage/t",
     "usage/dictionary",

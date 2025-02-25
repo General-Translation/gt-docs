@@ -6,8 +6,6 @@ description: API Reference for the <T> component
 ## Overview
 
 The `<T>` component is the main translation method in `gt-next`.
-Its contents are translated into a target language.
-Every `<T>` component has a unique `id` which is used to cache translations.
 
 ```jsx
 <T> // [!code highlight]
@@ -86,9 +84,9 @@ Remember to add a Dev API key to your environment to enable this behavior.
 
 
 While loading, `<T>` will return undefined unless languages are similar (en-US vs en-GB), though this behavior can be customized with render settings.
-If an error occurs, `<Tx>` will return the original content.
+If an error occurs, `<T>` will return the original content.
 
-You will see a delay during on demand translation in development.
+You will see a delay during on-demand translation in development.
 This delay will not occur during for production builds unless content is explicitly being translated on demand,
 i.e., by using [`<Tx>`](/docs/next/api/components/tx) or [`tx()`](/docs/next/api/strings/tx).
 
@@ -188,8 +186,8 @@ export default function Example() {
 }
 ```
 <Callout>
-**Note:** A good rule of thumb is that any content that is *literally* between the two `<T>` in the file will be translated.
-You can always add another `<T>` to translate the content that is not being translated, though nesting `<T>` components is not recommended.
+    **Note:** A good rule of thumb is that any content that is *literally* between the two `<T>` in the file will be translated.
+    You can always add another `<T>` to translate the content that is not being translated, though nesting `<T>` components is not recommended.
 </Callout>
 
 ---
@@ -197,6 +195,7 @@ You can always add another `<T>` to translate the content that is not being tran
 ## Notes
  * The `<T>` component is designed for translating content in your application. It is the primary method for localization in `gt-next`.
  * Use the `<T>` component to translate plain text or JSX structures, including variables and pluralization.
+ * If you use the `<T>` component on the client side, make sure it is wrapped in a [`<GTProvider>`](/docs/next/reference/t-reference#gtprovider) to access the translation context.
 
 ## Next steps
  * For on-demand translations, look into the [`<Tx>`](/docs/next/api/components/tx) component.
