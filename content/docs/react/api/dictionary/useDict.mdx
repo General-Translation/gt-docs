@@ -5,19 +5,18 @@ description: API Reference for the useDict hook
 
 ## Overview
 
-`useDict()` is used to access string translations from the [translation dictionary](/docs/next/reference/dictionaries/dictionaries) for client-side components.
-It must be used within a component wrapped by a [`<GTProvider>`](/docs/next/api/components/gtprovider).
+`useDict()` is used to access string translations from the [translation dictionary](/docs/react/reference/dictionaries/dictionaries).
+It must be used within a component wrapped by a [`<GTProvider>`](/docs/react/api/components/gtprovider).
 
 ```jsx
 const d = useDict(); // Get the translation function
 d('greeting.hello'); // pass the id to get a translation
 ```
 
-For server-side translations, see [`getDict()`](/docs/next/api/dictionary/getDict).
 
 <Callout>
-  `getDict()` and `useDict()` use a [dictionary](/docs/next/reference/dictionaries/dictionaries) to store all content for translation.
-  This is different from using the [`<T>` component](/docs/next/reference/t-reference) for translation.
+  `useDict()` uses a [dictionary](/docs/react/reference/dictionaries/dictionaries) to store all content for translation.
+  This is different from using the [`<T>` component](/docs/react/reference/t-reference) for translation.
   If you are interested in only using `<T>` components for translation, then this document is not relevant.
 </Callout>
 
@@ -41,6 +40,7 @@ For server-side translations, see [`getDict()`](/docs/next/api/dictionary/getDic
 | ---- | ----------- |
 | `id` | An optional prefix to prepend to all translation keys. This is useful for working with nested dictionary values.|
 
+
 ### Returns
 
 A translation function `d()` that, given an id, will return the translated version of the corresponding entry
@@ -52,7 +52,7 @@ A translation function `d()` that, given an id, will return the translated versi
 | Name                  | Type | Description                                                                 |
 |-----------------------|--|-----------------------------------------------------------------------------|
 | `id`             | `string` | The id of the entry to be translated                                     |
-| `options?`            | [`InlineTranslationOptions`](/docs/next/api/types/inlineTranslationOptions) | Translation options to customize the behavior of `d()`. |
+| `options?`            | [`InlineTranslationOptions`](/docs/react/api/types/inlineTranslationOptions) | Translation options to customize the behavior of `d()`. |
 
 ---
 
@@ -68,18 +68,17 @@ const dictionary = {
 export default dictionary;
 ```
 
-When we want to access these entries (on the client side), we call `useDict()`.
+When we want to access these entries, we call `useDict()`.
 This returns a function that accepts the key of a translation from the dictionary.
 
 ```jsx title="translateGreeting.jsx" copy
-"use client";
-import { useDict } from 'gt-next/client';
+import { useDict } from 'gt-react';
 
 export default async function translateGreeting() {
   const d = useDict(); // [!code highlight]
   return (
     <p>
-      {d('greeting')} // Hello, Alice // [!code highlight]
+      {d('greeting')} // [!code highlight]
     </p>
   );
 }
@@ -99,10 +98,9 @@ const dictionary = {
 export default dictionary;
 ```
 
-```jsx title="src/server/translateGreeting.jsx" copy
+```jsx copy
 // [!code word:userName]
-"use client";
-import { useDict } from 'gt-next/client';
+import { useDict } from 'gt-react';
 
 export default async function translateGreeting() {
   const d = useDict();
@@ -112,7 +110,7 @@ export default async function translateGreeting() {
 
   return (
     <p>
-      {greetingAlice}
+      {greetingAlice} // Hello, Alice // [!code highlight]
     </p>
   );
 }
@@ -133,8 +131,7 @@ export default dictionary;
 ```
 Because we added the value `'prefix1.prefix2'` to the `useDict` hook, all of the keys are prefixed with `prefix1.prefix2`:
 ```jsx title="UserDetails.jsx" copy
-"use client";
-import { useDict } from 'gt-next/client';
+import { useDict } from 'gt-react';
 
 export default function UserDetails() {
   const d = useDict('prefix1.prefix2'); // [!code highlight]
@@ -147,10 +144,8 @@ export default function UserDetails() {
 ```
 --- 
 ## Notes
- * The `useDict()` function allows you to access dictionary translations on the client side.
- * The `useDict()` hook can only be used within a component wrapped by a [`<GTProvider>` component](/docs/next/api/components/gtprovider).
+ * The `useDict()` function allows you to access dictionary translations.
+ * The `useDict()` hook can only be used within a component wrapped by a [`<GTProvider>` component](/docs/react/api/components/gtprovider).
 
 ## Next Steps
- * For server-side translations, see [`getDict()`](/docs/next/api/dictionary/getDict).
- * Learn more about using dictionaries in the [dictionaries reference](/docs/next/reference/dictionaries/dictionaries).
- * See [DictionaryTranslationOptions](/docs/next/api/types/DictionaryTranslationOptions) for more information on translation options.
+ * Learn more about using dictionaries in the [dictionaries reference](/docs/react/reference/dictionaries/dictionaries).

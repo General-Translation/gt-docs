@@ -5,7 +5,7 @@ description: API Reference for the getDict server-side translation function
 
 ## Overview
 
-`getDict()` is used to get translations from the [translation dictionary](/docs/next/reference/dictionaries/dictionaries) for server-side components.
+`getDict()` is used to get string translations from the [translation dictionary](/docs/next/reference/dictionaries/dictionaries) for server-side components.
 
 ```jsx
 const d = await getDict(); // Get the translation function
@@ -44,16 +44,20 @@ For client-side translations, see [`useDict()`](/docs/next/api/dictionary/useDic
 | ---- | ----------- |
 | `id` | An optional prefix to prepend to all translation keys. This is useful for working with nested dictionary values. |
 
+
 ### Returns
 
-A promise that resolves to the `d()` translation function with the following signature:
+A promise of a translation function `d()` that, given an id, will return the translated version of the corresponding entry
 
 ```jsx
-(id: string, options?: Record<string, any>) => React.ReactNode
+Promise<(id: string, options?: DictionaryTranslationOptions) => React.ReactNode>
 ```
-* `id`: The identifier of the translation to fetch.
-* `options`: An optional object to provide dynamic variables or branching content.
-* Returns: The translated value as a `React.ReactNode`.
+
+| Name                  | Type | Description                                                                 |
+|-----------------------|--|-----------------------------------------------------------------------------|
+| `id`             | `string` | The id of the entry to be translated                                     |
+| `options?`            | [`InlineTranslationOptions`](/docs/next/api/types/inlineTranslationOptions) | Translation options to customize the behavior of `d()`. |
+
 
 ---
 
@@ -61,12 +65,10 @@ A promise that resolves to the `d()` translation function with the following sig
 
 ### Basic Usage
 Every entry in your dictionary gets translated.
-Entries can be either JSX or a string.
 
 ```jsx title="dictionary.jsx" copy
 const dictionary = {
-  greeting1: <>Hello, Alice!</>, // [!code highlight]
-  greeting2: "Hello, Bob!", // [!code highlight]
+  greeting: <>Hello, Alice!</>, // [!code highlight]
 };
 export default dictionary;
 ```
@@ -83,102 +85,52 @@ export default async function translateGreeting() {
 
   return (
     <p>
-      {d('greeting1')} // [!code highlight]
-      {d('greeting2')} // [!code highlight]
+      {d('greeting')} // Hello, Alice // [!code highlight]
     </p>
   );
 }
 ```
 
 ### Using variables
-
-You can pass variables to dictionary translations.
-For jsx content, just use a [variable component](/docs/next/reference/dictionaries/variable-components).
-For string content, add curley braces `{}` to the string.
-
-<Callout type="error">
-  Whenever you have a variable in your jsx translations,
-  NEVER insert variables directly into the jsx.
-  ALWAYS use a [variable component](/docs/next/reference/dictionaries/variable-components#motive):
-  `<Currency>`, `<DateTime>`, `<Num>`, or `<Var>`.
-</Callout>
-
 In order to pass values, you must (1) assign an identifier and (2) reference the identifier when calling the `d()` function.
-In this example, we use `<Var>` and `{}` to pass variables to the translations.
-In the dictionary, we assign identifiers `name="userName"` and `{userName}`.
+
+In this example, we use `{}` to pass variables to the translations.
+In the dictionary, we assign identifier `{userName}`.
+
 
 ```jsx title="dictionary.jsx" copy
+// [!code word:userName]
 const dictionary = {
-  greeting1: <>Hello, <Var name="userName"/> !</>, // [!code highlight]
-  greeting2: "Hello, {userName}!", // [!code highlight]
+  greeting: "Hello, {userName}!", // [!code highlight]
 };
 export default dictionary;
 ```
-In the component, we pass the values `userName: "Alice"` and `userName: "Bob"`.
 
-```jsx title="src/server/translateGreeting.jsx" copy
+```jsx title="translateGreeting.jsx" copy
+// [!code word:userName]
 import { getDict } from 'gt-next/server';
 
 export default async function translateGreeting() {
   const d = await getDict();
   
   // Hello Alice!
-  const greetingAlice = d('greeting1', { userName: "Alice" }); // [!code highlight]
-  // Hello Bob!
-  const greetingBob = d('greeting2', { userName: "Bob" }); // [!code highlight]
+  const greetingAlice = d('greeting', { userName: "Alice" }); // [!code highlight]
 
   return (
     <p>
       {greetingAlice}
-      {greetingBob}
     </p>
-  );
-}
-```
-### Using branches
-[Branching components](/docs/next/reference/dictionaries/branching-components), such as [`<Branch>`](/docs/next/api/components/branch) and [`<Plural>`](/docs/next/api/components/plural),
-can be used to handle control logic in a translation.
-
-In order to pass values, you must (1) assign an identifier and (2) reference the identifier when calling the `d()` function.
-In this example, we see that `hairColor` is passed to both `<Branch>` and `<Var>` components.
-```jsx title="dictionary.jsx" copy
-import { Branch, Var } from 'gt-next';
-
-const dictionary = {
-  hairColor: <>
-    <Branch name="hairColor" // [!code highlight]
-      black={<>Their hair is dark.</>}
-      brown={<>Their hair is in the middle.</>}
-      blonde={<>Their hair is light.</>}
-      >
-        {/* fallback incase no branch is matched */}
-        <p>Unhandled hair color: <Var name="hairColor"/></p> // [!code highlight]
-      </Branch>
-  </>,
-};
-```
-
-```jsx title="HairColor.jsx" copy
-import { getDict } from 'gt-next/server';
-
-export default function HairColor() {
-  const d = await getDict();
-  return (
-    <div>
-      { d('hairColor', { hairColor: 'brown' }) } // [!code highlight]
-    </div>
   );
 }
 ```
 
 ### Using prefixes
-We can use prefixes to only translate a subset of the dictionary.
+We can use prefixes to only fetch a subset of the dictionary.
 ```jsx  title="dictionary.jsx" copy
 const dictionary = {
   prefix1: { // [!code highlight]
     prefix2: { // [!code highlight]
-      greeting1: <>Hello, Alice</>,
-      greeting2: "Hello, Bob",
+      greeting: "Hello, Bob",
     }
   }
 };
@@ -186,14 +138,13 @@ export default dictionary;
 ```
 Because we added the value `'prefix1.prefix2'` to the `getDict` method, all of the keys are prefixed with `prefix1.prefix2`:
 ```jsx title="UserDetails.jsx" copy
-import { getDict } from 'gt-next';
+import { getDict } from 'gt-next/server';
 
 export default function UserDetails() {
   const d = await getDict('prefix1.prefix2'); // [!code highlight]
   return (
     <div>
-      <p>{d('greeting1')}</p> {/* greeting1 => prefix1.prefix2.greeting1 */} // [!code highlight]
-      <p>{d('greeting2')}</p> {/* greeting2 => prefix1.prefix2.greeting2 */} // [!code highlight]
+      <p>{d('greeting')}</p> // greeting => prefix1.prefix2.greeting // [!code highlight]
     </div>
   );
 }
@@ -202,9 +153,7 @@ export default function UserDetails() {
 
 ## Notes
  * The `getDict()` function allows you to access dictionary translations on the server side.
- * Supports dynamic behavior and variable insertion with [Branching](/docs/next/reference/template-dictionaries/branching-components) and [Variable Components](/docs/next/reference/template-dictionaries/variable-components) respectively.
 
 ## Next Steps
  * See [`useDict()`](/docs/next/api/dictionary/useDict) for the client-side equivalent of `getDict()`.
  * Learn more about using dictionaries in the [dictionaries reference](/docs/next/reference/dictionaries/dictionaries).
- * Enhance server-side locale routing with [i18n Routing](/docs/next/guides/i18n-routing) and locale management with [i18n Configuration](/docs/next/reference/i18n-configuration).

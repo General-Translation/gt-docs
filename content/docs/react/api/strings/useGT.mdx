@@ -1,21 +1,21 @@
 ---
-title: getGT()
-description: API Reference for the getGT() string translation function
+title: useGT()
+description: API Reference for the useGT() string translation function
 ---
 
 ## Overview
 
-The `getGT()` function is a server-side function for translating strings at build times.
+The `useGT()` function is a hook for translating strings at build time.
 
 ```jsx
-const t = await getGT();
+const t = useGT();
 
 <p>{  t('This text will be translated')  }</p>;
 ```
 
 <Callout>
 **Buildtime Translation:**
-`getGT()` translations occur at buildtime, before your app deploys.
+`useGT()` translations occur at buildtime, before your app deploys.
 Though you can pass variables to the translated string, you can only translate content known at build time.
 </Callout>
 
@@ -25,16 +25,16 @@ None
 
 ### Returns
 
-A promise of a callback function, `t()`, which translates the provided content.
+A callback function, `t()`, which translates the provided content.
 
 ```jsx
-Promise<(content: string, options?: InlineTranslationOptions) => string>
+(content: string, options?: InlineTranslationOptions) => string
 ```
 
 | Name                  | Type | Description                                                                 |
 |-----------------------|--|-----------------------------------------------------------------------------|
 | `content`             | `string` | The string content to be translated.                                     |
-| `options?`            | [`InlineTranslationOptions`](/docs/next/api/types/inlineTranslationOptions) | Translation options to customize the behavior of `t()`. |
+| `options?`            | [`InlineTranslationOptions`](/docs/react/api/types/inlineTranslationOptions) | Translation options to customize the behavior of `t()`. |
 
 ---
 
@@ -49,7 +49,7 @@ Once generated, translations are either (1) stored in the CDN or (2) stored in y
 From there, the translated content is served to your users.
 If a translation is not found, it will fallback to the originial content.
 
-Make sure to follow the [deployment guide here](/docs/next/tutorials/quickdeploy).
+Make sure to follow the [deployment guide here](/docs/react/tutorials/quickdeploy).
 
 ### Development
 During development, the `t()` function will translate content on demand.
@@ -57,8 +57,7 @@ This is useful for prototyping what your app will look like in different languag
 Remember to add a Dev API key to your environment to enable this behavior.
 
 You will see a delay during on demand translation in development.
-This will not occur during for production builds unless content is explicitly being translated on demand,
-i.e., using [`tx()`](/docs/next/api/strings/tx) or [`<Tx>`](/docs/next/api/components/tx).
+This will not occur during for production builds.
 
 ---
 
@@ -66,13 +65,13 @@ i.e., using [`tx()`](/docs/next/api/strings/tx) or [`<Tx>`](/docs/next/api/compo
 ## Example
 
 ### Basic Usage
-You can use `getGT()` to translate strings.
+You can use `useGT()` to translate strings.
 
 ```javascript copy
-import { getGT } from 'gt-next/server';
+import { useGT } from 'gt-react';
 
-export default async function TranslateGreeting() {
-  const t = await getGT();
+export default function TranslateGreeting() {
+  const t = useGT();
 
   return (
     <p>
@@ -88,10 +87,10 @@ Note: "Alice" will be translated to the user's preferred language.
 You can pass variables to dictionary translations.
 
 ```javascript copy
-import { getGT } from 'gt-next/server';
+import { useGT } from 'gt-react';
 
-export default async function TranslateGreeting() {
-  const t = await getGT();
+export default function TranslateGreeting() {
+  const t = useGT();
 
   return (
     <p>
@@ -105,10 +104,10 @@ Note: "Alice" will not translated to the user's preferred language because it is
 ---
 
 ## Notes
- * The `getGT()` function is a server-side function that translates strings.
- * Translations strings with `getGT()` happen before runtime, during the build process (unless in development).
+ * The `useGT()` function is a hook for translating strings.
+ * The `useGT()` hook can only be used within a component wrapped by a [`<GTProvider>` component](/docs/react/api/components/gtprovider).
+ * Translations strings with `useGT()` happen before runtime, during the build process (unless in development).
 
 ## Next steps
- * See [`useGT()`](/docs/next/api/strings/useGT) for client-side string translations at buildtime.
- * For runtime translations, see [`tx()`](/docs/next/api/strings/tx) and [`<Tx>`](/docs/next/api/components/tx).
- * See [`InlineTranslationOptions`](/docs/next/api/types/inlineTranslationOptions) for more information on customizing translations.
+ * See [`useDict()`](/docs/react/api/dictionary/useDict) for translating strings using a dictionary.
+ * See [`InlineTranslationOptions`](/docs/react/api/types/inlineTranslationOptions) for more information on customizing translations.
