@@ -1,4 +1,12 @@
 {
   "title": "React CLI Tool",
-  "pages": ["index"]
+  "pages": [
+    "index",
+    "setup",
+    "scan",
+    "translate",
+    "generate",
+    "---Reference---",
+    "reference/wrapping"
+  ]
 }

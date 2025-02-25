@@ -13,6 +13,7 @@
     "react",
     "!react-cli",
     "next",
+    "react-cli",
     "next-cli",
     "---Reference---",
     "reference/standalone",

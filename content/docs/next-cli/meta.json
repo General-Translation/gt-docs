@@ -1,4 +1,4 @@
 {
   "title": "Next.js CLI Tool",
-  "pages": ["index", "setup", "translate"]
+  "pages": ["index", "setup", "translate", "--Reference--"]
 }
