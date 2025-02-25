@@ -5,7 +5,7 @@ description: Scans your project for translatable content
 ## Usage
 
 ```bash
-npx gt-react-cli scan
+npx gt-next-cli scan
 ```
 <Callout type="info">
     **Note:**
@@ -15,7 +15,7 @@ npx gt-react-cli scan
 
 ## Overview
 
-The `gt-react-cli scan` command scans your project for translatable content.
+The `gt-next-cli scan` command scans your project for translatable content.
 It does this by parsing your project's file tree and using babel to wrap the `<T>` component around static content.
 Any dynamic content will be automatically wrapped with `<Var>` components.
 
@@ -29,7 +29,7 @@ Any dynamic content will be automatically wrapped with `<Var>` components.
 
 
 ```jsx title="src/app/Home.js"
-import { T, Var } from 'gt-react'; // [!code highlight]
+import { T, Var } from 'gt-next'; // [!code highlight]
 
 export default function Home({ user }) {
   return (
@@ -85,7 +85,7 @@ This means that it will wrap the entire component in a `<T>` component if it is 
 <div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
 ```
 
-See the [reference](/docs/react-cli/reference/wrapping) for more details on how the `<T>` component is wrapped.
+See the [reference](/docs/next-cli/reference/wrapping) for more details on how the `<T>` component is wrapped.
 
 ### Auto-formatting
 

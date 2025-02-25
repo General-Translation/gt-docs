@@ -1,4 +1,12 @@
 {
   "title": "Next.js CLI Tool",
-  "pages": ["index", "setup", "translate", "--Reference--"]
+  "pages": [
+    "index",
+    "setup",
+    "scan",
+    "translate",
+    "generate",
+    "---Reference---",
+    "reference/wrapping"
+  ]
 }

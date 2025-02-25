@@ -2,12 +2,28 @@
 title: Setup
 description: Integrates the gt-next library with your project
 ---
+## Usage
+
+```bash
+npx gt-next-cli setup
+```
+<Callout type="info">
+    **Note:**
+
+    This command executes locally! It does not communicate with GT servers, nor does it require any credentials.
+</Callout>
 
 ## Overview
 
 The `gt-next-cli setup` command automatically sets up your project for translation.
-It does this by parsing your projects file tree and using babel to add the `<T>` around static content.
+It does this by parsing your project's file tree and using babel to wrap the `<T>` component around static content.
 Any dynamic content will be automatically wrapped with `<Var>` components.
+
+This command should be run **once**, during the initial internationalization of your project.
+On subsequent changes, you should use the `scan` command to update your project.
+
+See the [scan](/docs/next-cli/scan) command for more details.
+
 
 ```jsx title="src/app/Home.js"
 import { T, Var } from 'gt-next'; // [!code highlight]
@@ -15,7 +31,9 @@ import { T, Var } from 'gt-next'; // [!code highlight]
 export default function Home({ user }) {
   return (
     <div>
-      <T id="app.home.home.0">Hello, World! My name is <Var>{ user.name }</Var></T> // [!code highlight]
+      <T id="app.home.0">
+        Hello, World! My name is <Var>{ user.name }</Var> // [!code highlight]
+      </T>
     </div>
   );
 }
@@ -27,21 +45,8 @@ export default function Home({ user }) {
 
 | Parameter       | Description                                      | Type    | Optional | Default         |
 |-----------------|--------------------------------------------------|---------|----------|-----------------|
-| `--api-key`       | Production API key                               | `string`  | `true`     |                 |
-| `--project-id`    | The project ID                                   | `string`  | `true`     |                 |
-| `--options`       | Path to the GT options file                      | `string`  | `true`     | `"gt.config.json"`  |
-| `--new`           | New locales to translate your project into       | `string`  | `true`     |                 |
-| `--dictionary`    | Path to the dictionary file                      | `string`  | `true`     |                 |
-| `--dry-run`       | Dry run the command                              | `boolean` | `true`     | `false`           |
-| `--ignore-errors` | Ignore errors and force translation for valid content | `boolean` | `true`     | `false`           |
-| `--inline`        | Include inline `<T>` tags in addition to the dictionary | `boolean` | `true`     | `true`            |
-| `--src`           | The source directory to scan                     | `string`  | `true`     |                 |
-
----
-## Usage
-
-### Basic usage
-
+| `--src <path>`           | The source directory to scan                     | `string`  | `true`     |  `./src && ./app && ./pages && ./components` |
+| `--config <path>`        | The path to the GT config file                   | `string`  | `true`     | `"gt.config.json"` |
 
 ---
 
@@ -56,48 +61,31 @@ Read more about the `gt.config.json` file [here](/docs/next/reference/gt-config)
 
 ### The `id` prop
 
-Every `<T>` component is assigned a unique identifier.
-This identifier is used to reference a translation in the translation editor.
+The setup command gives the option of automatically generating unique IDs for your `<T>` components.
+This is useful for projects that use a lot of `<T>` components and want to avoid manually having to assign each one a unique ID.
+
+This `id` is useful for referencing specific translations in the translation editor and in the console.
 
 ### `<T>` injection behavior
 
-The CLI will only wrap direct children inside JSX elements. 
-It will wrap other JSX elements separately with their own `<T>` components.
-
-
-
 #### Basic case
+
+The CLI will wrap JSX elements at the highest possible level.
+This means that it will wrap the entire component in a `<T>` component if it is not already wrapped.
+
 ```jsx
-<div>Hello, World!</div> -> <T id="SOME_ID">Hello, World!</T>
+<div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
 ```
 
+See the [reference](/docs/next-cli/reference/wrapping) for more details on how the `<T>` component is wrapped.
 
-#### JSX expressions
-```jsx
-<div>Hello, {name}</div> -> <T id="SOME_ID">Hello, <Var>{name}</Var></T>
-```
+### `<GTProvider>` behavior
 
-#### Short circuit operations in JSX
-```jsx
-<p>{true && "Hello, World!"}</p>
+For the Next.js App Router, the setup command will automatically wrap the `<T>` component in a `<GTProvider>` component within the appropriate `layout.jsx` file.
 
--> 
+Additionally, it will setup the `withGTConfig` Next.js plugin in the `next.config.js` file for you.
 
-<T id="">
-  <p>
-    <Var>{true && <T id="SOME_ID">{"Hello, World!"}</T>}</Var>
-  </p>
-</T>
-```
+### Auto-formatting
 
-#### String concatenation in JSX expressions
-```jsx
-<p>{"Hello," + " World!"}</p> -> <T id="SOME_ID"><p>{"Hello," + " World!"}</p></T>
-```
-
-
-#### Template literals in JSX expressions
-```jsx
-<p>{`${temp}`}</p> -> <T id="SOME_ID"><p><Var>{`${temp}`}</Var></p></T>
-```
+The setup command will automatically format the changes it makes to your codebase with Prettier, Biome, or ESLint depending on your project's configuration.
 
