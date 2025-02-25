@@ -7,18 +7,14 @@ description: API Reference for the tx string translation function
 
 The `tx()` function is a server-side function for translating strings.
 ```jsx
-await tx('Hello, world!', {id: 'exampleId'}); // returns 'Hola, mundo!'
+await tx('Hello, world!'); // returns 'Hola, mundo!'
 ```
 
- * String translation only (no jsx).
- * Server side components only.
- * High performance caching.
- * Support variable injections.
- * Static content only, dynamically constructed strings are invalid.
 
 <Callout>
-    You can leverage caching by passing an `id` parameter to `tx()`.
-    This helps optimize translation performance by reusing previously fetched translations.
+**Runtime Translation:**
+`tx()` translations occur at runtime.
+This means translation will be performed live, so you can translate content known at runtime.
 </Callout>
 
 ## Reference
@@ -32,29 +28,9 @@ await tx('Hello, world!', {id: 'exampleId'}); // returns 'Hola, mundo!'
         optional: false,
     },
     "options?": {
-        type: 'Object',
+        type: 'RuntimeTranslationOptions',
         optional: true,
         default: '{}',
-    },
-    "options.id?": {
-        type: 'string',
-        optional: true,
-    },
-    "options.locale?": {
-        type: 'string',
-        optional: true,
-    },
-    "options.context?": {
-        type: 'string',
-        optional: true,
-    },
-    "options.variables?": {
-        type: 'Record<string, any>',
-        optional: true,
-    },
-    "options.variableOptions?": {
-        type: 'Record<string, Intl.NumberFormatOptions|Intl.DateTimeFormatOptions>',
-        optional: true,
     },
   }}
 />
@@ -63,16 +39,27 @@ await tx('Hello, world!', {id: 'exampleId'}); // returns 'Hola, mundo!'
 | Name                  | Description                                                                 |
 |-----------------------|-----------------------------------------------------------------------------|
 | `content`             | The string that needs to be translated.                                     |
-| `options`            | Translation options to customize the behavior of `tx()`.                    |
-| `options.id`         | A unique identifier for the content, used for caching and fetching translations. |
-| `options.locale`     | The target locale for translation. Defaults to the current locale if not provided. |
-| `options.context`    | Additional context for the translation process, which may influence the translation's outcome. |
-| `options.variables`  | A map of variables to inject into the translated content.                   |
-| `options.variableOptions` | Options for formatting numbers and dates using `Intl.NumberFormat` or `Intl.DateTimeFormat`. |
+| `options`            | Translation options to customize the behavior of `tx()`. See [`RuntimeTranslationOptions`](/docs/next/api/types/RuntimeTranslationOptions).                    |
 
 ### Returns
 
 A promise that resolves to a string containing the translated content, or the original content if no translation is needed.
+
+---
+
+
+## Behavior
+
+The `tx()` function translates strings at runtime.
+This means that translations are performed live, so you can translate content that is only known at runtime.
+The trade off is that there is a delay while waiting for an on-demand translation to load is significantly slower.
+
+Our advice is to translate everything you can at build time using [`getGT()`](/docs/next/api/strings/useGT), [`useGT()`](/docs/next/api/strings/useGT), or [`<T>`](/docs/next/api/components/t),
+and only use on-demand translations, like `tx()` and [`<Tx>`](/docs/next/api/components/tx), when necessary.
+
+Make sure to follow the [deployment guide here](/docs/next/tutorials/quickdeploy).
+
+---
 
 ## Example
 
@@ -84,21 +71,19 @@ You can use `tx()` to translate strings.
 import { tx } from 'gt-next/server';
 
 export default async function translateGreeting() {
-    return await tx("Hello, world!", { id: 'translateGreeting' }); // [!code highlight]
+    return await tx("Hello, world!"); // [!code highlight]
 }
 ```
 
-### Specifying Translation Options
+### Adding context
 
-You can customize the translation by providing a target locale and a context to be considered when translating.
+You can customize the translation by providing a context to be considered when translating.
 
 ```javascript title="TranslateWithOptions.jsx" copy
 import { tx } from 'gt-next/server';
 
 export default async function TranslateWithOptions() {
     return await tx("Hello, world!", {
-        id: 'TranslateWithOptions',
-        locale: 'es', // [!code highlight]
         context: 'Translate informally' // [!code highlight]
     });
 }
@@ -108,29 +93,37 @@ export default async function TranslateWithOptions() {
 
 In order to pass values to your string, you must (1) assign an identifier and (2) reference the identifier in the `variables` field.
 
-
-In this example, we have created a variable with the identifier `{price}`.
-We have assigned it a value `price: 29.99`, and given it options `price: { style: 'currency', currency: 'MXN' }`.
 ```jsx title="translateWithVariables.js" copy
+// [!code word:price]
 import { tx } from 'gt-next/server';
 
 export default async function translateWithVariables() {
-    return await tx("The price is {price}", {
-        id: 'translateWithVariables',
-        locale: 'es-MX', 
-        variables: { price: 29.99 },  // [!code highlight]
-        variableOptions: { price: { style: 'currency', currency: 'MXN' } }  // [!code highlight]
+    return await tx("The cost is {price}", {
+        variables: { price : 29.99 },
+        variableOptions: { price : { style: 'currency', currency: 'MXN' } }
     });
 }
 ```
 
+### Specifying a Locale
+You can specify a locale to use for the translation.
+By default, the locale is set to the user's preferred language.
+
+```jsx title="translateWithLocale.js" copy
+import { tx } from 'gt-next/server';
+
+export default async function translateWithLocale() {
+    return await tx("Hello, world!", { locale: 'fr' }); // [!code highlight]
+}
+```
+
+---
+
 ## Notes
- * The `tx()` function is asynchronous and must be awaited.
- * It is designed exclusively for server-side usage and cannot be used in client-side components.
- * Supports advanced features like variable injection rendering for flexible localization workflows.
- * It is strongly recommended that you take advantage of caching by passing a unique id parameter.
+ * `tx()` exclusively for server-side usage and cannot be used in client-side components.
+ * Translations with `tx()` occur at runtime, meaning they are translated live. This is significantly slower than translations at build time.
 
 ## Next Steps
- * Learn more about using variables in translations with [Variable Components](/docs/next/reference/using-variable-components).
- * For JSX translations, see [`useElement()`](/docs/next/api/dictionary/useElement), [`useGT()`](/docs/next/api/dictionary/useGT) or [`getGT()`](/docs/next/api/dictionary/getGT).
- * Explore locale management with [i18n Configuration](/docs/next/references/i18n-configuration).
+ * See [`useGT()`](/docs/next/api/strings/useGT) and [`getGT()`](/docs/next/api/strings/getGT) for translating strings before deployment.
+ * For translating jsx, see [`<T>`](/docs/next/api/components/t) and [`<Tx>`](/docs/next/api/components/tx).
+ * See [`RuntimeTranslationOptions`](/docs/next/api/types/RuntimeTranslationOptions) for more information on customizing translations.
