@@ -64,7 +64,7 @@ export default function SupportedLocales() {
       <div style={styles.searchContainer}>
         <input
           type="text"
-          placeholder="Search locales..."
+          placeholder="Search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={styles.searchInput}
