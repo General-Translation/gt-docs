@@ -44,7 +44,7 @@ const LOGOS: Record<
     darkLogo: 'https://gt-docs-ten.vercel.app/logos/vite-logo.svg',
     lightWordmark: 'https://gt-docs-ten.vercel.app/logos/vite-logo.svg',
     darkWordmark: 'https://gt-docs-ten.vercel.app/logos/vite-logo.svg',
-    name: 'Vite',
+    name: 'Vite + React',
     href: '/docs/react/tutorials/quickstart',
     alt: 'Vite Logo',
   },
