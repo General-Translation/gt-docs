@@ -29,6 +29,7 @@ import {
   LogoCardContent,
   AllLogoCards,
 } from '@/components/ui/logocard';
+import SupportedLocales from '@/components/SupportedLocales';
 
 const customMdxComponents = {
   a: (props: React.ComponentProps<'a'>) => (
@@ -42,6 +43,7 @@ const customMdxComponents = {
   LogoCardImage,
   LogoCardContent,
   AllLogoCards,
+  SupportedLocales,
 };
 
 export default async function Page({
