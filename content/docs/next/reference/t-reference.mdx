@@ -11,10 +11,13 @@ Please feel free to skip around this page as needed.
 We will cover the following:
  * [The `<T>` component](#what-is-the-t-component)
  * [Design patterns](#design-patterns)
+ * [Production considerations](#production)
  * [Some examples](#examples)
  * [Common pitfalls](#common-pitfalls)
 
-If you are looking for how to use [Variable Components](/docs/next/reference/using-variable-components) or [Branching Components](/docs/next/reference/using-branching-components), please refer to the respective articles.
+If you are looking for how to use [Variable Components](/docs/next/reference/using-variable-components) or [Branching Components](/docs/next/reference/using-branching-components), please refer to their respective articles.
+
+---
 
 ## What is the `<T>` Component?
 
@@ -26,6 +29,7 @@ The `<T>` component supports static text, JSX structures, and context-aware tran
 When no translation is available, it gracefully falls back to displaying the content in the application's default locale.
 
 
+---
 
 ## Design Patterns
 
@@ -43,7 +47,7 @@ Our advice is to wrap your application in a `<GTProvider>` at the root level to 
 import { GTProvider } from 'gt-next';
 import { getLocale } from "gt-next/server";
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
   const locale = await getLocale();
   return (
     <html lang={locale}>
@@ -79,125 +83,148 @@ export default function RootLayout({ children }) {
 
 ### Variables in `<T>` Components
 
-Variables can be used in `<T>` components to display dynamic content and/or private content.
-These include [`<Var>`](/docs/next/api/components/var), [`<Num>`](/docs/next/api/components/num), [`<Currency>`](/docs/next/api/components/currency) and [`<DateTime>`](/docs/next/api/components/datetime) components.
-For simplicity, we will use `<Var>` in this example.
+Variables components can be used in `<T>` components to (1) display dynamic values and/or (2) mark content that should not be translated.
+Think of things like a user's name: it's (1) different from person to person and (2) should not change even when the language changes.
 
-The Variable Component is always wrapped inside of a `<T>` component.
-The contents that we want to translate is then wrapped inside of the Variable Component.
-
-```javascript copy
+```jsx title="DynamicGreeting.js" copy
 import { T, Var } from 'gt-next';
 
 export default function DynamicGreeting({ user }) {
   return (
     <T>
-      Hello, <Var>{user.name}</Var>!
+      Hello, <Var>{user.name}</Var>! // [!code highlight]
     </T>
   );
 }
 ```
 
-Depending on which component is used, you can specify more information about reformatting the variable content.
-Read more about it in the [Variable Components](/docs/next/reference/using-variable-components) article.
+There are many variable components: [`<Var>`](/docs/next/api/components/var), [`<Num>`](/docs/next/api/components/num), [`<Currency>`](/docs/next/api/components/currency) and [`<DateTime>`](/docs/next/api/components/datetime).
+Some of these will automatically reformat the content based on the user's locale. Others will simply mark the content as "do not translate".
+Also, these components don't necessarily need to be wrapped in a `<T>` component to reformat content.
+
+Read more about it in [this article about variable components](/docs/next/reference/using-variable-components).
 
 ### Branching in `<T>` Components
 
-Like variables, Branching Components can be used in `<T>` components to display different content based on conditions.
+Branching components can be used to display different content based on conditions for translations.
 These include [`<Plural>`](/docs/next/api/components/plural) and [`<Branch>`](/docs/next/api/components/branch) components.
-Let's examine the `<Branch>` component in this example.
+We use these components because they allow for a more optimized translation process.
 
-The `<Branch>` component is always wrapped inside of a `<T>` component.
-The contents that we want to translate is then wrapped inside of the `<Branch>` component.
+For example, the `<Plural>` component allows you to mark a sentences that should be pluralized when translation occurs.
 
-```javascript copy
-import { T, Branch } from 'gt-next';
+```jsx title="Count.js" copy
+import { T, Plural } from 'gt-next';
 
-export default function StatusMessage({ status }) {
+export default function Count({ num }) {
   return (
     <T>
-      <Branch
-        branch={status}
-        active={<p>The user is active.</p>}
-        inactive={<p>The user is inactive.</p>}
-      >
-        <p>Status unknown.</p>
-      </Branch>
+      <Plural
+        n={num} // <-- variable to check // [!code highlight]
+        singular={<p>There is one item.</p>}  // [!code highlight]
+        plural={<p>There are multiple items.</p>}  // [!code highlight]
+      />
     </T>
   );
 }
 ```
+
+It is also useful as it standardizes your pluralization logic across your application in your base language.
 
 You can specify different options depending on which component you use.
 Read more about it in the [Branching Components](/docs/next/reference/using-branching-components) article.
 
 ### Translating Strings [#translating-strings]
 
-Right now, the best way to translate a string is to use the [Dictionary Design Pattern](/docs/next/reference/dictionaries/dictionaries).
-This stands in contrast to the inline translation design pattern using the `<T>` component, but these two systems can be used in tandem, as we will see here.
+If you want to translate just a string, you can use [`useGT()`](/docs/next/api/components/strings/useGT), [`getGT()`](/docs/next/api/components/strings/getGT), or [`tx()`](/docs/next/api/components/strings/tx).
 
-To give a quick overview, you can define the string (or jsx) content in a dictionary file:
-```jsx title="src/dictionary.js" copy
-const dictionary = {
-    greeting: "Hello, world!",
+
+[`useGT()`](/docs/next/api/components/strings/useGT) and [`getGT()`](/docs/next/api/components/strings/getGT) are used for translating strings at buildtime.
+```jsx title="Greeting.js" copy
+function Greeting() {
+  const t = useGT();  // client side
+  const t = await getGT(); // server side
+  return <p>{t('Hello, my friend!')}</p>; // [!code highlight]
 }
 ```
 
-Then you can call it using the [`useGT()`](/docs/next/api/dictionary/useGT) hook or [`getGT()`](/docs/next/api/dictionary/getGT) method for client and server-side components, respectively.
+[`tx()`](/docs/next/api/components/strings/tx) is used for translating strings at runtime.
+```jsx title="FavoriteFlavor.js" copy
+function async FavoriteFlavor({ flavor }) {
+  return <p>{await tx(`Your favorite ice cream flavor is ${flavor}`)}</p>; // [!code highlight]
+}
+```
 
-<Tabs items={['client', 'server']}>
-    <Tab value="client">
-    ```jsx title="src/components/TranslateGreeting.js" copy
-    "use client";
-    import { useGT } from 'gt-next';
+For more information, you can refer to [our guide on translating strings](/docs/next/tutorials/translating-strings).
 
-    // This is a client-side component
-    export default function TranslateGreeting() {
-      const t = useGT();
-      return <p>{t('greeting')}</p>;
-    }
-    ```
-    </Tab>
-    <Tab value="server">
-    ```jsx title="src/pages/api/translate-greeting.js" copy
-    import { getGT } from 'gt-next';
+### Adding ids to `<T>` Components
 
-    // This is a server-side component
-    export default async function TranslateGreeting() {
-      const t = await getGT();
-      return <p>{t('greeting')}</p>;
-    }
-    ```
-    </Tab>
-</Tabs>
+A handy debugging trick is to add an `id` prop to your `<T>` components.
+This allows you to track which translations are being used in your application.
+It also allows you to use the [Translation Editor](/signin) to make changes to your translations without redeploying.
 
-<Callout>
-    We admit that this is not the most elegant solution.
-    We are currently working on an easier way to translate strings in the future that will involve inline translation of strings.
-</Callout>
+```jsx title="Greeting.js" copy
+import { T } from 'gt-next';
 
-### Translating common languages in advance
+export default function Greeting() {
+  return (
+    <T id="greeting">
+      Hello, world!
+    </T>
+  );
+}
+```
 
-Translating high frequency languages ahead of time is a common practice to improve load times.
-We have built a simple CLI tool that allows you to specify which languages you would like to translate.
-It can easily integrate with your CI/CD pipeline to ensure that translations are always up to date.
+---
 
-```bash
-npx gt-next-cli translate --languages fr es ja
+## Production considerations [#production]
+
+### Deploying to production
+
+While in development, any content in a `<T>` component will be translated on-demand.
+We do this for convenience during the development process.
+But, when deploying to production, all translations occur at build time.
+
+Make sure to run the translate command before deploying to production, so that all translations are available at runtime.
+We recommend adding it to your in your CD pipeline or as a part of your build script.
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gt-next-cli translate --languages fr es ja && next build",
+  }
+}
 ```
 
 That's it! You have successfully translated your application into French, Spanish, and Japanese.
 
-For more information, please refer to the [CLI Tool](/docs/next-cli/translate) reference guide.
+For a more detailed guide on deploying your application, please refer to the [Deployment](/docs/next/tutorials/quickdeploy) guide.
+For more information on the command, please refer to the [CLI Tool](/docs/next-cli/translate) reference guide.
+
+### Behavior: Development vs Production
+
+In development, the `<T>` component will translate content on-demand.
+This means that when the component is rendered, it will perform a translation immediately.
+We do this for convenience to make development with other languages easier.
+
+To enable this behavior, just add a Dev API key to your environment.
+
+In production, the `<T>` component will translate content at build time.
+This means that you have to run the translation command before deploying your application.
+
+<Callout>
+  **Tip:**
+  If you want to simulate production behavior in development, just use a production API key in your development build.
+</Callout>
 
 ### Privacy Concerns
 
 With some exceptions, all content wrapped in a `<T>` component is sent to the General Translation APIs for translation.
-This might not be desirable for rendering sensitive data, such as user names, account numbers, etc.
+This might not be desirable for rendering sensitive data, such as usernames, account numbers, etc.
 
 To circumvent this issue, use [Variable Components](/docs/next/reference/using-variable-components#privacy) to handle private information.
 This ensures that no sensitive data is sent to the General Translation APIs for translation.
 The localization of all content wrapped in any Variable Component is handled locally.
+
+---
 
 ## Examples
 
@@ -205,17 +232,12 @@ The localization of all content wrapped in any Variable Component is handled loc
 
 The simplest use case for `<T>` is to translate static text.
 
-<Callout>
-    **Note:** The `id` prop is optional, but may be useful for debugging and observability.
-    Additionally, the translation editor feature on the platform will be easier to use if you provide a period separated `id`.
-</Callout>
-
 ```javascript copy
 import { T } from 'gt-next';
 
 export default function BasicUsage() {
   return (
-    <T id="greeting">
+    <T>
       Hello, world!
     </T>
   );
@@ -235,7 +257,7 @@ import { T } from 'gt-next';
 
 export default function FormalGreeting() {
   return (
-    <T id="greeting" context="formal">
+    <T context="formal">
       Hi there!
     </T>
   );
@@ -256,7 +278,7 @@ import CustomButton from './CustomButton';
 
 export default function Page() {
   return (
-    <T id="jsx">
+    <T>
       This will be translated
       <div>
         <div>
@@ -272,9 +294,11 @@ export default function Page() {
 }
 ```
 
+---
+
 ## Common Pitfalls
 
-### Direct Text Only [#direct-text]
+### Direct descendants only [#direct-text]
 
 The `<T>` component only translates text passed directly as a child.
 This means that if you have content inside a component that is not directly passed to `<T>`, it will not be translated.
@@ -290,7 +314,7 @@ function UntranslatedContent() {
 
 export default function DisplayGreetings() {
   return (
-    <T id="greeting">
+    <T>
       <h1>Hello, this text will be translated</h1>
       <UntranslatedContent />
     </T>
@@ -304,7 +328,11 @@ Only the content directly inside `<T>` will be translated, like the `<h1>` tag a
 This occurs because of how React renders components.
 It is a bit complicated, but the gist is that React does not know the content of a component until it has rendered.
 Therefore, the contents of components like `<UntranslatedContent>` are not translated.
-However, any text directly `<T>` will be translated as expected.
+However, any text directly between the two `<T>` tags will be translated.
+<Callout>
+    **Note:** A good rule of thumb is that any content that is *literally* between the two `<T>` in the file will be translated.
+    You can always add another `<T>` to translate the content that is not being translated, though nesting `<T>` components is not recommended.
+</Callout>
 
 #### What's the fix?
 
@@ -316,7 +344,7 @@ The solution is to always wrap the text in the `<T>` component directly, like so
 ```javascript copy
 function TranslatedContent() {
   return (
-    <T id="greeting">
+    <T>
       <p>This content <b>IS</b> translated</p>
     </T>
   );
@@ -325,7 +353,7 @@ function TranslatedContent() {
 export default function DisplayGreetings() {
   return (
     <>
-      <T id="greeting-title">
+      <T>
         <h1>Hello, this text will be translated</h1>
       </T>
       <TranslatedContent />
@@ -337,13 +365,10 @@ export default function DisplayGreetings() {
 
 #### What about variables? [#variables]
 
-**TL;DR:** Variables will be translated, but please use [Variable Components](/docs/next/reference/using-variable-components) or [Branching Components](/docs/next/reference/using-branching-components) for this purpose.
-
 Variables are a little more complicated because they have the tendency to change their values.
-The downstream effect is that a new translation will be generated each time the variable changes.
-This can lead to performance issues.
-To avoid this, we recommend using [Variable Components](/docs/next/reference/using-variable-components) for displaying dynamic values and [Branching Components](/docs/next/reference/using-branching-components) for conditional logic.
+We recommend using [Variable Components](/docs/next/reference/using-variable-components) for displaying dynamic values and [Branching Components](/docs/next/reference/using-branching-components) for conditional logic.
 
+If you want to translate dynamic contents at runtime, checkout [`tx()`](/docs/next/api/components/strings/tx) and [`<Tx>`](/docs/next/api/components/tx).
 
 
 ### Nested `<T>` Components [#nested-t]
@@ -356,7 +381,7 @@ Here is an example of **what not to do**:
 ```jsx copy
 function SomeComponent() {
   return (
-    <T id="other-nested-greeting">
+    <T>
       Hello, friend!
     </T>
   );
@@ -364,8 +389,8 @@ function SomeComponent() {
 
 export default function NestedTranslation() {
   return (
-    <T id="greeting">
-      <T id="nested-greeting"> {/* Don't do this! */} // [!code highlight]
+    <T>
+      <T> {/* Don't do this! */} // [!code highlight]
         Hello, world!
       </T>
       <SomeComponent /> {/* This still counts. Don't do this! */} // [!code highlight]
@@ -373,7 +398,8 @@ export default function NestedTranslation() {
   );
 }
 ```
-The solution here would be to remove the `<T id="nested-greeting">` component wrapping the nested `<T>` components.
+
+The solution here is to remove the outtermost `<T>` component.
 
 ### Conditional Content [#conditional-content]
 
@@ -385,7 +411,7 @@ import { T, Branch } from 'gt-next';
 
 export default function Header({ user }) {
   return (
-    <T id="header">
+    <T>
       <h2>
         <Branch
           branch={user.hasAccount}
@@ -396,38 +422,15 @@ export default function Header({ user }) {
     </T>
   );
 }
-
 ```
-
-
-### Dynamic `<T>` ids [#dynamic-ids]
-
-Sometimes, you may want to use a dynamic string value for the `id` prop of a `<T>` component.
-Don't do this.
-
-This will trigger on-demand translation for every unique `id` value, which can lead to performance issues.
-Always use a static string value for the `id` prop of a `<T>` component.
-
-If you want to translate dynamic content, there are a few options available for you:
-
-1. Use the [Branching Component](/docs/next/reference/using-branching-components) to conditionally render content.
-    If you want to conditionally display content based on a value, use the [`<Branch>`](/docs/next/api/components/branch) component.
-    This allows you to use pre-defined the content you want to be translated.
-
-2. Use the [Variable Component](/docs/next/reference/using-variable-components) to render dynamic content.
-    If the content is dynamic (like displaying some integer, date, etc.), use a Variable Component to render the content.
-    Furthermore, this can be combined with the Branching Component to conditionally render content if necessary.
-
-3. If you want to render a string, please use the [Dictionary Design Pattern](/docs/next/reference/dictionaries/dictionaries).
-
-You can read more about these design patterns in their respective reference guides or above in the [Design Patterns](#design-patterns) section.
-
 
 ## Notes
  * `<T>` components are used to translate arbitrary JSX Content.
- * Ensure every `<T>` component has a unique id for accurate translation tracking.
  * Wrap your app with a [`<GTProvider>`](/docs/next/api/components/gtprovider) to enable translations in client components.
+ * `<T>` translates contents at buildtime, not runtime. Development will perform on-demand translation for convenience, but this is not the case in production.
 
 ## Next Steps
- * Explore how to use variables in `<T>` translations in the [Variable Components article](/docs/next/reference/using-variable-components).
- * Discover how to manage pluralization and branching in the [Branching Components guide](/docs/next/references/using-branching-components).
+ * Explore [Variable Components article](/docs/next/reference/using-variable-components) and [Branching Components guide](/docs/next/references/using-branching-components).
+ * Learn about [translating strings](/docs/next/tutorials/translating-strings) in your application.
+ * For runtime translation, check out [`tx()`](/docs/next/api/components/strings/tx) and [`<Tx>`](/docs/next/api/components/tx).
+
