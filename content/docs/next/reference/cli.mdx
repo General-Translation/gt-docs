@@ -6,6 +6,8 @@ description: The General Translations CLI tool
 ## Overview
 
 This is a reference doc on the General Translation CLI tool.
+Read more about `gt-next-cli` [here](/docs/next-cli/introduction).
+
 For a step by step guide, check out the [Deploying to Production](/docs/next/tutorials/quickdeploy) guide.
 
 ### Installation
@@ -35,30 +37,14 @@ For a step by step guide, check out the [Deploying to Production](/docs/next/tut
 
 ## What does the CLI tool do?
 
-The CLI tool is a script that will scan your entire app for content to be translated.
-During this scan, it will parse and validate any `<T>` components or dictionaries that are used in your codebase.
+The CLI tool is used for managing your project and your translations.
+There are a two main commands you should be aware of: `translate` and `setup`.
 
-After parsing and validating content, the CLI tool will save the corresponding hashes and content on our servers.
-If eager translation is specified, the GT API will pre-translate the content in the specified locales and cache it on our CDN.
-
-## What is eager translation? [#pre-translation]
-
-Eager translation is the process of translating content in advance.
-This way, when the user requests a page, the translated content is already available in the CDN and can be served immediately.
-
-Of course, it is not always the best practice to translate every single language in advance.
-You should consider the languages that are most commonly used by your audience and translate those.
-The rest can be translated at runtime as necessary.
-
-
-## Is this required?
-
-Yes, you must run the CLI tool as part of your CI/CD pipeline in order to ensure that your content is able to be translated in production.
-
-Due to the nature of React (and Next.js client components) being rendered on the client side, API Keys and similar credentials
-cannot be passed to the client. The CLI tool is necessary to prevent abuse from malicious actors. 
-
-Running the CLI tool allows GT to pre-authorize your content for translation via hashing, eliminating security vulnerabilities.
+ * [The `translate` command](/docs/next-cli/translate) is meant to be added to the CD pipeline.
+   It is used to scan your project for content to be translated.
+   The content is then uploaded to a CDN or added to your app bundle to be used at runtime.
+ * [The `setup` command ](/docs/next-cli/setup) is used to automatically integrate the General Translation library into your project.
+   It will scan through your project and wrap any JSX content with a `<T>` component.
 
 
 ## Translating
