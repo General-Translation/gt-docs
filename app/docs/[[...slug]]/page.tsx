@@ -14,6 +14,35 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
 import { Card, Cards } from 'fumadocs-ui/components/card';
 import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import {
+  Card as ShadCard,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  LogoCard,
+  LogoCardContainer,
+  LogoCardImage,
+  LogoCardContent,
+  AllLogoCards,
+} from '@/components/ui/logocard';
+
+const customMdxComponents = {
+  a: (props: React.ComponentProps<'a'>) => (
+    <a
+      {...props}
+      className={'link' + (props.className ? ' ' + props.className : '')}
+    />
+  ),
+  LogoCardContainer,
+  LogoCard,
+  LogoCardImage,
+  LogoCardContent,
+  AllLogoCards,
+};
 
 export default async function Page({
   params,
@@ -51,6 +80,13 @@ export default async function Page({
             File,
             Folder,
             Files,
+            ShadCard,
+            CardContent,
+            CardDescription,
+            CardFooter,
+            CardHeader,
+            CardTitle,
+            ...customMdxComponents,
           }}
         />
       </DocsBody>

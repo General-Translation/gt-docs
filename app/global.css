@@ -1,3 +1,207 @@
+/* --------------- TAILWIND --------------- */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* --------------- SHAD CN --------------- */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* --------------- CUSTOM STYLES --------------- */
+
+:root {
+  /* Background */
+
+  /* Links */
+  --color-link: #458dff;
+  --color-link-dark: #437bca;
+
+  /* Cards */
+  --hover-shine-color: rgba(255, 255, 255, 0.1);
+  --hover-shine-inverse-color: rgba(0, 0, 0, 0.15);
+  --hover-shine-color-dark: rgba(0, 0, 0, 0.1);
+  --hover-shine-inverse-color-dark: rgba(255, 255, 255, 0.3);
+}
+
+.dark {
+  --color-link: var(--color-link-dark);
+  --hover-shine-color: var(--hover-shine-color-dark);
+  --hover-shine-inverse-color: var(--hover-shine-inverse-color-dark);
+}
+
+/* ---------- LINKS ---------- */
+
+.link {
+  position: relative;
+  text-decoration: none;
+  color: var(--color-link);
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px; /* Adjust this for underline positioning */
+  width: 100%;
+  height: 2px; /* Adjust thickness */
+  background-color: var(--color-link);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease-in-out;
+}
+
+.link:hover::after {
+  transform: scaleX(1);
+}
+
+/* ---------- LOGO CARDS ---------- */
+
+@keyframes logo-card-shine {
+  0% {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes logo-card-shadow {
+  0% {
+    box-shadow: 0 0 15px 0 var(--hover-shine-inverse-color);
+  }
+  100% {
+    box-shadow: 0 0 5px 0 var(--hover-shine-inverse-color);
+  }
+}
+
+.logo-card {
+  width: 240px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  /* Ensures shine effect stays within the card */
+}
+
+/* Light mode hover effect */
+.logo-card:hover {
+  @apply shadow-md;
+  transform: scale(1.05);
+  animation: logo-card-shadow 0.3s ease-in-out;
+  box-shadow: 0 0 5px 0 var(--hover-shine-inverse-color);
+}
+
+/* Dark mode hover effect - inverted (inset) shadow */
+.dark .logo-card:hover {
+  box-shadow: 0 0 5px 0 var(--hover-shine-inverse-color);
+  animation: logo-card-shadow 0.3s ease-in-out;
+}
+
+/* Shine Effect */
+.logo-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    var(--hover-shine-color) 25%,
+    var(--hover-shine-inverse-color) 50%,
+    var(--hover-shine-color) 75%
+  );
+  transform: skewX(-30deg);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.logo-card:hover::before {
+  animation: logo-card-shine 0.3s ease-in-out;
+}
+
+.logo-card-image {
+  width: 80px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 0.5rem; /* Reduced spacing */
+}
+
+.logo-card-content {
+  margin-bottom: 0.5rem; /* Reduced spacing */
+  padding: 1rem;
+}

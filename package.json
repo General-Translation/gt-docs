@@ -9,13 +9,17 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "fumadocs-core": "13.4.10",
     "fumadocs-mdx": "10.0.2",
     "fumadocs-ui": "^13.4.10",
     "lucide-react": "^0.452.0",
     "next": "^14.2.8",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/mdx": "^2.0.13",
