@@ -150,10 +150,6 @@ export default function Greeting() {
 
 ### Deploying to production
 
-While in development, any content in a `<T>` component will be translated on-demand.
-We do this for convenience during the development process.
-But, when deploying to production, all translations occur at build time.
-
 Make sure to run the translate command before deploying to production, so that all translations are available at runtime.
 We recommend adding it to your in your CD pipeline or as a part of your build script.
 ```json title="package.json" copy
@@ -163,6 +159,11 @@ We recommend adding it to your in your CD pipeline or as a part of your build sc
   }
 }
 ```
+
+That's it! You have successfully translated your application into French, Spanish, and Japanese.
+
+For a more detailed guide on deploying your application, please refer to the [Deployment](/docs/react/tutorials/quickdeploy) guide.
+For more information on the command, please refer to the [CLI Tool](/docs/react-cli/translate) reference guide.
 
 ### Behavior: Development vs Production
 
