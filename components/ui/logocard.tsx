@@ -73,7 +73,7 @@ const LOGOS: Record<
     darkLogo: '/gt-logo-dark.svg',
     lightWordmark: '/gt-logo-light.svg',
     darkWordmark: '/gt-logo-dark.svg',
-    name: 'And more!',
+    name: 'Other',
     href: '/docs/react/tutorials/quickstart',
     alt: 'General Translation Inc. Logo',
   },
