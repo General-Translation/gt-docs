@@ -56,7 +56,7 @@ Promise<(id: string, options?: DictionaryTranslationOptions) => React.ReactNode>
 | Name                  | Type | Description                                                                 |
 |-----------------------|--|-----------------------------------------------------------------------------|
 | `id`             | `string` | The id of the entry to be translated                                     |
-| `options?`            | [`InlineTranslationOptions`](/docs/next/api/types/inlineTranslationOptions) | Translation options to customize the behavior of `d()`. |
+| `options?`            | [`DictionaryTranslationOptions`](/docs/react/api/types/dictionaryTranslationOptions) | Translation options to customize the behavior of `d()`. |
 
 
 ---
@@ -76,10 +76,10 @@ export default dictionary;
 When we want to access these entries (on the server side), we call `getDict()`.
 This returns a function that accepts the key of a translation from the dictionary.
 
-```jsx title="translateGreeting.jsx" copy
+```jsx title="TranslateGreeting.jsx" copy
 import { getDict } from 'gt-next/server';
 
-export default async function translateGreeting() {
+export default async function TranslateGreeting() {
   
   const d = await getDict(); // [!code highlight]
 
@@ -91,7 +91,7 @@ export default async function translateGreeting() {
 }
 ```
 
-### Using variables
+### Using variables [#variables]
 In order to pass values, you must (1) assign an identifier and (2) reference the identifier when calling the `d()` function.
 
 In this example, we use `{}` to pass variables to the translations.
@@ -106,11 +106,11 @@ const dictionary = {
 export default dictionary;
 ```
 
-```jsx title="translateGreeting.jsx" copy
+```jsx title="TranslateGreeting.jsx" copy
 // [!code word:userName]
 import { getDict } from 'gt-next/server';
 
-export default async function translateGreeting() {
+export default async function TranslateGreeting() {
   const d = await getDict();
   
   // Hello Alice!

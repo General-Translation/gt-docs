@@ -12,7 +12,7 @@ It is required for any client-side translations on your application.
 
 - Wrap your entire application in `<GTProvider>` to enable translations on the client.
 - When working with dictionaries, optionally specify an `id` to limit the dictionary data sent to the client, optimizing performance for large dictionaries.
-- The `<GTProvider>` component is used for both [inline `<T>`](/docs/react/reference/t-reference) and [dictionaries](/docs/react/reference/dictionary).
+- The `<GTProvider>` component is used for both [inline `<T>`](/docs/react/reference/t-reference) and [dictionaries](/docs/react/reference/dictionary-reference).
 
 ## Reference
 
@@ -111,7 +111,7 @@ Wrap your application in `<GTProvider>` to add translation to your app.
 Don't forget to add a [list of supported locales](/docs/reference/supported-locales) to enable translation.
 
 
-```jsx title="layout.js" copy
+```jsx title="index.js" copy
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
@@ -131,7 +131,7 @@ createRoot(document.getElementById("root")!).render(
 
 You can also pass a dictionary to the `<GTProvider>` component and then access it with the [`useDict()`](/docs/next/api/components/dictionary/useDict) hook.
 
-```jsx title="layout.js" copy
+```jsx title="index.js" copy
 import dictionary from "./dictionary.js";
 
 createRoot(document.getElementById("root")!).render(
@@ -143,7 +143,7 @@ createRoot(document.getElementById("root")!).render(
 );
 ```
 
-For more information on using dictionaries, check out this [guide](/docs/react/reference/dictionary).
+For more information on using dictionaries, check out this [guide](/docs/react/reference/dictionary-reference).
 
 ### Adding configuration
 
@@ -161,7 +161,7 @@ It also directly integrates with the [`gt-react-cli translate` command](/docs/re
 
 All you have to do is just pass this to the `<GTProvider>` component.
 
-```jsx title="layout.js" copy
+```jsx title="index.js" copy
 import config from "../gt.config.json";
 
 createRoot(document.getElementById("root")!).render(
@@ -178,7 +178,7 @@ createRoot(document.getElementById("root")!).render(
 You can use the `loadTranslation` prop to load translations from a custom source.
 This is useful when you need to load translations from a different source, such as a custom API.
 
-```jsx title="layout.js" copy
+```jsx title="index.js" copy
 import loadTranslation from "./loadTranslation";
 
 createRoot(document.getElementById("root")!).render(
@@ -191,7 +191,7 @@ createRoot(document.getElementById("root")!).render(
 ```
 
 ## Notes
- * The `<GTProvider>` must wrap all [`<T>` components](/docs/react/api/components/t) and other translation-related functions. Read more about it [here](/docs/react/reference/t-reference#gtprovider).
+ * The `<GTProvider>` must wrap all [`<T>` components](/docs/react/api/components/t) and other translation-related functions. Learn more [here](/docs/react/reference/t-reference#gtprovider).
 
 ## Next steps
  * Learn more about the [`<T>` component](/docs/react/reference/t-reference) for translating text and components.

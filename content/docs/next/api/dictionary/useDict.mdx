@@ -52,7 +52,7 @@ A translation function `d()` that, given an id, will return the translated versi
 | Name                  | Type | Description                                                                 |
 |-----------------------|--|-----------------------------------------------------------------------------|
 | `id`             | `string` | The id of the entry to be translated                                     |
-| `options?`            | [`InlineTranslationOptions`](/docs/next/api/types/inlineTranslationOptions) | Translation options to customize the behavior of `d()`. |
+| `options?`            | [`DictionaryTranslationOptions`](/docs/react/api/types/dictionaryTranslationOptions) | Translation options to customize the behavior of `d()`. |
 
 ---
 
@@ -71,11 +71,11 @@ export default dictionary;
 When we want to access these entries (on the client side), we call `useDict()`.
 This returns a function that accepts the key of a translation from the dictionary.
 
-```jsx title="translateGreeting.jsx" copy
+```jsx title="TranslateGreeting.jsx" copy
 "use client";
 import { useDict } from 'gt-next/client';
 
-export default async function translateGreeting() {
+export default async function TranslateGreeting() {
   const d = useDict(); // [!code highlight]
   return (
     <p>
@@ -85,7 +85,7 @@ export default async function translateGreeting() {
 }
 ```
 
-### Using variables
+### Using variables [#variables]
 In order to pass values, you must (1) assign an identifier and (2) reference the identifier when calling the `d()` function.
 
 In this example, we use `{}` to pass variables to the translations.
@@ -99,12 +99,12 @@ const dictionary = {
 export default dictionary;
 ```
 
-```jsx title="src/server/translateGreeting.jsx" copy
+```jsx title="src/server/TranslateGreeting.jsx" copy
 // [!code word:userName]
 "use client";
 import { useDict } from 'gt-next/client';
 
-export default async function translateGreeting() {
+export default async function TranslateGreeting() {
   const d = useDict();
   
   // Hello Alice!
@@ -153,4 +153,4 @@ export default function UserDetails() {
 ## Next Steps
  * For server-side translations, see [`getDict()`](/docs/next/api/dictionary/getDict).
  * Learn more about using dictionaries in the [dictionaries reference](/docs/next/reference/dictionary).
- * See [DictionaryTranslationOptions](/docs/next/api/types/DictionaryTranslationOptions) for more information on translation options.
+ * See [DictionaryTranslationOptions](/docs/next/api/types/dictionaryTranslationOptions) for more information on translation options.

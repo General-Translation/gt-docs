@@ -58,7 +58,7 @@ We will walk through the following steps:
         Create a dictionary
     </Step>
     <Step>
-        Use the dictionary
+        Reference the dictionary
     </Step>
 </Steps>
 
@@ -111,11 +111,11 @@ export default dictionary;
 ```
 
 
-### Step 2: Use the dictionary
+### Step 2: Reference the dictionary
 
 There are a few ways to use the dictionary, depending on the context where you are trying to use the dictionary.
-For example, if you are in a client-side component, use the [`useGT()`](/docs/next/api/dictionary/useGT)
-hook and for server-side components use [`await getGT()`](/docs/next/api/dictionary/getGT).
+For example, if you are in a client-side component, use the [`useDict()`](/docs/next/api/dictionary/useDict)
+hook and for server-side components use [`await getDict()`](/docs/next/api/dictionary/getDict).
 
 Here is an example of how to use the dictionary in a client-side component:
 
@@ -125,7 +125,7 @@ import { useDict } from 'gt-next/client';
 
 export default function MyComponent() {
 
-  const d = useDict(); // on the client side, you use the useGT hook
+  const d = useDict(); // on the client side, you use the useDict hook
 
   return (
     <div>
@@ -173,10 +173,10 @@ export default dictionary;
 ```
 ```jsx title="src/components/MyComponent.js" copy
 // [!code word:name]
-import { getGT } from 'gt-next/server';
+import { getDict } from 'gt-next/server';
 
 export default async function MyComponent() {
-  const d = await getGT();
+  const d = await getDict();
 
   return (
     <div>
@@ -187,12 +187,12 @@ export default async function MyComponent() {
 }
 ```
 
-Read more about adding variables to your dictionary in the reference docs for [`useGT()`](/docs/next/api/dictionary/useGT) and [`getGT()`](/docs/next/api/dictionary/getGT).
+Read more about adding variables to your dictionary in [the `DictionaryTranslationOptions` type](/docs/next/api/types/dictionaryTranslationOptions).
 
 
 ### Prefixes
 
-Additionally, with `useGT()` and `getGT()` you can pass in a prefix to the function to specify a shared path in the dictionary.
+Additionally, with `useDict()` and `getDict()` you can pass in a prefix to the function to specify a shared path in the dictionary.
 This is useful if you have a shared path in your dictionary that you want to use in multiple components.
 
 ```jsx
@@ -208,11 +208,11 @@ export default dictionary;
 ```
 
 ```jsx title="src/components/MyComponent.js" copy
-import { getGT } from 'gt-next/server';
+import { getDict } from 'gt-next/server';
 
 export default async function MyComponent() {
   // All translation paths such as 'hello' will be prefixed with 'greetings'
-  const d = await getGT('greetings.common'); // [!code highlight]
+  const d = await getDict('greetings.common'); // [!code highlight]
 
   return (
     <div>
@@ -230,14 +230,18 @@ You can also specify a prefix in the `<GTProvider>` component.
 This will pass a subset of the dictionary to the client, so the whole dictionary does not have to be loaded.
 This only applies to client side components.
 
-```jsx
+```jsx title="layout.js" copy
 import { GTProvider } from 'gt-next';
 
-export default function Layout({ children }) {
+export default function RootLayout({ children }) {
     return (
-      <GTProvider id="nested.dictionary.key"> // [!code highlight]
-          {children}
-      </GTProvider>
+        <html lang="en">
+            <body>
+                <GTProvider id="nested.dictionary.key"> // [!code highlight]
+                    {children}
+                </GTProvider> // [!code highlight]
+            </body>
+        </html>
     );
 }
 ```
@@ -270,7 +274,7 @@ We recommend adding it to your in your CD pipeline or as a part of your build sc
 ```json title="package.json" copy
 {
   "scripts": {
-    "build": "npx gt-react-cli translate --languages fr es ja && <YOUR_BUILD_COMMAND>",
+    "build": "npx gt-next-cli translate --languages fr es ja && <YOUR_BUILD_COMMAND>",
   }
 }
 ```

@@ -77,7 +77,7 @@ import { tx } from 'gt-next/server';
 const Component = () => {
   return <div>
     { tx(
-      'Your account balance: { account-balance }!',
+      'Your account balance: {account-balance}!',
       {
         variables: { "account-balance" : 1000000 },
         variableOptions: { "account-balance": { style: 'currency', currency: 'USD' } }

@@ -97,7 +97,7 @@ const Component = () => {
   const t = useGT();
   return <div>
     { t(
-      'Your account balance: { account-balance }!',
+      'Your account balance: {account-balance}!',
       {
         variables: { "account-balance" : 1000000 },
         variableOptions: { "account-balance": { style: 'currency', currency: 'USD' } }
