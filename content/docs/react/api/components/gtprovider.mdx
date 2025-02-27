@@ -24,10 +24,59 @@ It is required for any client-side translations on your application.
       type: 'ReactNode',
       optional: false,
     },
+    "projectId": {
+      type: 'string',
+      optional: true,
+    },
     "id?": {
       type: 'string',
       optional: true,
       default: 'undefined',
+    },
+    "dictionary?": {
+      type: 'Dictionary',
+      optional: true,
+      default: 'defaultDictionary',
+    },
+    "locales?": {
+      type: 'string[]',
+      optional: true,
+    },
+    "defaultLocale?": {
+      type: 'string',
+      optional: true,
+      default: 'libraryDefaultLocale',
+    },
+    "locale?": {
+      type: 'string',
+      optional: true,
+    },
+    "cacheUrl?": {
+      type: 'string',
+      optional: true,
+      default: "'https://cdn.gtx.dev'",
+    },
+    "runtimeUrl?": {
+      type: 'string',
+      optional: true,
+      default: "'https://runtime.gtx.dev'",
+    },
+    "renderSettings?": {
+      type: 'RenderSettings',
+      optional: true,
+      default: 'defaultRenderSettings',
+    },
+    "_versionId?": {
+      type: 'string',
+      optional: true,
+    },
+    "devApiKey?": {
+      type: 'string',
+      optional: true,
+    },
+    "metadata?": {
+      type: 'object',
+      optional: true,
     },
   }}
 />
@@ -37,7 +86,18 @@ It is required for any client-side translations on your application.
 | Prop | Description |
 |-----------|-------------|
 | `children` | Any component or the parents of any component that needs to translate or access translation information on the client side. These should include any components using `<T>`, `useGT`, or other translation utilities. |
+| `projectId?` | The project ID required for General Translation cloud services. |
 | `id?` | The ID of a nested dictionary to limit the data sent to the client. This is useful for large projects with extensive dictionaries. |
+| `dictionary?` | The translation dictionary for the project. |
+| `locales?` | The list of approved locales for the project. |
+| `defaultLocale?` | The default locale to use if no other locale is found. |
+| `locale?` | The current locale, if already set. |
+| `cacheUrl?` | The URL of the cache service for fetching translations. |
+| `runtimeUrl?` | The URL of the runtime service for fetching translations. |
+| `renderSettings?` | The settings for rendering translations. |
+| `_versionId?` | The version ID for fetching translations. |
+| `devApiKey?` | The API key for development environments. |
+| `metadata?` | Additional metadata to pass to the context. |
 
 ### Returns
 
