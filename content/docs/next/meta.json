@@ -21,7 +21,6 @@
     "guides/locale-management",
     "guides/rtl",
     "---Additional Resources---",
-    "tutorials",
-    "!discussion"
+    "tutorials"
   ]
 }
