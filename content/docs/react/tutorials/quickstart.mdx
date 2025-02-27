@@ -85,14 +85,15 @@ See the [CLI tool documentation](/docs/react/reference/cli#setup) for more infor
 
 [`<GTProvider>`](/docs/react/api/components/gtprovider) is used to configure the behavior of `gt-react`. 
 It should be placed as high up in your app as possible, ideally at the root.
+Just add the list of [locale codes](/docs/reference/supported-locales) you want to support as a prop.
 
-```jsx copy
-import { GTProvider } from "gt-react"; // [!code highlight]
+```jsx title="App.js" copy
+import { GTProvider } from "gt-react";
 import MyApp from "./MyApp";
 
 export default function App() {
   return (
-    <GTProvider> // [!code highlight]
+    <GTProvider locales={['fr', 'zh']}> // French and Chinese support // [!code highlight]
       <MyApp />
     </GTProvider> // [!code highlight]
   );

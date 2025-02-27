@@ -89,13 +89,19 @@ export default function SupportedLocales() {
                 e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              <div style={styles.localeCode}>
+              <div style={styles.localeCode} suppressHydrationWarning>
                 {locale}
-                <span role="img" aria-label={`${properties.name} flag`}>
+                <span
+                  role="img"
+                  aria-label={`${properties.name} flag`}
+                  suppressHydrationWarning
+                >
                   {properties.emoji}
                 </span>
               </div>
-              <div style={styles.localeName}>{properties.name}</div>
+              <div style={styles.localeName} suppressHydrationWarning>
+                {properties.name}
+              </div>
             </li>
           );
         })}

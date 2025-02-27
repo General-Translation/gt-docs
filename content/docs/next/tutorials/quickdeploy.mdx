@@ -52,17 +52,25 @@ GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
 
 ## Step 3: Add the translate command to your build script 🏗️
 
-The next step is to add the translate command to your build script.
-Make sure that the translate command comes before the build command.
-
+The next step is to add the translate command to your build script,
+and specify the [locales](/docs/reference/supported-locales) that you would like to ship to production.
 
 ```json title="package.json" copy
 {
   "scripts": {
-    "build": "npx gt-next-cli translate && <YOUR_BUILD_COMMAND>"
+    "build": "npx gt-next-cli translate --languages pt es && <YOUR_BUILD_COMMAND>"
   }
 }
 ```
+Here, we have added Portuguese and Spanish to our configuration.
+
+<Callout>
+  **Tip:** Because we have specified the locales in the build script, they have been recorded in the config file.
+  You can edit the languages you want to support via the config file.
+  Just remember to remove any hard coded languages from [`withGTConfig()`](/docs/next/api/config/withgtconfig).
+</Callout>
+
+
 
 That's it! You are now ready to deploy your Next.js with GT!
 

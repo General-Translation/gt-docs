@@ -9,18 +9,21 @@ This guide describes how to internationalize an existing [Next.js](https://nextj
 
 For a project using the Pages Router, follow the [React docs](/docs/react/tutorials/quickstart).
 
-We will cover 3 simple steps:
+We will cover 4 simple steps:
 
 <Steps>
-    <Step>
-        Installing `gt-next` and `gt-next-cli`
-    </Step>
-    <Step>
-        Running the CLI setup tool
-    </Step>
-    <Step>
-        Setting up your local environment
-    </Step>
+  <Step>
+    Installing `gt-next` and `gt-next-cli`
+  </Step>
+  <Step>
+    Add the [`withGTConfig()` plugin](/docs/next/api/config/withGTConfig)
+  </Step>
+  <Step>
+    Running the CLI setup tool
+  </Step>
+  <Step>
+    Setting up your local environment
+  </Step>
 </Steps>
 
 This entire process should take under **5 minutes**.
@@ -65,7 +68,23 @@ Install the [gt-next](https://www.npmjs.com/package/gt-next) and [gt-next-cli](h
 </Tabs>
 
 
-### 2. Run the CLI tool
+### 2. Add the `withGTConfig()` plugin
+
+Add [`withGTConfig()`](/docs/next/api/config/withGTConfig) to your `next.config.js` file.
+You can specify the languages you want to support by passing an array of [locale codes](/docs/reference/supported-locales).
+
+```js title="next.config.js" copy
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {};
+
+export default withGTConfig(nextConfig, {
+  locales: ['pt', 'es'], // Support for Portuguese and Spanish
+});
+```
+
+
+### 3. Run the CLI tool
 
 Use the [gt-next-cli](https://www.npmjs.com/package/gt-next-cli) to setup your project for translation.
 
@@ -75,7 +94,7 @@ npx gt-next-cli setup
 
 This will scan your codebase for translatable content and automatically wrap it in `<T>` components.
 Additionally, this will setup the necessary `next.config.js` plugin and insert `<GTProvider>` components where necessary.
-See the [CLI tool documentation](/docs/next/reference/cli#setup) for more information.
+See the [CLI tool documentation](/docs/next-cli/setup) for more information.
 
 <Callout type="warn">
   **Experimental:**
@@ -84,63 +103,35 @@ See the [CLI tool documentation](/docs/next/reference/cli#setup) for more inform
 </Callout>
 
 
-### 3. Add your development API keys
+### 4. Add your development API keys
 
 Add your API key and Project ID to your local environment.
 
 <Steps>
-    <Step>
-        Navigate to the [Dashboard](https://generaltranslation.com/en-US/signin).
-        Go to the **Developer Keys** page in the sidebar.
-    </Step>
+  <Step>
+    Navigate to the [Dashboard](https://generaltranslation.com/en-US/signin).
+    Go to the **Developer Keys** page in the sidebar.
+  </Step>
 
-    <Step>
-        Click **Create Dev API Key**.
-    </Step>
+  <Step>
+    Click **Create Dev API Key**.
+  </Step>
 
-    <Step>
-      Add the Project ID and Development API key to your environment.
-      ```bash title=".env.local" copy
-      GT_API_KEY="YOUR_GT_API_KEY"
-      GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
-      ```
-    </Step>
+  <Step>
+    Add the Project ID and Development API key to your environment.
+    ```bash title=".env.local" copy
+    GT_API_KEY="YOUR_GT_API_KEY"
+    GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+    ```
+  </Step>
 </Steps>
 <Callout type="warn">
-    **Protect Your API Keys!**
+  **Protect Your API Keys!**
 
-    Development keys should **only** ever be used in development.
-    Likewise, production keys should **only** ever be used in production.
-    *Never commit your API keys to a public repository!*
+  Development keys should **only** ever be used in development.
+  Likewise, production keys should **only** ever be used in production.
+  *Never commit your API keys to a public repository!*
 </Callout>
-
-{/* ### 3. Add `<GTProvider>`
-
-[`<GTProvider>`](/docs/next/api/components/gtprovider) is used to configure the behavior of `gt-next` in client components. 
-It should be placed in the [`layout.js`](https://nextjs.org/docs/app/getting-started/layouts-and-pages#creating-a-layout) file at the root of your app directory.
-
-```jsx title="Layout.js" copy
-import { GTProvider } from 'gt-next' // [!code highlight]
-import { getLocale } from 'gt-next/server'
-
-export default async function RootLayout() {
-
-  // ensures the html lang attribute is correct
-  const locale = await getLocale(); 
-
-  return (
-    <html lang={locale}>
-      <body>
-        <GTProvider>  // [!code highlight]
-          {children}
-        </GTProvider>  // [!code highlight]
-      </body>
-    </html>
-  );
-}
-```
-
-For a full list of `<GTProvider>` props and extended documentation, see the [API reference](/docs/next/api/components/gtprovider). */}
 
 ---
 
