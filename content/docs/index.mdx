@@ -14,9 +14,12 @@ General Translation manages everything for you, so you can focus on shipping fea
 
 ### ⚛️ Translate entire React components in-line
 - A single opening and closing `<T>` component is all you need to translate an entire React component.
-- No need for complex refactoring or messy function calls.
+  - No need for complex refactoring or messy function calls.
 - Content is in-line and in the same location as your code.
+  - No keys are needed!
 - The library manages all i18n logic behind the scenes, so you don't have to.
+- Translations are always kept in sync with your source code.
+- Translations contain contextual information about the content, so they are more accurate.
 
 ```js title="Page.js" copy
 export default function Page() {
@@ -39,20 +42,20 @@ export default function Page() {
 ```
 
 ### 🔎 Feature parity with existing libraries
-- GT libraries also support the same features as existing libraries like `next-intl` and `next-i18next`.
+- GT libraries also support the same features as existing libraries like `i18next`, `react-intl`, and `next-intl`.
 - Features such as dictionaries, plurals, currencies, and automatic routing are all supported.
 
 ### 🧠 Free AI-powered translation service
-- Translations are created in seconds.
-- UI and HTML elements are translated in context by state of the art AI models.
+- Our free AI-powered translation service allows you to create translations for your app in seconds.
 - HTML content is re-arranged and customized according to the language.
+- Translations are generated on-demand, so you can view them in real-time in development.
 
 ### 🔧 Developer-friendly
 - Setup is simple and can be done in minutes.
 - All GT libraries are open-source and work standalone.
 - No more wasting time managing translation keys like `t('menu.header.title')`.
   - Just write everything in-line!
-- All GT libraries have simple interfaces and are easy to use.
+- All GT libraries have simple interfaces and are well documented.
 
 See our [Github repo](https://github.com/General-Translation/gt-libraries) for the source code and some example projects.
 
