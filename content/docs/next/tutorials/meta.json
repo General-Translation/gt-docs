@@ -4,8 +4,8 @@
     "quickstart",
     "quickdeploy",
     "translating-strings",
+    "local-tx",
     "examples/next-speedrun",
-    "examples/currency-converter",
-    "!dictionary"
+    "examples/currency-converter"
   ]
 }

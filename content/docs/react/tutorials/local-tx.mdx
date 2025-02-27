@@ -5,8 +5,8 @@ description: Setup local translations for your React app
 
 ## Overview
 
-This guide will show you how to serve translations directly for your React app.
-This means that translations will live in your app bundle and be served directly from your app.
+This guide will show you how to store translations in your React app rather than using a CDN.
+This means that translations will live in your app bundle.
 This can lead to faster loader times and avoids reliance on external infrastructure.
 
 In this document, we will (1) explain what are local translations and how they work and
@@ -16,15 +16,20 @@ In this document, we will (1) explain what are local translations and how they w
 
 ## What are local translations?
 
-Local translations are stored in your app's codebase and served in the bundle.
+Local translations are stored in your app's bundle, as opposed to being fetched from a CDN (Content Distribution Network).
 
-Let's say that you have added the `gt-react-cli translate` command to your CD process.
+Let's say that you have added the [`gt-react-cli translate`](/docs/react-cli/translate) command to your CD process.
 This will generate JSON files containing translations for your app.
 The final step is to get these translations out of our API and into your app.
 
 There are two ways to do this:
- * **Build Time:** After translations are generated, add them to your app's bundle.
- * **Runtime Time (default):** Fetch from translations from a CDN (Content Distribution Network) at runtime.
+ * **In your app's bundle:** After translations are generated, add them to your app's bundle.
+ * **In a CDN (default):** Fetch from translations from a CDN at runtime.
+
+<Callout>
+  **Note:**
+  If you are not using GT infrastructure, you will need to write a custom [`loadTranslation()`](/docs/react/api/config/load-translation) method to load translations from your preferred infrastructure.
+</Callout>
 
 ### What are the benefits?
 
@@ -49,7 +54,7 @@ you must redeploy your app with the new translation.
 
 ### Prerequisites
 
-Make sure that you have followed the [Quick Start Guide](/docs/react/tutorials/quickstart) to set up your react app with GT.
+Make sure that you have followed the [Quick Start Guide](/docs/react/tutorials/quickstart) to set up your React app with GT.
 
 
 ### Steps
@@ -75,22 +80,24 @@ Make sure that you have followed the [Quick Start Guide](/docs/react/tutorials/q
 
     export default function App() {
       return (
-        <GTProvider loadTranslation={loadTranslation}> // [!code highlight]
+        <GTProvider loadTranslation={loadTranslation} locales={['es', 'fr']}> // [!code highlight]
           <YourApp />
         </GTProvider>
       );
     }
     ```
-
   </Step>
+
   <Step>
-    Add the flags `--no-publish` and `--translations-dir` to the `translate` command to enable local translations.
+    In your [translate](/docs/react-cli/translate) command, add the following flags to use local translations:
+     * `--no-publish`: Disable translations from being published to the GT CDN.
+     * `--translations-dir ./src/_gt`: Save translations to the `./src/_gt` directory.
 
     ```bash
     npx gt-react-cli translate --no-publish --translations-dir ./src/_gt
     ```
-
-    <Callout>
+    
+    <Callout type="warn">
       Depending on the specific framework you are using, you may need to ensure that the translation JSONs are included in the
       final bundle.
     </Callout>
@@ -101,14 +108,10 @@ That's it! Your app will now only load translations from your local files.
 
 ---
 
-## Additional Resources
-
-See the `loadTranslation` function in the [API Reference](/docs/react/api/config/load-translation) for more information on writing a custom translation loader.
-
-See the [Examples](/docs/reference/examples) page for some example projects.
-
----
-
-## Notes:
+## Notes
  * Local translations are an alternative to fetching translations from a CDN.
- * You can customize `loadTranslation()` to also load translations from other sources, such as your database or your own CDN.
+ * You can customize [`loadTranslation()`](/docs/react/api/config/load-translation) to also load translations from other sources, such as your database or your own CDN.
+
+## Next steps
+ * See [`loadTranslation()`](/docs/react/api/config/load-translation) for more information on writing a custom translation loader.
+ * See the [Examples](/docs/reference/examples) page for some example projects.
