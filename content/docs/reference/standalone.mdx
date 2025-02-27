@@ -10,24 +10,22 @@ All of our libraries are open source and free to use. They work fully standalone
 
 You can use them in any project, without needing to ever create an account or sign up for General Translation services.
 
-Out of the box, our libraries support the following features:
+Standalone, our libraries support the following features:
 
 - Wrapping entire React components for translation
 - Dictionaries
 - Easy project setup
 - Middleware
 
-You will just need to manually provide source JSONs for each locale.
-
-Signing into our platform and creating an account is optional, but will unlock the following features:
+Using General Translation as a translation provider will unlock the following features:
 
 - On-demand translation
 - Automatic AI translations
-- No-hassle translation CDN
+- A no-hassle translation CDN
 
 ## How to use
 
-To use `gt-next` or `gt-react` standalone, without a GT account, follow the guide for using local translations:
+To use `gt-next` or `gt-react` with your own translation provider, use local translations:
 
 <Cards>
   <Card
@@ -39,3 +37,27 @@ To use `gt-next` or `gt-react` standalone, without a GT account, follow the guid
     href="/docs/react/tutorials/local-tx"
   />
 </Cards>
+
+## Managing translations
+
+To generate the translation files for your project, run the CLI tool with the following command:
+
+<Tabs items={['Next.js', 'React']}>
+  <Tab value="Next.js">
+    ```bash
+    npx gt-next-cli generate -t <path to translation files>
+    ```
+  </Tab>
+  <Tab value="React">
+    ```bash
+    npx gt-react-cli generate -t <path to translation files>
+    ```
+  </Tab>
+</Tabs>
+
+This command will generate the JSON data files for your project's source code. 
+You can then use these files with your own translation provider.
+To load the translations into `gt-next` or `gt-react`, use the `loadTranslation` function, as specified in
+the local translations guide.
+
+See the API reference for [Next.js](/docs/next-cli/generate) and [React](/docs/react-cli/generate) for more information.

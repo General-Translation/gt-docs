@@ -11,38 +11,30 @@ If you haven't, please do so first.
 This guide will show you how to setup local translations for your Next.js app.
 
 By default, your app will use General Translation's API and CDN to translate your app.
-This has many benefits, but also a few drawbacks:
 
-- Your app is required to use General Translation's services (API and CDN)
-- In production, translations may take slightly longer to load (~100-200ms)
-
-Local translations solve both of these problems. However, please note that there are also a few tradeoffs:
-
-- They may increase your bundle size
-- Your project will not be able to use on-demand translations in production
-
-<Callout type="warn">
-  To enable on-demand translations in development and production, you will still need to use GT services.
-</Callout>
 
 ### What are local translations?
 
 Local translations are JSON source files containing translations for your content that are stored in your project's codebase.
 
-They can be used alongside, or in replacement of, the GT CDN. 
+They can be used alongside, or in replacement of, GT as a translation provider. 
 
 There are a few pros and cons to using local translations:
 
 - **Pros:**
   - You do not need to rely on General Translation's services for your production app
     - Translations will load slightly faster (~100-200ms)
-  - You can use your own translation services
+  - You can use your own translation provider
 
 - **Cons:**
   - They may increase your bundle size
   - You will not be able to modify translations in production
-    - With the GT CDN, you can modify translations in production without needing to re-publish your app. Changes go live within 1 minute.
+    - With GT as a translation provider, you can modify translations in production without needing to re-publish your app. Changes go live within 1 minute.
 
+
+<Callout type="warn">
+  To enable on-demand translations in development and production, you will still need to use GT services.
+</Callout>
 
 ## Setup
 
