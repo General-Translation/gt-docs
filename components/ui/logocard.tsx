@@ -7,6 +7,10 @@ import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { useLayoutEffect, useState } from 'react';
 
+const BASE_URL = 'https://gt-docs-ten.vercel.app/';
+const REACT_QUICK_START = '/docs/react/tutorials/quickstart';
+const NEXT_QUICK_START = '/docs/next/tutorials/quickstart';
+
 const LOGOS: Record<
   string,
   {
@@ -20,52 +24,57 @@ const LOGOS: Record<
   }
 > = {
   react: {
-    lightLogo: 'https://gt-docs-ten.vercel.app/logos/react-logo-light.svg',
-    darkLogo: 'https://gt-docs-ten.vercel.app/logos/react-logo-dark.svg',
-    lightWordmark:
-      'https://gt-docs-ten.vercel.app/logos/react-wordmark-light.svg',
-    darkWordmark:
-      'https://gt-docs-ten.vercel.app/logos/react-wordmark-dark.svg',
+    lightLogo: 'logos/react-logo-light.svg',
+    darkLogo: 'logos/react-logo-dark.svg',
+    lightWordmark: 'logos/react-wordmark-light.svg',
+    darkWordmark: 'logos/react-wordmark-dark.svg',
     name: 'React',
-    href: '/docs/react/tutorials/quickstart',
+    href: REACT_QUICK_START,
     alt: 'React Logo',
   },
   nextjs: {
-    lightLogo: 'https://gt-docs-ten.vercel.app/logos/nextjs-logo.svg',
-    darkLogo: 'https://gt-docs-ten.vercel.app/logos/nextjs-logo.svg',
-    lightWordmark: 'https://gt-docs-ten.vercel.app/logos/nextjs-wordmark.svg',
-    darkWordmark: 'https://gt-docs-ten.vercel.app/logos/nextjs-wordmark.svg',
+    lightLogo: 'logos/nextjs-logo.svg',
+    darkLogo: 'logos/nextjs-logo.svg',
+    lightWordmark: 'logos/nextjs-wordmark.svg',
+    darkWordmark: 'logos/nextjs-wordmark.svg',
     name: 'Next.js',
-    href: '/docs/next/tutorials/quickstart',
+    href: NEXT_QUICK_START,
     alt: 'Next.js Logo',
   },
   viteLogo: {
-    lightLogo: 'https://gt-docs-ten.vercel.app/logos/vite-logo.svg',
-    darkLogo: 'https://gt-docs-ten.vercel.app/logos/vite-logo.svg',
-    lightWordmark: 'https://gt-docs-ten.vercel.app/logos/vite-logo.svg',
-    darkWordmark: 'https://gt-docs-ten.vercel.app/logos/vite-logo.svg',
+    lightLogo: 'logos/vite-logo.svg',
+    darkLogo: 'logos/vite-logo.svg',
+    lightWordmark: 'logos/vite-logo.svg',
+    darkWordmark: 'logos/vite-logo.svg',
     name: 'Vite + React',
-    href: '/docs/react/tutorials/quickstart',
+    href: REACT_QUICK_START,
     alt: 'Vite Logo',
   },
   gatsby: {
-    lightLogo: 'https://gt-docs-ten.vercel.app/logos/gatsby-logo.svg',
-    darkLogo: 'https://gt-docs-ten.vercel.app/logos/gatsby-logo.svg',
-    lightWordmark: 'https://gt-docs-ten.vercel.app/logos/gatsby-wordmark.svg',
-    darkWordmark: 'https://gt-docs-ten.vercel.app/logos/gatsby-wordmark.svg',
+    lightLogo: 'logos/gatsby-logo.svg',
+    darkLogo: 'logos/gatsby-logo.svg',
+    lightWordmark: 'logos/gatsby-wordmark.svg',
+    darkWordmark: 'logos/gatsby-wordmark.svg',
     name: 'Gatsby',
-    href: '/docs/react/tutorials/quickstart',
+    href: REACT_QUICK_START,
     alt: 'Gatsby Logo',
   },
+  redwoodjs: {
+    lightLogo: 'logos/redwoodjs-logo-light.svg',
+    darkLogo: 'logos/redwoodjs-logo-dark.svg',
+    lightWordmark: 'logos/redwoodjs-wordmark-light.svg',
+    darkWordmark: 'logos/redwoodjs-wordmark-dark.svg',
+    name: 'RedwoodJS',
+    href: REACT_QUICK_START,
+    alt: 'RedwoodJS Logo',
+  },
   createreactapp: {
-    lightLogo: 'https://gt-docs-ten.vercel.app/logos/react-logo-light.svg',
-    darkLogo: 'https://gt-docs-ten.vercel.app/logos/react-logo-dark.svg',
-    lightWordmark:
-      'https://gt-docs-ten.vercel.app/logos/react-wordmark-light.svg',
-    darkWordmark:
-      'https://gt-docs-ten.vercel.app/logos/react-wordmark-dark.svg',
+    lightLogo: 'logos/react-logo-light.svg',
+    darkLogo: 'logos/react-logo-dark.svg',
+    lightWordmark: 'logos/react-wordmark-light.svg',
+    darkWordmark: 'logos/react-wordmark-dark.svg',
     name: 'create-react-app',
-    href: '/docs/react/tutorials/quickstart',
+    href: REACT_QUICK_START,
     alt: 'React Logo',
   },
   other: {
@@ -74,7 +83,7 @@ const LOGOS: Record<
     lightWordmark: '/gt-logo-light.svg',
     darkWordmark: '/gt-logo-dark.svg',
     name: 'Other',
-    href: '/docs/react/tutorials/quickstart',
+    href: REACT_QUICK_START,
     alt: 'General Translation Inc. Logo',
   },
 };
@@ -101,7 +110,6 @@ const LogoCard = React.forwardRef<
   const router = useRouter();
 
   const handleClick = () => {
-    console.log(`click: ${src} ${LOGOS[src]?.href}`);
     if (src && LOGOS[src]?.href) {
       router.push(LOGOS[src].href);
     }
@@ -127,7 +135,9 @@ const LogoCardImage = React.forwardRef<
 
   useLayoutEffect(() => {
     setLogoSrc(
-      resolvedTheme === 'dark' ? LOGOS[src]?.darkLogo : LOGOS[src]?.lightLogo
+      BASE_URL + resolvedTheme === 'dark'
+        ? LOGOS[src]?.darkLogo
+        : LOGOS[src]?.lightLogo
     );
   }, [resolvedTheme]);
 

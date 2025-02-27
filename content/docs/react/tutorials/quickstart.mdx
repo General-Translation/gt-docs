@@ -118,7 +118,7 @@ Add your API key and Project ID to your environment variables.
         Add the Project ID and API Key to your environment variables.
         Depending on your React framework, the environment variables may look slightly different.
         These instructions are for **DEVELOPMENT ENVIRONMENTS ONLY**.
-        <Tabs items={["Vite", "Gatsby", "create-react-app", "Other"]}>
+        <Tabs items={["Vite", "Gatsby", "RedwoodJS", "create-react-app", "Other"]}>
             <Tab value="Vite">
             ```bash copy
             VITE_GT_API_KEY="YOUR_GT_DEV_API_KEY"
@@ -129,6 +129,12 @@ Add your API key and Project ID to your environment variables.
             ```bash copy
             GATSBY_GT_API_KEY="YOUR_GT_DEV_API_KEY"
             GATSBY_GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+            <Tab value="RedwoodJS">
+            ```bash copy
+            REDWOOD_ENV_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            REDWOOD_ENV_PROJECT_ID="YOUR_GT_PROJECT_ID"
             ```
             </Tab>
             <Tab value="create-react-app">
