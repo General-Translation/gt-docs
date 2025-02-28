@@ -7,11 +7,8 @@ description: Let's deploy your Next.js app with GT.
 
 This is a short tutorial to help you deploy your Next.js app with GT.
 
-We will do this in three steps:
+We will do this in 2 steps:
 <Steps>
-  <Step>
-    Choose which locales you want.
-  </Step>
   <Step>
     Add your production API keys.
   </Step>
@@ -24,13 +21,7 @@ We will do this in three steps:
 
 Make sure that you have followed the [Quick Start Guide](/docs/next/tutorials/quickstart) to set up your Next.js app with GT.
 
-## Step 1: Choose your locales 🌍
-
-Start by navigating to your [dashboard](https://www.generaltranslation.com/signin) and selecting **Project Locales** in the sidebar.
-
-Under the **Current Locales** sections, select the locales you want to deploy and click **Save**.
-
-## Step 2: Add your production API keys 🔑
+## Step 1: Add your production API keys 🔑
 
 Add your **production** API key and Project ID to your production environment variables.
 
@@ -50,26 +41,19 @@ GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
     *Never commit your API keys to a public repository!*
 </Callout>
 
-## Step 3: Add the translate command to your build script 🏗️
+## Step 2: Add the translate command to your build script 🏗️
 
-The next step is to add the translate command to your build script,
+The next step is to add the [translate command](/docs/next-cli/translate) to your build script,
 and specify the [locales](/docs/reference/supported-locales) that you would like to ship to production.
 
 ```json title="package.json" copy
 {
   "scripts": {
-    "build": "npx gt-next-cli translate --languages pt es && <YOUR_BUILD_COMMAND>"
+    "build": "npx gt-next-cli translate --locales pt es && <YOUR_BUILD_COMMAND>"
   }
 }
 ```
 Here, we have added Portuguese and Spanish to our configuration.
-
-<Callout>
-  **Tip:** Because we have specified the locales in the build script, they have been recorded in the config file.
-  You can edit the languages you want to support via the config file.
-  Just remember to remove any hard coded languages from [`withGTConfig()`](/docs/next/api/config/withgtconfig).
-</Callout>
-
 
 
 That's it! You are now ready to deploy your Next.js with GT!
@@ -78,3 +62,5 @@ That's it! You are now ready to deploy your Next.js with GT!
 
 ## Next steps
  * Follow this guide on [How to Manage Locales](/docs/next/guides/locale-management).
+ * Learn how to [Translate Strings](/docs/next/tutorials/translating-strings).
+ * Learn about the [`<T>` component](/docs/usage/t).
