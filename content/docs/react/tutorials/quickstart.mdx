@@ -10,18 +10,18 @@ This guide describes how to internationalize an existing [React](https://react.d
 We will cover 4 simple steps:
 
 <Steps>
-    <Step>
-        Installing the required libraries
-    </Step>
-    <Step>
-        Running the CLI setup tool
-    </Step>
-    <Step>
-        Adding `<GTProvider>` to your app
-    </Step>
-    <Step>
-        Setting up your local environment
-    </Step>
+  <Step>
+    Installing the required libraries
+  </Step>
+  <Step>
+    Select languages
+  </Step>
+  <Step>
+    Add the `<T>` component
+  </Step>
+  <Step>
+    Add your environment variables
+  </Step>
 </Steps>
 
 This entire process should take under **5 minutes**.
@@ -62,30 +62,12 @@ Install the [gt-react](https://www.npmjs.com/package/gt-react) and [gt-react-cli
 </Tabs>
 
 
-### 2. Run our CLI tool
-
-Run the [gt-react-cli](https://www.npmjs.com/package/gt-react-cli) tool to setup your project for translation.
-
-This will scan your codebase for translatable content and automatically wrap it in `<T>` components.
-
-```bash title="shell" copy
-npx gt-react-cli setup
-```
-
-See the [CLI tool documentation](/docs/react/reference/cli#setup) for more information.
-
-<Callout type="warn">
-  **Experimental:**
-  We are currently experiencing issues with automated translations setup for string content.
-  If you run into issues, please follow [this guide](/docs/react/tutorials/translating-strings) for translating strings.
-</Callout>
-
-
-### 3. Add `<GTProvider>`
+### 2. Select languages
 
 [`<GTProvider>`](/docs/react/api/components/gtprovider) is used to configure the behavior of `gt-react`. 
 It should be placed as high up in your app as possible, ideally at the root.
-Just add the list of [locale codes](/docs/reference/supported-locales) you want to support as a prop.
+
+Just pass a list of [locale codes](/docs/reference/supported-locales) to add them to your app.
 
 ```jsx title="App.js" copy
 import { GTProvider } from "gt-react";
@@ -102,7 +84,68 @@ export default function App() {
 
 For a full list of `<GTProvider>` props and extended documentation, see the [API reference](/docs/react/api/components/gtprovider).
 
-### 4. Set up your local environment
+### 3. Add the `<T>` component
+
+Wrap any nested JSX content in the [`<T>` component](/docs/react/api/components/t) to make it translatable.
+For more information, check out the [guide on using `<T>` components](/docs/react/reference/t-reference).
+
+```jsx title="Example.js" copy
+import { T } from "gt-react";
+
+export default function Example() {
+  return (
+    <T> // [!code highlight]
+      <p>
+        This gets translated.
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+Use the [`<Var>` component](/docs/react/api/components/var) to designate JSX content that should not be translated.
+
+```jsx title="Example.js" copy
+import { T, Var } from "gt-react";
+
+export default function Example() {
+  return (
+    <T>  // [!code highlight]
+      <p>
+        This gets translated. <Var>This does not.</Var>
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+<Callout type="info">
+  **Tip:**
+  To save time, run [the setup command](/docs/react-cli/setup).
+  This will scan your codebase for translatable JSX and insert the [`<T>`](/docs/react/api/components/t) tags for you.
+
+  ```bash title="shell" copy
+  npx gt-react-cli setup
+  ```
+</Callout>
+
+For strings, you can use [`useGT()`](/docs/react/api/strings/useGT) for translation.
+For more information, check out [this guide](/docs/react/tutorials/translating-strings).
+
+```jsx title="Example.js" copy
+import { useGT } from "gt-react";
+
+export default function Example() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <p>
+      {t("This gets translated.")} // [!code highlight]
+    </p>
+  );
+}
+```
+
+### 4. Add your environment variables
 
 Add your API key and Project ID to your environment variables.
 

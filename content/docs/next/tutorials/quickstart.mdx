@@ -16,13 +16,13 @@ We will cover 4 simple steps:
     Installing `gt-next` and `gt-next-cli`
   </Step>
   <Step>
-    Add the [`withGTConfig()` plugin](/docs/next/api/config/withGTConfig)
+    Select languages
   </Step>
   <Step>
-    Running the CLI setup tool
+    Add the `<T>` component
   </Step>
   <Step>
-    Setting up your local environment
+    Add your environment variables
   </Step>
 </Steps>
 
@@ -84,26 +84,70 @@ export default withGTConfig(nextConfig, {
 ```
 
 
-### 3. Run the CLI tool
+### 3. Add the `<T>` component
 
-Use the [gt-next-cli](https://www.npmjs.com/package/gt-next-cli) to setup your project for translation.
+Wrap any nested JSX content in the [`<T>` component](/docs/next/api/components/t) to make it translatable.
+For more information, check out the [guide on using `<T>` components](/docs/next/reference/t-reference).
 
-```bash title="shell" copy
-npx gt-next-cli setup
+```jsx title="Example.js" copy
+import { T } from "gt-next";
+
+export default function Example() {
+  return (
+    <T> // [!code highlight]
+      <p>
+        This gets translated.
+      </p>
+    </T>  // [!code highlight]
+  );
+}
 ```
 
-This will scan your codebase for translatable content and automatically wrap it in `<T>` components.
-Additionally, this will setup the necessary `next.config.js` plugin and insert `<GTProvider>` components where necessary.
-See the [CLI tool documentation](/docs/next-cli/setup) for more information.
+Use the [`<Var>` component](/docs/next/api/components/var) to designate JSX content that should not be translated.
 
-<Callout type="warn">
-  **Experimental:**
-  We are currently experiencing issues with automated translations setup for string content.
-  If you run into issues, please follow [this guide](/docs/next/tutorials/translating-strings) for translating strings.
+```jsx title="Example.js" copy
+import { T, Var } from "gt-next";
+
+export default function Example() {
+  return (
+    <T>  // [!code highlight]
+      <p>
+        This gets translated. <Var>This does not.</Var>
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+<Callout type="info">
+  **Tip:**
+  To save time, run [the setup command](/docs/next-cli/setup).
+  This will scan your codebase for translatable JSX and insert the [`<T>`](/docs/next/api/components/t) tags for you.
+
+  ```bash title="shell" copy
+  npx gt-next-cli setup
+  ```
 </Callout>
 
+For strings, you can use [`useGT()`](/docs/next/api/strings/useGT) or [`getGT()`](/docs/next/api/strings/getGT) for translation.
+For more information, check out [this guide](/docs/next/tutorials/translating-strings).
 
-### 4. Add your development API keys
+```jsx title="Example.js" copy
+import { useGT } from "gt-next/client";
+import { getGT } from "gt-next/server";
+
+export default function Example() {
+  const t = useGT(); // client side // [!code highlight]
+  const t = await getGT(); // server side // [!code highlight]
+  return (
+    <p>
+      {t("This gets translated.")} // [!code highlight]
+    </p>
+  );
+}
+```
+
+### 4. Add your environment variables
 
 Add your API key and Project ID to your local environment.
 
