@@ -4,6 +4,7 @@
     "---API---",
     "api/config",
     "api/components",
+    "api/strings",
     "api/dictionary",
     "api/helpers",
     "api/types",
