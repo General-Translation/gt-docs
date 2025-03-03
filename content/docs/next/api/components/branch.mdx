@@ -52,7 +52,6 @@ For example, branches like `active` and `inactive` can be added as parameters.
 |------------|-----------------------------------------------------------------------------|
 | `branch`     | The name of the branch to render.                                           |
 | `children`   | Fallback content to render if no matching branch is found.                  |
-| `name`       | Optional name for the component, used for a dictionary design pattern.    |
 | `[key]: string` | Branches representing possible content for the given branch value. Each key corresponds to a branch, and its value is the content to render. |
 
 ### Returns
@@ -146,70 +145,6 @@ export default function HairColor({ user }) {
   );
 }
 ```
-
-### Using a dictionary
-
-#### Basic usage
-```jsx title="dictionary.jsx" copy
-import { Branch } from 'gt-next';
-
-const dictionary = {
-  hairColor: <>
-    <Branch branch="black" // [!code highlight]
-      black={<>Their hair is dark.</>}
-      brown={<>Their hair is in the middle.</>}
-      blonde={<>Their hair is light.</>}
-    />
-  </>,
-};
-```
-
-```jsx title="HairColor.jsx" copy
-import { useGT } from 'gt-next';
-
-export default function HairColor(user) {
-  const t = useGT();
-  return (
-    <div>
-      { t('hairColor') } // [!code highlight]
-    </div>
-  );
-}
-```
-
-#### Passing values to dictionary entries
-In order to pass values, you must specify a name for the `<Branch>` (or other) component(s) and reference it when calling the `t()` function.
-
-In this example, we see that `hairColor` is passed to both `<Branch>` and `<Var>` components.
-```jsx title="dictionary.jsx" copy
-import { Branch, Var } from 'gt-next';
-
-const dictionary = {
-  hairColor: <>
-    <Branch name="hairColor" // [!code highlight]
-      black={<>Their hair is dark.</>}
-      brown={<>Their hair is in the middle.</>}
-      blonde={<>Their hair is light.</>}
-      >
-        <p>Unhandled hair color: <Var name="hairColor"/></p> // [!code highlight]
-      </Branch>
-  </>,
-};
-```
-
-```jsx title="HairColor.jsx" copy
-import { useGT } from 'gt-next';
-
-export default function HairColor(user) {
-  const t = useGT();
-  return (
-    <div>
-      { t('hairColor', { hairColor: user.hairColor }) } // [!code highlight]
-    </div>
-  );
-}
-```
-
 
 ---
 

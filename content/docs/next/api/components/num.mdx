@@ -122,54 +122,6 @@ export default function CustomFormat(number) {
 }
 ```
 
-### Dictionary examples
-The `<Num>` component can also be used in a dictionary entry.
-
-#### Basic usage
-
-```jsx title="dictionary.jsx"
-import { Num } from 'gt-next';
-
-const dictionary = {
-  itemCount: <>You have <Num>1</Num> item.</>
-}
-export default dictionary;
-```
-
-```jsx title="ItemCount.jsx" copy
-import { useGT } from 'gt-next';
-
-export default function ItemCount({ count }) {
-  const t = useGT();
-  return (
-    <>{t('itemCount')}</>
-  );
-}
-```
-
-#### Passing values to dictionary entries
-If you want to pass values to the dictionary entry, you must specify a name for the `<Num>` component and reference it when calling the `t()` function.
-
-```jsx title="dictionary.jsx"
-import { Num } from 'gt-next';
-
-const dictionary = {
-  itemCount: <>You have <Num name='count'/> item(s).</>
-}
-export default dictionary;
-```
-
-```jsx title="ItemCount.jsx" copy
-import { useGT } from 'gt-next';
-
-export default function ItemCount({ count }) {
-  const t = useGT();
-  return (
-    <>{t('itemCount', { count: 1 })}</>
-  );
-}
-```
-
 ---
 
 ## Notes

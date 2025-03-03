@@ -54,7 +54,6 @@ All formatting is handled locally using the [`Intl.DateTimeFormat`](https://deve
 | Prop Name | Description |
 |-----------|-------------|
 | `children` | The content to render inside the component. Typically a date or time value. If provided, it takes precedence over the `value` prop. |
-| `name`     | Optional identifing parameter used for dictionary design patterns. |
 | `value`    | The default value for the date or time. Can be a string, number (timestamp), or Date object. |
 | `options`  | Optional formatting options for the date or time, following the [`Intl.DateTimeFormatOptions` specification](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat). Use this to define styles such as weekday names, time zones, and more. |
 | `locales`  | Optional locales to specify the formatting locale. If not provided, the user's locale is used. Read more about specifying locales [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).|
@@ -124,47 +123,6 @@ export default function EventDate(event) {
             {event.date}
         </DateTime>.
     );
-}
-```
-
-### Dictionary examples
-`<DateTime>` components can be used with dictionaries as well.
-#### Basic usage
-```jsx title="dictionary.jsx" copy
-import { Currency } from 'gt-next';
-
-const dictionary = {
-    "eventTime": <>
-        The event is at <DateTime>{1738010355}</DateTime>. // [!code highlight]
-    </>,
-};
-export default dictionary;
-```
-
-```jsx title="EventTime.jsx" copy
-import { useGT } from 'gt-next';
-
-export default function EventTime() {
-    const t = useGT();
-    return <> t('eventTime') </>; // [!code highlight]
-}
-```
-#### Passing values to dictionary entries
-If you want to pass values to the dictionary entry, you must specify a name for the `<DateTime>` component and reference it when calling the `t()` function.
-```jsx title="dictionary.jsx" copy
-import { DateTime } from 'gt-next';
-const dictionary = {
-    "eventTime": <>The event is at <DateTime name='time'/>.</>, // [!code highlight]
-};
-export default dictionary;
-```
-
-```jsx title="EventTime.jsx" copy
-import { useGT } from 'gt-next';
-
-export default function EventTime() {
-    const t = useGT();
-    return <> t('eventTime', { time: 1738010355 }) </>; // [!code highlight]
 }
 ```
 

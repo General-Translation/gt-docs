@@ -12,7 +12,7 @@ Additionally, this is useful for rendering content that should be kept private s
 <Var>{user.name}</Var>
 ```
 
-The `<Var>` component is always used inside of a `<T>` component or in a dictionary entry.
+The `<Var>` component is always used inside of a `<T>` component.
 Think of it as a catch all for dynamic values that do not fit in to the category of `<Currency>`, `<DateTime>`, or `<Num>`.
 
 ## Reference
@@ -43,7 +43,6 @@ Think of it as a catch all for dynamic values that do not fit in to the category
 | Prop      | Description                                                                                                                                            |
 |-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `children`  | The content to render inside the component. If provided, it will take precedence over value. |
-| `name`      | Optional name for the variable, used for a dictionary design implementation.                                                                                      |
 | `value`     | Optional default value to be displayed if children is not provided. Can be a string.                                  |
 
 
@@ -55,67 +54,20 @@ Think of it as a catch all for dynamic values that do not fit in to the category
 ## Examples
 
 ### Basic example
-The `<Var>` component must be used inside of a `<T>` component or in a dictionary entry.
-```jsx title="Address.jsx" copy
+The `<Var>` component must be used inside of a `<T>` component.
+```jsx title="Example.jsx" copy
 import { T, Var } from 'gt-next'
 
-export default function Address(user) {
+export default function Example(user) {
   return (
-    <T id='address'>
-      <Var>{user.name}</Var>&apos;s current address is: // [!code highlight]
-      <Var>{user.address}</Var> // [!code highlight]
+    <T>
+      Translate this text!
+      Your name is: <Var>{user.name}</Var> // [!code highlight]
+      <Var><p>Do not translate this text</p></Var> // [!code highlight]
     </T>
   );
 }
 ```
-### Dictionary examples
-`<Var>` can also be used in dictionaries as well.
-#### Basic example
-In this example ,`"Alice"` and `"123 Fake Street"`, unlike the rest of the words in the sentence, will never be translated because they are wrapped in `<Var>` components.
-```jsx title="dictionary.jsx"
-const dictionary = {
-  address: <>
-    <Var>Alice</Var>'s current address is: <Var>123 Fake Street</Var> // [!code highlight]
-  </>,
-}
-export default dictionary;
-```
-```jsx title="Address.jsx"
-import { useGT } from 'gt-next'
-
-export default function Address() {
-  const { t } = useGT();
-  return (
-    <div>
-      {t('address')} // [!code highlight]
-    </div>
-  );
-}
-```
-
-#### Passing values to dictionary entries
-If you want to pass values to the dictionary entry, you must specify a name for the `<Var>` component and reference it when calling the `t()` function.
-```jsx title="dictionary.jsx"
-const dictionary = {
-  address: <>
-    <Var name='name'/>'s current address is: <Var name='address'/> // [!code highlight]
-  </>,
-}
-export default dictionary;
-```
-```jsx title="Address.jsx"
-import { useGT } from 'gt-next'
-
-export default function Address(user) {
-  const { t } = useGT();
-  return (
-    <div>
-      {t('address', { name: user.name, address: user.address })} // [!code highlight]
-    </div>
-  );
-}
-```
-
 
 ---
 
