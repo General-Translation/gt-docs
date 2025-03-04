@@ -71,15 +71,20 @@ export default dictionary;
 When we want to access these entries, we call `useDict()`.
 This returns a function that accepts the key of a translation from the dictionary.
 
+You must pass the dictionary to the `GTProvider` component.
+
 ```jsx title="TranslateGreeting.jsx" copy
 import { useDict } from 'gt-react';
+import dictionary from "./dictionary.json"
 
 export default async function TranslateGreeting() {
   const d = useDict(); // [!code highlight]
   return (
-    <p>
-      {d('greeting')} // [!code highlight]
-    </p>
+    <GTProvider dictionary={dictionary}>
+      <p>
+        {d('greeting')} // [!code highlight]
+      </p>
+    </GTProvider>
   );
 }
 ```
