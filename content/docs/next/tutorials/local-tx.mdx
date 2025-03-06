@@ -85,6 +85,58 @@ That's it! Your app will now only load translations from your local files.
 
 ---
 
+## Limitations
+
+We currently do not yet support bringing your own translations.
+Adding this functionality is one of our top priorities, and it will be available very soon.
+
+Until then, we recommend using the generated translations.
+You can do this by marking the file with your preferred language as your dictionary file in `gt.config.json`.
+
+For example, say that `./messages/en.json` is your base language file:
+```json
+{
+  "projectId": "your-project-id",
+  "dictionary": "./messages/en.json",
+  "locales": ["en", "fr", "de"],
+  ...
+}
+```
+
+And add your load translation function:
+```js title="src/loadTranslation.js" copy
+export default async function loadTranslation(locale) {
+  const t = await import(`./_gt/${locale}.json`);
+  return t.default;
+}
+```
+
+When you run the translate command, it will generate translations in the `./public/_gt` directory.
+```bash
+npx gt-next-cli translate --no-publish --translations-dir ./public/_gt
+```
+
+To access these translations, you can use [`useDict`](/docs/nest/api/dictionary/useDict) and [`getDict`](/docs/nest/api/dictionary/getDict) to access your translations.
+You can read more about using dictionaries [here](/docs/next/reference/dictionary-reference).
+
+```jsx title="pages/index.js" copy
+import { useDict } from 'gt-next/client';
+import { getDict } from 'gt-next/server';
+
+export default function Home() {
+  const { t } = useDict(); // client-side // [!code highlight]
+  const { t } = getDict(); // server-side // [!code highlight]
+  return (
+    <div>
+      <h1>{t('identifier')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+
+---
+
 
 ## Notes
  * Local translations are an alternative to fetching translations from a CDN.
