@@ -13,7 +13,7 @@ We will cover 4 simple steps:
 
 <Steps>
   <Step>
-    Installing `gt-next` and `gt-next-cli`
+    Installing `gt-next` and `gtx-cli`
   </Step>
   <Step>
     Select languages
@@ -38,31 +38,31 @@ This entire process should take under **5 minutes**.
 
 ### 1. Install libraries
 
-Install the [gt-next](https://www.npmjs.com/package/gt-next) and [gt-next-cli](https://www.npmjs.com/package/gt-next-cli) libraries.
+Install the [gt-next](https://www.npmjs.com/package/gt-next) and [gtx-cli](https://www.npmjs.com/package/gtx-cli) libraries.
 
 <Tabs items={["npm", "yarn", "bun", "pnpm"]}>
   <Tab value="npm">
   ```bash 
   npm i gt-next
-  npm i gt-next-cli --save-dev
+  npm i gtx-cli --save-dev
   ``` 
   </Tab>
   <Tab value="yarn">
   ```bash 
   yarn add gt-next
-  yarn add gt-react-cli --dev
+  yarn add gtx-cli --dev
   ```
   </Tab>
   <Tab value="bun">
   ```bash 
   bun add gt-next
-  bun add gt-next-cli --dev
+  bun add gtx-cli --dev
   ```
   </Tab>
   <Tab value="pnpm">
   ```bash 
   pnpm add gt-next
-  pnpm add gt-next-cli --save-dev
+  pnpm add gtx-cli --save-dev
   ```
   </Tab>
 </Tabs>
@@ -125,7 +125,7 @@ export default function Example() {
   This will scan your codebase for translatable JSX and insert the [`<T>`](/docs/next/api/components/t) tags for you.
 
   ```bash title="shell" copy
-  npx gt-next-cli setup
+  npx gtx-cli setup
   ```
 </Callout>
 

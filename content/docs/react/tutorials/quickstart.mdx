@@ -32,31 +32,31 @@ This entire process should take under **5 minutes**.
 
 ### 1. Install libraries
 
-Install the [gt-react](https://www.npmjs.com/package/gt-react) and [gt-react-cli](https://www.npmjs.com/package/gt-react-cli) libraries.
+Install the [gt-react](https://www.npmjs.com/package/gt-react) and [gtx-cli](https://www.npmjs.com/package/gtx-cli) libraries.
 
 <Tabs items={["npm", "yarn", "bun", "pnpm"]}>
   <Tab value="npm">
   ```bash 
   npm i gt-react
-  npm i gt-react-cli --save-dev
+  npm i gtx-cli --save-dev
   ``` 
   </Tab>
   <Tab value="yarn">
   ```bash 
   yarn add gt-react
-  yarn add gt-react-cli --dev
+  yarn add gtx-cli --dev
   ```
   </Tab>
   <Tab value="bun">
   ```bash 
   bun add gt-react
-  bun add -d gt-react-cli
+  bun add -d gtx-cli
   ```
   </Tab>
   <Tab value="pnpm">
   ```bash 
   pnpm add gt-react
-  pnpm add -D gt-react-cli
+  pnpm add -D gtx-cli
   ```
   </Tab>
 </Tabs>
@@ -125,7 +125,7 @@ export default function Example() {
   This will scan your codebase for translatable JSX and insert the [`<T>`](/docs/react/api/components/t) tags for you.
 
   ```bash title="shell" copy
-  npx gt-react-cli setup
+  npx gtx-cli setup
   ```
 </Callout>
 

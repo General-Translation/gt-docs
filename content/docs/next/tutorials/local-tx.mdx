@@ -18,7 +18,7 @@ In this document, we will (1) explain what are local translations and how they w
 
 Local translations are stored in your app's bundle, as opposed to being fetched from a CDN (Content Distribution Network).
 
-Let's say that you have added the [`gt-next-cli translate`](/docs/next-cli/translate) command to your CD process.
+Let's say that you have added the [`gtx-cli translate`](/docs/next-cli/translate) command to your CD process.
 This will generate JSON files containing translations for your app.
 The final step is to get these translations out of our API and into your app.
 
@@ -76,7 +76,7 @@ Make sure that you have followed the [Quick Start Guide](/docs/next/tutorials/qu
       * `--translations-dir ./public/_gt`: Save translations to the `./public/_gt` directory.
     
     ```bash
-    npx gt-next-cli translate --no-publish --translations-dir ./public/_gt
+    npx gtx-cli translate --no-publish --translations-dir ./public/_gt
     ```
   </Step>
 </Steps>
@@ -113,7 +113,7 @@ export default async function loadTranslation(locale) {
 
 When you run the translate command, it will generate translations in the `./public/_gt` directory.
 ```bash
-npx gt-next-cli translate --no-publish --translations-dir ./public/_gt
+npx gtx-cli translate --no-publish --translations-dir ./public/_gt
 ```
 
 To access these translations, you can use [`useDict`](/docs/nest/api/dictionary/useDict) and [`getDict`](/docs/nest/api/dictionary/getDict) to access your translations.
