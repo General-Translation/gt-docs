@@ -124,11 +124,11 @@ import { useDict } from 'gt-next/client';
 import { getDict } from 'gt-next/server';
 
 export default function Home() {
-  const { t } = useDict(); // client-side // [!code highlight]
-  const { t } = getDict(); // server-side // [!code highlight]
+  const d = useDict(); // client-side // [!code highlight]
+  const d = await getDict(); // server-side // [!code highlight]
   return (
     <div>
-      <h1>{t('identifier')}</h1> // [!code highlight]
+      <h1>{d('identifier')}</h1> // [!code highlight]
     </div>
   );
 }
