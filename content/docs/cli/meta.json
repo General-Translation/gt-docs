@@ -1,8 +1,9 @@
 {
-  "title": "Next.js CLI Tool",
+  "title": "CLI Tool",
   "pages": [
     "introduction",
     "---Commands---",
+    "init",
     "setup",
     "scan",
     "translate",

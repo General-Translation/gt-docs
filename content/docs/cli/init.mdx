@@ -1,0 +1,24 @@
+---
+title: Init
+description: Configures your project's GT settings.
+---
+
+## Usage
+
+Use this command to initialize your project's GT settings. It should be run once when you are first internationalizing your project.
+
+```bash
+npx gtx-cli init
+```
+
+## Overview
+
+The `init` command helps you configure your project's GT settings.
+
+It will create a `gt.config.json` file in the root of your project.
+
+The file will contain the following settings:
+
+- `defaultLocale`: The default locale for your project.
+- `locales`: An array of supported locales for your project.
+- `translationsDir`: The directory containing your project's language files. This setting is only used if you are not using a remote CDN.

@@ -18,7 +18,7 @@ In this document, we will (1) explain what are local translations and how they w
 
 Local translations are stored in your app's bundle, as opposed to being fetched from a CDN (Content Distribution Network).
 
-Let's say that you have added the [`gtx-cli translate`](/docs/next-cli/translate) command to your CD process.
+Let's say that you have added the [`gtx-cli translate`](/docs/cli/translate) command to your CD process.
 This will generate JSON files containing translations for your app.
 The final step is to get these translations out of our API and into your app.
 
@@ -71,7 +71,7 @@ Make sure that you have followed the [Quick Start Guide](/docs/next/tutorials/qu
   </Step>
 
   <Step>
-    In your [translate](/docs/next-cli/translate) command, add the following flags to use local translations:
+    In your [translate](/docs/cli/translate) command, add the following flags to use local translations:
       * `--no-publish`: Disable translations from being published to the GT CDN.
       * `--translations-dir ./public/_gt`: Save translations to the `./public/_gt` directory.
     

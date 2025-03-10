@@ -1,30 +1,27 @@
 ---
-title: Scan
-description: Scans your project for translatable content
+title: Setup
+description: Integrates gt-next or gt-react with your project.
 ---
 ## Usage
 
 ```bash
-npx gtx-cli scan
+npx gtx-cli setup
 ```
 
 ## Overview
 
-The `gtx-cli scan` command scans your project for translatable content.
+The `gtx-cli setup` command automatically sets up your project for translation with `gt-next` or `gt-react`.
 It does this by parsing your project's file tree and using babel to wrap the `<T>` component around static content.
 Any dynamic content will be automatically wrapped with `<Var>` components.
 
-<Callout type="info">
-    This command is similar to the `setup` command, but it is more straightforward and only wraps the `<T>` component around content.
+This command should be run **once**, when you are first internationalizing your project.
+On subsequent changes, you should use the `scan` command to update your project.
 
-    It does not add other components like `<GTProvider>`. Thus, we recommend running this command occasionally to ensure all the content in your project is translatable.
-
-    **You should run `setup` the first time you are integrating General Translation into your project.**
-</Callout>
+See the [scan](/docs/cli/scan) command for more details.
 
 
 ```jsx title="src/app/Home.js"
-import { T, Var } from 'gt-react'; // [!code highlight]
+import { T, Var } from 'gt-next'; // [!code highlight]
 
 export default function Home({ user }) {
   return (
@@ -37,6 +34,8 @@ export default function Home({ user }) {
 }
 ```
 
+If your project is using the Next.js App Router, the setup command will add a `<GTProvider>` component within the appropriate `layout.jsx` file.
+
 ---
 
 ## Parameters
@@ -45,9 +44,6 @@ export default function Home({ user }) {
 |-----------------|--------------------------------------------------|---------|----------|-----------------|
 | `--src <path>`           | The source directory to scan                     | `string`  | `true`     |  `./src && ./app && ./pages && ./components` |
 | `--config <path>`        | The path to the GT config file                   | `string`  | `true`     | `"gt.config.json"` |
-| `--disable-ids`   | Disable the automatic generation of IDs for `<T>` components         | `flag` | `true`    | `false`           |
-| `--disable-formatting`   | Disable auto-formatting         | `flag` | `true`    | `false`           |
-
 
 ---
 
@@ -62,12 +58,10 @@ Read more about the `gt.config.json` file [here](/docs/next/reference/gt-config)
 
 ### The `id` prop
 
-The scan command will automatically generate unique IDs for your `<T>` components.
+The setup command gives the option of automatically generating unique IDs for your `<T>` components.
 This is useful for projects that use a lot of `<T>` components and want to avoid manually having to assign each one a unique ID.
 
 This `id` is useful for referencing specific translations in the translation editor and in the console.
-
-To disable this behavior, you can use the `--disable-ids` flag.
 
 ### `<T>` injection behavior
 
@@ -80,10 +74,15 @@ This means that it will wrap the entire component in a `<T>` component if it is 
 <div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
 ```
 
-See the [reference](/docs/react-cli/reference/wrapping) for more details on how the `<T>` component is wrapped.
+See the [reference](/docs/cli/reference/wrapping) for more details on how the `<T>` component is wrapped.
+
+### `<GTProvider>` behavior
+
+For the Next.js App Router, the setup command will automatically wrap the `<T>` component in a `<GTProvider>` component within the appropriate `layout.jsx` file.
+
+Additionally, it will setup the `withGTConfig` Next.js plugin in the `next.config.js` file for you.
 
 ### Auto-formatting
 
-The scan command will automatically format the changes it makes to your codebase with Prettier, Biome, or ESLint depending on your project's configuration.
+The setup command will automatically format the changes it makes to your codebase with Prettier, Biome, or ESLint depending on your project's configuration.
 
-To disable this behavior, you can use the `--disable-formatting` flag.

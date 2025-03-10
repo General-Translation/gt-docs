@@ -35,9 +35,9 @@ This command is the primary way of using the General Translation API and related
 
 ## Usage
 
-There are three ways to use the `translate` command. Methods 2 and 3 require a production API key:
+There are four ways to use the `translate` command. Methods 2, 3, and 4 require a production API key:
 
-The behavior of the command is controlled by the flags. See the [Parameters](#parameters) section for more details.
+The behavior of the command is controlled by the flags. See the [flags](#flags) section for more details.
 
 
 ### Method 1: Validate your project's `<T>` components and dictionary file.
@@ -65,7 +65,7 @@ npx gtx-cli translate
 
 This method allows you to translate your project and save the translations to your codebase.
 
-`gt-next` can then serve these local translations to your users, rather than using General Translation's public CDN.
+`gt-next` and `gt-react` can then serve these local translations to your users, rather than using General Translation's public CDN.
 
 ```bash
 npx gtx-cli translate --no-publish -t <path>
@@ -75,10 +75,32 @@ npx gtx-cli translate --no-publish -t <path>
     This method is useful if you are using a custom CMS, or do not want to use the GT CDN.
 </Callout>
 
+### Method 4: Translate your project's JSON files.
+
+If you are using other i18n libraries such as `next-intl`, `react-i18next`, or `next-i18next`, you can use this method to translate your project's JSON files.
+
+Translations will be automatically saved to your codebase, as well as optionally published to the GT CDN.
+
+```bash
+npx gtx-cli translate -t <path> --default-locale <locale>
+```
+
+The path passed to the `-t` flag should be the path to the JSON files you want to translate, containing a wildcard (`*`) for the locale.
+
+For example, if your project's locale files are stored in the `public/locales` directory, you can translate them by running:
+
+```bash
+npx gtx-cli translate -t ./public/locales/*.json --default-locale en
+```
+You can
+
+<Callout type="info">
+    Make sure to have a production API key and project ID set in your environment variables as `GT_API_KEY` and `GT_PROJECT_ID`.
+</Callout>
 
 ---
 
-## Parameters
+## Flags
 
 | Parameter       | Description                                      | Type    | Optional | Default         |
 |-----------------|--------------------------------------------------|---------|----------|-----------------|
