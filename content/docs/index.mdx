@@ -32,7 +32,7 @@ If you would like to use your own i18n library, but still want to use General Tr
 - Translations are always kept in sync with your source code.
 - Translations contain contextual information about the content, so they are more accurate.
 
-```js title="Page.js" copy
+```jsx title="Page.jsx" copy
 export default function Page() {
   return (
     <T> // [!code highlight]
@@ -81,13 +81,17 @@ See our [Github repo](https://github.com/General-Translation/gt-libraries) for t
 
 **General Translation is an entire i18n stack**, including developer libraries, AI translations, and a complete infrastructure package for multilingual apps.
 
+You can mix and match our libraries with your own translation provider, or use our free AI-powered translation service with your own i18n library.
+
+For a seamless, end-to-end i18n experience, we recommend using our libraries with our translation service.
+
 With GT libraries like `gt-react` and `gt-next`, you can:
 
 ### 1. Translate entire React components, not just strings
 
 UI passed as the children of the `<T>` component will be translated regardless of how complicated the JSX tree is. For example:
 
-```javascript title="page.js"
+```javascript title="page.jsx"
 import { T } from "gt-next";
 
 export default function Page() {
@@ -110,7 +114,7 @@ With first class support for the Next.js [App Router](https://nextjs.org/docs/ap
 [React Server Components](https://react.dev/reference/rsc/server-components),
 you can translate both client and server components.
 
-```jsx title="src/components/MyServerComponent.js" copy
+```jsx title="src/components/MyServerComponent.jsx" copy
 import getName from "@/getName";
 import { T, Var } from "gt-next";
 
@@ -125,7 +129,7 @@ export default async function MyServerComponent() {
 }
 ```
 
-```jsx title="src/components/MyClientComponent.js" copy
+```jsx title="src/components/MyClientComponent.jsx" copy
 "use client";
 
 import { useState } from "react";
@@ -146,7 +150,7 @@ export default function MyClientComponent() {
 
 JSX content placed inside a `<T>` component is marked for translation:
 
-```jsx title="Page.js" copy
+```jsx title="Page.jsx" copy
 import { T } from "gt-next";
 
 export default function Page() {
@@ -159,7 +163,7 @@ export default function Page() {
 ```
 
 Alternatively, if you prefer using the historic dictionary approach, you can write your content in a dictionary file:
-<Tabs items={['.json', '.js']}>
+<Tabs items={['.json', '.js', '.ts']}>
   <Tab value=".json">
   ```json title="dictionary.json" copy
   {
@@ -168,16 +172,23 @@ Alternatively, if you prefer using the historic dictionary approach, you can wri
   ```
   </Tab>
   <Tab value=".js">
-  ```jsx title="dictionary.js" copy
+  ```js title="dictionary.js" copy
   const dictionary = {
     greeting: "Hello, World!" // [!code highlight]
   }
-
+  export default dictionary;
+  ```
+  </Tab>
+  <Tab value=".ts">
+  ```ts title="dictionary.ts" copy
+  const dictionary = {
+    greeting: "Hello, World!" // [!code highlight]
+  }
   export default dictionary;
   ```
   </Tab>
 </Tabs>
-```jsx title="page.js" copy
+```jsx title="page.jsx" copy
 import { useDict } from "gt-next";
 
 export default function Page() {
