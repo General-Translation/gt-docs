@@ -45,6 +45,55 @@ To install the CLI tool, run the following command:
 ## Use Cases
 
 
+### Translating GT projects
+
+The CLI tool can be used to translate your projects which use `gt-next` or `gt-react`.
+
+This guide assumes you have already setup your codebase to use `gt-next` or `gt-react` according to the [gt-next](/docs/next/tutorials/quickstart) or [gt-react](/docs/react/tutorials/quickstart) tutorials.
+
+
+<Accordions>
+  <Accordion title="My project is already in multiple languages in development, what's the point of this step?">
+    If you followed the quickstart guides for `gt-next` or `gt-react`, your project has only been internationalized in your
+    development environment. When shipping your project to production, you will need to actually generate and save the translations.
+  
+    This step is necessary to ensure that your API keys are not exposed to the public, due to client-side vulnerabilities for frameworks like React.
+   
+  </Accordion>
+</Accordions>
+
+1. First, you will need to initialize the CLI tool in your project.
+
+```bash
+npx gtx-cli init
+```
+
+2. Next, you will need to create a project in the [General Translation dashboard](https://generaltranslation.com/dashboard).
+
+After creating a project, you will need to generate a production API key. Navigate to the "API Keys" page and click the "Create API Key" button.
+
+3. Then, add your API key and Project ID to your environment variables.
+
+```bash title=".env"
+GT_API_KEY=<your-api-key>
+GT_PROJECT_ID=<your-project-id>
+```
+
+4. Finally, run the translation command.
+
+```bash
+npx gtx-cli translate
+```
+
+<Callout type="info">
+  By default, the CLI tool will publish the translations to the General Translation CDN, so they are ready to be used in your project.
+  If you would like to disable this behavior (for example, if you are loading translations from a different source), add the `--no-publish` flag to the command.
+</Callout>
+
+See the [API reference](/docs/cli/translate) for more information on the `translate` command.
+
+
+
 ### Translating language files (3rd party i18n libraries)
 
 The CLI tool allows you to translate language files for 3rd party i18n libraries.
@@ -103,54 +152,6 @@ npx gtx-cli translate
     ```
   </Accordion>
 </Accordions>
-
-### Translating GT projects
-
-The CLI tool can be used to translate your projects which use `gt-next` or `gt-react`.
-
-This guide assumes you have already setup your codebase to use `gt-next` or `gt-react` according to the [gt-next](/docs/next/tutorials/quickstart) or [gt-react](/docs/react/tutorials/quickstart) tutorials.
-
-
-<Accordions>
-  <Accordion title="My project is already in multiple languages in development, what's the point of this step?">
-    If you followed the quickstart guides for `gt-next` or `gt-react`, your project has only been internationalized in your
-    development environment. When shipping your project to production, you will need to actually generate and save the translations.
-  
-    This step is necessary to ensure that your API keys are not exposed to the public, due to client-side vulnerabilities for frameworks like React.
-   
-  </Accordion>
-</Accordions>
-
-1. First, you will need to initialize the CLI tool in your project.
-
-```bash
-npx gtx-cli init
-```
-
-2. Next, you will need to create a project in the [General Translation dashboard](https://generaltranslation.com/dashboard).
-
-After creating a project, you will need to generate a production API key. Navigate to the "API Keys" page and click the "Create API Key" button.
-
-3. Then, add your API key and Project ID to your environment variables.
-
-```bash title=".env"
-GT_API_KEY=<your-api-key>
-GT_PROJECT_ID=<your-project-id>
-```
-
-4. Finally, run the translation command.
-
-```bash
-npx gtx-cli translate
-```
-
-<Callout type="info">
-  By default, the CLI tool will publish the translations to the General Translation CDN, so they are ready to be used in your project.
-  If you would like to disable this behavior (for example, if you are loading translations from a different source), add the `--no-publish` flag to the command.
-</Callout>
-
-See the [API reference](/docs/cli/translate) for more information on the `translate` command.
-
 
 ### Generating language files for GT projects
 
