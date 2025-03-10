@@ -28,7 +28,7 @@ There are two ways to do this:
 
 <Callout>
   **Note:**
-  If you are not using GT infrastructure, you will need to write a custom [`loadTranslation()`](/docs/next/api/config/load-translation) method to load translations from your preferred infrastructure.
+  If you are not using GT infrastructure, you will need to write a custom [`loadTranslations()`](/docs/next/api/config/load-translations) method to load translations from your preferred infrastructure.
 </Callout>
 
 ### What are the benefits?
@@ -60,10 +60,10 @@ Make sure that you have followed the [Quick Start Guide](/docs/next/tutorials/qu
 
 <Steps>
   <Step>
-    Add a `loadTranslation.js` file under `./src` with the following content:
+    Add a `loadTranslations.js` file under `./src` with the following content:
 
-    ```js title="src/loadTranslation.js" copy
-    export default async function loadTranslation(locale) {
+    ```js title="src/loadTranslations.js" copy
+    export default async function loadTranslations(locale) {
       const t = await import(`./_gt/${locale}.json`);
       return t.default;
     }
@@ -104,8 +104,8 @@ For example, say that `./messages/en.json` is your base language file:
 ```
 
 And add your load translation function:
-```js title="src/loadTranslation.js" copy
-export default async function loadTranslation(locale) {
+```js title="src/loadTranslations.js" copy
+export default async function loadTranslations(locale) {
   const t = await import(`./_gt/${locale}.json`);
   return t.default;
 }
@@ -140,8 +140,8 @@ export default function Home() {
 
 ## Notes
  * Local translations are an alternative to fetching translations from a CDN.
- * You can customize [`loadTranslation()`](/docs/next/api/config/load-translation) to also load translations from other sources, such as your database or your own CDN.
+ * You can customize [`loadTranslations()`](/docs/next/api/config/load-translations) to also load translations from other sources, such as your database or your own CDN.
 
 ## Next steps
- * See [`loadTranslation()`](/docs/next/api/config/load-translation) for more information on writing a custom translation loader.
+ * See [`loadTranslations()`](/docs/next/api/config/load-translations) for more information on writing a custom translation loader.
  * See the [Examples](/docs/reference/examples) page for some example projects.

@@ -10,14 +10,11 @@ npx gtx-cli generate
 
 ## Overview
 
-The `gtx-cli generate` command generates a source file for your project for your default locale.
+The `gtx-cli generate` command generates a source file for your project for your default locale and supported locales.
 
-This source file has the same data structure as your project's translations, and should be used as a template for you
-to create your own translation files.
+The generated files are compatible with the `gt-next` and `gt-react` libraries, and are the same format used by the `translate` command.
 
-To create your own translation files, you can duplicate the source template and translate the content strings.
-
-Then, you can rename the translation files to the corresponding locale and use [local translations](/docs/next/tutorials/local-tx) to serve the translations to your users.
+After generating the source files, you can use [local translations](/docs/next/tutorials/local-tx) to serve the translations to your users.
 
 <Callout type="info">
     This command is only useful if you are using your own translation service.

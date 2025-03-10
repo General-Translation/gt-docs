@@ -1,14 +1,14 @@
 ---
-title: loadTranslation()
-description: API Reference for the loadTranslation() function.
+title: loadTranslations()
+description: API Reference for the loadTranslations() function.
 ---
 
 ## Overview
 
 
-The `loadTranslation()` function is the primary way to override the default translation loading behavior.
+The `loadTranslations()` function is the primary way to override the default translation loading behavior.
 By default, your app will load translations from the GT CDN in production.
-You can specify a `loadTranslation()` function to load translations from a different source, such as:
+You can specify a `loadTranslations()` function to load translations from a different source, such as:
  * From your app's bundle (most common)
  * From a database
  * From an API
@@ -42,8 +42,8 @@ A `Promise<any>` that resolves to either a string or JSX object containing the t
 
 ## Setup
 
-Define your `loadTranslation()` as the default export for a file with the name `loadTranslation.js` or `loadTranslation.ts` either in the `src/` directory or the root.
-If you want to use a different name or path, pass the relative path through the `loadTranslationPath` parameter in [`withGTConfig()`](/docs/next/api/config/with-gt-config).
+Define your `loadTranslations()` as the default export for a file with the name `loadTranslations.js` or `loadTranslations.ts` either in the `src/` directory or the root.
+If you want to use a different name or path, pass the relative path through the `loadTranslationsPath` parameter in [`withGTConfig()`](/docs/next/api/config/with-gt-config).
 
 ---
 
@@ -56,8 +56,8 @@ If you want to use a different name or path, pass the relative path through the 
 When configured to use [local translations](/docs/next/tutorials/local-tx), the [`gtx-cli translate`](/docs/cli/translate) command, translations are saved to the `./public/_gt` directory.
 Just add the `--no-publish` and `--translations-dir ./public/_gt` flags to the command.
 
-```js title="loadTranslation.js"
-export default async function loadTranslation(locale) {
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
   const translations = await import(`../public/_gt/${locale}.json`);
   return translations;
 };
@@ -65,8 +65,8 @@ export default async function loadTranslation(locale) {
 
 ### Load translations from a CDN
 
-```js title="loadTranslation.js"
-export default async function loadTranslation(locale) {
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
   try {
     const translations = await fetch(`https://your-cdn.com/translations/${locale}.json`);
     const data = await translations.json();
@@ -80,8 +80,8 @@ export default async function loadTranslation(locale) {
 
 ### Load translations from your own database
 
-```js title="loadTranslation.js"
-export default async function loadTranslation(locale) {
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
   try {
     const translations = await prisma.translation.findUnique({
       where: {
@@ -99,7 +99,7 @@ export default async function loadTranslation(locale) {
 ---
 
 ## Notes
- * `loadTranslation()` gives you the ability to customize how translations are loaded in your app in production.
+ * `loadTranslations()` gives you the ability to customize how translations are loaded in your app in production.
  * Its most common use case is for adding [local translations](/docs/next/tutorials/local-tx)
 
 ## Next steps

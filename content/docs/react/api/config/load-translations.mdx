@@ -1,15 +1,15 @@
 ---
-title: loadTranslation()
-description: API Reference for the loadTranslation() function.
+title: loadTranslations()
+description: API Reference for the loadTranslations() function.
 ---
 
 ## Overview
 
-The `loadTranslation()` function is the primary way to customize translation loading behavior.
+The `loadTranslations()` function is the primary way to customize translation loading behavior.
 
 In production, your translations need to be stored so that they can be rendered in your app.
 By default, your translations will be stored in the GT CDN.
-You can specify a `loadTranslation()` function to get translations from a different source, such as:
+You can specify a `loadTranslations()` function to get translations from a different source, such as:
  * From your app's bundle (most common)
  * From a database
  * From an API
@@ -43,14 +43,14 @@ A `Promise<any>` that resolves to either a string or JSX object containing the t
 
 ## Setup
 
-You must import the `loadTranslation()` function and assign it as a prop to the `<GTProvider>` component.
+You must import the `loadTranslations()` function and assign it as a prop to the `<GTProvider>` component.
 
 ```jsx title="src/index.js"
-import loadTranslation from './loadTranslation';
+import loadTranslations from './loadTranslations';
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <GTProvider locales={['es', 'fr']} loadTranslation={loadTranslation}> // [!code highlight]
+    <GTProvider locales={['es', 'fr']} loadTranslations={loadTranslations}> // [!code highlight]
       <App />
     </GTProvider>
   </StrictMode>
@@ -65,17 +65,17 @@ createRoot(document.getElementById("root")!).render(
 
 When configured to use [local translations](/docs/react/tutorials/local-tx), the [`gtx-cli translate`](/docs/cli/translate) command, translations are saved to the `./src/_gt` directory.
 
-```js title="loadTranslation.js"
-export default async function loadTranslation(locale) {
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
   const translations = await import(`./_gt/${locale}.json`);
-  return translations;
+  return translations.default;
 };
 ```
 
 ### Load translations from your own CDN
 
-```js title="loadTranslation.js"
-export default async function loadTranslation(locale) {
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
   try {
     const translations = await fetch(`https://your-cdn.com/translations/${locale}.json`);
     const data = await translations.json();
@@ -90,7 +90,7 @@ export default async function loadTranslation(locale) {
 ---
 
 ## Notes
- * `loadTranslation()` gives you the ability to customize how translations are loaded in your app in production.
+ * `loadTranslations()` gives you the ability to customize how translations are loaded in your app in production.
  * Its most common use case is for adding [local translations](/docs/react/tutorials/local-tx)
 
 ## Next steps
