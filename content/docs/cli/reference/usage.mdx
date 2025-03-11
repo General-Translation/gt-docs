@@ -1,13 +1,13 @@
 ---
-title: Translation CLI
-description: Quickstart guide for the General Translation CLI tool.
+title: Usage Guide
+description: Usage guide for the General Translation CLI tool.
 ---
 
 ## Overview
 
 This guide will walk you through the process of using the General Translation CLI tool to translate your project.
 
-The CLI tool is compatible with any i18n library, whether you are using `gt-next`, `gt-react`, or third-party libraries like `next-intl` or `react-i18next`.
+The CLI tool is compatible with any i18n library, whether you are using `gt-next`, `gt-react`, or third-party libraries like [`next-intl`](/docs/cli/tutorials/next-intl-quickstart) or [`react-i18next`](/docs/cli/tutorials/react-i18next-quickstart).
 
 The CLI tool is responsible for connecting your project to General Translation's AI translation service.
 
@@ -41,6 +41,8 @@ To install the CLI tool, run the following command:
   ```
   </Tab>
 </Tabs>
+
+---
 
 ## Use Cases
 
@@ -184,3 +186,13 @@ This command will generate a source file for your default locale, and all other 
 The content for each file is the same, and will be merged with any previous translations you have in your project.
 
 See the [API reference](/docs/cli/generate) for more information on the `generate` command.
+
+---
+
+## Notes
+ * [`gtx-cli translate`](/docs/cli/translate) is used to automatically generate translations for your project.
+ * If you are using a 3rd party i18n library, you can automatically update all of your translation JSON files every time your project changes. Just add the [`gtx-cli translate`](/docs/cli/translate) command to your build or CD process before the build command to automatically add translations to your project.
+
+## Next steps
+ * See the [CLI API reference](/docs/cli/introduction) for more information.
+ * If you want to see live translations in development (think hot reload), check out the [`<T>` component](/docs/usage/t).

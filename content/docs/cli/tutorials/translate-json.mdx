@@ -1,0 +1,50 @@
+---
+title: Auto Translate JSON Files
+description: How to use General Translation to set up automatic translation for your project's JSON files
+---
+
+## Overview
+
+If you are using a 3rd party i18n library or a custom i18n implementation, you can automatically update all of your translation JSON files every time your project changes.
+Just add the [`gtx-cli translate`](/docs/cli/translate#translate-json) command to your build or CD process before the build command to automatically add translations to your project.
+
+```json title="package.json"
+{
+  "scripts": {
+    "translate": "npx gtx-cli translate --translations-dir ./public/locales/* --default-locale en",
+    "build": "npm run translate && <your build command>"
+  }
+}
+```
+ * `--translations-dir, -t` is the path to your translation JSON files. The `*` syntax is used to denote the locale code in the path: `./public/locales/en.json`
+ * `--default-locale` denotes the file to read for generating translations.
+
+
+Then add your production API key and project ID to your environment variables.
+This is necessary to use the `gtx-cli` tool.
+You get these from the [General Translation dashboard](https://generaltranslation.com/dashboard).
+
+```bash title=".env"
+GT_API_KEY=<your-api-key>
+GT_PROJECT_ID=<your-project-id>
+```
+
+
+<Callout type="info">
+  **Note:**
+  The translate command will work for any JSON translation files assuming they do not use variables.
+
+  We currently support variable syntax the following i18n libraries: [`next-intl`](/docs/cli/tutorials/next-intl-quickstart), [`react-i18next`](/docs/cli/tutorials/react-i18next-quickstart), [`i18next`](/docs/cli/tutorials/i18next-quickstart).
+  Don't see your favorite library? [Please let us know](https://github.com/General-Translation/gt-libraries/issues), and we will add it as soon as we can!
+</Callout>
+
+---
+
+## Notes
+ * You can automatically add translations to your project by with the [`gtx-cli translate`](/docs/cli/translate#translate-json) command.
+ * If you want to commit your translation files, you can instead run the `gtx-cli translate` command before committing.
+
+
+## Next steps
+ * See the [usage guide](/docs/cli/reference/usage) for the cli tool.
+ * If you want to see live translations in development (think hot reload), check out the [`<T>` component](/docs/usage/t).

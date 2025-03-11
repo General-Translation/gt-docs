@@ -1,0 +1,80 @@
+---
+title: react-i18next
+description: Automatically translate your react-i18next project (<5 min)
+---
+
+## Overview
+
+This tutorial will show you how to automatically manage your project's translation files in [`react-i18next`](https://react.i18next.com/).
+
+
+We will follow these three steps:
+<Steps>
+  <Step>
+    Add your environment variables
+  </Step>
+  <Step>
+    Install [`gtx-cli`](/docs/cli/introduction)
+  </Step>
+  <Step>
+    Run the [`gtx-cli translate`](/docs/cli/translate#translate-json)
+  </Step>
+</Steps>
+
+<Callout>
+  **Tip:**
+  Avoid using translation files with the [`<T>` component](/docs/usage/t).
+</Callout>
+
+---
+
+## Step 1: Add your environment variables
+
+Add your production API key and project ID to your environment variables.
+This is necessary to use the `gtx-cli` tool.
+You get these from the [General Translation dashboard](https://generaltranslation.com/dashboard).
+
+```bash title=".env"
+GT_API_KEY=<your-api-key>
+GT_PROJECT_ID=<your-project-id>
+```
+
+## Step 2: Install `gtx-cli`
+
+Install the `gtx-cli` tool in your project.
+
+```bash
+npm install gtx-cli
+```
+
+## Step 3: Add the `gtx-cli translate` command to your build process
+
+Add the `gtx-cli translate` command to your build or CD process before the build command to automatically add translations to your project.
+
+```json title="package.json"
+{
+  "scripts": {
+    "translate": "npx gtx-cli translate --translations-dir ./public/locales/* --default-locale en",
+    "build": "npm run translate && <your build command>"
+  }
+}
+```
+ * `--translations-dir, -t` is the path to your translation JSON files. The `*` syntax is used to denote the locale code in the path: `./public/locales/en.json`
+ * `--default-locale` denotes the file from which translations are generated.
+
+This will generate translations for all of your locales and save them to your project.
+If you want to commit these files to your repo, you can instead run this command before committing.
+
+
+You're done! Now your project will automatically update all of your translation JSON files any time your project changes.
+
+---
+
+## Notes
+ * You can automatically add translations to your project by with the [`gtx-cli translate`](/docs/cli/translate#translate-json) command.
+ * If you want to commit your translation files, you can instead run the `gtx-cli translate` command before committing.
+
+## Next steps
+ * See the [usage guide](/docs/cli/reference/usage) for the cli tool.
+ * Check out tutorials for [`i18next`](/docs/cli/tutorials/i18next-quickstart) and [`next-intl`](/docs/cli/tutorials/next-intl-quickstart).
+ * If you want to see live translations in development (think hot reload), check out the [`<T>` component](/docs/usage/t).

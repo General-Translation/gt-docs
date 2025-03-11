@@ -1,14 +1,6 @@
 {
   "title": "Next.js",
   "pages": [
-    "---API---",
-    "api/config",
-    "api/components",
-    "api/strings",
-    "api/dictionary",
-    "api/middleware",
-    "api/helpers",
-    "api/types",
     "---Key Concepts---",
     "reference/t-reference",
     "reference/using-variable-components",
@@ -22,7 +14,19 @@
     "guides/i18n-routing",
     "guides/locale-management",
     "guides/rtl",
-    "---Additional Resources---",
-    "tutorials"
+    "---Tutorials---",
+    "tutorials/quickstart",
+    "tutorials/quickdeploy",
+    "tutorials/translating-strings",
+    "tutorials/examples/next-speedrun",
+    "tutorials/examples/currency-converter",
+    "---API---",
+    "api/config",
+    "api/components",
+    "api/strings",
+    "api/dictionary",
+    "api/middleware",
+    "api/helpers",
+    "api/types"
   ]
 }
