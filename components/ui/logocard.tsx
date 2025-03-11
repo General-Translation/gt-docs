@@ -135,9 +135,10 @@ const LogoCardImage = React.forwardRef<
 
   useLayoutEffect(() => {
     setLogoSrc(
-      BASE_URL + resolvedTheme === 'dark'
-        ? LOGOS[src]?.darkLogo
-        : LOGOS[src]?.lightLogo
+      BASE_URL +
+        (resolvedTheme === 'dark'
+          ? LOGOS[src]?.darkLogo
+          : LOGOS[src]?.lightLogo)
     );
   }, [resolvedTheme]);
 
