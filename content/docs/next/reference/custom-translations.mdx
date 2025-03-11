@@ -1,12 +1,14 @@
 ---
-title: Custom translations
-description: Running your app without GT infrastructure
+title: Custom Translations Files
+description: Using your own translation files
 ---
 
 ## Overview
 
 This guide will walk you through internationalizing your existing Next.js app with user-defined translations.
 All translations are stored in your project's repository and managed by you, similar to a traditional i18n setup.
+
+### How it works
 
 Translations live in JSON files called "dictionaries" (`en.json`, `fr.json`, etc.).
 The keys are used as references, and the values are the translated content:
@@ -38,6 +40,13 @@ export default function MyComponent() {
   );
 }
 ```
+
+<Callout>
+  **Note:** Because these translations are managed by you, you will need to update them manually as your app evolves.
+  That means each time you add or change content, you will need to update your translation files.
+
+  Consider using [`loadTranslations()`](/docs/next/api/config/load-translations) if you are interested in automating this process.
+</Callout>
 
 ---
 

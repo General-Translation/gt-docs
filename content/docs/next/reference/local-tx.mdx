@@ -26,11 +26,6 @@ There are two ways to do this:
  * **In your app's bundle:** After translations are generated, add them to your app's bundle.
  * **In a CDN (default):** Fetch from translations from a CDN at runtime.
 
-<Callout>
-  **Note:**
-  If you are not using GT infrastructure, you will need to write a custom [`loadTranslations()`](/docs/next/api/config/load-translations) method to load translations from your preferred infrastructure.
-</Callout>
-
 ### What are the benefits?
 
 *Faster load times:* Local translations are served directly from your app,
@@ -55,11 +50,6 @@ you must redeploy your app with the new translation.
 ### Prerequisites
 
 Make sure that you have followed the [Quick Start Guide](/docs/next/tutorials/quickstart) to set up your Next.js app with GT.
-
-
-### Language dictionaries
-
-
 
 ### Steps
 
@@ -88,7 +78,7 @@ Make sure that you have followed the [Quick Start Guide](/docs/next/tutorials/qu
 
 That's it! Your app will now only load translations from your local files.
 
----
+{/* ---
 
 ## Using your own translations
 
@@ -147,7 +137,7 @@ For a more detailed guide, see the [custom translations reference](/docs/next/re
 
 ### Option 2: Modify files created by the `gtx-cli generate` command
 
-🚧 This section is currently under construction. 🚧
+🚧 This section is currently under construction. 🚧 */}
 
 
 ---
@@ -159,4 +149,5 @@ For a more detailed guide, see the [custom translations reference](/docs/next/re
 
 ## Next steps
  * See [`loadTranslations()`](/docs/next/api/config/load-translations) for more information on writing a custom translation loader.
- * See the [Examples](/docs/reference/examples) page for some example projects.
+ * If you want to write your own translations check out [custom translations](/docs/next/reference/custom-translations).
+ * For more information on dictionary syntax, see the [dictionary reference](/docs/next/reference/dictionary-reference).
