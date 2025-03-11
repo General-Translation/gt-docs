@@ -17,6 +17,9 @@ You can specify a `loadTranslations()` function to load translations from a diff
 We have integrated support for loading translations from local files in your app's bundle.
 Follow [this guide](/docs/next/tutorials/local-tx) to set up local translations in your Next.js app.
 
+If you are looking to manually define your own translations, check out the [custom translations guide](/docs/next/reference/custom-translations)
+ and the [`load-dictionary()`](/docs/next/api/config/load-dictionary) function.
+
 ## Reference
 
 ### Parameters
@@ -53,15 +56,23 @@ If you want to use a different name or path, pass the relative path through the 
 
 ### Fetching translations from your bundle
 
-When configured to use [local translations](/docs/next/tutorials/local-tx), the [`gtx-cli translate`](/docs/cli/translate) command, translations are saved to the `./public/_gt` directory.
-Just add the `--no-publish` and `--translations-dir ./public/_gt` flags to the command.
-
 ```js title="loadTranslations.js"
 export default async function loadTranslations(locale) {
-  const translations = await import(`../public/_gt/${locale}.json`);
+  const translations = await import(`../public/locales/${locale}.json`);
   return translations;
 };
 ```
+
+When configured to use [local translations](/docs/next/tutorials/local-tx), the [`gtx-cli translate`](/docs/cli/translate) command,
+will save translations in your project's file tree.
+
+You can  translation files for your bundle with this command:
+
+```bash
+npx gtx-cli translate --no-publish --translations-dir ./public/locales
+```
+
+
 
 ### Load translations from a CDN
 
