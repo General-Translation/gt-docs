@@ -12,6 +12,15 @@ There are two types of API keys used with General Translation:
 
 The behavior between the two types of keys are different, so you should be careful to use the correct key for the environment you are in.
 
+```bash
+GT_PROJECT_ID=your-project-id
+GT_API_KEY=your-api-key
+```
+
+If you are using `gt-next` or `gt-react` as a standalone i18n library, you do not need to use API keys.
+
+---
+
 ## How to obtain
 
 <Steps>
@@ -29,35 +38,57 @@ The behavior between the two types of keys are different, so you should be caref
     </Step>
 </Steps>
 
+---
+
 ## Behavior
 
-The main difference between the two types of keys is in the persistence of translation data. 
+Most simply put, Prod API keys persist translations, while Dev API keys do not.
+You use Dev API keys for prototyping translations and Prod API keys when you are ready to deploy.
 
 ### Development API Key
 
-When using a development API key, translations are done on-demand and only memoized in memory. 
-Translations **will not be saved**. Therefore, it is not recommended to use this key in production.
-
 This type of key is useful for testing and development purposes.
+When using a development API key, translations are done on-demand and memoized in memory. 
+Translations **will not be saved**.
 
-<Callout type="error">
-  **Warning!**
+The development API key is used by components rendered in the browser (client-side) and by server-side rendered components to facilitate on-demand translation.
+This means that it must be exported to the client.
+This key should NEVER be used in production environments and NEVER should be passed to the client in a production environment.
 
-  Development API keys are passed to the client side, to facilitate client-side translation in development. 
-  This is fine in development environments, but is a security risk in production environments. If your application
-  is open to the internet, you should not use a development API key.
+```bash
+# example Vite .env file for dev
+VITE_GT_PROJECT_ID=your-project-id
+VITE_GT_API_KEY=your-dev-api-key # Only used in development
+```
+
+<Callout type="warn">
+  **Warning:**
+  Development API keys are passed to the client to facilitate client-side translation in development. 
+  This is fine in development environments, but is a security risk in production environments.
+  If your application is open to the internet, you should never use a development API key.
 </Callout>
 
 ### Production API Key
 
-When using a production API key, translations **are persisted**. 
+When using a production API key, translations **are persisted**.
+This means that translations will be saved (either in a CDN or in your app's bundle) to be used at runtime.
 
+This key is used in two places:
+ * The [`gtx-cli`](/docs/cli/introduction) tool when translations are generated during the deployment process. Check out [this guide](/docs/react/tutorials/quickdeploy) for more information.
+ * The `gt-next` library when translations occur at runtime (server-side only, not used by `gt-react`).
 
-<Callout type="warn">
-  In order to deploy your application to production, you must use a production API key with the CLI tool.
-</Callout>
+The API key is only used by the server, and it should NEVER be exported to the client.
+```bash
+GT_PROJECT_ID=your-project-id
+GT_API_KEY=your-prod-api-key # This key should never be exported to the client
+```
 
-## When to use which key
+---
 
-* **Development API Key**: When you are running your application locally, such as via `npm run dev` or `yarn dev`.
-* **Production API Key**: When you are running your application in production, with traffic exposed to the internet.
+## Notes
+ * Development API keys are used for testing and development purposes. It should only be used in development.
+ * Production API keys are used for production purposes.
+
+## Next steps
+ * Check out how to use [the `<T>` component](/docs/usage/t) to see live translations in development.
+ * See the [usage guide](/docs/cli/reference/usage) for the cli tool.

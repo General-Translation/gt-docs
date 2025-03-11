@@ -17,7 +17,7 @@ You can specify a `loadTranslations()` function to load translations from a diff
 We have integrated support for loading translations from local files in your app's bundle.
 Follow [this guide](/docs/next/reference/local-tx) to set up local translations in your Next.js app.
 
-If you are looking to manually define your own translations, check out the [custom translations guide](/docs/next/reference/custom-translations)
+If you are looking to manually define your own translations, check out the [custom translations guide](/docs/next/reference/stand-alone)
  and the [`loadDictionary()`](/docs/next/api/config/load-dictionary) function.
 
 ## Reference
@@ -123,9 +123,8 @@ export default async function loadTranslations(locale) {
   * [`loadTranslations()`](/docs/next/api/config/load-translations) is used to define custom loading behavior for fetching translations for your app.
   This could be getting translations from a CDN, a database, or your app's bundle.
   These are usually machine generated translations, managed by the cli tool, and not very user friendly to edit.
-  * [`loadDictionary()`](/docs/next/api/config/load-dictionary) is used for loading translation files with custom translations.
-  These files are usually hand-written translations, are more user-friendly to edit, and managed by the developer or translators.
-  Dictionary files will take precedence over translations loaded with `loadTranslations()`.
+  * [`loadDictionary()`](/docs/next/api/config/load-dictionary) is intended for implementations of `gt-next` as a standalone library.
+  Users bring their own translations and no translation infrastructure is used.
 </Callout>
 
 ---
@@ -136,5 +135,5 @@ export default async function loadTranslations(locale) {
 
 ## Next steps
  * Learn about why you might want to use [local translations](/docs/next/reference/local-tx)
- * Add your own translations with the [custom translations guide](/docs/next/reference/custom-translations)
+ * Add your own translations with the [custom translations guide](/docs/next/reference/stand-alone)
 

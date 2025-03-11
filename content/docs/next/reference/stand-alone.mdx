@@ -1,12 +1,13 @@
 ---
-title: Custom Translations Files
-description: Using your own translation files
+title: Stand-alone i18n
+description: Using gt-next as a stand-alone i18n library
 ---
 
 ## Overview
 
-This guide will walk you through internationalizing your existing Next.js app with user-defined translations.
-All translations are stored in your project's repository and managed by you, similar to a traditional i18n setup.
+This guide will walk you through internationalizing your existing Next.js app using `gt-next` as a stand-alone i18n library.
+All translations are stored in your project's repository and are managed by you.
+Furthermore, you bring your own translations. This means you won't have to add API keys.
 
 ### How it works
 
@@ -26,13 +27,15 @@ The keys are used as references, and the values are the translated content:
 }
 ```
 
-Translations are then referenced in your app with the [`useDict()`](/docs/next/api/dictionary/useGT) hook:
+Translations are then referenced in your app with the [`useDict()`](/docs/next/api/dictionary/useGT) hook and [`getDict()`](/docs/next/api/dictionary/getDict) function:
 ```jsx title="components/MyComponent.js"
 // [!code word:greeting]
 import { useDict } from 'gt-next/client';
+import { getDict } from 'gt-next/server';
 
 export default function MyComponent() {
-  const d = useDict();
+  const d = useDict(); // client-side
+  const d = await getDict(); // server-side
   return (
     <div>
       <h1>{d('greeting')}</h1>
@@ -45,7 +48,7 @@ export default function MyComponent() {
   **Note:** Because these translations are managed by you, you will need to update them manually as your app evolves.
   That means each time you add or change content, you will need to update your translation files.
 
-  Consider using [`loadTranslations()`](/docs/next/api/config/load-translations) if you are interested in automating this process.
+  Consider using [`the translate command`](/docs/cli/tutorials/translate-json) if you are interested in automating this process.
 </Callout>
 
 ---
@@ -74,6 +77,7 @@ export default withGTConfig(nextConfig, {
 This [`loadDictionary()`](/docs/next/api/config/load-dictionary) is responsible for loading your translations.
 All translations are stored in nested JSON files called dictionaries.
 
+Here, we specify that our translation files are stored in the `/public/dictionaries/` directory.
 ```jsx title="src/loadDictionary.js" copy
 export default async function loadDictionary(locale) {
   const t = await import(`../public/dictionaries/${locale}.json`);
@@ -141,7 +145,7 @@ export default function MyComponent() {
 ```
 
 <Callout>
-  **Tip:** For more information on dictionary syntax, see the [dictionary reference](/docs/next/reference/dictionary-reference).
+  **Tip:** For more information on dictionary syntax, such as inserting variables, see the [dictionary reference](/docs/next/reference/dictionary-reference).
 </Callout>
 
 ---
@@ -153,4 +157,4 @@ export default function MyComponent() {
 
 ## Next steps
  * For more information on dictionary syntax, see the [dictionary reference](/docs/next/reference/dictionary-reference).
- * Try using [`loadTranslations()`](/docs/next/api/config/load-translations) to automate the translation process.
+ * Consider using [`the translate command`](/docs/cli/tutorials/translate-json) if you are interested in automating the translation process.

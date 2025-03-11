@@ -86,7 +86,7 @@ export const config = {
 ### Step 3: Adding Supported Locales
 
 If you decide to use a specific set of locales, you can pass them as an argument to `createNextMiddleware()`.
-You should include `defaultLocale` and `locales` in both `middleware.js` and [`next.config.js`](/docs/next/guides/locale-management#include-locales).
+You should include `defaultLocale` and `locales` in both `middleware.js` and [`next.config.js`](/docs/next/reference/locale-management#include-locales).
 
 ```js title="middleware.js" copy
 
@@ -113,9 +113,9 @@ export const config = {
 Make sure to also pass these to your configuration in `next.config.js`.
 
 ```js title="next.config.js" copy
-import { initGT } from 'gt-next/config'
+import { withGTConfig } from 'gt-next/config'
 
-const withGT = initGT({
+const withGT = withGTConfig({
   defaultLocale: "en-US",
   locales: ["en-US", "fr", "es", "de", "ja"]
 });
@@ -123,7 +123,7 @@ const withGT = initGT({
 export default withGT({});
 ```
 
-For more in depth how to guide see [Locale Management](/docs/next/guides/locale-management).
+For more in depth how to guide see [Locale Management](/docs/next/reference/locale-management).
 
 
 ## Notes
@@ -132,5 +132,5 @@ For more in depth how to guide see [Locale Management](/docs/next/guides/locale-
  * You can specify the supported locales in the middleware configuration and next config file.
 
 ## Next Steps
- * Read more about [Locale Management](/docs/next/guides/locale-management).
- * Learn how to [Translate Your Application](/docs/next/guides/translate-your-application).
+ * Read more about [Locale Management](/docs/next/reference/locale-management).
+ * Learn how to [Translate Your Application](/docs/next/reference/translate-your-application).
