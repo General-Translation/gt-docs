@@ -26,11 +26,6 @@ There are two ways to do this:
  * **In your app's bundle:** After translations are generated, add them to your app's bundle.
  * **In a CDN (default):** Fetch from translations from a CDN at runtime.
 
-<Callout>
-  **Note:**
-  If you are not using GT infrastructure, you will need to write a custom [`loadTranslations()`](/docs/next/api/config/load-translations) method to load translations from your preferred infrastructure.
-</Callout>
-
 ### What are the benefits?
 
 *Faster load times:* Local translations are served directly from your app,
@@ -64,7 +59,7 @@ Make sure that you have followed the [Quick Start Guide](/docs/next/tutorials/qu
 
     ```js title="src/loadTranslations.js" copy
     export default async function loadTranslations(locale) {
-      const t = await import(`./_gt/${locale}.json`);
+      const t = await import(`../public/_gt/${locale}.json`);
       return t.default;
     }
     ```
@@ -83,43 +78,46 @@ Make sure that you have followed the [Quick Start Guide](/docs/next/tutorials/qu
 
 That's it! Your app will now only load translations from your local files.
 
----
+{/* ---
 
-## Limitations
+## Using your own translations
 
-We currently do not yet support bringing your own translations.
-Adding this functionality is one of our top priorities, and it will be available very soon.
+To use your own translations (and not use the GT AI translation service), there are a few options:
 
-Until then, we recommend using the generated translations.
+**Option 1:** Create your own language dictionaries
+**Option 2:** Modify files created by the [`gtx-cli generate`](/docs/cli/generate) command
+
+### Option 1: Create your own language dictionaries
+
 You can do this by marking the file with your preferred language as your dictionary file in `gt.config.json`.
 
-For example, say that `./messages/en.json` is your base language file:
-```json
+For example, say that `./dictionary/en.json` is your base language file:
+```json title="gt.config.json" copy
 {
   "projectId": "your-project-id",
-  "dictionary": "./messages/en.json",
+  "dictionary": "./dictionary/en.json",
   "locales": ["en", "fr", "de"],
   ...
 }
 ```
 
-And add your load translation function:
+And add your load translations function:
 ```js title="src/loadTranslations.js" copy
 export default async function loadTranslations(locale) {
-  const t = await import(`./_gt/${locale}.json`);
+  const t = await import(`../public/locales/${locale}.json`);
   return t.default;
 }
 ```
 
-When you run the translate command, it will generate translations in the `./public/_gt` directory.
+When you run the translate command, it will generate translations in the `./public/locales` directory.
 ```bash
-npx gtx-cli translate --no-publish --translations-dir ./public/_gt
+npx gtx-cli translate --no-publish --translations-dir ./public/locales --dictionary ./dictionary/en.json
 ```
 
 To access these translations, you can use [`useDict`](/docs/nest/api/dictionary/useDict) and [`getDict`](/docs/nest/api/dictionary/getDict) to access your translations.
 You can read more about using dictionaries [here](/docs/next/reference/dictionary-reference).
 
-```jsx title="pages/index.js" copy
+```jsx title="pages/index.jsx" copy
 import { useDict } from 'gt-next/client';
 import { getDict } from 'gt-next/server';
 
@@ -134,6 +132,13 @@ export default function Home() {
 }
 ```
 
+For a more detailed guide, see the [custom translations reference](/docs/next/reference/dictionary-reference).
+
+
+### Option 2: Modify files created by the `gtx-cli generate` command
+
+🚧 This section is currently under construction. 🚧 */}
+
 
 ---
 
@@ -144,4 +149,5 @@ export default function Home() {
 
 ## Next steps
  * See [`loadTranslations()`](/docs/next/api/config/load-translations) for more information on writing a custom translation loader.
- * See the [Examples](/docs/reference/examples) page for some example projects.
+ * If you want to write your own translations check out [custom translations](/docs/next/reference/custom-translations).
+ * For more information on dictionary syntax, see the [dictionary reference](/docs/next/reference/dictionary-reference).

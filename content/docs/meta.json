@@ -10,6 +10,7 @@
     "usage/dictionary",
     "usage/cli-tool",
     "usage/apikeys",
+    "usage/formats",
     "---Libraries---",
     "react",
     "next",
