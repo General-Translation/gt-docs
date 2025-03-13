@@ -7,14 +7,13 @@ description: Automatically translate your next-intl project (<5 min)
 
 This tutorial will show you how to automatically manage your project's translation files in [`next-intl`](https://next-intl.dev/).
 
-
-We will follow these three steps:
+We will follow these 4 steps:
 <Steps>
   <Step>
     Add your environment variables
   </Step>
   <Step>
-    Install [`gtx-cli`](/docs/cli/introduction)
+    Install [`gtx-cli`](/docs/cli)
   </Step>
   <Step>
     Initialize your project with the [`gtx-cli init`](/docs/cli/init) command
@@ -46,19 +45,31 @@ GT_PROJECT_ID=<your-project-id>
 
 Install the `gtx-cli` tool in your project.
 
-```bash
-npm install gtx-cli
-```
+<Tabs items={['npm', 'yarn', 'bun', 'pnpm']}>
+  <Tab value="npm">
+  ```bash 
+  npm i --save-dev gtx-cli
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add --dev gtx-cli
+  ```
+  </Tab>
 
-## Step 3: `gtx-cli init`
+  <Tab value="bun">
+  ```bash 
+  bun add --dev gtx-cli
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add --save-dev gtx-cli
+  ```
+  </Tab>
+</Tabs>
 
-Run the `gtx-cli init` command to initialize your project.
-
-```bash
-npx gtx-cli init
-```
-
-## Step 4: `gtx-cli translate`
+## Step 3: Add the `gtx-cli translate` command to your build process
 
 Add the `gtx-cli translate` command to your build or CI process before the build command to automatically add translations to your project.
 
@@ -84,5 +95,4 @@ You're done! Now your project will automatically update all of your translation 
 
 ## Next steps
  * See the [usage guide](/docs/cli/reference/usage) for the cli tool.
- * Check out tutorials for [`i18next`](/docs/cli/tutorials/i18next-quickstart) and [`react-i18next`](/docs/cli/tutorials/react-i18next-quickstart).
  * If you want to see live translations in development (think hot reload), check out the [`<T>` component](/docs/usage/t).
