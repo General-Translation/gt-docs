@@ -26,5 +26,5 @@
     "api/types"
   ],
   "root": true,
-  "description": "React Library"
+  "description": "React SDK"
 }

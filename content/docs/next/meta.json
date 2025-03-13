@@ -33,5 +33,5 @@
     "api/types"
   ],
   "root": true,
-  "description": "Next.js Library"
+  "description": "Next.js SDK"
 }

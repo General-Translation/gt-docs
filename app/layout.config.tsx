@@ -18,7 +18,7 @@ export const baseOptions: BaseLayoutProps = {
         &nbsp;&nbsp;General Translation&nbsp;&nbsp;
       </div>
     ),
-    url: 'https://www.generaltranslation.com',
+    url: '/docs',
   },
   links: [
     {
@@ -26,18 +26,6 @@ export const baseOptions: BaseLayoutProps = {
       url: '/dashboard',
       active: 'nested-url',
       icon: <Earth />,
-    },
-    {
-      text: 'Docs',
-      url: '/docs',
-      icon: <Book />,
-      active: 'none',
-    },
-    {
-      text: 'Pricing',
-      url: 'https://generaltranslation.com/pricing',
-      active: 'nested-url',
-      icon: <BookCheck />,
     },
     {
       text: 'Blog',
