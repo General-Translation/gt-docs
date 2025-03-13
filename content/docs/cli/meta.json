@@ -3,8 +3,7 @@
   "icon": "Terminal",
   "pages": [
     "[House][Home](/docs)",
-    "index",
-    "quickstart",
+    "tutorials/quickstart",
     "---Commands---",
     "init",
     "setup",
