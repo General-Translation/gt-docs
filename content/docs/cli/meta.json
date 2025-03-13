@@ -1,5 +1,6 @@
 {
   "title": "CLI Tool",
+  "icon": "Terminal",
   "pages": [
     "index",
     "---Commands---",

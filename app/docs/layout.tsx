@@ -1,4 +1,4 @@
-import { DocsLayout } from 'fumadocs-ui/layouts/docs';
+import { DocsLayout } from 'fumadocs-ui/layouts/notebook';
 import type { ReactNode } from 'react';
 import { baseOptions } from '@/app/layout.config';
 import { source } from '@/lib/source';
@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           transform(option, node) {
             const meta = source.getNodeMeta(node);
             if (!meta) return option;
-            const color = `var(--${meta.file.dirname}-color, var(--color-fd-foreground))`;
+            const color = `var(--${meta.file.dirname}-color, var(--purple-500, #8b5cf6))`;
             return {
               ...option,
               icon: (

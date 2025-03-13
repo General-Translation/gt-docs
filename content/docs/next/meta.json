@@ -1,5 +1,6 @@
 {
   "title": "Next.js",
+  "icon": "Triangle",
   "pages": [
     "index",
     "---Key Concepts---",

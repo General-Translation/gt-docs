@@ -1,0 +1,7 @@
+{
+  "title": "General Translation",
+  "icon": "House",
+  "root": true,
+  "description": "General Translation Docs",
+  "pages": ["index"]
+}
