@@ -2,6 +2,7 @@
   "title": "Next.js",
   "icon": "Triangle",
   "pages": [
+    "[House][Home](/docs)",
     "index",
     "---Key Concepts---",
     "reference/t-reference",

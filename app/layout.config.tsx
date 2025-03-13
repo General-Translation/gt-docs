@@ -1,7 +1,7 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import Logo from '@/components/Logo';
 
-import { Book, Earth, MessageSquareText } from 'lucide-react';
+import { Book, BookCheck, Earth, MessageSquareText } from 'lucide-react';
 
 /**
  * Shared layout configurations
@@ -32,6 +32,12 @@ export const baseOptions: BaseLayoutProps = {
       url: '/docs',
       icon: <Book />,
       active: 'none',
+    },
+    {
+      text: 'Pricing',
+      url: 'https://generaltranslation.com/pricing',
+      active: 'nested-url',
+      icon: <BookCheck />,
     },
     {
       text: 'Blog',

@@ -2,6 +2,7 @@
   "title": "React",
   "icon": "Atom",
   "pages": [
+    "[House][Home](/docs)",
     "index",
     "---Key Concepts---",
     "reference/t-reference",

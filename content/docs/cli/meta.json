@@ -2,6 +2,7 @@
   "title": "CLI Tool",
   "icon": "Terminal",
   "pages": [
+    "[House][Home](/docs)",
     "index",
     "---Commands---",
     "init",
@@ -9,7 +10,7 @@
     "scan",
     "translate",
     "generate",
-    "---Tutorials---",
+    "---Automate 3rd Party Translation---",
     "tutorials/next-intl-quickstart",
     "tutorials/i18next-quickstart",
     "tutorials/json",
@@ -18,5 +19,5 @@
     "reference/wrapping"
   ],
   "root": true,
-  "description": "The CLI tool for General Translation"
+  "description": "The General Translation CLI tool"
 }
