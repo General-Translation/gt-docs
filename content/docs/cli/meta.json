@@ -19,5 +19,5 @@
     "reference/wrapping"
   ],
   "root": true,
-  "description": "The General Translation CLI tool"
+  "description": "gtx-cli"
 }
