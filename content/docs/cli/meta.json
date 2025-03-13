@@ -4,6 +4,7 @@
   "pages": [
     "[House][Home](/docs)",
     "index",
+    "quickstart",
     "---Commands---",
     "init",
     "setup",
