@@ -1,7 +1,7 @@
 import { createPreset } from 'fumadocs-ui/tailwind-plugin';
 
 /** @type {import('tailwindcss').Config} */
-export default {
+const defaultConfig = {
     darkMode: ['class'],
     content: [
     './components/**/*.{ts,tsx}',
@@ -11,6 +11,7 @@ export default {
     './node_modules/fumadocs-ui/dist/**/*.js',
   ],
   presets: [createPreset()],
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     plugins: [require("tailwindcss-animate")],
     theme: {
     	extend: {
@@ -62,5 +63,7 @@ export default {
     			}
     		}
     	}
-    }
+  },
 };
+
+export default defaultConfig;

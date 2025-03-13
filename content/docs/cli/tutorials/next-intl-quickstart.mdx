@@ -17,7 +17,10 @@ We will follow these three steps:
     Install [`gtx-cli`](/docs/cli/introduction)
   </Step>
   <Step>
-    Run the [`gtx-cli translate`](/docs/cli/translate#translate-json)
+    Initialize your project with the [`gtx-cli init`](/docs/cli/init) command
+  </Step>
+  <Step>
+    Run [`gtx-cli translate`](/docs/cli/translate#translate-json)
   </Step>
 </Steps>
 
@@ -47,7 +50,15 @@ Install the `gtx-cli` tool in your project.
 npm install gtx-cli
 ```
 
-## Step 3: Add the `gtx-cli translate` command to your build process
+## Step 3: `gtx-cli init`
+
+Run the `gtx-cli init` command to initialize your project.
+
+```bash
+npx gtx-cli init
+```
+
+## Step 4: `gtx-cli translate`
 
 Add the `gtx-cli translate` command to your build or CD process before the build command to automatically add translations to your project.
 
@@ -59,9 +70,6 @@ Add the `gtx-cli translate` command to your build or CD process before the build
   }
 }
 ```
- * `--translations-dir, -t` is the path to your translation JSON files. The `*` syntax is used to denote the locale code in the path: `./public/locales/en.json`
- * `--default-locale` denotes the file from which translations are generated.
-
 This will generate translations for all of your locales and save them to your project.
 If you want to commit these files to your repo, you can instead run this command before committing.
 

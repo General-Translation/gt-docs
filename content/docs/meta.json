@@ -25,5 +25,7 @@
     "reference/supported-locales",
     "reference/locale-strings",
     "faqs"
-  ]
+  ],
+  "title": "General Translation",
+  "root": true
 }

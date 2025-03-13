@@ -1,81 +1,59 @@
-/* --------------- TAILWIND --------------- */
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@source '../../node_modules/fumadocs-ui/dist/**/*.js';
+
+/* --------------- FUMADOCS --------------- */
+@theme {
+  --color-fd-background: hsl(0, 0%, 100%);
+  --color-fd-foreground: hsl(0, 0%, 0%);
+  --color-fd-muted: hsl(0, 0%, 98%);
+  --color-fd-muted-foreground: hsl(0, 0%, 45.1%);
+  --color-fd-popover: hsl(0, 0%, 100%);
+  --color-fd-popover-foreground: hsl(0, 0%, 10%);
+  --color-fd-card: hsl(0, 0%, 100%);
+  --color-fd-card-foreground: hsl(0, 0%, 0%);
+  --color-fd-border: hsl(0, 0%, 92%);
+  --color-fd-primary: hsl(0, 0%, 0%);
+  --color-fd-primary-foreground: hsl(0, 0%, 100%);
+  --color-fd-secondary: hsl(0, 0%, 96%);
+  --color-fd-secondary-foreground: hsl(0, 0%, 0%);
+  --color-fd-accent: hsl(0, 0%, 94%);
+  --color-fd-accent-foreground: hsl(0, 0%, 0%);
+  --color-fd-ring: hsl(0, 0%, 70%);
+}
+
+.dark {
+  --color-fd-background: hsl(0, 0%, 4%);
+  --color-fd-foreground: hsl(0, 0%, 100%);
+  --color-fd-muted: hsl(0, 0%, 10%);
+  --color-fd-muted-foreground: hsl(0, 0%, 70%);
+  --color-fd-popover: hsl(0, 0%, 7%);
+  --color-fd-popover-foreground: hsl(0, 0%, 100%);
+  --color-fd-card: hsl(0, 0%, 7%);
+  --color-fd-card-foreground: hsl(0, 0%, 100%);
+  --color-fd-border: hsl(0, 0%, 15%);
+  --color-fd-primary: hsl(0, 0%, 100%);
+  --color-fd-primary-foreground: hsl(0, 0%, 0%);
+  --color-fd-secondary: hsl(0, 0%, 12%);
+  --color-fd-secondary-foreground: hsl(0, 0%, 100%);
+  --color-fd-accent: hsl(0, 0%, 15%);
+  --color-fd-accent-foreground: hsl(0, 0%, 100%);
+  --color-fd-ring: hsl(0, 0%, 60%);
+}
+
+.dark #nd-sidebar {
+  --color-fd-muted: hsl(0, 0%, 16%);
+  --color-fd-secondary: hsl(0, 0%, 18%);
+  --color-fd-muted-foreground: hsl(0, 0%, 72%);
+}
 
 /* --------------- SHAD CN --------------- */
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-/* --------------- CUSTOM STYLES --------------- */
-
 :root {
   /* Background */
-
+  --fd-layout-width: 1400px;
   /* Links */
   --color-link: #458dff;
   --color-link-dark: #437bca;
@@ -149,7 +127,11 @@
   justify-content: center;
   padding: 1rem;
   text-align: center;
-  @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+  border-radius: 0.5rem; /* rounded-lg */
+  border: 1px solid var(--border); /* border */
+  background-color: var(--card); /* bg-card */
+  color: var(--card-foreground); /* text-card-foreground */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   position: relative;
   overflow: hidden;
@@ -158,7 +140,8 @@
 
 /* Light mode hover effect */
 .logo-card:hover {
-  @apply shadow-md;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
   transform: scale(1.05);
   animation: logo-card-shadow 0.3s ease-in-out;
   box-shadow: 0 0 5px 0 var(--hover-shine-inverse-color);
@@ -204,5 +187,5 @@
 .logo-card-content {
   margin-bottom: 0.5rem; /* Reduced spacing */
   padding-bottom: 1rem;
-  @apply text-sm; /* Small text */
+  font-size: 0.875rem; /* text-sm */
 }

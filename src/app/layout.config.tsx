@@ -1,8 +1,16 @@
+import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import Logo from '@/components/Logo';
-import { type HomeLayoutProps } from 'fumadocs-ui/home-layout';
-import { BookCheck, Book, Earth, MessageSquareText } from 'lucide-react';
 
-export const baseOptions: HomeLayoutProps = {
+import { Earth, MessageSquareText } from 'lucide-react';
+
+/**
+ * Shared layout configurations
+ *
+ * you can customise layouts individually from:
+ * Home Layout: app/(home)/layout.tsx
+ * Docs Layout: app/docs/layout.tsx
+ */
+export const baseOptions: BaseLayoutProps = {
   nav: {
     title: (
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -18,18 +26,6 @@ export const baseOptions: HomeLayoutProps = {
       url: '/dashboard',
       active: 'nested-url',
       icon: <Earth />,
-    },
-    {
-      text: 'Docs',
-      url: '/docs',
-      active: 'nested-url',
-      icon: <Book />,
-    },
-    {
-      text: 'Pricing',
-      url: 'https://generaltranslation.com/pricing',
-      active: 'nested-url',
-      icon: <BookCheck />,
     },
     {
       text: 'Blog',

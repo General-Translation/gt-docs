@@ -16,5 +16,7 @@
     "---Reference---",
     "reference/usage",
     "reference/wrapping"
-  ]
+  ],
+  "root": true,
+  "description": "The CLI tool for General Translation"
 }
