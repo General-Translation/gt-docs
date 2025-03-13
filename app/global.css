@@ -46,7 +46,6 @@
 #nd-sidebar {
   --color-fd-primary: hsl(270, 70%, 55%); /* Lighter purple background */
   --color-fd-accent: hsl(270, 70%, 95%); /* Same as primary for consistency */
-  --color-fd-accent-foreground: hsl(270, 70%, 55%); /* Darker purple text */
 }
 
 .dark #nd-sidebar {
@@ -59,11 +58,6 @@
     50%,
     25%
   ); /* Darkened from 35% to 25% for better contrast */
-  --color-fd-accent-foreground: hsl(
-    270,
-    100%,
-    85%
-  ); /* Slightly lighter purple text */
 }
 
 /* --------------- SHAD CN --------------- */
