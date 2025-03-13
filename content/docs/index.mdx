@@ -35,7 +35,8 @@ If you would like to use your own i18n library, but still want to use General Tr
 ```jsx title="Page.jsx" copy
 export default function Page() {
   return (
-    <T> // [!code highlight]
+    // [!code highlight]
+    <T>
       <p>You can write any JSX as children of the {"<T>"} component.</p>
       <p>
         For example, you could write a <a href="/">link</a> and have the text be
@@ -96,7 +97,8 @@ import { T } from "gt-next";
 
 export default function Page() {
   return (
-    <T> // [!code highlight]
+    // [!code highlight]
+    <T>
       <p>Any children of <b>the {`<T>`} component</b> will be translated.</p>
       <p>
         Things like <a href="/">links</a>{', '}
@@ -123,7 +125,8 @@ export default async function MyServerComponent() {
 
   return (
     <T>
-      Hello, <Var>{name}</Var>  // [!code highlight]
+      {/* [!code highlight] */}
+      Hello, <Var>{name}</Var>
     </T>
   );
 }
@@ -140,7 +143,8 @@ export default function MyClientComponent() {
 
   return (
     <T>
-      Hello, <Var>{name}</Var>  // [!code highlight]
+      {/* [!code highlight] */}
+      Hello, <Var>{name}</Var>
     </T>
   );
 }
@@ -156,7 +160,8 @@ import { T } from "gt-next";
 export default function Page() {
   return (
     <T>
-      <p>Hello, World!</p>  {/* translates <p>Hello, World!</p> */} // [!code highlight]
+      {/* [!code highlight] */}
+      <p>Hello, World!</p>  {/* translates <p>Hello, World!</p> */}
     </T>
   )
 }
@@ -167,14 +172,14 @@ Alternatively, if you prefer using the historic dictionary approach, you can wri
   <Tab value=".json">
   ```json title="dictionary.json" copy
   {
-    "greeting": "Hello, World!" // [!code highlight]
+    "greeting": "Hello, World!"
   }
   ```
   </Tab>
   <Tab value=".js">
   ```js title="dictionary.js" copy
   const dictionary = {
-    greeting: "Hello, World!" // [!code highlight]
+    greeting: "Hello, World!"
   }
   export default dictionary;
   ```
@@ -182,7 +187,7 @@ Alternatively, if you prefer using the historic dictionary approach, you can wri
   <Tab value=".ts">
   ```ts title="dictionary.ts" copy
   const dictionary = {
-    greeting: "Hello, World!" // [!code highlight]
+    greeting: "Hello, World!" 
   }
   export default dictionary;
   ```

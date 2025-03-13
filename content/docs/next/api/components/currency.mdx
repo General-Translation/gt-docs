@@ -78,12 +78,12 @@ All reformatting is handled locally using the [`Intl.NumberFormat`](https://deve
 The `<Currency>` component can be used to display localized currency values.
 
 ```jsx title="PriceDisplay.jsx" copy
-import { Currency } from 'gt-next'; // [!code highlight]
+import { Currency } from 'gt-next';
 
 export default function PriceDisplay(item) {
-    return (
-        <Currency> {item.price} </Currency> // [!code highlight]
-    );
+  return (
+    <Currency> {item.price} </Currency>
+  );
 }
 ```
 
@@ -95,7 +95,7 @@ import { Currency } from 'gt-next';
 
 export default function PriceDisplay(item) {
   return (
-    <Currency currency="EUR"> {item.price} </Currency> // [!code highlight]
+    <Currency currency="EUR"> {item.price} </Currency> 
   );
 }
 ```
@@ -109,7 +109,8 @@ import { T, Currency } from 'gt-next';
 
 export default function PriceDisplay(item) {
   return (
-    <T id="itemPrice"> // [!code highlight]
+    {/* [!code highlight] */}
+    <T id="itemPrice">
       The price is <Currency> {item.price} </Currency>.
     </T> // [!code highlight]
   );

@@ -1,7 +1,7 @@
 {
   "title": "CLI Tool",
   "pages": [
-    "introduction",
+    "index",
     "---Commands---",
     "init",
     "setup",

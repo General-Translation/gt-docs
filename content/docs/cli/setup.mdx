@@ -21,13 +21,14 @@ See the [scan](/docs/cli/scan) command for more details.
 
 
 ```jsx title="src/app/Home.js"
-import { T, Var } from 'gt-next'; // [!code highlight]
+import { T, Var } from 'gt-next';  // [!code highlight]
 
 export default function Home({ user }) {
   return (
     <div>
       <T id="app.home.0">
-        Hello, World! My name is <Var>{ user.name }</Var> // [!code highlight]
+        {/* [!code highlight] */}
+        Hello, World! My name is <Var>{ user.name }</Var>
       </T>
     </div>
   );

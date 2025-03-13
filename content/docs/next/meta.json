@@ -1,6 +1,7 @@
 {
   "title": "Next.js",
   "pages": [
+    "index",
     "---Key Concepts---",
     "reference/t-reference",
     "reference/dictionary-reference",
@@ -28,5 +29,7 @@
     "api/middleware",
     "api/helpers",
     "api/types"
-  ]
+  ],
+  "root": true,
+  "description": "Next.js Library"
 }

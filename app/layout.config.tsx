@@ -1,7 +1,7 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import Logo from '@/components/Logo';
 
-import { Earth, MessageSquareText } from 'lucide-react';
+import { Book, Earth, MessageSquareText } from 'lucide-react';
 
 /**
  * Shared layout configurations
@@ -26,6 +26,12 @@ export const baseOptions: BaseLayoutProps = {
       url: '/dashboard',
       active: 'nested-url',
       icon: <Earth />,
+    },
+    {
+      text: 'Docs',
+      url: '/docs',
+      icon: <Book />,
+      active: 'none',
     },
     {
       text: 'Blog',
