@@ -12,8 +12,7 @@
     "---Tutorials---",
     "tutorials/next-intl-quickstart",
     "tutorials/i18next-quickstart",
-    "tutorials/react-i18next-quickstart",
-    "tutorials/translate-json",
+    "tutorials/json",
     "---Reference---",
     "reference/usage",
     "reference/wrapping"

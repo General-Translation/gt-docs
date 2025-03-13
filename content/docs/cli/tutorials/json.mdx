@@ -1,5 +1,5 @@
 ---
-title: Translate JSON Files
+title: JSON Files
 description: How to use General Translation to set up automatic translation for your project's JSON files
 ---
 
@@ -7,19 +7,16 @@ description: How to use General Translation to set up automatic translation for 
 
 If you are using a 3rd party i18n library, [stand alone `gt-next`](/docs/next/reference/stand-alone), stand alone `gt-react`, or a custom i18n implementation, you can automatically update all of your translation JSON files every time your project changes.
 
-Just add the [`gtx-cli translate`](/docs/cli/translate#translate-json) command to your build or CD process before the build command to automatically add translations to your project.
+Just add the [`gtx-cli translate`](/docs/cli/translate#translate-json) command to your build or CI process before the build command to automatically add translations to your project.
 
 ```json title="package.json"
 {
   "scripts": {
-    "translate": "npx gtx-cli translate --translations-dir ./public/locales/* --default-locale en",
+    "translate": "npx gtx-cli translate",
     "build": "npm run translate && <your build command>"
   }
 }
 ```
- * `--translations-dir, -t` is the path to your translation JSON files. The `*` syntax is used to denote the locale code in the path: `./public/locales/en.json`
- * `--default-locale` denotes the file to read for generating translations.
-
 
 Then add your production API key and project ID to your environment variables.
 This is necessary to use the `gtx-cli` tool.
@@ -33,7 +30,7 @@ GT_PROJECT_ID=<your-project-id>
 
 <Callout type="info">
   **Note:**
-  We currently support variable syntax the following i18n libraries: [`next-intl`](/docs/cli/tutorials/next-intl-quickstart), [`react-i18next`](/docs/cli/tutorials/react-i18next-quickstart), [`i18next`](/docs/cli/tutorials/i18next-quickstart), `gt-next`, `gt-react`.
+  We currently support custom string syntax and formatting for the following i18n libraries: [`next-intl`](/docs/cli/tutorials/next-intl-quickstart), [`react-i18next`](/docs/cli/tutorials/react-i18next-quickstart), [`i18next`](/docs/cli/tutorials/i18next-quickstart), `gt-next`, `gt-react`.
   
   If you are using a different i18n library, the translate command will only work for plain strings.
   Don't see your favorite library? [Please let us know](https://github.com/General-Translation/gt-libraries/issues), and we will add it as soon as we can!

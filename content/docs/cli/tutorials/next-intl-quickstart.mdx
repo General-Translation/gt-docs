@@ -26,7 +26,7 @@ We will follow these three steps:
 
 <Callout>
   **Tip:**
-  Avoid using translation files with the [`<T>` component](/docs/usage/t).
+  Avoid the hassle of using translation files with the [`<T>` component](/docs/usage/t).
 </Callout>
 
 ---
@@ -60,12 +60,12 @@ npx gtx-cli init
 
 ## Step 4: `gtx-cli translate`
 
-Add the `gtx-cli translate` command to your build or CD process before the build command to automatically add translations to your project.
+Add the `gtx-cli translate` command to your build or CI process before the build command to automatically add translations to your project.
 
 ```json title="package.json"
 {
   "scripts": {
-    "translate": "npx gtx-cli translate --translations-dir ./public/locales/* --default-locale en",
+    "translate": "npx gtx-cli translate",
     "build": "npm run translate && <your build command>"
   }
 }

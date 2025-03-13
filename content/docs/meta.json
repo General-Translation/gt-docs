@@ -13,7 +13,7 @@
     "cli/tutorials/next-intl-quickstart",
     "cli/tutorials/i18next-quickstart",
     "cli/tutorials/react-i18next-quickstart",
-    "cli/tutorials/translate-json",
+    "cli/tutorials/json",
     "---Libraries---",
     "react",
     "next",
