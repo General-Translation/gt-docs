@@ -2,8 +2,12 @@
   "title": "Helpers",
   "pages": [
     "---Client---",
-    "./useDefaultLocale", "./useLocale",
+    "./useDefaultLocale",
+    "./useLocale",
+    "./useSetLocale",
+    "./useLocaleSelector",
     "---Server---",
-    "./getDefaultLocale", "./getLocale"
+    "./getDefaultLocale",
+    "./getLocale"
   ]
 }

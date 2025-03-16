@@ -9,6 +9,7 @@
     "./num",
     "./var",
     "./branch",
-    "./plural"
+    "./plural",
+    "./localeSelector"
   ]
 }
