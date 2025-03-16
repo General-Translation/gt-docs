@@ -85,32 +85,7 @@ export const config = {
 
 ### Step 3: Adding Supported Locales
 
-If you decide to use a specific set of locales, you can pass them as an argument to `createNextMiddleware()`.
-You should include `defaultLocale` and `locales` in both `middleware.js` and [`next.config.js`](/docs/next/reference/locale-management#include-locales).
-
-```js title="middleware.js" copy
-
-import { createNextMiddleware } from 'gt-next/middleware'
-
-export default createNextMiddleware({
-  defaultLocale: "en-US",
-  locales: ["en-US", "fr", "es", "de", "ja"]
-});
-
-export const config = {
-  matcher: [
-    /*
-      * Match all request paths except for the ones starting with:
-      * - api (API routes)
-      * - _next (internal files)
-      * - static files
-      */
-    "/((?!api|static|.*\\..*|_next).*)",
-  ],
-}
-```
-
-Make sure to also pass these to your configuration in `next.config.js`.
+Make sure to pass the locales you want the middleware to support to your configuration in `next.config.js`.
 
 ```js title="next.config.js" copy
 import { withGTConfig } from 'gt-next/config'
@@ -124,7 +99,6 @@ export default withGT({});
 ```
 
 For more in depth how to guide see [Locale Management](/docs/next/reference/locale-management).
-
 
 ## Notes
  * i18n routing changes the URL structure of your application. Each language has its own URL.
