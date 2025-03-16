@@ -8,13 +8,13 @@ description: Automatically translate your i18next project (<5 min)
 This tutorial will show you how to automatically manage your project's translation files in [`i18next`](https://i18next.com/).
 
 
-We will follow these three steps:
+We will follow these 4 steps:
 <Steps>
   <Step>
     Add your environment variables
   </Step>
   <Step>
-    Install [`gtx-cli`](/docs/cli/introduction)
+    Install [`gtx-cli`](/docs/cli)
   </Step>
   <Step>
     Initialize your project with the [`gtx-cli init`](/docs/cli/init) command
@@ -46,9 +46,29 @@ GT_PROJECT_ID=<your-project-id>
 
 Install the `gtx-cli` tool in your project.
 
-```bash
-npm install gtx-cli
-```
+<Tabs items={['npm', 'yarn', 'bun', 'pnpm']}>
+  <Tab value="npm">
+  ```bash 
+  npm i --save-dev gtx-cli
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add --dev gtx-cli
+  ```
+  </Tab>
+
+  <Tab value="bun">
+  ```bash 
+  bun add --dev gtx-cli
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add --save-dev gtx-cli
+  ```
+  </Tab>
+</Tabs>
 
 ## Step 3: Add the `gtx-cli translate` command to your build process
 
@@ -76,5 +96,4 @@ You're done! Now your project will automatically update all of your translation 
 
 ## Next steps
  * See the [usage guide](/docs/cli/reference/usage) for the cli tool.
- * Check out tutorials for [`react-i18next`](/docs/cli/tutorials/react-i18next-quickstart) or [`next-intl`](/docs/cli/tutorials/next-intl-quickstart).
  * If you want to see live translations in development (think hot reload), check out the [`<T>` component](/docs/usage/t).

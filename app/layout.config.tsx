@@ -2,7 +2,7 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import Logo from '@/components/Logo';
 
 import { Earth, MessageSquareText } from 'lucide-react';
-
+import Image from 'next/image';
 /**
  * Shared layout configurations
  *
@@ -32,6 +32,14 @@ export const baseOptions: BaseLayoutProps = {
       url: '/blog',
       active: 'nested-url',
       icon: <MessageSquareText />,
+    },
+    {
+      text: 'Discord',
+      url: 'https://discord.gg/W99K6fchSu',
+      active: 'nested-url',
+      icon: (
+        <Image src="logos/discord.svg" alt="Discord" width={16} height={16} />
+      ),
     },
   ],
   githubUrl: 'https://github.com/General-Translation/gt-libraries',
