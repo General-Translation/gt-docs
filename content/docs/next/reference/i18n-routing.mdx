@@ -90,12 +90,12 @@ Make sure to pass the locales you want the middleware to support to your configu
 ```js title="next.config.js" copy
 import { withGTConfig } from 'gt-next/config'
 
-const withGT = withGTConfig({
+const nextConfig = {};
+
+export default withGTConfig(nextConfig, {
   defaultLocale: "en-US",
   locales: ["en-US", "fr", "es", "de", "ja"]
 });
-
-export default withGT({});
 ```
 
 For more in depth how to guide see [Locale Management](/docs/next/reference/locale-management).

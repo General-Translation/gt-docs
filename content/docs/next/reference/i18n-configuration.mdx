@@ -86,12 +86,11 @@ import { withGTConfig } from 'gt-next/config'
 
 const nextConfig = {}
 
-const withGT = withGTConfig(nextConfig, {
+export default withGTConfig(nextConfig, {
   defaultLocale: "en-US",
   locales: ["en-US", "zh", "jp"]
 });
 
-export default withGT({});
 ```
 
 To see a list of supported locales, refer to the [Supported Locales](/docs/reference/supported-locales).
@@ -105,12 +104,12 @@ You can specify custom behavior for determining the user's locale by creating a 
 ```js title="myapp/next.config.mjs" copy
 import { withGTConfig } from 'gt-next/config'
 
-const withGT = withGTConfig({
+const nextConfig = {};
+
+export default withGTConfig(nextConfig, {
   defaultLocale: "en-US", // the default language of your app, usually "en" or "en-US"
   i18n: "./i18n.js"
 });
-
-export default withGT({});
 ```
 
 
@@ -133,7 +132,9 @@ We will route all your translations to your preferred LLM provider, but if your 
 ```js title="next.config.mjs" copy
 import { withGTConfig } from 'gt-next/config'
 
-const withGT = withGTConfig({
+const nextConfig = {};
+
+export default withGTConfig(nextConfig, {
   defaultLocale: "en-US",
   preferredModelProvider: "anthropic"
 });
