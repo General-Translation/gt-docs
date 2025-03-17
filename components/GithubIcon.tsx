@@ -1,9 +1,9 @@
 'use client';
 
-import { useTheme } from 'next-themes';
+//import { useTheme } from 'next-themes';
 
 export function GitHubIcon() {
-  const { resolvedTheme } = useTheme();
+  //const { resolvedTheme } = useTheme();
 
   return (
     <img
@@ -11,7 +11,6 @@ export function GitHubIcon() {
       width={20}
       height={20}
       alt="GitHub"
-      className={resolvedTheme === 'dark' ? 'invert' : ''}
     />
   );
 }
