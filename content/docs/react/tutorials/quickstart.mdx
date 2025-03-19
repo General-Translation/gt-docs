@@ -219,12 +219,12 @@ Congratulations! 🥳 Your app is now multilingual! Let's see it in action.
 
 <Steps>
   <Step>
-    Start by changing your preferred browser's language settings. This will
-    change which language is displayed. 
-    * Change your language in [Chrome](https://support.google.com/chrome/answer/173424) 
-    * Change your language in [Firefox](https://support.mozilla.org/en-US/kb/use-firefox-another-language)
-    * Change your language in [Edge](https://support.microsoft.com/en-us/microsoft-edge/use-microsoft-edge-in-another-language-4da8b5e0-11ce-7ea4-81d7-4e332eec551f)
-    {/* TODO: safari */}
+    Add the [`<LocaleSelector>`](/docs/react/api/components/locale-selector) component to your app.
+    This will allow you to select a different language for your app.
+    <Callout>
+      **Tip:**
+      You can also change your language in your browser settings.
+    </Callout>
   </Step>
   <Step>
     Start your React app in development mode.
@@ -253,9 +253,7 @@ Congratulations! 🥳 Your app is now multilingual! Let's see it in action.
   </Step>
   <Step>
     Open up your app in your preferred browser (usually at
-    [http://localhost:3000](http://localhost:3000)). *If you want to switch
-    languages, just select a different language in your browser settings and
-    refresh the page.*
+    [http://localhost:3000](http://localhost:3000)).
   </Step>
 </Steps>
 
@@ -264,6 +262,8 @@ Congratulations! 🥳 Your app is now multilingual! Let's see it in action.
 <Accordions>
   <Accordion title="My app's language is not changing, even though I've changed my browser's language.">
     **Browser Cookies**
+
+    If you are deciding to test different languages by changing your browser's language, this issue may occur.
 
     Check your browser's cookies for your app.
     General translation uses cookies to store the user's language preference.
@@ -276,6 +276,8 @@ Congratulations! 🥳 Your app is now multilingual! Let's see it in action.
     * [Firefox](https://support.mozilla.org/en-US/kb/delete-cookies-remove-info-websites-stored)
     * [Safari](https://support.apple.com/en-mn/guide/safari/sfri11471/16.0/mac/11.0)
     * [Edge](https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09)
+
+    If this does not work, make sure that the list of locales in your [`<GTProvider>`](/docs/react/api/components/gtprovider) is up to date.
   </Accordion>
   <Accordion title="Why do new languages take a long time to load?">
     **On-Demand Translation**
