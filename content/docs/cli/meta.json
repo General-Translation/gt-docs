@@ -16,6 +16,7 @@
     "tutorials/i18next-quickstart",
     "tutorials/json",
     "---Reference---",
+    "reference/config",
     "reference/usage",
     "reference/wrapping"
   ],
