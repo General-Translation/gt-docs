@@ -37,66 +37,66 @@ This command is the primary way of using the General Translation API and related
 
 There are four ways to use the `translate` command. Methods 2, 3, and 4 require a production API key:
 
-The behavior of the command is controlled by the flags. See the [flags](#flags) section for more details.
-
-
-### Method 1: Validate your project's `<T>` components and dictionary file.
-
-This method is useful for validating your project's `<T>` components and dictionary file.
-
-This ensures that your project is correctly configured and that the translations will be valid and accurate.
-
-```bash
-npx gtx-cli translate --dry-run
-```
-
-### Method 2: Translate your project and save the translations on the GT CDN.
-
-This method allows you to translate your project using General Translation's services and automatically saves the translations on the GT CDN.
-
-```bash
-npx gtx-cli translate
-```
 <Callout type="info">
-    This is the recommended method for most projects.
+    We recommend running [`npx gtx-cli init`](/docs/cli/init) to first configure your project before running the `translate` command.
+    Depending on how your project is configured, the behavior of the translate command may change.
 </Callout>
 
-### Method 3: Translate your project and save the translations to your codebase.
 
-This method allows you to translate your project and save the translations to your codebase.
-
-`gt-next` and `gt-react` can then serve these local translations to your users, rather than using General Translation's public CDN.
-
-```bash
-npx gtx-cli translate --no-publish -t <path>
-```
-
-<Callout type="info">
-    This method is useful if you are using a custom CMS, or do not want to use the GT CDN.
-</Callout>
-
-### Method 4: Translate your project's JSON files. [#translate-json]
+### Method 1: Translate your project's JSON files. [#translate-json]
 
 If you are using other i18n libraries such as `next-intl`, `react-i18next`, or `next-i18next`, you can use this method to translate your project's JSON files.
 
 Translations will be automatically saved to your codebase, as well as optionally published to the GT CDN.
 
-```bash
-npx gtx-cli translate -t <path> --default-locale <locale>
-```
+When running [`npx gtx-cli init`](/docs/cli/init), specify that you are using a 3rd party i18n library before running the `translate` command.
 
-The path passed to the `-t` flag should be the path to the JSON files you want to translate, containing a wildcard (`*`) for the locale.
-
-For example, if your project's locale files are stored in the `public/locales` directory, you can translate them by running:
+See the [CLI config docs](/docs/cli/reference/config) for more details.
 
 ```bash
-npx gtx-cli translate -t ./public/locales/*.json --default-locale en
+npx gtx-cli translate
 ```
-You can
-
 <Callout type="info">
-    Make sure to have a production API key and project ID set in your environment variables as `GT_API_KEY` and `GT_PROJECT_ID`.
+    The CLI tool will automatically detect your i18n library by reading your `package.json` file, and will translate your content while respecting your i18n library's syntax.
 </Callout>
+
+### Method 2: Translate your project and save the translations on the GT CDN.
+
+If you are using `gt-next` or `gt-react`, you can use this method to translate your project.
+
+When running [`npx gtx-cli init`](/docs/cli/init), if you select the option to save translations remotely, the `translate` command will save the translations on the GT CDN.
+
+```bash
+npx gtx-cli translate
+```
+
+### Method 3: Translate your project and save the translations to your codebase.
+
+When running [`npx gtx-cli init`](/docs/cli/init), if you select the option to save translations locally, the `translate` command will save the translations to your codebase.
+
+`gt-next` and `gt-react` can then serve these local translations to your users, rather than using General Translation's public CDN.
+
+```bash
+npx gtx-cli translate
+```
+<Callout type="info">
+    This method is useful if you are using a custom content management system, or do not want to use the GT CDN.
+</Callout>
+
+### Method 4: Validate your project's `<T>` components and dictionary file. [#validate]
+
+This method is useful for validating your project's `<T>` components and dictionary file.
+
+This ensures that your project is correctly configured and that the translations will be valid and accurate.
+
+No translations will be generated if the `--dry-run` flag is provided.
+
+```bash
+npx gtx-cli translate --dry-run
+```
+
+
+
 
 ---
 
@@ -118,8 +118,7 @@ You can
 | `--ignore-errors` | Ignore errors and force translation for valid content       | `flag` | `true`     | `false`           |
 | `--dry-run`       | Dry run the command                                         | `flag` | `true`     | `false`           |
 | `--no-wait`       | Do not wait for the translations to complete before exiting | `flag` | `true`     | `false`           |
-| `--no-publish`    | Do not publish the translations to the CDN                  | `flag` | `true`     | `false`           |
-| `-t, --translations-dir <path>`    | The directory to save the translations to  | `string`  | `true`     |            |
+| `--publish`    | Publish the translations to the CDN                  | `flag` | `true`     | `false`           |
 
 All of these parameters are optional and can be alternatively provided in the `gt.config.json` file.
 
@@ -135,8 +134,7 @@ There are a few key parameters:
 | `--dry-run` | This flag will cause the CLI to parse and validate your project, but will not communicate with the GT API. This is useful for validating your codebase.
 | `--api-key` | Unless you are using `--dry-run`, you must provide a production API key.
 | `--project-id` | Similarly, unless you are using `--dry-run`, you must provide a project ID.
-| `-t, --translations-dir` | The directory to save the translations to. You should provide this if you would like to use local translations, and want to save them to your codebase.
-| `--no-publish` | Similarly, if you are using local translations, and do not want to make your translations publicly available on the GT CDN, you can use this flag.
+| `--publish` | If you are using local translations, and want to make your translations publicly available on the GT CDN, you can use this flag.
 | `--new, --locales <locales>` | Locales to translate your project into. These will be appended to the locales specified in your `gt.config.json` file.
 
 ### Configuration file
@@ -144,4 +142,4 @@ There are a few key parameters:
 When running the CLI tool for the first time, it will attempt to create a `gt.config.json` file in the root of your project.
 This file contains metadata about your project that is used to translate your content.
 
-Read more about the `gt.config.json` file [here](/docs/next/reference/gt-config).
+Read more about the `gt.config.json` file [here](/docs/cli/reference/config).
