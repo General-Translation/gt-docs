@@ -1,0 +1,298 @@
+---
+title: 介绍
+description: General Translation本地化库的文档
+---
+
+## 入门指南
+我们为许多流行的React框架提供了快速入门指南。
+<AllLogoCards />
+
+## 什么是General Translation？
+
+General Translation是一个完整的国际化（i18n）技术栈，让您能够快速轻松地发布多语言应用。
+
+General Translation包括以下内容：
+
+- 面向React和Next.js的开源开发者库
+- AI翻译服务
+- 用于提供翻译内容的完整基础设施包
+
+如果您想将GT库与自己的翻译提供商一起使用，请查看我们的[独立模式](/docs/reference/standalone)文档。
+
+如果您想使用自己的i18n库，但仍想使用General Translation的AI翻译服务，请查看我们的[CLI工具](/docs/cli/tutorials/quickstart)文档。
+
+## 特性
+
+### ⚛️ 内联翻译整个React组件
+- 只需一个开始和结束的`<T>`组件就能翻译整个React组件。
+  - 无需复杂的重构或混乱的函数调用。
+- 内容是内联的，与您的代码位于同一位置。
+  - 不需要键、字符串或额外的文件！
+- 该库在后台管理所有i18n逻辑，您无需操心。
+- 翻译始终与您的源代码保持同步。
+- 翻译包含内容的上下文信息，因此更加准确。
+
+```jsx title="Page.jsx" copy
+export default function Page() {
+  return (
+    // [!code highlight]
+    <T>
+      <p>You can write any JSX as children of the {"<T>"} component.</p>
+      <p>
+        For example, you could write a <a href="/">link</a> and have the text be
+        translated in context.
+      </p>
+      <div>
+        <div>
+          <p>Even deeply nested components are translated in context.</p>
+          <button>Click me!</button>
+        </div>
+      </div>
+    </T> // [!code highlight]
+  );
+}
+```
+
+### 🔎 与现有库功能对等
+- GT库还支持与现有库（如`i18next`、`react-intl`和`next-intl`）相同的功能。
+- 支持字典、复数形式、货币和自动路由等功能。
+
+### 🧠 免费的AI驱动翻译服务
+- 我们免费的AI驱动翻译服务让您能够在几秒钟内为应用创建翻译。
+- **翻译热重载**将在您编写翻译时自动更新您的翻译。
+- HTML内容会根据语言进行重新排列和定制。
+
+### 🔧 对开发者友好
+- 设置简单，几分钟内即可完成。
+- 所有GT库都是开源的，可独立工作。
+  - 您可以使用自己的翻译提供商或使用我们免费的AI驱动翻译服务。
+- 不再浪费时间管理像`t('menu.header.title')`这样的翻译键。
+  - 只需内联编写所有内容！
+
+查看我们的[Github仓库](https://github.com/General-Translation/gt-libraries)获取源代码和一些示例项目。
+
+
+<Callout>
+  这些文档正在建设中。如果您找不到所需内容，请在我们的[GitHub仓库](https://github.com/General-Translation/gt-docs/issues)
+  创建一个问题。
+</Callout>
+---
+
+## 为什么选择General Translation？
+
+**General Translation是一个完整的i18n技术栈**，包括开发者库、AI翻译和多语言应用的完整基础设施包。
+
+您可以将我们的库与自己的翻译提供商混合搭配，或者将我们免费的AI驱动翻译服务与您自己的i18n库一起使用。
+
+为了获得无缝的端到端i18n体验，我们建议将我们的库与我们的翻译服务一起使用。
+
+使用GT库（如`gt-react`和`gt-next`），您可以：
+
+### 1. 翻译整个React组件，而不仅仅是字符串
+
+作为`<T>`组件子元素传递的UI将被翻译，无论JSX树有多复杂。例如：
+
+```javascript title="page.jsx"
+import { T } from "gt-next";
+
+export default function Page() {
+  return (
+    // [!code highlight]
+    <T>
+      <p>Any children of <b>the {`<T>`} component</b> will be translated.</p>
+      <p>
+        Things like <a href="/">links</a>{', '}
+        <button>buttons</button>{', '}
+        and even <div> <div> <div> deeply nested components </div> </div> </div>  are translated.
+      </p>
+    </T> // [!code highlight]
+  );
+}
+```
+
+### 2. 同时翻译客户端和服务器组件
+
+通过对Next.js [App Router](https://nextjs.org/docs/app)和
+[React Server Components](https://react.dev/reference/rsc/server-components)的一流支持，
+你可以同时翻译客户端和服务器组件。
+
+```jsx title="src/components/MyServerComponent.jsx" copy
+import getName from "@/getName";
+import { T, Var } from "gt-next";
+
+export default async function MyServerComponent() {
+  const name = await getName();
+
+  return (
+    <T>
+      {/* [!code highlight] */}
+      Hello, <Var>{name}</Var>
+    </T>
+  );
+}
+```
+
+```jsx title="src/components/MyClientComponent.jsx" copy
+"use client";
+
+import { useState } from "react";
+import { T, Var } from "gt-next";
+
+export default function MyClientComponent() {
+  const [name, setName] = useState("Alice");
+
+  return (
+    <T>
+      {/* [!code highlight] */}
+      Hello, <Var>{name}</Var>
+    </T>
+  );
+}
+```
+
+### 3. 内联或在字典中编写内容
+
+放置在`<T>`组件内的JSX内容被标记为需要翻译：
+
+```jsx title="Page.jsx" copy
+import { T } from "gt-next";
+
+export default function Page() {
+  return (
+    <T>
+      {/* [!code highlight] */}
+      <p>Hello, World!</p>  {/* translates <p>Hello, World!</p> */}
+    </T>
+  )
+}
+```
+
+或者，如果你更喜欢使用传统的字典方法，你可以在字典文件中编写内容：
+<Tabs items={['.json', '.js', '.ts']}>
+  <Tab value=".json">
+  ```json title="dictionary.json" copy
+  {
+    "greeting": "Hello, World!"
+  }
+  ```
+  </Tab>
+  <Tab value=".js">
+  ```js title="dictionary.js" copy
+  const dictionary = {
+    greeting: "Hello, World!"
+  }
+  export default dictionary;
+  ```
+  </Tab>
+  <Tab value=".ts">
+  ```ts title="dictionary.ts" copy
+  const dictionary = {
+    greeting: "Hello, World!" 
+  }
+  export default dictionary;
+  ```
+  </Tab>
+</Tabs>
+```jsx title="page.jsx" copy
+import { useDict } from "gt-next";
+
+export default function Page() {
+  const d = useDict();
+  return d('greeting'); // translates "Hello, World!" // [!code highlight]
+}
+```
+
+### 4. 在开发中查看翻译内容
+
+无需担心UI在不同语言中的外观，
+**General Translation将在你编写内容时实时自动翻译。**
+
+不必在生产环境中多次修改你的UI，
+只需用英语编写内容**一次**，然后让General Translation处理剩下的工作。
+
+需要在部署前查看你的UI元素在德语中的样子？没问题，General Translation会自动为你翻译它们！
+
+### 5. 按需翻译内容
+
+应用程序通常需要翻译仅在运行时才知道的内容。
+对于Next.js，GT库支持按需翻译内容的能力。
+
+一些常见的例子包括：
+ - 用户特定信息
+ - 远程存储的内容
+ - 动态生成的内容
+
+一旦加载了翻译，它将实时用新的翻译内容重写你的组件。
+
+
+## 开始使用
+
+
+<Tabs items={['Next.js', 'React']}>
+  <Tab value="Next.js">
+  遵循[快速入门](/docs/next/tutorials/quickstart)指南来发布您的首个翻译。
+    <Tabs items={['npm', 'yarn', 'bun', 'pnpm']}>
+      <Tab value="npm">
+      ```bash 
+      npm i gt-next
+      ``` 
+      </Tab>
+      <Tab value="yarn">
+      ```bash 
+      yarn add gt-next
+      ```
+      </Tab>
+
+      <Tab value="bun">
+      ```bash 
+      bun add gt-next
+      ```
+      </Tab>
+
+      <Tab value="pnpm">
+      ```bash 
+      pnpm add gt-next
+      ```
+      </Tab>
+    </Tabs>
+  </Tab>
+  <Tab value="React">
+  遵循[快速入门](/docs/react/tutorials/quickstart)指南来发布您的首个翻译。
+    <Tabs items={['npm', 'yarn', 'bun', 'pnpm']}>
+      <Tab value="npm">
+      ```bash 
+      npm i gt-react
+      ``` 
+      </Tab>
+      <Tab value="yarn">
+      ```bash 
+      yarn add gt-react
+      ```
+      </Tab>
+
+      <Tab value="bun">
+      ```bash 
+      bun add gt-react
+      ```
+      </Tab>
+      <Tab value="pnpm">
+      ```bash 
+      pnpm add gt-react
+      ```
+      </Tab>
+    </Tabs>
+  </Tab>
+</Tabs>
+
+准备走向全球？几分钟内开始翻译您的应用并触达全球用户！
+
+<Cards>
+  <Card
+    title="Next.js 快速入门"
+    href="/docs/next/tutorials/quickstart"
+  />
+  <Card
+    title="React 快速入门"
+    href="/docs/react/tutorials/quickstart"
+  />
+</Cards>

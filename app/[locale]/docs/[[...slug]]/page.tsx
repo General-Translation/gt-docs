@@ -29,6 +29,7 @@ import {
   AllLogoCards,
 } from '@/components/ui/logocard';
 import SupportedLocales from '@/components/SupportedLocales';
+import { getLocale } from 'gt-next/server';
 
 const customMdxComponents = {
   a: (props: React.ComponentProps<'a'>) => (
@@ -48,7 +49,8 @@ export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
 }) {
   const params = await props.params;
-  const page = source.getPage(params.slug);
+  const locale = await getLocale();
+  const page = source.getPage(params.slug, locale);
   if (!page) notFound();
 
   const MDX = page.data.body;
@@ -101,7 +103,8 @@ export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>;
 }) {
   const params = await props.params;
-  const page = source.getPage(params.slug);
+  const locale = await getLocale();
+  const page = source.getPage(params.slug, locale);
   if (!page) notFound();
 
   return {

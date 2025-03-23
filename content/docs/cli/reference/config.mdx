@@ -22,7 +22,8 @@ Here is an example of the `files` object:
 ```json title="gt.config.json"
 "files": {
   "json": {
-    "include": ["path/to/your/[locale].json"],
+    "include": ["path/to/include/[locale].json"],
+    "exclude": ["path/to/exclude/[locale].json"]
   }
 }
 ```
@@ -39,6 +40,8 @@ The CLI tool will replace the `[locale]` placeholder with the `defaultLocale` va
 
 It will save translated files to the corresponding path, with the `[locale]` placeholder replaced with the locale code.
 
+Optionally, you can also include an `exclude` key. The value of the `exclude` key should be an array of glob patterns that match the files you want to exclude from translation.
+
 ---
 
 Here is an example of the `gt.config.json` file:
@@ -49,13 +52,16 @@ Here is an example of the `gt.config.json` file:
   "locales": ["fr", "es"],
   "files": {
     "json": {
-      "include": ["path/to/your/[locale].json"]
+      "include": ["path/to/include/[locale].json"],
+      "exclude": ["path/to/exclude/[locale].json"]
     }
   }
 }
 ```
 
-With this configuration, the CLI will search for the file at `path/to/your/en.json` and save the translated files to `path/to/your/fr.json` and `path/to/your/es.json`.
+With this configuration, the CLI will search for the file at `path/to/include/en.json` and save the translated files to `path/to/include/fr.json` and `path/to/your/es.json`.
+
+It will ignore any files that match the glob pattern `path/to/exclude/[locale].json`.
 
 <Callout type="info">
 
