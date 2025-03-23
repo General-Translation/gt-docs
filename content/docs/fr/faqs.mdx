@@ -1,0 +1,86 @@
+---
+title: FAQs
+---
+## FAQs techniques
+
+### D'où le `<T>` obtient-il ses traductions ? Quelles traductions utilise-t-il ?
+
+`<T>` peut techniquement charger des traductions de n'importe où selon la façon dont vous avez configuré la bibliothèque. 
+Si vous avez un ID de projet, la bibliothèque peut accéder à un CDN gratuit. 
+Elle peut également stocker des traductions localement, ou faire un mélange des deux. 
+Consultez la [documentation load-translations](/docs/next/api/config/load-translations#fetching-translations-from-your-bundle) pour plus de détails.
+
+Pendant le développement, pour que vous puissiez voir les traductions se recharger instantanément lorsque vous modifiez le contenu, le composant `<T>` fait appel à une API qui utilise un petit modèle d'IA pour créer des traductions temporaires. Ces traductions ne sont stockées nulle part, elles sont simplement renvoyées à l'application.
+
+En production, `<T>` ne fera pas cela afin de ne pas divulguer vos clés API.
+
+### Pourquoi dois-je installer l'outil CLI ?
+
+L'outil CLI analyse le contenu à l'intérieur de tous les composants `<T>` et génère des traductions pour ce contenu à l'avance, 
+afin que toutes les traductions soient prêtes lorsque votre application est déployée en production. 
+En développement, vous n'en avez pas besoin car vous pouvez utiliser des clés API de développement pour traduire à la demande.
+
+
+### Y a-t-il un repli automatique pour les traductions manquantes en production ?
+
+Oui, si en production, une traduction pour un certain contenu est manquante, la bibliothèque reviendra automatiquement au texte source original.
+
+### La traduction par IA fonctionne-t-elle également avec du contenu dynamique et des variables ?
+
+Le composant `<T>` ne prend pas en charge la traduction de contenu dynamique et de variables, 
+car cela signifie que les traductions pourraient potentiellement changer à chaque re-rendu. 
+Cependant, vous pouvez toujours inclure du contenu dynamique et des variables à l'intérieur d'un `<T>` en les enveloppant avec 
+les composants `<Var>`, `<Datetime>`, `<Currency>`. 
+C'est similaire à la façon dont d'autres bibliothèques font l'interpolation de chaînes.
+
+Pour gt-next, il existe également un composant côté serveur `<Tx>` qui effectue réellement des traductions sur place en production, 
+et prend en charge toute forme de contenu dynamique, mais il nécessite une clé API.
+
+### Comment fonctionne le système hors ligne ? Puis-je déployer une application avec GT sans dépendance à vos serveurs ?
+
+Oui, vous le pouvez, mais vous devriez faire les traductions vous-même, 
+puis les charger soit depuis votre propre bundle, soit depuis votre propre CDN. 
+Consultez notre documentation à ce sujet : [ici](/docs/next/api/config/load-translations#fetching-translations-from-your-bundle).
+
+## FAQs commerciales
+
+### Suis-je propriétaire de mes traductions ?
+
+**Oui.** 
+
+> Vous, le client, conservez la pleine propriété et les droits sur toute sortie traduite produite par les Services. Nous ne revendiquons aucun droit sur votre production.
+
+Pour plus d'informations, consultez nos [Conditions d'utilisation](https://generaltranslation.com/terms).
+
+## FAQs générales
+
+### Que sont les tokens ?
+
+Lorsque du texte est envoyé aux API [GT](https://www.generaltranslation.com), il est décomposé en morceaux appelés *tokens*.
+Considérez les tokens comme de petites parties de votre texte d'entrée, comme des mots ou des parties de mots, qu'un modèle d'IA utilise pour comprendre et traduire votre contenu.
+
+> Une règle empirique utile est qu'un token correspond généralement à environ 4 caractères de texte pour le texte anglais courant. Cela équivaut à peu près à ¾ d'un mot (donc 100 tokens ~= 75 mots).
+
+Par exemple, la chaîne `Hello, world!` a 13 caractères et 4 tokens : `Hello`, `,`, ` world`, et `!`.
+
+Si vous dépassez la limite de tokens pour votre forfait, nous commençons à facturer en fonction de l'utilisation des tokens. 
+Nous facturons uniquement en fonction de la longueur de votre entrée — jamais en fonction de la longueur de la traduction.
+En savoir plus sur nos forfaits disponibles [ici](https://generaltranslation.com/pricing).
+
+Par exemple, imaginez que vous avez la chaîne `"Hello, world!"`, et les langues de votre projet sont `"fr"` (français), `"es"` (espagnol), et "`de"` (allemand).
+L'utilisation des tokens sera calculée comme `4 * 3 = 12`. C'est-à-dire, les 4 tokens de `"Hello, world!"`, traduits 3 fois.
+
+Nous tokenisons actuellement avec `tiktoken` d'OpenAI, qui est le même tokenizer utilisé par [GPT-4](https://openai.com/index/gpt-4/). Vous pouvez explorer ce tokenizer [ici](https://platform.openai.com/tokenizer).
+
+### Locales ? Langues ? Régions ? Quelle est la différence ?
+
+Tout au long de cette documentation, vous nous verrez utiliser les termes *locale* et *langue* de manière quelque peu interchangeable.
+Pour la plupart, ils signifient effectivement la même chose, mais il existe quelques différences subtiles, et celles-ci seront clarifiées lorsque nécessaire.
+
+*Langue* fait référence à une forme de communication parlée ou écrite utilisée par les humains.
+
+*Région* fait référence à la zone où une langue est parlée ou écrite. Bien sûr, la langue peut rester la même, mais varier selon les régions. Par exemple, le français canadien par rapport au français parlé en France.
+
+*Locale* est une combinaison d'une langue et d'une région, et est utilisée pour spécifier une langue particulière dans une région particulière. Par exemple, `en-US` est l'anglais tel qu'il est parlé aux États-Unis.
+
+Ces différences sont détaillées plus en détail dans notre documentation sur les [Chaînes de locale](/docs/reference/locale-strings).

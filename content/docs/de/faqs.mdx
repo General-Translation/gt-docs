@@ -1,0 +1,86 @@
+---
+title: FAQs
+---
+## Technische FAQs
+
+### Woher bezieht `<T>` seine Übersetzungen? Welche Übersetzungen werden verwendet?
+
+`<T>` kann technisch gesehen Übersetzungen von überall laden, abhängig davon, wie Sie die Bibliothek konfiguriert haben. 
+Wenn Sie eine Projekt-ID haben, kann die Bibliothek auf ein kostenloses CDN zugreifen. 
+Sie kann auch Übersetzungen lokal speichern oder eine Mischung aus beidem verwenden. 
+Weitere Details finden Sie in der [load-translations Dokumentation](/docs/next/api/config/load-translations#fetching-translations-from-your-bundle).
+
+Während der Entwicklung, damit Sie sehen können, wie die Übersetzungen bei Inhaltsänderungen neu geladen werden, greift die `<T>`-Komponente auf eine API zu, die ein kleines KI-Modell verwendet, um temporäre Übersetzungen zu erstellen. Diese Übersetzungen werden nirgendwo gespeichert, sie werden einfach an die App zurückgesendet.
+
+In der Produktionsumgebung wird `<T>` dies nicht tun, um Ihre API-Schlüssel nicht preiszugeben.
+
+### Warum muss ich das CLI-Tool installieren?
+
+Das CLI-Tool analysiert den Inhalt aller `<T>`-Komponenten und generiert im Voraus Übersetzungen für diesen Inhalt, 
+damit alle Übersetzungen bereit sind, wenn Ihre App in der Produktionsumgebung bereitgestellt wird. 
+In der Entwicklungsumgebung benötigen Sie es nicht, da Sie Entwicklungs-API-Schlüssel verwenden können, um bei Bedarf zu übersetzen.
+
+
+### Gibt es einen automatischen Fallback für fehlende Übersetzungen in der Produktionsumgebung?
+
+Ja, wenn in der Produktionsumgebung eine Übersetzung für einen bestimmten Inhalt fehlt, wird die Bibliothek automatisch auf den ursprünglichen Quelltext zurückgreifen.
+
+### Funktioniert die KI-Übersetzung auch mit dynamischen Inhalten und Variablen?
+
+Die `<T>`-Komponente unterstützt nicht die Übersetzung von dynamischen Inhalten und Variablen, 
+da dies bedeuten würde, dass sich die Übersetzungen potenziell bei jedem Neurendern ändern könnten. 
+Sie können jedoch weiterhin dynamische Inhalte und Variablen innerhalb eines `<T>` einfügen, indem Sie sie mit 
+`<Var>`, `<Datetime>`, `<Currency>`-Komponenten umschließen. 
+Dies ähnelt der String-Interpolation in anderen Bibliotheken.
+
+Für gt-next gibt es auch eine serverseitige `<Tx>`-Komponente, die tatsächlich Übersetzungen in der Produktionsumgebung direkt durchführt 
+und jede Form von dynamischem Inhalt unterstützt, aber sie erfordert einen API-Schlüssel.
+
+### Wie funktioniert das Offline-System? Kann ich eine Anwendung mit GT ohne Abhängigkeit von Ihren Servern bereitstellen?
+
+Ja, das können Sie, aber Sie müssten die Übersetzungen selbst erstellen 
+und sie dann entweder aus Ihrem eigenen Bundle oder Ihrem eigenen CDN laden. 
+Sehen Sie sich unsere Dokumentation dazu an: [hier](/docs/next/api/config/load-translations#fetching-translations-from-your-bundle).
+
+## Geschäftliche FAQs
+
+### Besitze ich meine Übersetzungen?
+
+**Ja.** 
+
+> Sie als Kunde behalten das volle Eigentum und alle Rechte an allen übersetzten Inhalten, die durch die Dienste erstellt werden. Wir erheben keinen Anspruch auf Ihre Ausgaben.
+
+Weitere Informationen finden Sie in unseren [Nutzungsbedingungen](https://generaltranslation.com/terms).
+
+## Allgemeine FAQs
+
+### Was sind Tokens?
+
+Wenn Text an [GT](https://www.generaltranslation.com) APIs gesendet wird, wird er in Stücke zerlegt, die als *Tokens* bezeichnet werden.
+Stellen Sie sich Tokens als kleine Teile Ihres Eingabetextes vor, wie Wörter oder Teile von Wörtern, die ein KI-Modell verwendet, um Ihren Inhalt zu verstehen und zu übersetzen.
+
+> Eine hilfreiche Faustregel ist, dass ein Token im Allgemeinen etwa 4 Zeichen Text für gewöhnlichen englischen Text entspricht. Dies entspricht ungefähr ¾ eines Wortes (also 100 Tokens ~= 75 Wörter).
+
+Zum Beispiel hat die Zeichenfolge `Hello, world!` 13 Zeichen und 4 Tokens: `Hello`, `,`, ` world` und `!`.
+
+Wenn Sie das Token-Limit für Ihren Plan überschreiten, beginnen wir, basierend auf der Token-Nutzung zu berechnen. 
+Wir berechnen immer nur die Länge Ihrer Eingabe — niemals die Länge der Übersetzung.
+Lesen Sie mehr über unsere verfügbaren Pläne [hier](https://generaltranslation.com/pricing).
+
+Stellen Sie sich zum Beispiel vor, Sie haben die Zeichenfolge `"Hello, world!"` und die Sprachen Ihres Projekts sind `"fr"` (Französisch), `"es"` (Spanisch) und "`de"` (Deutsch).
+Die Token-Nutzung wird als `4 * 3 = 12` berechnet. Das heißt, die 4 Tokens von `"Hello, world!"`, 3-mal übersetzt.
+
+Wir tokenisieren derzeit mit OpenAIs `tiktoken`, dem gleichen Tokenizer, der von [GPT-4](https://openai.com/index/gpt-4/) verwendet wird. Sie können diesen Tokenizer [hier](https://platform.openai.com/tokenizer) erkunden.
+
+### Locales? Sprachen? Regionen? Was ist der Unterschied?
+
+In dieser Dokumentation werden Sie sehen, dass wir die Begriffe *Locale* und *Sprache* etwas austauschbar verwenden.
+Größtenteils bedeuten sie dasselbe, aber es gibt einige subtile Unterschiede, die bei Bedarf verdeutlicht werden.
+
+*Sprache* bezieht sich auf eine gesprochene oder geschriebene Kommunikationsform, die von Menschen verwendet wird.
+
+*Region* bezieht sich auf das Gebiet, in dem eine Sprache gesprochen oder geschrieben wird. Natürlich kann die Sprache dieselbe bleiben, aber zwischen Regionen variieren. Zum Beispiel kanadisches Französisch im Vergleich zu Französisch, wie es in Frankreich gesprochen wird.
+
+*Locale* ist eine Kombination aus einer Sprache und einer Region und wird verwendet, um eine bestimmte Sprache in einer bestimmten Region anzugeben. Zum Beispiel ist `en-US` Englisch, wie es in den Vereinigten Staaten gesprochen wird.
+
+Diese Unterschiede werden in unserer Dokumentation zu [Locale Strings](/docs/reference/locale-strings) näher erläutert.

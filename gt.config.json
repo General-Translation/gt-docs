@@ -2,9 +2,7 @@
   "defaultLocale": "en",
   "files": {
     "mdx": {
-      "include": ["content/docs/cli/*.mdx"],
-      "exclude": ["content/docs/**/*.*.mdx"],
-      "transform": "*.[locale].mdx"
+      "include": ["content/docs/[locale]/*.mdx"]
     }
   },
   "locales": ["zh", "de", "fr", "es", "ja"],

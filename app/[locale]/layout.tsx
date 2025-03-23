@@ -9,6 +9,7 @@ import { source } from '@/lib/source';
 import { GitHubIcon } from '@/components/GithubIcon';
 import { I18nProvider } from 'fumadocs-ui/i18n';
 import { getLocale, GTProvider } from 'gt-next/server';
+import { getLocaleProperties } from 'generaltranslation';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -45,24 +46,35 @@ export function generateMetadata(): Metadata {
   };
 }
 
-const locales = [
-  {
-    name: 'English',
-    locale: 'en',
-  },
-  {
-    name: 'Chinese',
-    locale: 'zh',
-  },
-  {
-    name: 'German',
-    locale: 'de',
-  },
-];
-
 export default async function Layout({ children }: { children: ReactNode }) {
   const locale = await getLocale();
   const options = await baseOptions(locale);
+  const locales = [
+    {
+      name: getLocaleProperties('en', locale).languageName,
+      locale: 'en',
+    },
+    {
+      name: getLocaleProperties('zh', locale).languageName,
+      locale: 'zh',
+    },
+    {
+      name: getLocaleProperties('de', locale).languageName,
+      locale: 'de',
+    },
+    {
+      name: getLocaleProperties('fr', locale).languageName,
+      locale: 'fr',
+    },
+    {
+      name: getLocaleProperties('es', locale).languageName,
+      locale: 'es',
+    },
+    {
+      name: getLocaleProperties('ja', locale).languageName,
+      locale: 'ja',
+    },
+  ];
   return (
     <html lang={locale} className={inter.className} suppressHydrationWarning>
       <body suppressHydrationWarning>
@@ -74,6 +86,9 @@ export default async function Layout({ children }: { children: ReactNode }) {
               en: (await import('@/content/ui.en.json')).default,
               zh: (await import('@/content/ui.zh.json')).default,
               de: (await import('@/content/ui.de.json')).default,
+              fr: (await import('@/content/ui.fr.json')).default,
+              es: (await import('@/content/ui.es.json')).default,
+              ja: (await import('@/content/ui.ja.json')).default,
             }[locale]
           }
         >
