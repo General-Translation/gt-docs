@@ -18,17 +18,17 @@ For more information on how to use this middleware, see the [i18n routing guide]
 
 <TypeTable
   type={{
-    "pathConfig?": {
+    "pathConfig": {
         type: 'any',
         optional: true,
         default: '{}',
     },
-    "localeRouting?": {
+    "localeRouting": {
         type: 'string',
         optional: true,
         default: true,
     },
-    "prefixDefaultLocale?": {
+    "prefixDefaultLocale": {
         decription: 'Optional value. children will be used for value if not provided.',
         type: 'string | number',
         optional: true,
@@ -87,6 +87,18 @@ export default createNextMiddleware({
 
 See the [i18n routing guide](/docs/next/reference/i18n-routing) for a detailed explanation of how this works.
 
+### Remove default locale prefix
+
+You can remove the default locale prefix by setting the `prefixDefaultLocale` option to `false`.
+
+```js title="middleware.js" copy
+export default createNextMiddleware({
+  prefixDefaultLocale: true,
+});
+```
+
+When this is true, then every path must be prefixed with the locale.
+If you set this to `false` (which is the default), then only the default locale will be removed from the path.
 
 ---
 
