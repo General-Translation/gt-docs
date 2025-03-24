@@ -3,7 +3,7 @@ import Logo from '@/components/Logo';
 
 import { Earth, MessageSquareText } from 'lucide-react';
 import Image from 'next/image';
-import { getDict, getGT } from 'gt-next/server';
+import { getDict } from 'gt-next/server';
 
 /**
  * Shared layout configurations
@@ -12,7 +12,7 @@ import { getDict, getGT } from 'gt-next/server';
  * Home Layout: app/(home)/layout.tsx
  * Docs Layout: app/docs/layout.tsx
  */
-export async function baseOptions(locale: string): Promise<BaseLayoutProps> {
+export async function baseOptions(): Promise<BaseLayoutProps> {
   const t = await getDict();
   return {
     i18n: true,

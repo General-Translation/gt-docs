@@ -48,7 +48,7 @@ export function generateMetadata(): Metadata {
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const locale = await getLocale();
-  const options = await baseOptions(locale);
+  const options = await baseOptions();
   const locales = [
     {
       name: getLocaleProperties('en', locale).languageName,
