@@ -1,0 +1,170 @@
+---
+title: <T> 包装行为
+description: CLI 工具如何包装 `<T>` 组件的具体行为
+---
+
+## 概述
+
+本页描述了 CLI 工具如何包装 `<T>` 组件的确切行为。
+
+作为经验法则，CLI 将会在任何静态的、有意义的内容周围包装 [`<T>`](/docs/next/api/components/t) 组件。
+它还会在 `<T>` 组件内包含的任何动态子内容周围包装 [`<Var>`](/docs/next/api/components/var) 组件。
+
+例如，以下内容将被包装在 `<T>` 组件中：
+```jsx
+<div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
+```
+
+但以下内容不会：
+```jsx
+<div><img src="logo.png" /></div> -> <div><img src="logo.png" /></div>
+```
+
+CLI 工具将始终确保最终输出是有效的 JSX 并正确使用 `<T>` 组件。
+
+在某些情况下，例如使用[逻辑运算符](#logical-operators)时，一些人工干预可能有助于确保更好的翻译和更多的上下文。
+
+<Accordions>
+  <Accordion title="为什么 <T> 组件不能包装动态内容？">
+    由于 `<T>` 组件通常是预先翻译和缓存的，确保内容在运行时不会改变是很重要的。
+    如果允许动态内容，每个用户可能会看到相同内容的不同翻译。
+
+    如果你想翻译在运行时变化的内容，你应该使用 [`<Tx>`](/docs/next/api/components/t) 组件。
+  </Accordion>
+  <Accordion title='什么被视为"静态"内容？'>
+    静态内容是指在运行时不能改变的内容。
+    例如，以下是静态的：
+    ```jsx
+    <div>Hello, World!</div>
+    ```
+    但以下是动态的：
+    ```jsx
+    <div>{name}</div>
+    ```
+  </Accordion>
+  <Accordion title='什么被视为"有意义的"内容？'>
+    
+有意义的内容是指可以被翻译并在不同语言中有不同含义的内容。
+
+例如，这是有意义的：
+```jsx
+<div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
+```
+而这些不是：
+```jsx
+<div><img src="logo.png" /></div>
+<div><span></span></div>
+<div><div></div></div>
+<div><CustomButton/></div>
+```
+
+无论内容以什么语言查看，结果始终相同。
+
+<Callout type="info">
+  符号如 '!', '?', '.', 和 "@" 被视为无意义的，因为它们通常在各种语言中具有相同的含义，
+  并翻译为相同的符号。
+  
+  用于确定内容是否有意义的正则表达式是：
+  ```/[\p{L}\p{N}]/u;```
+</Callout>
+  </Accordion>
+</Accordions>
+
+<Callout type="info">
+  请在 [Github](https://github.com/General-Translation/gt-libraries/issues) 上向我们报告任何错误或意外行为。
+</Callout>
+
+
+### JSX 表达式
+
+CLI 将自动用 [`<Var>`](/docs/next/api/components/var) 组件包装表达式 `{...}`。
+这是因为表达式通常是动态的。
+
+```jsx
+<div>Hello, {name}</div> -> <T id="SOME_ID"><div>Hello, <Var>{name}</Var></div></T>
+```
+
+<Callout type="warn">
+  `<Var>` 组件中包含的内容不会被翻译。
+  
+  如果你想翻译动态内容，你应该使用 [`<Tx>`](/docs/next/api/components/t) 组件。
+</Callout>
+
+### JSX 表达式中的静态内容
+
+表达式包装规则的例外是当表达式包含静态内容时。
+
+例如，以下内容不会被包装在 `<Var>` 组件中：
+```jsx
+<p>{"Hello," + " World!"}</p> -> <T id="SOME_ID"><p>{"Hello," + " World!"}</p></T>
+```
+
+
+### JSX 表达式中的模板字面量
+
+CLI 将在包含准引用（`${}`）的模板字面量周围包装 [`<Var>`](/docs/next/api/components/var) 组件ent，因为它们可以是动态的。
+```jsx
+<p>{`${temp}`}</p> -> <T id="SOME_ID"><p><Var>{`${temp}`}</Var></p></T>
+```
+
+### 逻辑运算符
+
+包含逻辑运算符如 `&&`、`||` 和 `?` 的JSX表达式
+将被包装在 [`<Var>`](/docs/next/api/components/var) 组件中，
+如果在顶层需要 `<T>` 组件。（即如果表达式外有其他有意义的内容）
+
+<Tabs items={["Before", "After"]}>
+  <Tab value="Before">
+    ```jsx
+    <div>Hello, {name && {name}} World!</div>
+    ```
+  </Tab>
+  <Tab value="After">
+    ```jsx
+    <T id="SOME_ID">
+      <div>Hello, <Var>{name && {name}}</Var> World!</div>
+    </T>
+    ```
+  </Tab>
+</Tabs>
+
+在表达式内部，CLI将把元素视为与表达式的其余部分完全独立。
+
+这意味着它们将被包装在自己的 `<T>` 组件中（以确保所有内容都可翻译）
+
+<Tabs items={["Before", "After"]}>
+  <Tab value="Before">
+    ```jsx
+    <div>{name ? <>Hello, </> : <>Goodbye, </>}</div>
+    ```
+  </Tab>
+  <Tab value="After">
+    ```jsx
+    <T id="SOME_ID">
+      <div>
+        <Var>
+          {name ? <T id="HELLO"><>Hello, </></T> : <T id="GOODBYE"><>Goodbye, </></T>}
+        </Var> World!
+      </div>
+    </T>
+    ```
+  </Tab>
+</Tabs>
+<Callout type="warn">
+  在这种情况下，你应该使用 [`<Branch>`](/docs/next/api/components/branch) 或 [`<Plural>`](/docs/next/api/components/plural) 组件代替。
+
+  CLI工具目前不会在 `<T>` 组件中自动使用这些组件，所以你需要手动更改代码。
+
+  前面的例子应该重写为：
+  ```jsx
+  <T id="SOME_ID">
+    <div>
+      <Branch branch={name == null}
+        true={<>Hello, </>}
+        false={<>Goodbye, </>}
+      />
+      World!
+    </div>
+  </T>
+  ```
+</Callout>

@@ -1,0 +1,90 @@
+---
+title: Escanear
+description: Escanea tu proyecto en busca de contenido traducible
+---
+## Uso
+
+```bash
+npx gtx-cli scan
+```
+
+## Descripción general
+
+El comando `gtx-cli scan` escanea tu proyecto en busca de contenido traducible.
+Lo hace analizando el árbol de archivos de tu proyecto y utilizando babel para envolver el contenido estático con el componente `<T>`.
+Cualquier contenido dinámico será automáticamente envuelto con componentes `<Var>`.
+
+<Callout type="info">
+    Este comando es similar al comando `setup`, pero es más directo y solo envuelve el contenido con el componente `<T>`.
+
+    No agrega otros componentes como `<GTProvider>`. Por lo tanto, recomendamos ejecutar este comando ocasionalmente para asegurar que todo el contenido en tu proyecto sea traducible.
+
+    **Deberías ejecutar `setup` la primera vez que estés integrando General Translation en tu proyecto.**
+</Callout>
+
+
+```jsx title="src/app/Home.js"
+import { T, Var } from 'gt-next'; // [!code highlight]
+
+export default function Home({ user }) {
+  return (
+    <div>
+      <T id="app.home.0">
+        {/* [!code highlight] */}
+        Hello, World! My name is <Var>{ user.name }</Var>
+      </T>
+    </div>
+  );
+}
+```
+
+---
+
+## Parámetros
+
+| Parámetro       | Descripción                                      | Tipo    | Opcional | Predeterminado         |
+|-----------------|--------------------------------------------------|---------|----------|-----------------|
+| `--src <path>`           | El directorio fuente a escanear                     | `string`  | `true`     |  `./src && ./app && ./pages && ./components` |
+| `--config <path>`        | La ruta al archivo de configuración GT                   | `string`  | `true`     | `"gt.config.json"` |
+| `--disable-ids`   | Desactiva la generación automática de IDs para componentes `<T>`         | `flag` | `true`    | `false`           |
+| `--disable-formatting`   | Desactiva el formato automático         | `flag` | `true`    | `false`           |
+
+
+---
+
+## Comportamiento
+
+### Archivo de configuración
+
+Al ejecutar la herramienta CLI por primera vez, intentará crear un archivo `gt.config.json` en la raíz de tu proyecto.
+Este archivo contiene metadatos sobre tu proyecto que se utilizan para traducir tu contenido.
+
+Lee más sobre el archivo `gt.config.json` [aquí](/docs/cli/reference/config).
+
+### La prop `id`
+
+El comando scan generará automáticamente IDs únicos para tus componentes `<T>`.
+Esto es útil para proyectos que utilizan muchos componentes `<T>` y quieren evitar tener que asignar manualmente un ID único a cada uno.
+
+Este `id` es útil para referenciar traducciones específicas en el editor de traducciones y en la consola.
+
+Para desactivar este comportamiento, puedes usar la bandera `--disable-ids`.
+
+### Comportamiento de inyección de `<T>`
+
+#### Caso básico
+
+La CLI envolverá los elementos JSX al nivel más alto posible.
+Esto significa que envolverá todo el componente en un componente `<T>` si aún no está envuelto.
+
+```jsx
+<div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
+```
+
+Consulta la [referencia](/docs/cli/reference/wrapping) para más detalles sobre cómo se envuelve el componente `<T>`.
+
+### Formato automático
+
+El comando scan formateará automáticamente los cambios que realiza en tu código base con Prettier, Biome o ESLint dependiendo de la configuración de tu proyecto.
+
+Para desactivar este comportamiento, puedes usar la bandera `--disable-formatting`.

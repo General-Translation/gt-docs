@@ -1,0 +1,14 @@
+{
+  "search": "検索",
+  "searchNoResult": "結果が見つかりませんでした",
+  "toc": "このページ内",
+  "tocNoHeadings": "見出しがありません",
+  "lastUpdate": "最終更新日",
+  "chooseLanguage": "言語を選択",
+  "nextPage": "次へ",
+  "previousPage": "前へ",
+  "chooseTheme": "テーマ",
+  "editOnGithub": "GitHubで編集",
+  "dashboard": "ダッシュボード",
+  "blog": "ブログ"
+}

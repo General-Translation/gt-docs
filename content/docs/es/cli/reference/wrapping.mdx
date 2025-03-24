@@ -1,0 +1,170 @@
+---
+title: Comportamiento de envoltura de <T>
+description: Comportamiento específico de cómo la herramienta CLI envuelve el componente `<T>`
+---
+
+## Descripción general
+
+Esta página describe el comportamiento exacto de cómo la herramienta CLI envuelve el componente `<T>`.
+
+Como regla general, la CLI envolverá el componente [`<T>`](/docs/next/api/components/t) alrededor de cualquier contenido estático y significativo.
+También envolverá un componente [`<Var>`](/docs/next/api/components/var) alrededor de cualquier subcontenido dinámico contenido dentro de un componente `<T>`.
+
+Por ejemplo, lo siguiente será envuelto en un componente `<T>`:
+```jsx
+<div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
+```
+
+pero lo siguiente no lo será:
+```jsx
+<div><img src="logo.png" /></div> -> <div><img src="logo.png" /></div>
+```
+
+La herramienta CLI siempre se asegurará de que el resultado final sea JSX válido y utilice correctamente el componente `<T>`.
+
+En algunos casos, como con los [operadores lógicos](#logical-operators), podría ser útil alguna intervención humana para garantizar mejores traducciones con más contexto.
+
+<Accordions>
+  <Accordion title="¿Por qué los componentes <T> no pueden envolver contenido dinámico?">
+    Dado que el componente `<T>` normalmente se pre-traduce y se almacena en caché, es importante asegurarse de que el contenido no cambie en tiempo de ejecución.
+    Si se permitiera contenido dinámico, cada usuario podría potencialmente ver una traducción diferente del mismo contenido.
+
+    Si deseas traducir contenido que cambia en tiempo de ejecución, deberías usar el componente [`<Tx>`](/docs/next/api/components/t) en su lugar.
+  </Accordion>
+  <Accordion title='¿Qué se considera contenido "estático"?'>
+    El contenido estático es contenido que no puede cambiar en tiempo de ejecución.
+    Por ejemplo, lo siguiente es estático:
+    ```jsx
+    <div>Hello, World!</div>
+    ```
+    pero lo siguiente es dinámico:
+    ```jsx
+    <div>{name}</div>
+    ```
+  </Accordion>
+  <Accordion title='¿Qué se considera contenido "significativo"?'>
+    
+El contenido significativo es aquel que podría ser traducido y tiene un significado diferente en otro idioma.
+
+Por ejemplo, esto es significativo:
+```jsx
+<div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
+```
+mientras que estos no lo son:
+```jsx
+<div><img src="logo.png" /></div>
+<div><span></span></div>
+<div><div></div></div>
+<div><CustomButton/></div>
+```
+
+Independientemente del idioma en que se vea el contenido, los resultados son siempre los mismos.
+
+<Callout type="info">
+  Símbolos como '!', '?', '.', y "@" se consideran no significativos, ya que típicamente tienen el mismo significado en todos los idiomas y 
+  se traducen al mismo símbolo.
+  
+  La expresión regular utilizada para determinar si el contenido es significativo es:
+  ```/[\p{L}\p{N}]/u;```
+</Callout>
+  </Accordion>
+</Accordions>
+
+<Callout type="info">
+  Por favor, infórmanos de cualquier error o comportamiento inesperado en [Github](https://github.com/General-Translation/gt-libraries/issues).
+</Callout>
+
+
+### Expresiones JSX
+
+La CLI envolverá automáticamente las expresiones `{...}` en componentes [`<Var>`](/docs/next/api/components/var).
+Esto se debe a que las expresiones son típicamente dinámicas. 
+
+```jsx
+<div>Hello, {name}</div> -> <T id="SOME_ID"><div>Hello, <Var>{name}</Var></div></T>
+```
+
+<Callout type="warn">
+  El contenido dentro de un componente `<Var>` no será traducido. 
+  
+  Si deseas traducir contenido dinámico, deberías usar el componente [`<Tx>`](/docs/next/api/components/t) en su lugar.
+</Callout>
+
+### Contenido estático en expresiones JSX
+
+La excepción a la regla de envoltura de expresiones es cuando la expresión contiene contenido estático.
+
+Por ejemplo, lo siguiente no será envuelto en un componente `<Var>`:
+```jsx
+<p>{"Hello," + " World!"}</p> -> <T id="SOME_ID"><p>{"Hello," + " World!"}</p></T>
+```
+
+
+### Literales de plantilla en expresiones JSX
+
+La CLI envolverá literales de plantilla que contengan cuasis (`${}`) en un componente [`<Var>`](/docs/next/api/components/var)ent, ya que pueden ser dinámicos.
+```jsx
+<p>{`${temp}`}</p> -> <T id="SOME_ID"><p><Var>{`${temp}`}</Var></p></T>
+```
+
+### Operadores lógicos
+
+Las expresiones JSX que contienen operadores lógicos como `&&`, `||` y `?` 
+serán envueltas en un componente [`<Var>`](/docs/next/api/components/var),
+si es necesario un componente `<T>` en el nivel superior. (es decir, si hay otro contenido significativo fuera de la expresión)
+
+<Tabs items={["Antes", "Después"]}>
+  <Tab value="Antes">
+    ```jsx
+    <div>Hello, {name && {name}} World!</div>
+    ```
+  </Tab>
+  <Tab value="Después">
+    ```jsx
+    <T id="SOME_ID">
+      <div>Hello, <Var>{name && {name}}</Var> World!</div>
+    </T>
+    ```
+  </Tab>
+</Tabs>
+
+Dentro de la expresión, la CLI tratará los elementos como si fueran completamente independientes del resto de la expresión.
+
+Esto significa que serán envueltos en sus propios componentes `<T>` (para asegurar que todo el contenido sea traducible)
+
+<Tabs items={["Antes", "Después"]}>
+  <Tab value="Antes">
+    ```jsx
+    <div>{name ? <>Hello, </> : <>Goodbye, </>}</div>
+    ```
+  </Tab>
+  <Tab value="Después">
+    ```jsx
+    <T id="SOME_ID">
+      <div>
+        <Var>
+          {name ? <T id="HELLO"><>Hello, </></T> : <T id="GOODBYE"><>Goodbye, </></T>}
+        </Var> World!
+      </div>
+    </T>
+    ```
+  </Tab>
+</Tabs>
+<Callout type="warn">
+  En casos como estos, deberías estar usando un componente [`<Branch>`](/docs/next/api/components/branch) o [`<Plural>`](/docs/next/api/components/plural) en su lugar.
+
+  La herramienta CLI actualmente no utiliza automáticamente estos componentes en un componente `<T>`, por lo que tendrás que cambiar el código manualmente.
+
+  El ejemplo anterior debería reescribirse como:
+  ```jsx
+  <T id="SOME_ID">
+    <div>
+      <Branch branch={name == null}
+        true={<>Hello, </>}
+        false={<>Goodbye, </>}
+      />
+      World!
+    </div>
+  </T>
+  ```
+</Callout>

@@ -1,0 +1,196 @@
+---
+title: 使用指南
+description: GT命令行工具的使用指南
+---
+
+## 概述
+
+本指南将引导您使用General Translation的CLI工具（`gtx-cli`）来翻译您的项目。
+
+CLI工具与任何i18n库兼容，无论您使用的是`gt-next`、`gt-react`，还是第三方库如[`next-intl`](/docs/cli/tutorials/next-intl-quickstart)或[`react-i18next`](/docs/cli/tutorials/react-i18next-quickstart)。
+
+CLI工具负责将您的项目连接到General Translation的AI翻译服务。
+
+使用CLI工具有几种方式，请导航到与您的使用场景相关的部分。
+
+## 安装
+
+要安装CLI工具，请运行以下命令：
+
+
+<Tabs items={['npm', 'yarn', 'bun', 'pnpm']}>
+  <Tab value="npm">
+  ```bash 
+  npm i --save-dev gtx-cli
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add --dev gtx-cli
+  ```
+  </Tab>
+
+  <Tab value="bun">
+  ```bash 
+  bun add --dev gtx-cli
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add --save-dev gtx-cli
+  ```
+  </Tab>
+</Tabs>
+
+---
+
+## 使用场景
+
+
+### 翻译GT项目
+
+CLI工具可用于翻译使用`gt-next`或`gt-react`的项目。
+
+本指南假设您已经按照[gt-next](/docs/next/tutorials/quickstart)或[gt-react](/docs/react/tutorials/quickstart)教程设置了您的代码库。
+
+
+<Accordions>
+  <Accordion title="我的项目在开发环境中已经支持多语言，这一步的意义是什么？">
+    如果您遵循了`gt-next`或`gt-react`的快速入门指南，您的项目仅在开发环境中进行了国际化。当将项目部署到生产环境时，您需要实际生成并保存翻译内容。
+  
+    由于React等框架的客户端漏洞可能导致API密钥暴露给公众，因此这一步是必要的，以确保您的API密钥不会被公开。
+   
+  </Accordion>
+</Accordions>
+
+1. 首先，您需要在项目中初始化CLI工具。
+
+```bash
+npx gtx-cli init
+```
+
+2. 接下来，您需要在[General Translation仪表板](https://generaltranslation.com/dashboard)中创建一个项目。
+
+创建项目后，您需要生成一个生产环境API密钥。导航到"API密钥"页面并点击"创建API密钥"按钮。
+
+3. 然后，将您的API密钥和项目ID添加到环境变量中。
+
+```bash title=".env"
+GT_API_KEY=<your-api-key>
+GT_PROJECT_ID=<your-project-id>
+```
+
+4. 最后，运行翻译命令。
+
+```bash
+npx gtx-cli translate
+```
+
+<Callout type="info">
+  默认情况下，CLI工具会将翻译发布到General Translation CDN，以便在您的项目中使用。
+  如果您想禁用此行为（例如，如果您从不同的源加载翻译），请在命令中添加`--no-publish`标志。
+</Callout>
+
+有关`translate`命令的更多信息，请参阅[API参考](/docs/cli/translate)。
+
+
+
+### 翻译语言文件（第三方i18n库或独立GT项目）
+
+CLI工具允许您翻译第三方i18n库的语言文件，或者与[`gt-next`](/docs/next/reference/stand-alone)或[`gt-react`](/docs/react/reference/stand-alone)的独立实现一起使用。
+
+大多数i18n库依赖JSON文件来存储翻译数据。
+CLI工具可用于自动将这些JSON文件翻译成您所需的语言。
+
+1. 首先，您需要在项目中初始化CLI工具。
+
+```bash
+npx gtx-cli init
+```
+此命令将在项目根目录创建一个`gt.config.json`文件，其中包含一些基本配置设置，如项目的默认语言和支持的语言。
+
+2. 接下来，您需要在[General Translation仪表板](https://generaltranslation.com/dashboard)中创建一个项目。
+
+创建项目后，您需要生成一个生产环境API密钥。导航到"API密钥"页面并点击"创建API密钥"按钮。
+
+3. 然后，将您的API密钥和项目ID添加到环境变量中。
+
+```bash title=".env"
+GT_API_KEY=<your-api-key>
+GT_PROJECT_ID=<your-project-id>
+```
+
+4. 最后，运行翻译命令。
+
+```bash
+npx gtx-cli translate
+```
+
+<Callout type="info">
+  默认情况下，CLI工具将在您的`gt.config.json`文件中指定的`translationsDir`目录中查找要翻译的语言文件。
+  它将使用您的`gt.config.json`文件中指定的`defaultLocale`作为源语言。
+
+  它还会将翻译发布到General Translation CDN，以便在您的项目中使用。
+  如果您想禁用此行为，请在命令中添加`--no-publish`标志。
+</Callout>
+
+
+<Accordions>
+  <Accordion title="为什么我的文件没有被翻译？">
+    如果您的文件没有被翻译，很可能是您的`gt.config.json`文件配置不正确。
+
+    `translationsDir`应该设置为包含您的语言文件的目录，并包含通配符（`*`）以匹配所有语言文件。
+
+    例如，如果您的语言文件存储在`src/locales`目录中，您的`gt.config.json`文件应该如下所示：
+
+    ```json
+    {
+      "defaultLocale": "en",
+      "supportedLocales": ["en", "fr", "es"],
+      "translationsDir": "src/locales/*.json"
+    }
+    ```
+  </Accordion>
+</Accordions>
+
+### 为GT项目生成语言文件
+
+CLI工具可用于为使用`gt-next`或`gt-react`的项目生成语言文件。
+
+如果您想使用自己的翻译提供商，这个用例很有用。
+
+与其他i18n库不同，`gt-next`和`gt-react`支持内联翻译，这意味着没有传统的JSON文件结构包含每种语言的键和值。
+
+这意味着为了跟踪文本的变化，GT库在源代码中存储原始文本的哈希值。
+
+这种内部数据结构（包含哈希值）很难使用，因此CLI工具提供了一个方便的命令来为您的项目生成语言文件。
+
+1. 首先，您需要在项目中初始化CLI工具。
+
+```bash
+npx gtx-cli init
+```
+
+当被问到"您的语言文件存储在哪里？"时，选择"Local"选项。
+
+2. 运行：
+
+```bash
+npx gtx-cli generate
+```
+
+此命令将为您的默认语言环境和您为项目配置的所有其他语言环境生成源文件。
+
+每个文件的内容相同，并将与您项目中之前的任何翻译合并。
+
+有关`generate`命令的更多信息，请参阅[API参考](/docs/cli/generate)。
+
+---
+
+## 注意
+ * [`gtx-cli translate`](/docs/cli/translate)用于自动为您的项目生成翻译。
+ * 如果您使用第三方i18n库，您可以在项目每次更改时自动更新所有翻译JSON文件。只需在构建命令之前将[`gtx-cli translate`](/docs/cli/translate)命令添加到您的构建或CD流程中，即可自动将翻译添加到您的项目中。
+
+## 下一步
+ * 有关更多信息，请参阅[CLI API参考](/docs/cli)。
+ * 如果您想在开发中看到实时翻译（类似热重载），请查看[`<T>`组件](/docs/usage/t)。
