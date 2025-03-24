@@ -54,7 +54,6 @@ export default async function Page(props: {
   if (!page) notFound();
 
   const MDX = page.data.body;
-
   return (
     <DocsPage
       toc={page.data.toc}
