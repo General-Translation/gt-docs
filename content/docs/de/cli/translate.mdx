@@ -1,0 +1,145 @@
+---
+title: Übersetzen
+description: Wie man sein Projekt übersetzt
+---
+## Verwendung
+
+<Callout type="error">
+    Führen Sie dies in Ihrer CI-Pipeline **bevor** Sie Ihre Next.js-App für die Produktion bauen aus.
+</Callout>
+
+```bash
+npx gtx-cli translate
+```
+<Callout type="info">
+    **Hinweis:**
+    Dieser Befehl benötigt einen Produktions-API-Schlüssel! Erhalten Sie einen auf der [Plattform](https://generaltranslation.com/dashboard).
+</Callout>
+
+## Überblick
+
+Der Befehl `gtx-cli translate` übersetzt Ihr Projekt. Er durchläuft den Dateibaum Ihres Projekts und übersetzt alle Inhalte, die in einer `<T>`-Komponente eingeschlossen sind.
+
+Zusätzlich werden Inhalte aus der Wörterbuchdatei (falls vorhanden) einbezogen.
+
+Dieser Befehl ist die primäre Methode zur Nutzung der General Translation API und zugehöriger Dienste.
+
+<Callout type="warn">
+    **Nur für den Produktionseinsatz!**
+
+    Dieser Befehl ist für Produktions-Builds gedacht und **sollte nicht in der Entwicklung verwendet werden**.
+    Bevor Sie diesen Befehl ausführen, stellen Sie bitte sicher, dass Sie sich auf dem Branch befinden, der für die Produktion verwendet wird.
+    Denken Sie auch daran, Ihren Produktions-API-Schlüssel (`GT_API_KEY`) und Ihre Projekt-ID (`GT_PROJECT_ID`) in Ihren Umgebungsvariablen anzugeben.
+</Callout>
+
+
+## Verwendung
+
+Es gibt vier Möglichkeiten, den Befehl `translate` zu verwenden. Die Methoden 2, 3 und 4 erfordern einen Produktions-API-Schlüssel:
+
+<Callout type="info">
+    Wir empfehlen, zuerst [`npx gtx-cli init`](/docs/cli/init) auszuführen, um Ihr Projekt zu konfigurieren, bevor Sie den Befehl `translate` ausführen.
+    Je nach Konfiguration Ihres Projekts kann sich das Verhalten des Übersetzungsbefehls ändern.
+</Callout>
+
+
+### Methode 1: Übersetzen der JSON-Dateien Ihres Projekts. [#translate-json]
+
+Wenn Sie andere i18n-Bibliotheken wie `next-intl`, `react-i18next` oder `next-i18next` verwenden, können Sie diese Methode nutzen, um die JSON-Dateien Ihres Projekts zu übersetzen.
+
+Übersetzungen werden automatisch in Ihrer Codebasis gespeichert und optional auch im GT CDN veröffentlicht.
+
+Wenn Sie [`npx gtx-cli init`](/docs/cli/init) ausführen, geben Sie an, dass Sie eine externe i18n-Bibliothek verwenden, bevor Sie den Befehl `translate` ausführen.
+
+Weitere Details finden Sie in der [CLI-Konfigurationsdokumentation](/docs/cli/reference/config).
+
+```bash
+npx gtx-cli translate
+```
+<Callout type="info">
+    Das CLI-Tool erkennt Ihre i18n-Bibliothek automatisch, indem es Ihre `package.json`-Datei liest, und übersetzt Ihre Inhalte unter Berücksichtigung der Syntax Ihrer i18n-Bibliothek.
+</Callout>
+
+### Methode 2: Übersetzen Ihres Projekts und Speichern der Übersetzungen im GT CDN.
+
+Wenn Sie `gt-next` oder `gt-react` verwenden, können Sie diese Methode nutzen, um Ihr Projekt zu übersetzen.
+
+Wenn Sie bei der Ausführung von [`npx gtx-cli init`](/docs/cli/init) die Option zum Speichern von Übersetzungen remote auswählen, speichert der Befehl `translate` die Übersetzungen im GT CDN.
+
+```bash
+npx gtx-cli translate
+```
+
+### Methode 3: Übersetzen Ihres Projekts und Speichern der Übersetzungen in Ihrer Codebasis.
+
+Wenn Sie bei der Ausführung von [`npx gtx-cli init`](/docs/cli/init) die Option zum lokalen Speichern von Übersetzungen auswählen, speichert der Befehl `translate` die Übersetzungen in Ihrer Codebasis.
+
+`gt-next` und `gt-react` können dann diese lokalen Übersetzungen an Ihre Benutzer liefern, anstatt das öffentliche CDN von General Translation zu verwenden.
+
+```bash
+npx gtx-cli translate
+```
+<Callout type="info">
+    Diese Methode ist nützlich, wenn Sie ein benutzerdefiniertes Content-Management-System verwenden oder das GT CDN nicht nutzen möchten.
+</Callout>
+
+### Methode 4: Validieren der `<T>`-Komponenten und der Wörterbuchdatei Ihres Projekts. [#validate]
+
+Diese Methode ist nützlich zur Validierung der `<T>`-Komponenten und der Wörterbuchdatei Ihres Projekts.
+
+Dies stellt sicher, dass Ihr Projekt korrekt konfiguriert ist und dass die Übersetzungen gültig und genau sein werden.
+
+Es werden keine Übersetzungen generiert, wenn das Flag `--dry-run` angegeben wird.
+
+```bash
+npx gtx-cli translate --dry-run
+```
+
+
+
+
+---
+
+## Flags
+
+| Parameter       | Beschreibung                                      | Typ    | Optional | Standard         |
+|-----------------|--------------------------------------------------|---------|----------|-----------------|
+| `--api-key`       | Einen Produktions-API-Schlüssel angeben                                | `string`  | `true`     |                 |
+| `--project-id`    | Die Projekt-ID angeben                                      | `string`  | `true`     |                 |
+| `--version-id`    | Eine Versions-ID angeben (standardmäßig ein Hash des Inhalts)    | `string`  | `true`     |                 |
+| `--config <path>`| Einen Pfad zur GT-Konfigurationsdatei angeben                       | `string`  | `true`     | `"gt.config.json"`  |
+| `--tsconfig, --jsconfig <path>`| Einen Pfad zur TS- oder JS-Konfigurationsdatei angeben | `string`  | `true`     |                 |
+| `--src <paths>`   | Das/die zu scannende(n) Quellverzeichnis(se) angeben                     | `[string]`  | `true`     | `./src && ./app && ./pages && ./components`      |
+| `--dictionary <path>`    | Einen Pfad zur Wörterbuchdatei angeben                | `string`  | `true`     |                 |
+| `--inline`        | Inline-`<T>`-Tags zusätzlich zum Wörterbuch einbeziehen     | `boolean` | `true`     | `true`            |
+| `--timeout`       | Das Timeout für die Übersetzungsanfrage in Sekunden          | `number`  | `true`     | `600`              |
+| `--new, --locales <locales>`| Sprachen, in die Ihr Projekt übersetzt werden soll            | `[string]`  | `true`     |                 |
+| `--default-locale <locale>`| Die Quellsprache für das Projekt                  | `string`  | `true`     |  `en`               |
+| `--ignore-errors` | Fehler ignorieren und Übersetzung für gültige Inhalte erzwingen       | `flag` | `true`     | `false`           |
+| `--dry-run`       | Testlauf des Befehls                                         | `flag` | `true`     | `false`           |
+| `--no-wait`       | Nicht auf den Abschluss der Übersetzungen warten, bevor das Programm beendet wird | `flag` | `true`     | `false`           |
+| `--publish`    | Die Übersetzungen im CDN veröffentlichen                  | `flag` | `true`     | `false`           |
+
+Alle diese Parameter sind optional und können alternativ in der Datei `gt.config.json` angegeben werden.
+
+<Callout type="warn">
+    Fügen Sie Ihren API-Schlüssel nicht zur Datei `gt.config.json` hinzu!
+    Sie sollten ihn stattdessen als Umgebungsvariable festlegen. Die CLI liest automatisch `GT_API_KEY`, wenn diese Variable gesetzt ist.
+</Callout>
+
+Es gibt einige wichtige Parameter:
+
+| Parameter       | Beschreibung                                      |
+|-----------------|--------------------------------------------------|
+| `--dry-run` | Dieser Flag bewirkt, dass die CLI Ihr Projekt analysiert und validiert, aber nicht mit der GT-API kommuniziert. Dies ist nützlich zur Validierung Ihrer Codebasis.
+| `--api-key` | Wenn Sie nicht `--dry-run` verwenden, müssen Sie einen Produktions-API-Schlüssel angeben.
+| `--project-id` | Ebenso müssen Sie, wenn Sie nicht `--dry-run` verwenden, eine Projekt-ID angeben.
+| `--publish` | Wenn Sie lokale Übersetzungen verwenden und Ihre Übersetzungen öffentlich im GT-CDN verfügbar machen möchten, können Sie diesen Flag verwenden.
+| `--new, --locales <locales>` | Sprachen, in die Ihr Projekt übersetzt werden soll. Diese werden zu den in Ihrer Datei `gt.config.json` angegebenen Sprachen hinzugefügt.
+
+### Konfigurationsdatei
+
+Wenn Sie das CLI-Tool zum ersten Mal ausführen, wird versucht, eine Datei `gt.config.json` im Stammverzeichnis Ihres Projekts zu erstellen.
+Diese Datei enthält Metadaten über Ihr Projekt, die für die Übersetzung Ihrer Inhalte verwendet werden.
+
+Lesen Sie mehr über die Datei `gt.config.json` [hier](/docs/cli/reference/config).

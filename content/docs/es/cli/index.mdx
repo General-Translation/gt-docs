@@ -1,0 +1,35 @@
+---
+title: Inicio rápido de CLI
+description: Cómo traducir automáticamente tu proyecto utilizando la herramienta CLI de Traducción General
+---
+
+## Descripción general
+
+La herramienta CLI de Traducción General (`gtx-cli`) te permite traducir automáticamente tu proyecto a cualquiera de los [idiomas compatibles](/docs/reference/supported-locales).
+
+Proporciona soporte de primera clase para [`gt-next`](/docs/react) y [`gt-react`](/docs/react) con tu proyecto, permitiéndote escanear tu proyecto en busca de contenido traducible, traducir tu proyecto y generar archivos JSON de datos de traducción.
+
+La herramienta CLI también se puede utilizar para generar traducciones para bibliotecas i18n de terceros como [next-intl](https://next-intl.dev/) o [i18next](https://react.i18next.com/).
+
+---
+
+Dependiendo de qué biblioteca i18n esté utilizando tu proyecto, sigue uno de los siguientes tutoriales:
+
+* [gt-next](/docs/cli/tutorials/gt)
+* [gt-react](/docs/cli/tutorials/gt)
+* [next-intl](/docs/cli/tutorials/next-intl-quickstart)
+* [i18next](/docs/cli/tutorials/i18next-quickstart)
+* [Otros](/docs/cli/tutorials/json)
+
+
+
+
+## Uso
+
+| Comando | Descripción |
+| --- | --- |
+| [`npx gtx-cli init`](/docs/cli/init) | (Opcional) Configura los ajustes de GT para tu proyecto. |
+| [`npx gtx-cli setup`](/docs/cli/setup) | Guía de configuración paso a paso que prepara tu proyecto para la traducción. |
+| [`npx gtx-cli scan`](/docs/cli/scan) | Escanea tu proyecto en busca de contenido traducible. Se puede usar repetidamente para actualizar tu proyecto. |
+| [`npx gtx-cli translate`](/docs/cli/translate) | Traduce tu proyecto a través de la API de GT. |
+| [`npx gtx-cli generate`](/docs/cli/generate) | Genera un nuevo archivo JSON de datos de traducción. Debe usarse cuando se utiliza la biblioteca de forma independiente. |

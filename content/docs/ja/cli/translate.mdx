@@ -1,0 +1,145 @@
+---
+title: 翻訳
+description: プロジェクトを翻訳する方法
+---
+## 使用方法
+
+<Callout type="error">
+    これは本番用のNext.jsアプリをビルドする**前に**、CIパイプラインで実行してください。
+</Callout>
+
+```bash
+npx gtx-cli translate
+```
+<Callout type="info">
+    **注意:**
+    このコマンドには本番用APIキーが必要です！[プラットフォーム](https://generaltranslation.com/dashboard)で取得してください。
+</Callout>
+
+## 概要
+
+`gtx-cli translate`コマンドはプロジェクトを翻訳します。プロジェクトのファイルツリーを走査し、`<T>`コンポーネントでラップされたコンテンツを翻訳します。
+
+さらに、辞書ファイル（提供されている場合）からのコンテンツも含まれます。
+
+このコマンドはGeneral Translation APIおよび関連サービスを使用する主要な方法です。
+
+<Callout type="warn">
+    **本番環境での使用のみ！**
+
+    このコマンドは本番ビルド用であり、**開発環境では使用すべきではありません**。
+    このコマンドを実行する前に、本番環境で使用されるブランチにいることを確認してください。
+    また、環境変数に本番用APIキー（`GT_API_KEY`）とプロジェクトID（`GT_PROJECT_ID`）を指定することも忘れないでください。
+</Callout>
+
+
+## 使用方法
+
+`translate`コマンドを使用するには4つの方法があります。方法2、3、4は本番用APIキーが必要です：
+
+<Callout type="info">
+    `translate`コマンドを実行する前に、[`npx gtx-cli init`](/docs/cli/init)を実行してプロジェクトを設定することをお勧めします。
+    プロジェクトの設定方法によって、translateコマンドの動作が変わる場合があります。
+</Callout>
+
+
+### 方法1：プロジェクトのJSONファイルを翻訳する [#translate-json]
+
+`next-intl`、`react-i18next`、または`next-i18next`などの他のi18nライブラリを使用している場合、この方法でプロジェクトのJSONファイルを翻訳できます。
+
+翻訳は自動的にコードベースに保存され、オプションでGT CDNにも公開されます。
+
+[`npx gtx-cli init`](/docs/cli/init)を実行する際、`translate`コマンドを実行する前にサードパーティのi18nライブラリを使用していることを指定してください。
+
+詳細については[CLIの設定ドキュメント](/docs/cli/reference/config)を参照してください。
+
+```bash
+npx gtx-cli translate
+```
+<Callout type="info">
+    CLIツールは`package.json`ファイルを読み取ることでi18nライブラリを自動的に検出し、i18nライブラリの構文を尊重しながらコンテンツを翻訳します。
+</Callout>
+
+### 方法2：プロジェクトを翻訳してGT CDNに翻訳を保存する
+
+`gt-next`または`gt-react`を使用している場合、この方法でプロジェクトを翻訳できます。
+
+[`npx gtx-cli init`](/docs/cli/init)を実行する際に、翻訳をリモートに保存するオプションを選択すると、`translate`コマンドはGT CDNに翻訳を保存します。
+
+```bash
+npx gtx-cli translate
+```
+
+### 方法3：プロジェクトを翻訳してコードベースに翻訳を保存する
+
+[`npx gtx-cli init`](/docs/cli/init)を実行する際に、翻訳をローカルに保存するオプションを選択すると、`translate`コマンドはコードベースに翻訳を保存します。
+
+`gt-next`と`gt-react`は、General Translationの公開CDNを使用する代わりに、これらのローカル翻訳をユーザーに提供できます。
+
+```bash
+npx gtx-cli translate
+```
+<Callout type="info">
+    この方法は、カスタムコンテンツ管理システムを使用している場合や、GT CDNを使用したくない場合に便利です。
+</Callout>
+
+### 方法4：プロジェクトの`<T>`コンポーネントと辞書ファイルを検証する [#validate]
+
+この方法は、プロジェクトの`<T>`コンポーネントと辞書ファイルを検証するのに役立ちます。
+
+これにより、プロジェクトが正しく設定されており、翻訳が有効で正確であることが確認できます。
+
+`--dry-run`フラグが提供されている場合、翻訳は生成されません。
+
+```bash
+npx gtx-cli translate --dry-run
+```
+
+
+
+
+---
+
+## フラグ
+
+| パラメータ       | 説明                                      | タイプ    | オプション | デフォルト         |
+|-----------------|--------------------------------------------------|---------|----------|-----------------|
+| `--api-key`       | プロダクションAPIキーを指定                                | `string`  | `true`     |                 |
+| `--project-id`    | プロジェクトIDを指定                                      | `string`  | `true`     |                 |
+| `--version-id`    | バージョンIDを指定（デフォルトでは、コンテンツのハッシュ）    | `string`  | `true`     |                 |
+| `--config <path>`| GT設定ファイルへのパスを指定                       | `string`  | `true`     | `"gt.config.json"`  |
+| `--tsconfig, --jsconfig <path>`| TSまたはJS設定ファイルへのパスを指定 | `string`  | `true`     |                 |
+| `--src <paths>`   | スキャンするソースディレクトリを指定                     | `[string]`  | `true`     | `./src && ./app && ./pages && ./components`      |
+| `--dictionary <path>`    | 辞書ファイルへのパスを指定                | `string`  | `true`     |                 |
+| `--inline`        | 辞書に加えてインライン`<T>`タグを含める     | `boolean` | `true`     | `true`            |
+| `--timeout`       | 翻訳リクエストのタイムアウト（秒）          | `number`  | `true`     | `600`              |
+| `--new, --locales <locales>`| プロジェクトを翻訳するロケール            | `[string]`  | `true`     |                 |
+| `--default-locale <locale>`| プロジェクトのソースロケール                  | `string`  | `true`     |  `en`               |
+| `--ignore-errors` | エラーを無視し、有効なコンテンツの翻訳を強制       | `flag` | `true`     | `false`           |
+| `--dry-run`       | コマンドのドライラン                                         | `flag` | `true`     | `false`           |
+| `--no-wait`       | 翻訳が完了するのを待たずに終了 | `flag` | `true`     | `false`           |
+| `--publish`    | 翻訳をCDNに公開                  | `flag` | `true`     | `false`           |
+
+これらのパラメータはすべてオプションであり、代わりに`gt.config.json`ファイルで提供することもできます。
+
+<Callout type="warn">
+    APIキーを`gt.config.json`ファイルに追加しないでください！
+    代わりに環境変数として設定してください。CLIは設定されている場合、自動的に`GT_API_KEY`を読み取ります。
+</Callout>
+
+いくつかの重要なパラメータがあります：
+
+| パラメータ       | 説明                                      |
+|-----------------|--------------------------------------------------|
+| `--dry-run` | このフラグを使用すると、CLIはプロジェクトを解析して検証しますが、GT APIと通信しません。これはコードベースの検証に役立ちます。
+| `--api-key` | `--dry-run`を使用していない限り、プロダクションAPIキーを提供する必要があります。
+| `--project-id` | 同様に、`--dry-run`を使用していない限り、プロジェクトIDを提供する必要があります。
+| `--publish` | ローカル翻訳を使用していて、翻訳をGT CDNで公開したい場合は、このフラグを使用できます。
+| `--new, --locales <locales>` | プロジェクトを翻訳するロケール。これらは`gt.config.json`ファイルで指定されたロケールに追加されます。
+
+### 設定ファイル
+
+CLIツールを初めて実行すると、プロジェクトのルートに`gt.config.json`ファイルを作成しようとします。
+このファイルには、コンテンツを翻訳するために使用されるプロジェクトに関するメタデータが含まれています。
+
+`gt.config.json`ファイルについて詳しくは[こちら](/docs/cli/reference/config)をご覧ください。

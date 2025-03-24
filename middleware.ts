@@ -1,6 +1,7 @@
 import { createNextMiddleware } from 'gt-next/middleware';
 
 export default createNextMiddleware({
+  // Have to prefix since otherwise fumadocs will not work
   prefixDefaultLocale: true,
 });
 

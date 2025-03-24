@@ -1,0 +1,89 @@
+---
+title: Setup
+description: Integriert gt-next oder gt-react in dein Projekt.
+---
+## Verwendung
+
+```bash
+npx gtx-cli setup
+```
+
+## Überblick
+
+Der Befehl `gtx-cli setup` richtet dein Projekt automatisch für Übersetzungen mit `gt-next` oder `gt-react` ein.
+Dies geschieht durch das Parsen des Dateibaums deines Projekts und die Verwendung von Babel, um statische Inhalte mit der `<T>`-Komponente zu umschließen.
+Alle dynamischen Inhalte werden automatisch mit `<Var>`-Komponenten umschlossen.
+
+Dieser Befehl sollte **einmal** ausgeführt werden, wenn du dein Projekt zum ersten Mal internationalisierst.
+Bei nachfolgenden Änderungen solltest du den Befehl `scan` verwenden, um dein Projekt zu aktualisieren.
+
+Weitere Details findest du beim Befehl [scan](/docs/cli/scan).
+
+
+```jsx title="src/app/Home.js"
+import { T, Var } from 'gt-next';  // [!code highlight]
+
+export default function Home({ user }) {
+  return (
+    <div>
+      <T id="app.home.0">
+        {/* [!code highlight] */}
+        Hello, World! My name is <Var>{ user.name }</Var>
+      </T>
+    </div>
+  );
+}
+```
+
+Wenn dein Projekt den Next.js App Router verwendet, fügt der Setup-Befehl eine `<GTProvider>`-Komponente in die entsprechende `layout.jsx`-Datei ein.
+
+---
+
+## Parameter
+
+| Parameter       | Beschreibung                                     | Typ     | Optional | Standard        |
+|-----------------|--------------------------------------------------|---------|----------|-----------------|
+| `--src <path>`           | Das zu scannende Quellverzeichnis               | `string`  | `true`     |  `./src && ./app && ./pages && ./components` |
+| `--config <path>`        | Der Pfad zur GT-Konfigurationsdatei              | `string`  | `true`     | `"gt.config.json"` |
+
+---
+
+## Verhalten
+
+### Konfigurationsdatei
+
+Wenn du das CLI-Tool zum ersten Mal ausführst, wird es versuchen, eine `gt.config.json`-Datei im Stammverzeichnis deines Projekts zu erstellen.
+Diese Datei enthält Metadaten über dein Projekt, die für die Übersetzung deiner Inhalte verwendet werden.
+
+Mehr über die `gt.config.json`-Datei erfährst du [hier](/docs/cli/reference/config).
+
+### Die `id`-Eigenschaft
+
+Der Setup-Befehl bietet die Möglichkeit, automatisch eindeutige IDs für deine `<T>`-Komponenten zu generieren.
+Dies ist nützlich für Projekte, die viele `<T>`-Komponenten verwenden und vermeiden möchten, jeder manuell eine eindeutige ID zuzuweisen.
+
+Diese `id` ist nützlich, um bestimmte Übersetzungen im Übersetzungseditor und in der Konsole zu referenzieren.
+
+### `<T>`-Injektionsverhalten
+
+#### Grundlegender Fall
+
+Das CLI wird JSX-Elemente auf der höchstmöglichen Ebene umschließen.
+Das bedeutet, dass es die gesamte Komponente in eine `<T>`-Komponente einwickelt, wenn sie nicht bereits umschlossen ist.
+
+```jsx
+<div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
+```
+
+Weitere Details zur Umschließung mit der `<T>`-Komponente findest du in der [Referenz](/docs/cli/reference/wrapping).
+
+### `<GTProvider>`-Verhalten
+
+Für den Next.js App Router wird der Setup-Befehl automatisch die `<T>`-Komponente in eine `<GTProvider>`-Komponente innerhalb der entsprechenden `layout.jsx`-Datei einbetten.
+
+Zusätzlich wird es das `withGTConfig` Next.js-Plugin in der `next.config.js`-Datei für dich einrichten.
+
+### Automatische Formatierung
+
+Der Setup-Befehl formatiert die Änderungen, die er an deinem Codebase vornimmt, automatisch mit Prettier, Biome oder ESLint, je nach der Konfiguration deines Projekts.
+

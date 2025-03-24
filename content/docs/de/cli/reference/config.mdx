@@ -1,0 +1,76 @@
+---
+title: Konfiguration
+description: Konfigurationsdokumentation für die gt.config.json Datei
+---
+
+## Übersicht
+
+Die Datei `gt.config.json` wird verwendet, um die GT-Einstellungen Ihres Projekts zu konfigurieren. Sie sollte im Stammverzeichnis Ihres Projekts platziert werden.
+
+## Konfiguration
+
+Die Datei `gt.config.json` enthält die folgenden Einstellungen:
+
+- `defaultLocale`: Die Standardsprache für Ihr Projekt. Dies ist die Sprache, in der Ihr Quellinhalt geschrieben ist. Dies ist auch die Fallback-Sprache für Ihr Projekt (wenn Sie `gt-next` oder `gt-react` verwenden).
+
+- `locales`: Ein Array von Sprachen für Ihr Projekt. Dies sind die Sprachen, in die Sie Ihr Projekt übersetzen möchten. Weitere Informationen finden Sie unter [unterstützte Sprachen](/docs/reference/supported-locales).
+Wenn Sie `gt-next` oder `gt-react` verwenden, sind dies auch die Sprachen, die Ihre App unterstützt.
+
+- `files`: Dies ist ein Objekt, das Informationen über den Inhalt enthält, den Sie übersetzen möchten.
+Hier ist ein Beispiel für das `files`-Objekt:
+
+```json title="gt.config.json"
+"files": {
+  "json": {
+    "include": ["path/to/include/[locale].json"],
+    "exclude": ["path/to/exclude/[locale].json"]
+  }
+}
+```
+
+`files` sollte einen Schlüssel für jeden Dateityp enthalten, den Sie übersetzen möchten.
+Derzeit unterstützen wir die folgenden Dateischlüssel:
+
+- `json`: JSON-Dateien.
+
+Das entsprechende Objekt sollte einen `include`-Schlüssel enthalten. Der Wert des `include`-Schlüssels ist ein Array von Glob-Mustern, die mit den Dateien übereinstimmen, die Sie übersetzen möchten.
+
+Sie sollten den Platzhalter `[locale]` in Ihren Glob-Mustern verwenden, um sicherzustellen, dass die richtige Sprache verwendet wird.
+Das CLI-Tool ersetzt den Platzhalter `[locale]` durch den Wert von `defaultLocale`, wenn es nach übersetzbaren Dateien sucht.
+
+Es speichert übersetzte Dateien im entsprechenden Pfad, wobei der Platzhalter `[locale]` durch den Sprachcode ersetzt wird.
+
+Optional können Sie auch einen `exclude`-Schlüssel einfügen. Der Wert des `exclude`-Schlüssels sollte ein Array von Glob-Mustern sein, die mit den Dateien übereinstimmen, die Sie von der Übersetzung ausschließen möchten.
+
+---
+
+Hier ist ein Beispiel für die Datei `gt.config.json`:
+
+```json title="gt.config.json"
+{
+  "defaultLocale": "en",
+  "locales": ["fr", "es"],
+  "files": {
+    "json": {
+      "include": ["path/to/include/[locale].json"],
+      "exclude": ["path/to/exclude/[locale].json"]
+    }
+  }
+}
+```
+
+Mit dieser Konfiguration sucht die CLI nach der Datei unter `path/to/include/en.json` und speichert die übersetzten Dateien unter `path/to/include/fr.json` und `path/to/your/es.json`.
+
+Es ignoriert alle Dateien, die dem Glob-Muster `path/to/exclude/[locale].json` entsprechen.
+
+<Callout type="info">
+
+Derzeit kann die CLI nur eine JSON-Quelldatei gleichzeitig übersetzen. Wir arbeiten daran, Unterstützung für mehrere Quelldateien hinzuzufügen.
+
+</Callout>
+
+---
+
+## Nächste Schritte
+
+Erfahren Sie, wie Sie den [init-Befehl](/docs/cli/init) verwenden, um diese Konfigurationsdatei zu generieren.

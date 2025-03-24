@@ -1,0 +1,170 @@
+---
+title: <T> Umschließungsverhalten
+description: Spezifisches Verhalten, wie das CLI-Tool die `<T>`-Komponente umschließt
+---
+
+## Übersicht
+
+Diese Seite beschreibt das genaue Verhalten, wie das CLI-Tool die `<T>`-Komponente umschließt.
+
+Als Faustregel gilt, dass die CLI die [`<T>`](/docs/next/api/components/t)-Komponente um jeden statischen, bedeutungsvollen Inhalt umschließen wird.
+Sie wird auch eine [`<Var>`](/docs/next/api/components/var)-Komponente um jeden dynamischen Teilinhalt umschließen, der innerhalb einer `<T>`-Komponente enthalten ist.
+
+Zum Beispiel wird Folgendes in eine `<T>`-Komponente eingewickelt:
+```jsx
+<div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
+```
+
+aber Folgendes nicht:
+```jsx
+<div><img src="logo.png" /></div> -> <div><img src="logo.png" /></div>
+```
+
+Das CLI-Tool stellt immer sicher, dass die endgültige Ausgabe gültiges JSX ist und die `<T>`-Komponente korrekt verwendet.
+
+In einigen Fällen, wie bei [logischen Operatoren](#logical-operators), könnte ein menschliches Eingreifen nützlich sein, um bessere Übersetzungen mit mehr Kontext zu gewährleisten.
+
+<Accordions>
+  <Accordion title="Warum können <T>-Komponenten keinen dynamischen Inhalt umschließen?">
+    Da die `<T>`-Komponente typischerweise vorübersetzt und zwischengespeichert wird, ist es wichtig sicherzustellen, dass der Inhalt zur Laufzeit nicht geändert wird.
+    Wenn dynamischer Inhalt erlaubt wäre, könnte jeder Benutzer potenziell eine andere Übersetzung desselben Inhalts sehen.
+
+    Wenn Sie Inhalte übersetzen möchten, die sich zur Laufzeit ändern, sollten Sie stattdessen die [`<Tx>`](/docs/next/api/components/t)-Komponente verwenden.
+  </Accordion>
+  <Accordion title='Was gilt als "statischer" Inhalt?'>
+    Statischer Inhalt ist Inhalt, der sich zur Laufzeit nicht ändern kann.
+    Zum Beispiel ist Folgendes statisch:
+    ```jsx
+    <div>Hello, World!</div>
+    ```
+    aber Folgendes ist dynamisch:
+    ```jsx
+    <div>{name}</div>
+    ```
+  </Accordion>
+  <Accordion title='Was gilt als "bedeutungsvoller" Inhalt?'>
+    
+Bedeutungsvoller Inhalt ist Inhalt, der realistischerweise übersetzt werden könnte und in einer anderen Sprache eine andere Bedeutung hat.
+
+Zum Beispiel ist dies bedeutungsvoll:
+```jsx
+<div>Hello, World!</div> -> <T id="SOME_ID"><div>Hello, World!</div></T>
+```
+während diese es nicht sind:
+```jsx
+<div><img src="logo.png" /></div>
+<div><span></span></div>
+<div><div></div></div>
+<div><CustomButton/></div>
+```
+
+Unabhängig davon, in welcher Sprache der Inhalt betrachtet wird, sind die Ergebnisse immer gleich.
+
+<Callout type="info">
+  Symbole wie '!', '?', '.', und "@" gelten als nicht bedeutungsvoll, da sie typischerweise in allen Sprachen die gleiche Bedeutung haben und 
+  zum gleichen Symbol übersetzt werden.
+  
+  Der Regex, der verwendet wird, um festzustellen, ob Inhalt bedeutungsvoll ist, lautet:
+  ```/[\p{L}\p{N}]/u;```
+</Callout>
+  </Accordion>
+</Accordions>
+
+<Callout type="info">
+  Bitte melden Sie uns Fehler oder unerwartetes Verhalten auf [Github](https://github.com/General-Translation/gt-libraries/issues).
+</Callout>
+
+
+### JSX-Ausdrücke
+
+Die CLI wird Ausdrücke `{...}` automatisch in [`<Var>`](/docs/next/api/components/var)-Komponenten einwickeln.
+Dies liegt daran, dass Ausdrücke typischerweise dynamisch sind. 
+
+```jsx
+<div>Hello, {name}</div> -> <T id="SOME_ID"><div>Hello, <Var>{name}</Var></div></T>
+```
+
+<Callout type="warn">
+  Inhalte, die in einer `<Var>`-Komponente enthalten sind, werden nicht übersetzt. 
+  
+  Wenn Sie dynamische Inhalte übersetzen möchten, sollten Sie stattdessen die [`<Tx>`](/docs/next/api/components/t)-Komponente verwenden.
+</Callout>
+
+### Statischer Inhalt in JSX-Ausdrücken
+
+Die Ausnahme von der Regel zur Ausdrucksumschließung ist, wenn der Ausdruck statischen Inhalt enthält.
+
+Zum Beispiel wird Folgendes nicht in eine `<Var>`-Komponente eingewickelt:
+```jsx
+<p>{"Hello," + " World!"}</p> -> <T id="SOME_ID"><p>{"Hello," + " World!"}</p></T>
+```
+
+
+### Template-Literale in JSX-Ausdrücken
+
+Die CLI wird Template-Literale, die Quasis (`${}`) enthalten, in eine [`<Var>`](/docs/next/api/components/var)-Komponent, da sie dynamisch sein können.
+```jsx
+<p>{`${temp}`}</p> -> <T id="SOME_ID"><p><Var>{`${temp}`}</Var></p></T>
+```
+
+### Logische Operatoren
+
+JSX-Ausdrücke, die logische Operatoren wie `&&`, `||` und `?` enthalten, 
+werden in eine [`<Var>`](/docs/next/api/components/var)-Komponente eingebettet,
+wenn eine `<T>`-Komponente auf der obersten Ebene erforderlich ist (d.h. wenn es anderen bedeutungsvollen Inhalt außerhalb des Ausdrucks gibt).
+
+<Tabs items={["Before", "After"]}>
+  <Tab value="Before">
+    ```jsx
+    <div>Hello, {name && {name}} World!</div>
+    ```
+  </Tab>
+  <Tab value="After">
+    ```jsx
+    <T id="SOME_ID">
+      <div>Hello, <Var>{name && {name}}</Var> World!</div>
+    </T>
+    ```
+  </Tab>
+</Tabs>
+
+Innerhalb des Ausdrucks behandelt die CLI Elemente so, als wären sie völlig unabhängig vom Rest des Ausdrucks.
+
+Das bedeutet, dass sie in ihre eigenen `<T>`-Komponenten eingebettet werden (um sicherzustellen, dass alle Inhalte übersetzbar sind).
+
+<Tabs items={["Before", "After"]}>
+  <Tab value="Before">
+    ```jsx
+    <div>{name ? <>Hello, </> : <>Goodbye, </>}</div>
+    ```
+  </Tab>
+  <Tab value="After">
+    ```jsx
+    <T id="SOME_ID">
+      <div>
+        <Var>
+          {name ? <T id="HELLO"><>Hello, </></T> : <T id="GOODBYE"><>Goodbye, </></T>}
+        </Var> World!
+      </div>
+    </T>
+    ```
+  </Tab>
+</Tabs>
+<Callout type="warn">
+  In solchen Fällen sollten Sie stattdessen eine [`<Branch>`](/docs/next/api/components/branch)- oder [`<Plural>`](/docs/next/api/components/plural)-Komponente verwenden.
+
+  Das CLI-Tool verwendet diese Komponenten derzeit nicht automatisch in einer `<T>`-Komponente, daher müssen Sie den Code manuell ändern.
+
+  Das vorherige Beispiel sollte wie folgt umgeschrieben werden:
+  ```jsx
+  <T id="SOME_ID">
+    <div>
+      <Branch branch={name == null}
+        true={<>Hello, </>}
+        false={<>Goodbye, </>}
+      />
+      World!
+    </div>
+  </T>
+  ```
+</Callout>

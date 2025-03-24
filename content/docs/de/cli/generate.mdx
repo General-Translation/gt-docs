@@ -1,0 +1,45 @@
+---
+title: Quellvorlage generieren
+description: Wie man eine Quellvorlage für dein Projekt generiert
+---
+## Verwendung
+
+```bash
+npx gtx-cli generate
+```
+
+## Überblick
+
+Der Befehl `gtx-cli generate` generiert eine Quelldatei für dein Projekt für deine Standardsprache und unterstützten Sprachen.
+
+Die generierten Dateien sind kompatibel mit den Bibliotheken `gt-next` und `gt-react` und haben das gleiche Format, das auch vom Befehl `translate` verwendet wird.
+
+Nach dem Generieren der Quelldateien kannst du [lokale Übersetzungen](/docs/next/reference/local-tx) verwenden, um die Übersetzungen deinen Nutzern bereitzustellen.
+
+<Callout type="info">
+    Dieser Befehl ist nur nützlich, wenn du deinen eigenen Übersetzungsdienst verwendest.
+
+    Wenn du die General Translation API verwendest, solltest du stattdessen den Befehl `translate` verwenden.
+</Callout>
+
+## Parameter
+
+| Parameter       | Beschreibung                                      | Typ    | Optional | Standard         |
+|-----------------|--------------------------------------------------|---------|----------|-----------------|
+| `--src <paths>`   | Gibt das/die zu scannende(n) Quellverzeichnis(se) an                     | `[string]`  | `true`     | `./src && ./app && ./pages && ./components`      |
+| `--dictionary <path>`    | Gibt einen Pfad zur Wörterbuchdatei an                | `string`  | `true`     |                 |
+| `--tsconfig, --jsconfig <path>`| Gibt einen Pfad zur TS- oder JS-Konfigurationsdatei an | `string`  | `true`     |                 |
+| `--inline`        | Schließt Inline-`<T>`-Tags zusätzlich zum Wörterbuch ein     | `boolean` | `true`     | `true`            |
+| `--default-locale <locale>`| Die Quellsprache für das Projekt                  | `string`  | `true`     |  `en`               |
+| `--ignore-errors` | Ignoriert Fehler und erzwingt die Übersetzung für gültige Inhalte       | `flag` | `true`     | `false`           |
+| `-t, --translations-dir <path>`    | Das Verzeichnis, in dem die Übersetzungen gespeichert werden sollen  | `string`  | `false`     |            |
+
+Der Parameter `-t` ist erforderlich, da er das Verzeichnis angibt, in dem die Quellvorlage gespeichert werden soll.
+
+
+### Konfigurationsdatei
+
+Wenn du das CLI-Tool zum ersten Mal ausführst, wird es versuchen, eine `gt.config.json`-Datei im Stammverzeichnis deines Projekts zu erstellen.
+Diese Datei enthält Metadaten über dein Projekt, die zur Übersetzung deiner Inhalte verwendet werden.
+
+Mehr über die `gt.config.json`-Datei erfährst du [hier](/docs/cli/reference/config).

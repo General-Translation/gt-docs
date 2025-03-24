@@ -1,0 +1,26 @@
+---
+title: Init
+description: Configure les paramètres GT de votre projet.
+---
+
+## Utilisation
+
+Utilisez cette commande pour initialiser les paramètres GT de votre projet. Cette commande est facultative et sert uniquement à créer un fichier `gt.config.json` à la racine de votre projet.
+
+```bash
+npx gtx-cli init
+```
+
+## Aperçu
+
+La commande `init` vous aide à configurer les paramètres GT de votre projet.
+
+Elle créera un fichier `gt.config.json` à la racine de votre projet.
+
+Le fichier contiendra les paramètres suivants :
+
+- `defaultLocale` : La locale par défaut pour votre projet.
+- `locales` : Un tableau des locales prises en charge pour votre projet.
+- `files` : Il s'agit d'un objet qui contient des informations sur le contenu que vous souhaitez traduire.
+
+Pour des informations plus spécifiques sur le fichier `gt.config.json`, veuillez consulter la [documentation de configuration](/docs/cli/reference/config).

@@ -1,0 +1,45 @@
+---
+title: 生成源模板
+description: 如何为您的项目生成源模板
+---
+## 用法
+
+```bash
+npx gtx-cli generate
+```
+
+## 概述
+
+`gtx-cli generate` 命令为您的项目生成一个源文件，包括默认语言和支持的语言。
+
+生成的文件与 `gt-next` 和 `gt-react` 库兼容，并且与 `translate` 命令使用的格式相同。
+
+生成源文件后，您可以使用[本地翻译](/docs/next/reference/local-tx)将翻译提供给您的用户。
+
+<Callout type="info">
+    此命令仅在您使用自己的翻译服务时有用。
+
+    如果您使用的是 General Translation API，则应该使用 `translate` 命令。
+</Callout>
+
+## 参数
+
+| 参数       | 描述                                      | 类型    | 可选 | 默认值         |
+|-----------------|--------------------------------------------------|---------|----------|-----------------|
+| `--src <paths>`   | 指定要扫描的源目录                     | `[string]`  | `true`     | `./src && ./app && ./pages && ./components`      |
+| `--dictionary <path>`    | 指定字典文件的路径                | `string`  | `true`     |                 |
+| `--tsconfig, --jsconfig <path>`| 指定 TS 或 JS 配置文件的路径 | `string`  | `true`     |                 |
+| `--inline`        | 除字典外还包括内联 `<T>` 标签     | `boolean` | `true`     | `true`            |
+| `--default-locale <locale>`| 项目的源语言                  | `string`  | `true`     |  `en`               |
+| `--ignore-errors` | 忽略错误并强制翻译有效内容       | `flag` | `true`     | `false`           |
+| `-t, --translations-dir <path>`    | 保存翻译的目录  | `string`  | `false`     |            |
+
+`-t` 参数是必需的，它指定了保存源模板的目录。
+
+
+### 配置文件
+
+首次运行 CLI 工具时，它将尝试在项目根目录中创建一个 `gt.config.json` 文件。
+该文件包含用于翻译内容的项目元数据。
+
+在[这里](/docs/cli/reference/config)阅读更多关于 `gt.config.json` 文件的信息。

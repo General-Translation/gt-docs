@@ -1,0 +1,76 @@
+---
+title: 配置
+description: gt.config.json 文件的配置文档
+---
+
+## 概述
+
+`gt.config.json` 文件用于配置项目的 GT 设置。它应该放置在项目的根目录中。
+
+## 配置
+
+`gt.config.json` 文件包含以下设置：
+
+- `defaultLocale`：项目的默认语言环境。这是您的源内容所使用的语言环境。这也是项目的后备语言环境（如果使用 `gt-next` 或 `gt-react`）。
+
+- `locales`：项目的语言环境数组。这些是您想要将项目翻译成的语言环境。有关更多信息，请参阅[支持的语言环境](/docs/reference/supported-locales)。
+如果您使用的是 `gt-next` 或 `gt-react`，这些也是您的应用程序支持的语言环境。
+
+- `files`：这是一个包含有关您想要翻译的内容信息的对象。
+以下是 `files` 对象的示例：
+
+```json title="gt.config.json"
+"files": {
+  "json": {
+    "include": ["path/to/include/[locale].json"],
+    "exclude": ["path/to/exclude/[locale].json"]
+  }
+}
+```
+
+`files` 应该为您想要翻译的每种文件类型包含一个键。
+我们目前支持以下文件键：
+
+- `json`：JSON 文件。
+
+相应的对象应该包含一个 `include` 键。`include` 键的值是一个匹配您想要翻译的文件的 glob 模式数组。
+
+您应该在 glob 模式中使用 `[locale]` 占位符，以确保使用正确的语言环境。
+CLI 工具在搜索可翻译文件时，会将 `[locale]` 占位符替换为 `defaultLocale` 值。
+
+它会将翻译后的文件保存到相应的路径，并将 `[locale]` 占位符替换为语言代码。
+
+可选地，您还可以包含一个 `exclude` 键。`exclude` 键的值应该是一个匹配您想要排除在翻译之外的文件的 glob 模式数组。
+
+---
+
+以下是 `gt.config.json` 文件的示例：
+
+```json title="gt.config.json"
+{
+  "defaultLocale": "en",
+  "locales": ["fr", "es"],
+  "files": {
+    "json": {
+      "include": ["path/to/include/[locale].json"],
+      "exclude": ["path/to/exclude/[locale].json"]
+    }
+  }
+}
+```
+
+使用此配置，CLI 将搜索位于 `path/to/include/en.json` 的文件，并将翻译后的文件保存到 `path/to/include/fr.json` 和 `path/to/your/es.json`。
+
+它将忽略任何匹配 glob 模式 `path/to/exclude/[locale].json` 的文件。
+
+<Callout type="info">
+
+目前，CLI 一次只能翻译一个 JSON 源文件。我们正在努力添加对多个源文件的支持。
+
+</Callout>
+
+---
+
+## 下一步
+
+了解如何使用 [init 命令](/docs/cli/init) 生成此配置文件。

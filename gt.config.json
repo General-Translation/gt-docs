@@ -2,7 +2,11 @@
   "defaultLocale": "en",
   "files": {
     "mdx": {
-      "include": ["content/docs/[locale]/*.mdx"]
+      "include": [
+        "content/docs/[locale]/*.mdx",
+        "content/docs/[locale]/cli/*.mdx",
+        "content/docs/[locale]/cli/reference/*.mdx"
+      ]
     }
   },
   "locales": ["zh", "de", "fr", "es", "ja"],
