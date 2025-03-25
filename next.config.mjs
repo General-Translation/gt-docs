@@ -8,8 +8,7 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   devIndicators: false,
-  basePath: '/docs',
-
+  assetPrefix: '/docs-static',
 };
 
 export default withGTConfig(withMDX(config), {
