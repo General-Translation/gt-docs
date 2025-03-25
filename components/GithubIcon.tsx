@@ -5,5 +5,5 @@
 export function GitHubIcon() {
   //const { resolvedTheme } = useTheme();
 
-  return <img src="github-mark.svg" width={20} height={20} alt="GitHub" />;
+  return <img src="/github-mark.svg" width={20} height={20} alt="GitHub" />;
 }
