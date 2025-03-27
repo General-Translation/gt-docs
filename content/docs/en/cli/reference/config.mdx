@@ -7,6 +7,8 @@ description: Config docs for the gt.config.json file
 
 The `gt.config.json` file is used to configure your project's GT settings. It should be placed in the root of your project.
 
+The CLI command `npx gtx-cli init` will create a `gt.config.json` file for you in your project.
+
 ## Configuration
 
 The `gt.config.json` file contains the following settings:
@@ -31,7 +33,10 @@ Here is an example of the `files` object:
 `files` should contain a key for each file type that you want to translate.
 We currently support the following file keys:
 
+- `gt`: General Translation files.
 - `json`: JSON files.
+
+## `json`
 
 The corresponding object should contain an `include` key. The value of the `include` key is an array of glob patterns that match the files you want to translate.
 
@@ -41,6 +46,31 @@ The CLI tool will replace the `[locale]` placeholder with the `defaultLocale` va
 It will save translated files to the corresponding path, with the `[locale]` placeholder replaced with the locale code.
 
 Optionally, you can also include an `exclude` key. The value of the `exclude` key should be an array of glob patterns that match the files you want to exclude from translation.
+
+## `gt`
+
+The corresponding object should contain an `output` key. The value should be a glob pattern that matches the files you want to save the translations to.
+
+The `[locale]` placeholder in your glob patterns is required to ensure that the correct locale is used.
+
+For example, if you want to save the translations to a file called `ui.es.json`, you should use the following glob pattern:
+
+```json title="gt.config.json"
+"files": {
+  "gt": {
+    "output": "content/docs/ui.[locale].json"
+  }
+}
+```
+
+
+<Callout type="info">
+
+This option should only be used if you are using `gt-next` or `gt-react`, and want to save translations locally, instead of using the GT CDN.
+
+Currently, only one file for each locale can be generated.
+
+</Callout>
 
 ---
 
@@ -59,15 +89,9 @@ Here is an example of the `gt.config.json` file:
 }
 ```
 
-With this configuration, the CLI will search for the file at `path/to/include/en.json` and save the translated files to `path/to/include/fr.json` and `path/to/your/es.json`.
+With this configuration, the CLI will search for the JSON file at `path/to/include/en.json` and save the translated files to `path/to/include/fr.json` and `path/to/your/es.json`.
 
 It will ignore any files that match the glob pattern `path/to/exclude/[locale].json`.
-
-<Callout type="info">
-
-Currently, the CLI can only translate one JSON source file at a time. We are working on adding support for multiple source files.
-
-</Callout>
 
 ---
 

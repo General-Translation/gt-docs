@@ -89,14 +89,14 @@ Make sure that you have followed the [Quick Start Guide](/docs/react/tutorials/q
   </Step>
 
   <Step>
-    In your [translate](/docs/cli/translate) command, add the following flags to use local translations:
-     * `--no-publish`: Disable translations from being published to the GT CDN.
-     * `--translations-dir ./src/_gt`: Save translations to the `./src/_gt` directory.
-
+    Run the following command, and when asked "Where are your language files stored?", select the "Local" option.
     ```bash
-    npx gtx-cli translate --no-publish --translations-dir ./src/_gt
+    npx gtx-cli init
     ```
-    
+    Then, run the translate command.
+    ```bash
+    npx gtx-cli translate
+    ```
     <Callout type="warn">
       Depending on the specific framework you are using, you may need to ensure that the translation JSONs are included in the
       final bundle.

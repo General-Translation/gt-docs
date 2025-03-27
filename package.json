@@ -18,7 +18,7 @@
     "fumadocs-mdx": "^11.5.7",
     "fumadocs-ui": "^15.1.2",
     "gt-next": "^5.2.13",
-    "gtx-cli": "^1.1.5",
+    "gtx-cli": "^1.1.7-alpha.2",
     "next": "^15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

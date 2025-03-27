@@ -66,12 +66,13 @@ Make sure that you have followed the [Quick Start Guide](/docs/next/tutorials/qu
   </Step>
 
   <Step>
-    In your [translate](/docs/cli/translate) command, add the following flags to use local translations:
-      * `--no-publish`: Disable translations from being published to the GT CDN.
-      * `--translations-dir ./public/_gt`: Save translations to the `./public/_gt` directory.
-    
+    Run the following command, and when asked "Where are your language files stored?", select the "Local" option.
     ```bash
-    npx gtx-cli translate --no-publish --translations-dir ./public/_gt
+    npx gtx-cli init
+    ```
+    Then, run the translate command.
+    ```bash
+    npx gtx-cli translate
     ```
   </Step>
 </Steps>
