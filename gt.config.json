@@ -1,11 +1,15 @@
 {
   "defaultLocale": "en",
   "files": {
+    "json": {
+      "include": ["content/ui.[locale].json"]
+    },
     "mdx": {
       "include": [
-        "content/docs/[locale]/*.mdx",
-        "content/docs/[locale]/cli/*.mdx",
-        "content/docs/[locale]/cli/reference/*.mdx"
+        "content/docs/[locale]/cli/reference/*.mdx",
+        "content/docs/[locale]/cli/tutorials/*.mdx",
+        "content/docs/[locale]/reference/*.mdx",
+        "content/docs/[locale]/usage/*.mdx"
       ]
     }
   },

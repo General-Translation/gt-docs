@@ -1,0 +1,77 @@
+---
+title: Wörterbücher
+description: Wie man Wörterbücher verwendet
+---
+
+## Überblick
+
+Wörterbücher sind eine Möglichkeit, Textinhalte in General Translation zu übersetzen.
+Alle Inhalte werden in einer zentralen Datei gespeichert und können mit dem [`useDict()` Hook](/docs/react/api/dictionary/useDict) abgerufen werden.
+
+Wenn Sie andere i18n-Bibliotheken verwendet haben, sind Sie möglicherweise mit der Verwendung von Übersetzungsdateien (`en.json`, `zh.json`, usw.) vertraut.
+Die Verwendung von Wörterbüchern ist syntaktisch praktisch identisch, außer dass Sie nur eine Datei in Ihrer Basissprache pflegen müssen.
+Alle Übersetzungen werden von LLMs generiert.
+
+<Callout>
+  **Tipp**:
+  Wenn Sie nach einer einfacheren Möglichkeit suchen, Textinhalte zu übersetzen, empfehlen wir die Verwendung des [`useGT()` Hooks](/docs/react/api/strings/useGT).
+</Callout>
+
+---
+
+## Vor- und Nachteile
+
+Es gibt einige Vorteile bei der Verwendung von Wörterbüchern:
+
+1. **Zentralisierte Speicherung**: Wörterbücher speichern alle übersetzbaren Inhalte in einer einzigen Datei, was die Verwaltung und Aktualisierung erleichtert.
+2. **Historischer Präzedenzfall**: Das Wörterbuchmuster ist ein gängiges Entwurfsmuster in der Branche und wird von vielen anderen Bibliotheken verwendet.
+
+Gleichzeitig hat es auch einige Nachteile:
+
+1. **Komplexität**: Wörterbücher sind komplexer einzurichten und zu verwenden als die Übersetzung von Textinhalten inline.
+2. **Lesbarkeit**: Wörterbücher sind weniger lesbar als die Inline-Übersetzung, da der Inhalt vom Kontext getrennt ist, in dem er verwendet wird.
+
+Wörterbücher sind ein alternatives Entwurfsmuster zur Inline-Übersetzung, aber beide Muster werden von unserer Bibliothek unterstützt und schließen sich nicht gegenseitig aus.
+Sie können ein Wörterbuch zusammen mit der Inline-Übersetzung mit [der `<T>` Komponente](/docs/react/api/components/t) und [dem `useGT()` Hook](/docs/react/api/strings/useGT) verwenden.
+
+---
+
+## Beispiel
+
+Geben Sie Ihre Textinhalte in einer Wörterbuchdatei an (entweder `.js` oder `.json`).
+```jsx title="src/dictionary.json" copy
+{
+  "greetings": {
+    "hello": 'Hello, World!',
+  },
+} 
+```
+
+Dann referenzieren Sie es in Ihrer Komponente, indem Sie den Schlüssel an die Funktion `d()` übergeben.
+
+```jsx title="src/MyComponent" copy
+import { GTProvider, useDict } from 'gt-react';
+import dictionary from './dictionary.json';
+
+export default function MyComponent() {
+
+  const d = useDict(); // [!code highlight]
+
+  return (
+    <GTProvider dictionary={dictionary}>
+      <div>
+        {d('greetings.hello')} // [!code highlight]
+      </div>
+    </GTProvider>
+  );
+}
+```
+
+---
+
+## Hinweise
+ * Wörterbücher sind eine Möglichkeit, Inhalte in General Translation zu übersetzen.
+ * Der [`useDict()` Hook](/docs/react/api/dictionary/useDict) wird für die Übersetzung von Strings mit dem Wörterbuchmuster verwendet.
+
+## Nächste Schritte
+ * Weitere Informationen finden Sie in den Anleitungen zu Wörterbüchern für [React](/docs/react/reference/dictionary-reference) oder [Next.js](/docs/next/reference/dictionary-reference)

@@ -1,0 +1,77 @@
+---
+title: 辞書
+description: 辞書の使い方
+---
+
+## 概要
+
+辞書は、General Translationで文字列コンテンツを翻訳する方法です。
+すべてのコンテンツは中央ファイルに保存され、[`useDict()` フック](/docs/react/api/dictionary/useDict)を使用してアクセスできます。
+
+他のi18nライブラリを使用したことがある場合、翻訳ファイル（`en.json`、`zh.json`など）の使用に慣れているかもしれません。
+辞書の使用は基本的に構文的に同じですが、ベース言語で1つのファイルのみを維持する必要があります。
+すべての翻訳はLLMによって生成されます。
+
+<Callout>
+  **ヒント**:
+  文字列コンテンツを翻訳するためのよりシンプルな方法をお探しの場合は、[`useGT()` フック](/docs/react/api/strings/useGT)の使用をお勧めします。
+</Callout>
+
+---
+
+## 利点と欠点
+
+辞書を使用する利点がいくつかあります：
+
+1. **一元化されたストレージ**: 辞書はすべての翻訳可能なコンテンツを単一のファイルに保存するため、管理と更新が容易になります。
+2. **歴史的な先例**: 辞書パターンは業界で一般的な設計パターンであり、多くの他のライブラリで使用されています。
+
+同時に、いくつかの欠点もあります：
+
+1. **複雑さ**: 辞書はインラインで文字列コンテンツを翻訳するよりも設定と使用が複雑です。
+2. **読みやすさ**: 辞書はコンテンツが使用されているコンテキストから分離されているため、インライン翻訳よりも読みにくいです。
+
+辞書はインライン翻訳の代替設計パターンですが、これらのパターンは私たちのライブラリでサポートされており、相互に排他的ではありません。
+[`<T>` コンポーネント](/docs/react/api/components/t)や[`useGT()` フック](/docs/react/api/strings/useGT)を使用したインライン翻訳と一緒に辞書を使用することができます。
+
+---
+
+## 例
+
+辞書ファイル（`.js`または`.json`）で文字列コンテンツを指定します。
+```jsx title="src/dictionary.json" copy
+{
+  "greetings": {
+    "hello": 'Hello, World!',
+  },
+} 
+```
+
+次に、キーを`d()`関数に渡してコンポーネントで参照します。
+
+```jsx title="src/MyComponent" copy
+import { GTProvider, useDict } from 'gt-react';
+import dictionary from './dictionary.json';
+
+export default function MyComponent() {
+
+  const d = useDict(); // [!code highlight]
+
+  return (
+    <GTProvider dictionary={dictionary}>
+      <div>
+        {d('greetings.hello')} // [!code highlight]
+      </div>
+    </GTProvider>
+  );
+}
+```
+
+---
+
+## 注意点
+ * 辞書はGeneral Translationでコンテンツを翻訳する方法です。
+ * [`useDict()` フック](/docs/react/api/dictionary/useDict)は辞書パターンで文字列を翻訳するために使用されます。
+
+## 次のステップ
+ * 詳細については、[React](/docs/react/reference/dictionary-reference)または[Next.js](/docs/next/reference/dictionary-reference)の辞書に関するガイドをご覧ください。

@@ -1,0 +1,56 @@
+---
+title: Locale-Zeichenketten
+description: Wie man Locale-Zeichenketten in GT interpretiert
+---
+
+
+## Überblick
+
+General Translation verwendet eine Variante des [BCP 47 Language Tag Standards](https://www.techonthenet.com/js/language_tags.php), um Locales und Sprachen darzustellen.
+BCP 47 Language Tags sind der Internet Best Current Practices (BCP) Standard zur Identifizierung von Sprachen in sowohl gesprochener als auch geschriebener Form.
+Diese Tags bieten eine einheitliche Methode zur Spezifizierung von Sprachen und ermöglichen es Anwendungen, Inhalte, Format und Verhalten basierend auf der Locale des Benutzers anzupassen.
+
+Language Tags bestehen aus einem oder mehreren Subtags, die durch das Zeichen `"-"` getrennt sind. Die Subtags umfassen folgende Komponenten:
+
+- **Language Subtag**: Repräsentiert die Hauptsprache, z.B. `en` für Englisch, `es` für Spanisch.
+- **Region Subtag**: Spezifiziert ein Land oder eine Region, z.B. `US` für die Vereinigten Staaten, `FR` für Frankreich.
+- **Script Subtag** (optional): Gibt das Schriftsystem an, z.B. `Latn` für lateinische Schrift.
+- **Variant Subtag** (optional): Identifiziert eine spezifische Variation einer Sprache, z.B. `arevela` für Ostarmenisch.
+
+Wenn Sie diese Tags zusammenfügen, bezeichnen wir dies als **Locale** oder **Locale-Tag**.
+
+### Häufig verwendete Tags
+
+In der Praxis bestehen die meisten Language Tags aus zwei Subtags: einer Sprache und einer Region. Hier sind einige gängige Beispiele:
+
+| Language Tag | Beschreibung                      |
+|--------------|-----------------------------------|
+| `en-US`      | Englisch wie in den USA verwendet |
+| `es-ES`      | Spanisch wie in Spanien verwendet |
+| `fr-CA`      | Französisch wie in Kanada verwendet |
+| `zh-CN`      | Vereinfachtes Chinesisch (China)  |
+| `de-DE`      | Deutsch wie in Deutschland verwendet |
+
+### Erweiterte Tags
+
+Language Tags können zusätzliche Subtags für mehr Spezifität enthalten:
+
+- **Beispiel**: `hy-Latn-IT-arevela`
+  - `hy`: Armenisch (Sprache)
+  - `Latn`: Lateinisch (Schrift)
+  - `IT`: Italien (Region)
+  - `arevela`: Ostarmenisch (Variante)
+
+Dieses Tag repräsentiert Ostarmenisch, geschrieben in lateinischer Schrift, wie es in Italien verwendet wird.
+
+## Ausnahmen zu BCP 47 in GT
+
+🚧 Dieser Abschnitt befindet sich derzeit im Aufbau. 🚧
+
+## Hinweise
+ * General Translations verwendet **Locale Tags (Locales)**, um Sprachen und Regionen intern zu identifizieren.
+
+## Nächste Schritte
+ * Sehen Sie unsere [Liste der unterstützten Locales](/docs/reference/supported-locales), um die in General Translation verfügbaren Language Tags zu finden.
+ * Informieren Sie sich im offiziellen [IETF Language Tag Registry](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry)
+   und im [BCP 47 Language Tag Standard](https://www.techonthenet.com/js/language_tags.php) für weitere Informationen.

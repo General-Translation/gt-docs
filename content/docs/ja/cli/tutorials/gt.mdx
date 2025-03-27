@@ -1,0 +1,107 @@
+---
+title: GTライブラリ
+description: GTライブラリを使用してプロジェクトを自動的に翻訳する
+---
+
+## 概要
+
+このチュートリアルでは、[`gt-next`](/docs/next)または[`gt-react`](/docs/react)を使用する際にプロジェクトの翻訳ファイルを自動的に管理する方法を紹介します。
+
+
+以下の4つのステップに従います：
+<Steps>
+  <Step>
+    環境変数を追加する
+  </Step>
+  <Step>
+    [`gtx-cli`](/docs/cli)をインストールする
+  </Step>
+  <Step>
+    [`gtx-cli init`](/docs/cli/init)コマンドでプロジェクトを初期化する
+  </Step>
+  <Step>
+    [`gtx-cli translate`](/docs/cli/translate#translate-json)を実行する
+  </Step>
+</Steps>
+
+<Callout>
+  **ヒント:**
+  [`<T>`コンポーネント](/docs/usage/t)を使用して翻訳ファイルの手間を省きましょう。
+</Callout>
+
+---
+
+## ステップ1：環境変数を追加する
+
+本番環境のAPIキーとプロジェクトIDを環境変数に追加します。
+これは`gtx-cli`ツールを使用するために必要です。
+これらは[General Translation ダッシュボード](https://generaltranslation.com/dashboard)から取得できます。
+
+```bash title=".env"
+GT_API_KEY=<your-api-key>
+GT_PROJECT_ID=<your-project-id>
+```
+
+## ステップ2：`gtx-cli`をインストールする
+
+プロジェクトに`gtx-cli`ツールをインストールします。
+
+<Tabs items={['npm', 'yarn', 'bun', 'pnpm']}>
+  <Tab value="npm">
+  ```bash 
+  npm i --save-dev gtx-cli
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add --dev gtx-cli
+  ```
+  </Tab>
+
+  <Tab value="bun">
+  ```bash 
+  bun add --dev gtx-cli
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add --save-dev gtx-cli
+  ```
+  </Tab>
+</Tabs>
+
+## ステップ3：`gtx-cli init`コマンドでプロジェクトを初期化する
+
+`gtx-cli init`コマンドを実行してプロジェクトを設定します。
+
+```bash
+npx gtx-cli init
+```
+
+## ステップ4：ビルドプロセスに`gtx-cli translate`コマンドを追加する
+
+ビルドコマンドの前に`gtx-cli translate`コマンドをビルドまたはCIプロセスに追加して、プロジェクトに自動的に翻訳を追加します。
+
+```json title="package.json"
+{
+  "scripts": {
+    "translate": "npx gtx-cli translate",
+    "build": "npm run translate && <your build command>"
+  }
+}
+```
+これにより、すべてのロケールの翻訳が生成され、プロジェクトに保存されます。
+これらのファイルをリポジトリにコミットしたい場合は、代わりにコミット前にこのコマンドを実行することができます。
+
+
+完了です！これで、プロジェクトが変更されるたびに、すべての翻訳JSONファイルが自動的に更新されます。
+
+---
+
+## 注意点
+ * [`gtx-cli translate`](/docs/cli/translate#translate-json)コマンドを使用して、プロジェクトに自動的に翻訳を追加できます。
+ * 翻訳ファイルをコミットしたい場合は、代わりにコミット前に`gtx-cli translate`コマンドを実行できます。
+
+## 次のステップ
+ * CLIツールの[使用ガイド](/docs/cli/reference/usage)を参照してください。
+ * 開発中にライブ翻訳を確認したい場合（ホットリロードのようなもの）、[`<T>`コンポーネント](/docs/usage/t)をチェックしてください。

@@ -1,0 +1,94 @@
+---
+title: Clés API
+description: Comment utiliser les clés API avec General Translation
+---
+
+## Aperçu
+
+Il existe deux types de clés API utilisées avec General Translation :
+
+- **Clé API de production** : Celle-ci est utilisée pour traduire votre contenu en production.
+- **Clé API de développement** : Celle-ci est utilisée pour traduire votre contenu en développement.
+
+Le comportement entre les deux types de clés est différent, vous devez donc veiller à utiliser la bonne clé pour l'environnement dans lequel vous vous trouvez.
+
+```bash
+GT_PROJECT_ID=your-project-id
+GT_API_KEY=your-api-key
+```
+
+Si vous utilisez `gt-next` ou `gt-react` comme bibliothèque i18n autonome, vous n'avez pas besoin d'utiliser de clés API.
+
+---
+
+## Comment les obtenir
+
+<Steps>
+    <Step>
+        Accédez au tableau de bord de votre projet sur le [site web de General Translation](https://generaltranslation.com).
+    </Step>
+    <Step>
+        Cliquez sur l'onglet "API Keys" ou "Developer Keys".
+    </Step>
+    <Step>
+        Cliquez sur le bouton "Create API Key".
+    </Step>
+    <Step>
+        Copiez la clé API et collez-la dans le fichier `.env` de votre projet.
+    </Step>
+</Steps>
+
+---
+
+## Comportement
+
+En termes simples, les clés API de production persistent les traductions, tandis que les clés API de développement ne le font pas.
+Vous utilisez les clés API de développement pour prototyper les traductions et les clés API de production lorsque vous êtes prêt à déployer.
+
+### Clé API de développement
+
+Ce type de clé est utile à des fins de test et de développement.
+Lors de l'utilisation d'une clé API de développement, les traductions sont effectuées à la demande et mémorisées en mémoire.
+Les traductions **ne seront pas sauvegardées**.
+
+La clé API de développement est utilisée par les composants rendus dans le navigateur (côté client) et par les composants rendus côté serveur pour faciliter la traduction à la demande.
+Cela signifie qu'elle doit être exportée vers le client.
+Cette clé ne devrait JAMAIS être utilisée dans des environnements de production et ne devrait JAMAIS être transmise au client dans un environnement de production.
+
+```bash
+# exemple de fichier .env Vite pour le développement
+VITE_GT_PROJECT_ID=your-project-id
+VITE_GT_API_KEY=your-dev-api-key # Utilisée uniquement en développement
+```
+
+<Callout type="warn">
+  **Avertissement :**
+  Les clés API de développement sont transmises au client pour faciliter la traduction côté client en développement.
+  C'est acceptable dans les environnements de développement, mais constitue un risque de sécurité dans les environnements de production.
+  Si votre application est ouverte sur Internet, vous ne devriez jamais utiliser une clé API de développement.
+</Callout>
+
+### Clé API de production
+
+Lors de l'utilisation d'une clé API de production, les traductions **sont persistantes**.
+Cela signifie que les traductions seront sauvegardées (soit dans un CDN, soit dans le bundle de votre application) pour être utilisées au moment de l'exécution.
+
+Cette clé est utilisée à deux endroits :
+ * L'outil [`gtx-cli`](/docs/cli) lorsque les traductions sont générées pendant le processus de déploiement. Consultez [ce guide](/docs/react/tutorials/quickdeploy) pour plus d'informations.
+ * La bibliothèque `gt-next` lorsque les traductions se produisent au moment de l'exécution (côté serveur uniquement, non utilisée par `gt-react`).
+
+La clé API est uniquement utilisée par le serveur, et elle ne devrait JAMAIS être exportée vers le client.
+```bash
+GT_PROJECT_ID=your-project-id
+GT_API_KEY=your-prod-api-key # Cette clé ne devrait jamais être exportée vers le client
+```
+
+---
+
+## Remarques
+ * Les clés API de développement sont utilisées à des fins de test et de développement. Elles ne devraient être utilisées qu'en développement.
+ * Les clés API de production sont utilisées à des fins de production.
+
+## Prochaines étapes
+ * Découvrez comment utiliser [le composant `<T>`](/docs/usage/t) pour voir les traductions en direct en développement.
+ * Consultez le [guide d'utilisation](/docs/cli/reference/usage) pour l'outil CLI.

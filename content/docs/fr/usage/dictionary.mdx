@@ -1,0 +1,77 @@
+---
+title: Dictionnaires
+description: Comment utiliser les dictionnaires
+---
+
+## Aperçu
+
+Les dictionnaires sont un moyen de traduire du contenu textuel dans General Translation.
+Tout le contenu est stocké dans un fichier central et peut être accessible en utilisant le [hook `useDict()`](/docs/react/api/dictionary/useDict).
+
+Si vous avez utilisé d'autres bibliothèques i18n, vous êtes peut-être familier avec l'utilisation de fichiers de traduction (`en.json`, `zh.json`, etc.).
+L'utilisation des dictionnaires est pratiquement identique syntaxiquement, sauf que vous n'avez besoin de maintenir qu'un seul fichier dans votre langue de base.
+Toutes les traductions seront générées par des LLM.
+
+<Callout>
+  **Astuce**:
+  Si vous recherchez un moyen plus simple de traduire du contenu textuel, nous vous recommandons d'utiliser le [hook `useGT()`](/docs/react/api/strings/useGT).
+</Callout>
+
+---
+
+## Avantages et inconvénients
+
+Il y a quelques avantages à utiliser les dictionnaires :
+
+1. **Stockage centralisé** : Les dictionnaires stockent tout le contenu traduisible dans un seul fichier, ce qui facilite la gestion et la mise à jour.
+2. **Précédent historique** : Le modèle de dictionnaire est un modèle de conception courant dans l'industrie et est utilisé par de nombreuses autres bibliothèques.
+
+En même temps, il présente également quelques inconvénients :
+
+1. **Complexité** : Les dictionnaires sont plus complexes à configurer et à utiliser que la traduction de contenu textuel en ligne.
+2. **Lisibilité** : Les dictionnaires sont moins lisibles que la traduction en ligne car le contenu est séparé du contexte où il est utilisé.
+
+Les dictionnaires sont un modèle de conception alternatif à la traduction en ligne, mais les deux modèles sont pris en charge par notre bibliothèque et ne s'excluent pas mutuellement.
+Vous pouvez utiliser un dictionnaire parallèlement à la traduction en ligne avec [le composant `<T>`](/docs/react/api/components/t) et [le hook `useGT()`](/docs/react/api/strings/useGT).
+
+---
+
+## Exemple
+
+Spécifiez votre contenu textuel dans un fichier de dictionnaire (soit `.js` ou `.json`).
+```jsx title="src/dictionary.json" copy
+{
+  "greetings": {
+    "hello": 'Hello, World!',
+  },
+} 
+```
+
+Ensuite, vous y faites référence dans votre composant en passant la clé à la fonction `d()`.
+
+```jsx title="src/MyComponent" copy
+import { GTProvider, useDict } from 'gt-react';
+import dictionary from './dictionary.json';
+
+export default function MyComponent() {
+
+  const d = useDict(); // [!code highlight]
+
+  return (
+    <GTProvider dictionary={dictionary}>
+      <div>
+        {d('greetings.hello')} // [!code highlight]
+      </div>
+    </GTProvider>
+  );
+}
+```
+
+---
+
+## Notes
+ * Les dictionnaires sont un moyen de traduire du contenu dans General Translation.
+ * Le [hook `useDict()`](/docs/react/api/dictionary/useDict) est utilisé pour traduire des chaînes avec le modèle de dictionnaire.
+
+## Prochaines étapes
+ * Pour plus d'informations, consultez les guides sur les dictionnaires pour [React](/docs/react/reference/dictionary-reference) ou [Next.js](/docs/next/reference/dictionary-reference)

@@ -1,0 +1,52 @@
+---
+title: <T>
+description: 如何使用<T>组件
+---
+
+## 概述
+
+`<T>`组件是通用翻译中翻译内容的主要方式。
+它可以与字典一起使用，也可以单独使用。
+
+`<T>`组件可用于翻译文本、HTML和JSX。
+
+你只需要将文本包裹在`<T>`组件中，它就会被翻译。
+
+无需额外配置！
+
+```jsx
+import { T } from 'gt-react'; // [!code highlight]
+
+export default function MyComponent() {
+  return (
+    // [!code highlight]
+    <T>
+      <h1>List of Shakespeare Plays: </h1>
+      <ul>
+        <li>Hamlet</li>
+        <li>A Midsummer Night's Dream</li>
+        <li>Macbeth</li>
+      </ul>
+    </T> // [!code highlight]
+  );
+}
+```
+
+
+### 我们的建议
+
+我们推荐使用`<T>`组件，因为它的简单性，特别是如果你是国际化(i18n)的新手。
+我们为那些因过去经验或与现有代码库轻松集成而偏好这种设计模式的人提供[字典](/docs/next/reference/dictionary-reference)。
+
+要了解更多信息，请参阅相应框架的具体参考：
+  
+<Cards>
+  <Card
+    href="/docs/next/reference/t-reference"
+    title="Next.js"
+  />
+  <Card
+    href="/docs/react/reference/t-reference"
+    title="React"
+  />
+</Cards>

@@ -1,0 +1,35 @@
+---
+title: CLI 快速入门
+description: 如何使用通用翻译 CLI 工具自动翻译您的项目
+---
+
+## 概述
+
+通用翻译 CLI 工具（`gtx-cli`）允许您将项目自动翻译成任何[支持的语言](/docs/reference/supported-locales)。
+
+它为您的项目提供了与 [`gt-next`](/docs/react) 和 [`gt-react`](/docs/react) 的一流支持，使您能够扫描项目中的可翻译内容，翻译您的项目，并生成翻译数据 JSON 文件。
+
+CLI 工具还可用于为第三方 i18n 库生成翻译，如 [next-intl](https://next-intl.dev/) 或 [i18next](https://react.i18next.com/)。
+
+---
+
+根据您的项目使用的 i18n 库，请遵循以下教程之一：
+
+* [gt-next](/docs/cli/tutorials/gt)
+* [gt-react](/docs/cli/tutorials/gt)
+* [next-intl](/docs/cli/tutorials/next-intl-quickstart)
+* [i18next](/docs/cli/tutorials/i18next-quickstart)
+* [其他](/docs/cli/tutorials/json)
+
+
+
+
+## 使用方法
+
+| 命令 | 描述 |
+| --- | --- |
+| [`npx gtx-cli init`](/docs/cli/init) | （可选）配置您项目的 GT 设置。 |
+| [`npx gtx-cli setup`](/docs/cli/setup) | 逐步设置指南，为您的项目准备翻译。 |
+| [`npx gtx-cli scan`](/docs/cli/scan) | 扫描您的项目中的可翻译内容。可以重复使用以更新您的项目。 |
+| [`npx gtx-cli translate`](/docs/cli/translate) | 通过 GT API 翻译您的项目。 |
+| [`npx gtx-cli generate`](/docs/cli/generate) | 生成新的翻译数据 JSON 文件。在单独使用库时应使用。 |

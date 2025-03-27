@@ -1,0 +1,94 @@
+---
+title: API-Schlüssel
+description: Wie man API-Schlüssel mit General Translation verwendet
+---
+
+## Überblick
+
+Es gibt zwei Arten von API-Schlüsseln, die mit General Translation verwendet werden:
+
+- **Produktions-API-Schlüssel**: Dieser wird verwendet, um Ihre Inhalte in der Produktion zu übersetzen.
+- **Entwicklungs-API-Schlüssel**: Dieser wird verwendet, um Ihre Inhalte in der Entwicklung zu übersetzen.
+
+Das Verhalten zwischen den beiden Schlüsseltypen ist unterschiedlich, daher sollten Sie darauf achten, den richtigen Schlüssel für die Umgebung zu verwenden, in der Sie sich befinden.
+
+```bash
+GT_PROJECT_ID=your-project-id
+GT_API_KEY=your-api-key
+```
+
+Wenn Sie `gt-next` oder `gt-react` als eigenständige i18n-Bibliothek verwenden, müssen Sie keine API-Schlüssel verwenden.
+
+---
+
+## Wie man sie erhält
+
+<Steps>
+    <Step>
+        Navigieren Sie zum Projekt-Dashboard auf der [General Translation Website](https://generaltranslation.com).
+    </Step>
+    <Step>
+        Klicken Sie auf den Tab "API-Schlüssel" oder "Entwicklerschlüssel".
+    </Step>
+    <Step>
+        Klicken Sie auf die Schaltfläche "API-Schlüssel erstellen".
+    </Step>
+    <Step>
+        Kopieren Sie den API-Schlüssel und fügen Sie ihn in die `.env`-Datei Ihres Projekts ein.
+    </Step>
+</Steps>
+
+---
+
+## Verhalten
+
+Einfach ausgedrückt: Produktions-API-Schlüssel speichern Übersetzungen dauerhaft, während Entwicklungs-API-Schlüssel dies nicht tun.
+Sie verwenden Entwicklungs-API-Schlüssel zum Prototyping von Übersetzungen und Produktions-API-Schlüssel, wenn Sie bereit für die Bereitstellung sind.
+
+### Entwicklungs-API-Schlüssel
+
+Diese Art von Schlüssel ist nützlich für Test- und Entwicklungszwecke.
+Bei Verwendung eines Entwicklungs-API-Schlüssels werden Übersetzungen bei Bedarf durchgeführt und im Speicher zwischengespeichert.
+Übersetzungen **werden nicht gespeichert**.
+
+Der Entwicklungs-API-Schlüssel wird von Komponenten verwendet, die im Browser gerendert werden (clientseitig) und von serverseitig gerenderten Komponenten, um die Übersetzung bei Bedarf zu ermöglichen.
+Das bedeutet, dass er an den Client exportiert werden muss.
+Dieser Schlüssel sollte NIEMALS in Produktionsumgebungen verwendet und NIEMALS in einer Produktionsumgebung an den Client übergeben werden.
+
+```bash
+# Beispiel Vite .env-Datei für die Entwicklung
+VITE_GT_PROJECT_ID=your-project-id
+VITE_GT_API_KEY=your-dev-api-key # Nur in der Entwicklung verwendet
+```
+
+<Callout type="warn">
+  **Warnung:**
+  Entwicklungs-API-Schlüssel werden an den Client übergeben, um clientseitige Übersetzungen in der Entwicklung zu ermöglichen.
+  Dies ist in Entwicklungsumgebungen in Ordnung, stellt aber in Produktionsumgebungen ein Sicherheitsrisiko dar.
+  Wenn Ihre Anwendung für das Internet zugänglich ist, sollten Sie niemals einen Entwicklungs-API-Schlüssel verwenden.
+</Callout>
+
+### Produktions-API-Schlüssel
+
+Bei Verwendung eines Produktions-API-Schlüssels **werden Übersetzungen dauerhaft gespeichert**.
+Das bedeutet, dass Übersetzungen gespeichert werden (entweder in einem CDN oder im Bundle Ihrer App), um zur Laufzeit verwendet zu werden.
+
+Dieser Schlüssel wird an zwei Stellen verwendet:
+ * Das [`gtx-cli`](/docs/cli)-Tool, wenn Übersetzungen während des Bereitstellungsprozesses generiert werden. Weitere Informationen finden Sie in [dieser Anleitung](/docs/react/tutorials/quickdeploy).
+ * Die `gt-next`-Bibliothek, wenn Übersetzungen zur Laufzeit erfolgen (nur serverseitig, nicht von `gt-react` verwendet).
+
+Der API-Schlüssel wird nur vom Server verwendet und sollte NIEMALS an den Client exportiert werden.
+```bash
+GT_PROJECT_ID=your-project-id
+GT_API_KEY=your-prod-api-key # Dieser Schlüssel sollte niemals an den Client exportiert werden
+```
+
+---
+
+## Hinweise
+ * Entwicklungs-API-Schlüssel werden für Test- und Entwicklungszwecke verwendet. Sie sollten nur in der Entwicklung verwendet werden.
+ * Produktions-API-Schlüssel werden für Produktionszwecke verwendet.
+
+## Nächste Schritte
+ * Erfahren Sie, wie Sie [die `<T>`-Komponente](/docs/usage/t) verwenden, um Live-Übersetzungen in der Entwicklung zu sehen.
+ * Sehen Sie sich die [Nutzungsanleitung](/docs/cli/reference/usage) für das CLI-Tool an.

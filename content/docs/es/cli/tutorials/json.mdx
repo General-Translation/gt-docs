@@ -1,0 +1,114 @@
+---
+title: Archivos JSON
+description: Cómo usar General Translation para configurar la traducción automática de los archivos JSON de tu proyecto
+---
+
+## Descripción general
+
+`gtx-cli` puede utilizarse para traducir automáticamente los archivos JSON de tu proyecto, independientemente de la biblioteca i18n que estés utilizando.
+
+<Callout type="info">
+  **Nota:**
+  Actualmente admitimos sintaxis y formato de cadenas personalizadas para las siguientes bibliotecas i18n: [`next-intl`](/docs/cli/tutorials/next-intl-quickstart), [`i18next`](/docs/cli/tutorials/i18next-quickstart), [`gt-next`](/docs/cli/tutorials/gt), [`gt-react`](/docs/cli/tutorials/gt).
+  
+  Si estás utilizando una biblioteca i18n diferente, los resultados de la traducción pueden no ser precisos para cadenas con sintaxis y formato personalizados (por ejemplo, mensajes ICU).
+  ¿No ves tu biblioteca favorita? [Por favor, háganoslo saber](https://github.com/General-Translation/gt-libraries/issues), ¡y la agregaremos tan pronto como podamos!
+</Callout>
+
+Seguiremos estos 4 pasos:
+<Steps>
+  <Step>
+    Añadir tus variables de entorno
+  </Step>
+  <Step>
+    Instalar [`gtx-cli`](/docs/cli)
+  </Step>
+  <Step>
+    Inicializar tu proyecto con el comando [`gtx-cli init`](/docs/cli/init)
+  </Step>
+  <Step>
+    Ejecutar [`gtx-cli translate`](/docs/cli/translate#translate-json)
+  </Step>
+</Steps>
+
+<Callout>
+  **Consejo:**
+  Evita las molestias de usar archivos de traducción con el [componente `<T>`](/docs/usage/t).
+</Callout>
+
+---
+
+## Paso 1: Añadir tus variables de entorno
+
+Añade tu clave API de producción y el ID del proyecto a tus variables de entorno.
+Esto es necesario para utilizar la herramienta `gtx-cli`.
+Puedes obtener estos datos desde el [panel de control de General Translation](https://generaltranslation.com/dashboard).
+
+```bash title=".env"
+GT_API_KEY=<your-api-key>
+GT_PROJECT_ID=<your-project-id>
+```
+
+## Paso 2: Instalar `gtx-cli`
+
+Instala la herramienta `gtx-cli` en tu proyecto.
+
+<Tabs items={['npm', 'yarn', 'bun', 'pnpm']}>
+  <Tab value="npm">
+  ```bash 
+  npm i --save-dev gtx-cli
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add --dev gtx-cli
+  ```
+  </Tab>
+
+  <Tab value="bun">
+  ```bash 
+  bun add --dev gtx-cli
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add --save-dev gtx-cli
+  ```
+  </Tab>
+</Tabs>
+
+## Paso 3: Inicializar tu proyecto con el comando `gtx-cli init`
+
+Ejecuta el comando `gtx-cli init` para configurar tu proyecto.
+
+```bash
+npx gtx-cli init
+```
+
+## Paso 4: Añadir el comando `gtx-cli translate` a tu proceso de compilación
+
+Añade el comando `gtx-cli translate` a tu proceso de compilación o CI antes del comando de compilación para agregar automáticamente traducciones a tu proyecto.
+
+```json title="package.json"
+{
+  "scripts": {
+    "translate": "npx gtx-cli translate",
+    "build": "npm run translate && <your build command>"
+  }
+}
+```
+Esto generará traducciones para todos tus idiomas y las guardará en tu proyecto.
+Si quieres confirmar estos archivos en tu repositorio, puedes ejecutar este comando antes de confirmar.
+
+
+¡Has terminado! Ahora tu proyecto actualizará automáticamente todos tus archivos JSON de traducción cada vez que tu proyecto cambie.
+
+---
+
+## Notas
+ * Puedes añadir traducciones automáticamente a tu proyecto con el comando [`gtx-cli translate`](/docs/cli/translate#translate-json).
+ * Si quieres confirmar tus archivos de traducción, puedes ejecutar el comando `gtx-cli translate` antes de confirmar.
+
+## Siguientes pasos
+ * Consulta la [guía de uso](/docs/cli/reference/usage) para la herramienta cli.
+ * Si quieres ver traducciones en vivo durante el desarrollo (piensa en recarga en caliente), consulta el [componente `<T>`](/docs/usage/t).

@@ -1,0 +1,62 @@
+---
+title: 开源
+description: General Translation 库是开源的！
+---
+
+
+## 概述
+
+我们所有的库都是开源的，可以免费使用。它们完全独立，开箱即用。
+
+您可以在任何项目中使用它们，无需创建账户或注册 General Translation 服务。
+
+独立使用时，我们的库支持以下功能：
+
+- 包装整个 React 组件进行翻译
+- 字典
+- 简便的项目设置
+- 中间件
+
+使用 General Translation 作为翻译提供商将解锁以下功能：
+
+- 按需翻译
+- 自动 AI 翻译
+- 无忧的翻译 CDN
+
+## 如何使用
+
+要使用自己的翻译提供商来使用 `gt-next` 或 `gt-react`，请使用本地翻译：
+
+<Cards>
+  <Card
+    title="Next.js"
+    href="/docs/next/reference/local-tx"
+  />
+  <Card
+    title="React"
+    href="/docs/react/reference/local-tx"
+  />
+</Cards>
+
+## 管理翻译
+
+要为您的项目生成翻译文件，请使用以下命令运行 CLI 工具：
+
+<Tabs items={['Next.js', 'React']}>
+  <Tab value="Next.js">
+    ```bash
+    npx gtx-cli generate -t <path to translation files>
+    ```
+  </Tab>
+  <Tab value="React">
+    ```bash
+    npx gtx-cli generate -t <path to translation files>
+    ```
+  </Tab>
+</Tabs>
+
+此命令将为您的项目源代码生成 JSON 数据文件。
+然后，您可以将这些文件与您自己的翻译提供商一起使用。
+要将翻译加载到 `gt-next` 或 `gt-react` 中，请使用 `loadTranslations` 函数，如本地翻译指南中所述。
+
+有关更多信息，请参阅 [CLI API 参考](/docs/cli/generate)。

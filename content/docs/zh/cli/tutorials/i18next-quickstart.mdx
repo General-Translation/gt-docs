@@ -1,0 +1,107 @@
+---
+title: i18next
+description: 自动翻译您的i18next项目（<5分钟）
+---
+
+## 概述
+
+本教程将向您展示如何自动管理您的[`i18next`](https://i18next.com/)项目中的翻译文件。
+
+
+我们将遵循以下4个步骤：
+<Steps>
+  <Step>
+    添加您的环境变量
+  </Step>
+  <Step>
+    安装[`gtx-cli`](/docs/cli)
+  </Step>
+  <Step>
+    使用[`gtx-cli init`](/docs/cli/init)命令初始化您的项目
+  </Step>
+  <Step>
+    运行[`gtx-cli translate`](/docs/cli/translate#translate-json)
+  </Step>
+</Steps>
+
+<Callout>
+  **提示：**
+  使用[`<T>`组件](/docs/usage/t)可以避免使用翻译文件的麻烦。
+</Callout>
+
+---
+
+## 步骤1：添加您的环境变量
+
+将您的生产API密钥和项目ID添加到环境变量中。
+这对于使用`gtx-cli`工具是必要的。
+您可以从[General Translation仪表板](https://generaltranslation.com/dashboard)获取这些信息。
+
+```bash title=".env"
+GT_API_KEY=<your-api-key>
+GT_PROJECT_ID=<your-project-id>
+```
+
+## 步骤2：安装`gtx-cli`
+
+在您的项目中安装`gtx-cli`工具。
+
+<Tabs items={['npm', 'yarn', 'bun', 'pnpm']}>
+  <Tab value="npm">
+  ```bash 
+  npm i --save-dev gtx-cli
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add --dev gtx-cli
+  ```
+  </Tab>
+
+  <Tab value="bun">
+  ```bash 
+  bun add --dev gtx-cli
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add --save-dev gtx-cli
+  ```
+  </Tab>
+</Tabs>
+
+## 步骤3：使用`gtx-cli init`命令初始化您的项目
+
+运行`gtx-cli init`命令来配置您的项目。
+
+```bash
+npx gtx-cli init
+```
+
+## 步骤4：将`gtx-cli translate`命令添加到您的构建过程中
+
+在构建命令之前，将`gtx-cli translate`命令添加到您的构建或CI过程中，以自动为您的项目添加翻译。
+
+```json title="package.json"
+{
+  "scripts": {
+    "translate": "npx gtx-cli translate",
+    "build": "npm run translate && <your build command>"
+  }
+}
+```
+这将为您的所有语言环境生成翻译并将它们保存到您的项目中。
+如果您想将这些文件提交到您的代码库，您可以在提交之前运行此命令。
+
+
+您已完成！现在，每当您的项目发生变化时，您的项目将自动更新所有翻译JSON文件。
+
+---
+
+## 注意事项
+ * 您可以通过[`gtx-cli translate`](/docs/cli/translate#translate-json)命令自动为您的项目添加翻译。
+ * 如果您想提交您的翻译文件，您可以在提交之前运行`gtx-cli translate`命令。
+
+## 下一步
+ * 查看CLI工具的[使用指南](/docs/cli/reference/usage)。
+ * 如果您想在开发中查看实时翻译（类似热重载），请查看[`<T>`组件](/docs/usage/t)。

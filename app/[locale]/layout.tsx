@@ -46,32 +46,36 @@ export function generateMetadata(): Metadata {
   };
 }
 
+function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export default async function Layout({ children }: { children: ReactNode }) {
   const locale = await getLocale();
   const options = await baseOptions();
   const locales = [
     {
-      name: getLocaleProperties('en', locale).languageName,
+      name: capitalize(getLocaleProperties('en', 'en').languageName),
       locale: 'en',
     },
     {
-      name: getLocaleProperties('zh', locale).languageName,
+      name: capitalize(getLocaleProperties('zh', 'zh').languageName),
       locale: 'zh',
     },
     {
-      name: getLocaleProperties('de', locale).languageName,
+      name: capitalize(getLocaleProperties('de', 'de').languageName),
       locale: 'de',
     },
     {
-      name: getLocaleProperties('fr', locale).languageName,
+      name: capitalize(getLocaleProperties('fr', 'fr').languageName),
       locale: 'fr',
     },
     {
-      name: getLocaleProperties('es', locale).languageName,
+      name: capitalize(getLocaleProperties('es', 'es').languageName),
       locale: 'es',
     },
     {
-      name: getLocaleProperties('ja', locale).languageName,
+      name: capitalize(getLocaleProperties('ja', 'ja').languageName),
       locale: 'ja',
     },
   ];

@@ -1,8 +1,8 @@
 {
   "search": "検索",
-  "searchNoResult": "結果が見つかりませんでした",
-  "toc": "このページ内",
-  "tocNoHeadings": "見出しがありません",
+  "searchNoResult": "検索結果はありません",
+  "toc": "このページについて",
+  "tocNoHeadings": "見出しなし",
   "lastUpdate": "最終更新日",
   "chooseLanguage": "言語を選択",
   "nextPage": "次へ",
