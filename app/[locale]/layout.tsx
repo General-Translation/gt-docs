@@ -6,10 +6,10 @@ import { DocsLayout } from 'fumadocs-ui/layouts/notebook';
 import type { ReactNode } from 'react';
 import { baseOptions } from '@/app/[locale]/layout.config';
 import { source } from '@/lib/source';
-import { GitHubIcon } from '@/components/GithubIcon';
 import { I18nProvider } from 'fumadocs-ui/i18n';
 import { getLocale, GTProvider } from 'gt-next/server';
 import { getLocaleProperties } from 'generaltranslation';
+import { SiGithub } from '@icons-pack/react-simple-icons';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -97,6 +97,9 @@ export default async function Layout({ children }: { children: ReactNode }) {
           }
         >
           <GTProvider>
+            {/* <Banner variant="rainbow" id="home_banner">
+              <T>Contact us</T>
+            </Banner> */}
             <RootProvider>
               <DocsLayout
                 sidebar={{
@@ -133,7 +136,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
                       >
                         <div className="px-4 py-2 mb-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-100/20">
                           <h3 className="font-semibold text-sm flex items-center gap-2">
-                            <GitHubIcon />
+                            <SiGithub />
                             Star us on GitHub!
                           </h3>
                         </div>

@@ -37,24 +37,32 @@ We will take you through two easy steps to add i18n routing to your Next.js appl
 Insert a directory in your app folder called `[locale]` (e.g., `app/[locale]`).
 Include all of your pages and layouts under this directory.
 
-```
-my-app/
-├── middleware.js
-├── app/
-│   ├── [locale]/     <-- Dynamic route
-│   │   ├── layout.js
-│   │   ├── page.js
-│   │   └── some-page/
-│   │       └── page.js
-│   └── api/
-│       └── route.js
-├── public/
-│   └── images/
-│       └── logo.png
-├── styles/
-│   └── globals.css
-└── next.config.js
-```
+<Files>
+  <Folder name="my-app" defaultOpen={true}>
+    <File name="middleware.js" />
+    <Folder name="app" defaultOpen={true}>
+      <Folder name="[locale]" defaultOpen={true}>
+        <File name="layout.js" />
+        <File name="page.js" />
+        <Folder name="some-page">
+          <File name="page.js" />
+        </Folder>
+      </Folder>
+      <Folder name="api">
+        <File name="route.js" />
+      </Folder>
+    </Folder>
+    <Folder name="public">
+      <Folder name="images">
+        <File name="logo.png" />
+      </Folder>
+    </Folder>
+    <Folder name="styles">
+      <File name="globals.css" />
+    </Folder>
+    <File name="next.config.js" />
+  </Folder>
+</Files>
 
 Ensure all special files inside `app/` are nested under `app/[locale]`.
 

@@ -18,21 +18,26 @@ The first step is to add the `withGTConfig()` plugin function to your next confi
 
 In the root directory of your project, there should be a file called `next.config.js` (or `.ts`, `.mjs`, `.cjs`).
 
-```
-my-app/
-├── src/
-│   ├── app/
-│   │    └── page.js
-│   └── components/
-│       ├── Header.js
-│       └── Footer.js
-├── public/
-│   └── favicon.ico
-├── next.config.js <--- here 
-├── .gitignore
-├── package.json
-└── README.md
-```
+<Files>
+  <Folder name="my-app" defaultOpen={true}>
+    <Folder name="src" defaultOpen>
+      <Folder name="app">
+        <File name="page.js" />
+      </Folder>
+      <Folder name="components">
+        <File name="Header.js" />
+        <File name="Footer.js" />
+      </Folder>
+    </Folder>
+    <Folder name="public">
+      <File name="favicon.ico" />
+    </Folder>
+    <File name="next.config.js" />
+    <File name=".gitignore" />
+    <File name="package.json" />
+    <File name="README.md" />
+  </Folder>
+</Files>
 
 ### Add the plugin
 
