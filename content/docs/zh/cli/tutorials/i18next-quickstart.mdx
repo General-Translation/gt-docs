@@ -80,7 +80,7 @@ npx gtx-cli init
 
 ## 步骤4：将`gtx-cli translate`命令添加到您的构建过程中
 
-在构建命令之前，将`gtx-cli translate`命令添加到您的构建或CI过程中，以自动为您的项目添加翻译。
+在构建命令之前，将`gtx-cli translate`命令添加到您的构建或CI过程中，以自动向项目添加翻译。
 
 ```json title="package.json"
 {
@@ -94,13 +94,14 @@ npx gtx-cli init
 如果您想将这些文件提交到您的代码库，您可以在提交之前运行此命令。
 
 
-您已完成！现在，每当您的项目发生变化时，您的项目将自动更新所有翻译JSON文件。
+完成了！现在，每当您的项目发生变化时，您的项目将自动更新所有翻译JSON文件。
 
 ---
 
 ## 注意事项
- * 您可以通过[`gtx-cli translate`](/docs/cli/translate#translate-json)命令自动为您的项目添加翻译。
+ * 您可以使用[`gtx-cli translate`](/docs/cli/translate#translate-json)命令自动向项目添加翻译。
  * 如果您想提交您的翻译文件，您可以在提交之前运行`gtx-cli translate`命令。
+ * 要配置翻译的输出路径，请参阅[配置](/docs/cli/reference/config)文档。
 
 ## 下一步
  * 查看CLI工具的[使用指南](/docs/cli/reference/usage)。

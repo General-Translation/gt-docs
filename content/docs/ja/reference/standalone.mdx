@@ -6,9 +6,9 @@ description: General Translationのライブラリはオープンソースです
 
 ## 概要
 
-私たちのすべてのライブラリはオープンソースで、無料で使用できます。それらは完全にスタンドアロンで、すぐに使える状態になっています。
+私たちのすべてのライブラリはオープンソースで、無料で使用できます。それらは完全にスタンドアロンで、すぐに使える状態です。
 
-アカウントを作成したり、General Translationサービスにサインアップしたりする必要なく、どのプロジェクトでも使用できます。
+アカウントを作成したり、General Translationサービスにサインアップしたりする必要なく、どんなプロジェクトでも使用できます。
 
 スタンドアロンでは、私たちのライブラリは以下の機能をサポートしています：
 
@@ -17,7 +17,7 @@ description: General Translationのライブラリはオープンソースです
 - 簡単なプロジェクトセットアップ
 - ミドルウェア
 
-General Translationを翻訳プロバイダーとして使用すると、以下の機能が利用可能になります：
+General Translationを翻訳プロバイダーとして使用すると、以下の機能が利用できるようになります：
 
 - オンデマンド翻訳
 - 自動AI翻訳
@@ -45,18 +45,20 @@ General Translationを翻訳プロバイダーとして使用すると、以下�
 <Tabs items={['Next.js', 'React']}>
   <Tab value="Next.js">
     ```bash
-    npx gtx-cli generate -t <path to translation files>
+    npx gtx-cli init
+    npx gtx-cli generate
     ```
   </Tab>
   <Tab value="React">
     ```bash
-    npx gtx-cli generate -t <path to translation files>
+    npx gtx-cli init
+    npx gtx-cli generate
     ```
   </Tab>
 </Tabs>
 
 このコマンドは、プロジェクトのソースコード用のJSONデータファイルを生成します。
 その後、これらのファイルを独自の翻訳プロバイダーで使用できます。
-`gt-next`または`gt-react`に翻訳をロードするには、ローカル翻訳ガイドで指定されている`loadTranslations`関数を使用してください。
+翻訳を`gt-next`または`gt-react`にロードするには、ローカル翻訳ガイドで指定されている`loadTranslations`関数を使用してください。
 
 詳細については、[CLI APIリファレンス](/docs/cli/generate)を参照してください。

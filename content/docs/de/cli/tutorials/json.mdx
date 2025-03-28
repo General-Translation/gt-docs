@@ -12,7 +12,7 @@ description: Wie man General Translation verwendet, um automatische Übersetzung
   Wir unterstützen derzeit benutzerdefinierte String-Syntax und Formatierung für die folgenden i18n-Bibliotheken: [`next-intl`](/docs/cli/tutorials/next-intl-quickstart), [`i18next`](/docs/cli/tutorials/i18next-quickstart), [`gt-next`](/docs/cli/tutorials/gt), [`gt-react`](/docs/cli/tutorials/gt).
   
   Wenn Sie eine andere i18n-Bibliothek verwenden, sind die Übersetzungsergebnisse möglicherweise nicht genau für Strings mit benutzerdefinierter Syntax und Formatierung (zum Beispiel ICU-Nachrichten).
-  Vermissen Sie Ihre bevorzugte Bibliothek? [Bitte lassen Sie es uns wissen](https://github.com/General-Translation/gt-libraries/issues), und wir werden sie so schnell wie möglich hinzufügen!
+  Vermissen Sie Ihre bevorzugte Bibliothek? [Bitte teilen Sie uns das mit](https://github.com/General-Translation/gt-libraries/issues), und wir werden sie so schnell wie möglich hinzufügen!
 </Callout>
 
 Wir werden diese 4 Schritte befolgen:
@@ -33,7 +33,7 @@ Wir werden diese 4 Schritte befolgen:
 
 <Callout>
   **Tipp:**
-  Vermeiden Sie den Aufwand der Verwendung von Übersetzungsdateien mit der [`<T>` Komponente](/docs/usage/t).
+  Vermeiden Sie den Aufwand mit Übersetzungsdateien durch die Verwendung der [`<T>` Komponente](/docs/usage/t).
 </Callout>
 
 ---
@@ -87,7 +87,7 @@ npx gtx-cli init
 
 ## Schritt 4: Fügen Sie den Befehl `gtx-cli translate` zu Ihrem Build-Prozess hinzu
 
-Fügen Sie den Befehl `gtx-cli translate` zu Ihrem Build- oder CI-Prozess hinzu, bevor Sie den Build-Befehl ausführen, um automatisch Übersetzungen zu Ihrem Projekt hinzuzufügen.
+Fügen Sie den Befehl `gtx-cli translate` zu Ihrem Build- oder CI-Prozess hinzu, bevor der Build-Befehl ausgeführt wird, um automatisch Übersetzungen zu Ihrem Projekt hinzuzufügen.
 
 ```json title="package.json"
 {
@@ -97,7 +97,7 @@ Fügen Sie den Befehl `gtx-cli translate` zu Ihrem Build- oder CI-Prozess hinzu,
   }
 }
 ```
-Dies generiert Übersetzungen für alle Ihre Locales und speichert sie in Ihrem Projekt.
+Dies generiert Übersetzungen für alle Ihre Sprachen und speichert sie in Ihrem Projekt.
 Wenn Sie diese Dateien in Ihr Repository übernehmen möchten, können Sie diesen Befehl stattdessen vor dem Commit ausführen.
 
 
@@ -106,9 +106,10 @@ Sie sind fertig! Jetzt wird Ihr Projekt automatisch alle Ihre Übersetzungs-JSON
 ---
 
 ## Hinweise
- * Sie können Ihrem Projekt automatisch Übersetzungen hinzufügen mit dem Befehl [`gtx-cli translate`](/docs/cli/translate#translate-json).
- * Wenn Sie Ihre Übersetzungsdateien committen möchten, können Sie stattdessen den Befehl `gtx-cli translate` vor dem Commit ausführen.
+ * Sie können mit dem Befehl [`gtx-cli translate`](/docs/cli/translate#translate-json) automatisch Übersetzungen zu Ihrem Projekt hinzufügen.
+ * Wenn Sie Ihre Übersetzungsdateien committen möchten, sollten Sie den Befehl `gtx-cli translate` vor dem Commit ausführen.
+ * Um den Ausgabepfad für Ihre Übersetzungen zu konfigurieren, siehe die [Konfigurationsdokumentation](/docs/cli/reference/config).
 
 ## Nächste Schritte
- * Sehen Sie sich den [Nutzungsleitfaden](/docs/cli/reference/usage) für das CLI-Tool an.
- * Wenn Sie Live-Übersetzungen in der Entwicklung sehen möchten (denken Sie an Hot Reload), schauen Sie sich die [`<T>` Komponente](/docs/usage/t) an.
+ * Lesen Sie die [Nutzungsanleitung](/docs/cli/reference/usage) für das CLI-Tool.
+ * Wenn Sie Live-Übersetzungen in der Entwicklung sehen möchten (wie Hot Reload), schauen Sie sich die [`<T>` Komponente](/docs/usage/t) an.

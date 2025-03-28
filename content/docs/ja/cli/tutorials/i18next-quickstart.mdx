@@ -80,7 +80,7 @@ npx gtx-cli init
 
 ## ステップ4：ビルドプロセスに`gtx-cli translate`コマンドを追加する
 
-ビルドまたはCIプロセスに`gtx-cli translate`コマンドをビルドコマンドの前に追加して、プロジェクトに自動的に翻訳を追加します。
+ビルドコマンドの前に`gtx-cli translate`コマンドをビルドまたはCIプロセスに追加して、プロジェクトに自動的に翻訳を追加します。
 
 ```json title="package.json"
 {
@@ -101,6 +101,7 @@ npx gtx-cli init
 ## 注意点
  * [`gtx-cli translate`](/docs/cli/translate#translate-json)コマンドを使用して、プロジェクトに自動的に翻訳を追加できます。
  * 翻訳ファイルをコミットしたい場合は、代わりにコミット前に`gtx-cli translate`コマンドを実行できます。
+ * 翻訳の出力パスを設定するには、[設定](/docs/cli/reference/config)ドキュメントを参照してください。
 
 ## 次のステップ
  * CLIツールの[使用ガイド](/docs/cli/reference/usage)を参照してください。

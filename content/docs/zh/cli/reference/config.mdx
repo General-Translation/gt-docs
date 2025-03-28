@@ -7,6 +7,8 @@ description: gt.config.json 文件的配置文档
 
 `gt.config.json` 文件用于配置项目的 GT 设置。它应该放置在项目的根目录中。
 
+CLI 命令 `npx gtx-cli init` 将在您的项目中创建一个 `gt.config.json` 文件。
+
 ## 配置
 
 `gt.config.json` 文件包含以下设置：
@@ -28,12 +30,15 @@ description: gt.config.json 文件的配置文档
 }
 ```
 
-`files` 应该为您想要翻译的每种文件类型包含一个键。
+`files` 应该包含您想要翻译的每种文件类型的键。
 我们目前支持以下文件键：
 
+- `gt`：通用翻译文件。
 - `json`：JSON 文件。
 
-相应的对象应该包含一个 `include` 键。`include` 键的值是一个匹配您想要翻译的文件的 glob 模式数组。
+## `json`
+
+相应的对象应包含一个 `include` 键。`include` 键的值是一个匹配您想要翻译的文件的 glob 模式数组。
 
 您应该在 glob 模式中使用 `[locale]` 占位符，以确保使用正确的语言环境。
 CLI 工具在搜索可翻译文件时，会将 `[locale]` 占位符替换为 `defaultLocale` 值。
@@ -41,6 +46,31 @@ CLI 工具在搜索可翻译文件时，会将 `[locale]` 占位符替换为 `de
 它会将翻译后的文件保存到相应的路径，并将 `[locale]` 占位符替换为语言代码。
 
 可选地，您还可以包含一个 `exclude` 键。`exclude` 键的值应该是一个匹配您想要排除在翻译之外的文件的 glob 模式数组。
+
+## `gt`
+
+相应的对象应包含一个 `output` 键。该值应该是一个匹配您想要保存翻译的文件的 glob 模式。
+
+您的 glob 模式中的 `[locale]` 占位符是必需的，以确保使用正确的语言环境。
+
+例如，如果您想将翻译保存到名为 `ui.es.json` 的文件中，您应该使用以下 glob 模式：
+
+```json title="gt.config.json"
+"files": {
+  "gt": {
+    "output": "content/docs/ui.[locale].json"
+  }
+}
+```
+
+
+<Callout type="info">
+
+此选项仅在您使用 `gt-next` 或 `gt-react`，并希望在本地保存翻译而不是使用 GT CDN 时使用。
+
+目前，每种语言环境只能生成一个文件。
+
+</Callout>
 
 ---
 
@@ -59,15 +89,9 @@ CLI 工具在搜索可翻译文件时，会将 `[locale]` 占位符替换为 `de
 }
 ```
 
-使用此配置，CLI 将搜索位于 `path/to/include/en.json` 的文件，并将翻译后的文件保存到 `path/to/include/fr.json` 和 `path/to/your/es.json`。
+使用此配置，CLI 将搜索位于 `path/to/include/en.json` 的 JSON 文件，并将翻译后的文件保存到 `path/to/include/fr.json` 和 `path/to/your/es.json`。
 
 它将忽略任何匹配 glob 模式 `path/to/exclude/[locale].json` 的文件。
-
-<Callout type="info">
-
-目前，CLI 一次只能翻译一个 JSON 源文件。我们正在努力添加对多个源文件的支持。
-
-</Callout>
 
 ---
 

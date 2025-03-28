@@ -1,11 +1,13 @@
 ---
 title: Konfiguration
-description: Konfigurationsdokumentation für die gt.config.json Datei
+description: Konfigurationsdokumentation für die gt.config.json-Datei
 ---
 
 ## Übersicht
 
 Die Datei `gt.config.json` wird verwendet, um die GT-Einstellungen Ihres Projekts zu konfigurieren. Sie sollte im Stammverzeichnis Ihres Projekts platziert werden.
+
+Der CLI-Befehl `npx gtx-cli init` erstellt eine `gt.config.json`-Datei für Sie in Ihrem Projekt.
 
 ## Konfiguration
 
@@ -29,9 +31,12 @@ Hier ist ein Beispiel für das `files`-Objekt:
 ```
 
 `files` sollte einen Schlüssel für jeden Dateityp enthalten, den Sie übersetzen möchten.
-Derzeit unterstützen wir die folgenden Dateischlüssel:
+Wir unterstützen derzeit die folgenden Dateischlüssel:
 
+- `gt`: Allgemeine Übersetzungsdateien.
 - `json`: JSON-Dateien.
+
+## `json`
 
 Das entsprechende Objekt sollte einen `include`-Schlüssel enthalten. Der Wert des `include`-Schlüssels ist ein Array von Glob-Mustern, die mit den Dateien übereinstimmen, die Sie übersetzen möchten.
 
@@ -41,6 +46,31 @@ Das CLI-Tool ersetzt den Platzhalter `[locale]` durch den Wert von `defaultLocal
 Es speichert übersetzte Dateien im entsprechenden Pfad, wobei der Platzhalter `[locale]` durch den Sprachcode ersetzt wird.
 
 Optional können Sie auch einen `exclude`-Schlüssel einfügen. Der Wert des `exclude`-Schlüssels sollte ein Array von Glob-Mustern sein, die mit den Dateien übereinstimmen, die Sie von der Übersetzung ausschließen möchten.
+
+## `gt`
+
+Das entsprechende Objekt sollte einen `output`-Schlüssel enthalten. Der Wert sollte ein Glob-Muster sein, das mit den Dateien übereinstimmt, in denen Sie die Übersetzungen speichern möchten.
+
+Der Platzhalter `[locale]` in Ihren Glob-Mustern ist erforderlich, um sicherzustellen, dass die richtige Sprache verwendet wird.
+
+Wenn Sie beispielsweise die Übersetzungen in einer Datei namens `ui.es.json` speichern möchten, sollten Sie das folgende Glob-Muster verwenden:
+
+```json title="gt.config.json"
+"files": {
+  "gt": {
+    "output": "content/docs/ui.[locale].json"
+  }
+}
+```
+
+
+<Callout type="info">
+
+Diese Option sollte nur verwendet werden, wenn Sie `gt-next` oder `gt-react` verwenden und Übersetzungen lokal speichern möchten, anstatt das GT CDN zu verwenden.
+
+Derzeit kann nur eine Datei für jede Sprache generiert werden.
+
+</Callout>
 
 ---
 
@@ -59,15 +89,9 @@ Hier ist ein Beispiel für die Datei `gt.config.json`:
 }
 ```
 
-Mit dieser Konfiguration sucht die CLI nach der Datei unter `path/to/include/en.json` und speichert die übersetzten Dateien unter `path/to/include/fr.json` und `path/to/your/es.json`.
+Mit dieser Konfiguration sucht die CLI nach der JSON-Datei unter `path/to/include/en.json` und speichert die übersetzten Dateien unter `path/to/include/fr.json` und `path/to/your/es.json`.
 
 Es ignoriert alle Dateien, die dem Glob-Muster `path/to/exclude/[locale].json` entsprechen.
-
-<Callout type="info">
-
-Derzeit kann die CLI nur eine JSON-Quelldatei gleichzeitig übersetzen. Wir arbeiten daran, Unterstützung für mehrere Quelldateien hinzuzufügen.
-
-</Callout>
 
 ---
 

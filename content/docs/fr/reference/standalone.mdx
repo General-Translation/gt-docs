@@ -6,9 +6,9 @@ description: Les bibliothèques de General Translation sont open source !
 
 ## Aperçu
 
-Toutes nos bibliothèques sont open source et gratuites. Elles fonctionnent de manière autonome, prêtes à l'emploi.
+Toutes nos bibliothèques sont open source et gratuites. Elles fonctionnent de manière totalement autonome, prêtes à l'emploi.
 
-Vous pouvez les utiliser dans n'importe quel projet, sans avoir besoin de créer un compte ou de vous inscrire aux services de General Translation.
+Vous pouvez les utiliser dans n'importe quel projet, sans jamais avoir besoin de créer un compte ou de vous inscrire aux services de General Translation.
 
 De manière autonome, nos bibliothèques prennent en charge les fonctionnalités suivantes :
 
@@ -45,12 +45,14 @@ Pour générer les fichiers de traduction pour votre projet, exécutez l'outil C
 <Tabs items={['Next.js', 'React']}>
   <Tab value="Next.js">
     ```bash
-    npx gtx-cli generate -t <path to translation files>
+    npx gtx-cli init
+    npx gtx-cli generate
     ```
   </Tab>
   <Tab value="React">
     ```bash
-    npx gtx-cli generate -t <path to translation files>
+    npx gtx-cli init
+    npx gtx-cli generate
     ```
   </Tab>
 </Tabs>

@@ -11,7 +11,7 @@ description: General Translationを使用してプロジェクトのJSONファ�
   **注意:**
   現在、以下のi18nライブラリのカスタム文字列構文とフォーマットをサポートしています：[`next-intl`](/docs/cli/tutorials/next-intl-quickstart)、[`i18next`](/docs/cli/tutorials/i18next-quickstart)、[`gt-next`](/docs/cli/tutorials/gt)、[`gt-react`](/docs/cli/tutorials/gt)。
   
-  異なるi18nライブラリを使用している場合、カスタム構文とフォーマットを持つ文字列（例えば、ICUメッセージ）の翻訳結果が正確でない可能性があります。
+  別のi18nライブラリを使用している場合、カスタム構文とフォーマットを持つ文字列（例えば、ICUメッセージ）の翻訳結果が正確でない可能性があります。
   お気に入りのライブラリが見つかりませんか？[ぜひお知らせください](https://github.com/General-Translation/gt-libraries/issues)。できるだけ早く追加します！
 </Callout>
 
@@ -87,7 +87,7 @@ npx gtx-cli init
 
 ## ステップ4：ビルドプロセスに`gtx-cli translate`コマンドを追加する
 
-ビルドコマンドの前に`gtx-cli translate`コマンドをビルドまたはCIプロセスに追加して、プロジェクトに自動的に翻訳を追加します。
+ビルドコマンドの前にビルドまたはCIプロセスに`gtx-cli translate`コマンドを追加して、プロジェクトに自動的に翻訳を追加します。
 
 ```json title="package.json"
 {
@@ -98,7 +98,7 @@ npx gtx-cli init
 }
 ```
 これにより、すべてのロケールの翻訳が生成され、プロジェクトに保存されます。
-これらのファイルをリポジトリにコミットしたい場合は、代わりにコミット前にこのコマンドを実行することができます。
+これらのファイルをリポジトリにコミットしたい場合は、代わりにコミット前にこのコマンドを実行できます。
 
 
 完了です！これで、プロジェクトが変更されるたびに、すべての翻訳JSONファイルが自動的に更新されます。
@@ -107,8 +107,9 @@ npx gtx-cli init
 
 ## 注意点
  * [`gtx-cli translate`](/docs/cli/translate#translate-json)コマンドを使用して、プロジェクトに自動的に翻訳を追加できます。
- * 翻訳ファイルをコミットしたい場合は、代わりにコミット前に`gtx-cli translate`コマンドを実行できます。
+ * 翻訳ファイルをコミットしたい場合は、コミット前に`gtx-cli translate`コマンドを実行する必要があります。
+ * 翻訳の出力パスを設定するには、[設定](/docs/cli/reference/config)ドキュメントを参照してください。
 
 ## 次のステップ
  * CLIツールの[使用ガイド](/docs/cli/reference/usage)を参照してください。
- * 開発中にライブ翻訳を確認したい場合（ホットリロードのようなもの）、[`<T>`コンポーネント](/docs/usage/t)をチェックしてください。
+ * 開発中にライブ翻訳を表示したい場合（ホットリロードのようなもの）は、[`<T>`コンポーネント](/docs/usage/t)をチェックしてください。

@@ -25,7 +25,7 @@ description: General Translation 库是开源的！
 
 ## 如何使用
 
-要使用自己的翻译提供商来使用 `gt-next` 或 `gt-react`，请使用本地翻译：
+要在您自己的翻译提供商中使用 `gt-next` 或 `gt-react`，请使用本地翻译：
 
 <Cards>
   <Card
@@ -45,12 +45,14 @@ description: General Translation 库是开源的！
 <Tabs items={['Next.js', 'React']}>
   <Tab value="Next.js">
     ```bash
-    npx gtx-cli generate -t <path to translation files>
+    npx gtx-cli init
+    npx gtx-cli generate
     ```
   </Tab>
   <Tab value="React">
     ```bash
-    npx gtx-cli generate -t <path to translation files>
+    npx gtx-cli init
+    npx gtx-cli generate
     ```
   </Tab>
 </Tabs>
