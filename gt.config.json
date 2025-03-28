@@ -6,10 +6,10 @@
     },
     "mdx": {
       "include": [
-        "content/docs/[locale]/cli/reference/*.mdx",
-        "content/docs/[locale]/cli/tutorials/*.mdx",
-        "content/docs/[locale]/reference/*.mdx",
-        "content/docs/[locale]/usage/*.mdx"
+        "content/docs/[locale]/cli/**/*.mdx",
+        "content/docs/[locale]/reference/**/*.mdx",
+        "content/docs/[locale]/usage/**/*.mdx",
+        "content/docs/[locale]/generaltranslation/**/*.mdx"
       ]
     }
   },
