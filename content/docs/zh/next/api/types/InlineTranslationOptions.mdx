@@ -1,0 +1,120 @@
+---
+title: InlineTranslationOptions
+description: InlineTranslationOptions 类型的 API 参考
+---
+
+## 概述
+
+`InlineTranslationOptions` 类型用于将变量传递给内联翻译并指定其渲染行为。
+您还可以为翻译添加上下文和标识符。
+它与 [`useGT()`](/docs/next/api/strings/useGT) 和 [`getGT()`](/docs/next/api/strings/getGT) 一起使用，以将变量传递给内联字符串翻译。
+
+<Callout>
+  **构建时翻译：**
+  变量不会通过 [`useGT()`](/docs/next/api/strings/useGT) 和 [`getGT()`](/docs/next/api/strings/getGT) 进行翻译，只有原始字符串会被翻译。
+  请参阅 [`tx()`](/docs/next/api/strings/tx) 以翻译包含动态内容的字符串。
+</Callout>
+
+## 参考
+
+### 参数
+
+<TypeTable
+  type={{
+    "context?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "id?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "variables?": {
+        type: 'Record<string, any>',
+        optional: true,
+        default: 'undefined',
+    },
+    "variablesOptions?": {
+        type: 'Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### 描述
+
+| 属性 | 描述 |
+| ---- | ----------- |
+| `context` | 内容的上下文（用于翻译）。 |
+| `id` | 用于翻译编辑器的可选标识符。 |
+| `variables` | 一个对象，其中的键标识每个值在字符串中的映射位置。|
+| `variablesOptions` | 一个对象，其中的键标识变量，值定义变量的行为。更多信息请参见 [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) 和 [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat)。 |
+
+---
+
+## 示例
+
+### 上下文
+
+为了给字符串添加上下文，我们使用 `context` 属性。
+
+```jsx title="Component.tsx"
+// [!code word:context]
+import { useGT } from 'gt-next/client';
+
+const Component = () => {
+  const t = useGT();
+  return <div>{t('Hello, world!', { context: 'a formal greeting' })}</div>;
+};
+```
+
+
+### 传递变量
+为了在字符串中添加变量，我们使用 `{variable-name}` 语法，其中花括号包裹变量名。
+
+```jsx title="Component.tsx"
+// [!code word:username]
+import { useGT } from 'gt-next/client';
+
+const Component = () => {
+  const t = useGT();
+  return <div>{t('Hello, {username}! How is your day?', { variables: { 'username' : 'Brian123' } })}</div>;
+};
+```
+
+### 添加变量选项
+
+您还可以使用 `variablesOptions` 属性自定义变量的呈现方式。
+```jsx title="Component.tsx"
+// [!code word:account-balance]
+import { useGT } from 'gt-next/client';
+
+const Component = () => {
+  const t = useGT();
+  return <div>
+    { t(
+      'Your account balance: {account-balance}!',
+      {
+        variables: { "account-balance" : 1000000 },
+        variableOptions: { "account-balance": { style: 'currency', currency: 'USD' } }
+      }
+    ) }
+  </div>;
+};
+```
+
+
+---
+
+## 注意事项
+ * `InlineTranslationOptions` 用于字符串翻译。
+ * `variables` 对象将值传递给文本。
+ * `variablesOptions` 对象定义变量的行为。
+
+
+## 下一步
+ * 查看 [`useGT()`](/docs/next/api/strings/useGT) 和 [`getGT()`](/docs/next/api/strings/getGT) 以获取有关内联字符串翻译的更多信息。
+ * 查看 [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) 和 [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) 以获取有关格式选项的更多信息。

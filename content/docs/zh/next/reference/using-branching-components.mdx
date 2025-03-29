@@ -1,0 +1,185 @@
+---
+title: 分支组件
+description: gt-next 中分支组件的综合参考
+---
+
+## 概述
+
+`gt-next` 中的分支组件使得基于特定条件的动态内容渲染成为可能。这些组件包括：
+
+- [`<Branch>`](/docs/next/api/components/branch): 基于匹配的 `branch` 属性渲染内容。
+- [`<Plural>`](/docs/next/api/components/plural): 基于给定数字的复数规则渲染内容。
+
+这两个组件为在本地化应用中管理条件逻辑和动态内容提供了强大的工具。
+
+在本参考中，我们将涵盖：
+- 什么是分支组件以及它们如何工作。
+- 有效使用分支组件的设计模式。
+- 如何使用每个分支组件的一些示例。
+- 使用分支组件时要避免的常见陷阱。
+
+---
+
+## 什么是分支组件？
+
+分支组件根据特定条件或值动态选择要渲染的内容。
+
+### `<Branch>` 组件
+`<Branch>` 组件允许您根据提供的 `branch` 值渲染不同的内容。
+如果没有找到匹配的分支，则渲染备用的 `children` 内容。
+
+例如，`<Branch>` 组件非常适合基于应用程序状态、用户偏好或任何动态数据进行条件渲染。
+
+### `<Plural>` 组件
+`<Plural>` 组件通过自动处理复数化和数字一致性扩展了 `<Branch>` 的功能。
+它使用提供的 `n` 值根据特定语言环境的规则确定显示哪个复数形式。
+
+例如，`<Plural>` 组件非常适合动态渲染单数和复数文本，例如 "1 item" 与 "2 items"。
+
+---
+
+## 设计模式
+
+### 使用 `<Branch>` 的分支逻辑 [#branch-logic]
+
+`<Branch>` 组件用于根据 `branch` 值灵活地切换内容。
+您可以定义多个可能的分支，组件将渲染与匹配的分支键对应的内容。
+
+```javascript copy
+import { T, Branch } from 'gt-next';
+
+export default function UserStatus({ status }) {
+  return (
+    <T id="UserStatus">
+      <Branch
+        branch={status}
+        active={<p>用户处于活跃状态。</p>}
+        inactive={<p>用户处于非活跃状态。</p>}
+      >
+        <p>状态未知。</p>
+      </Branch>
+    </T>
+  );
+}
+```
+### 使用 `<Plural>` 的复数化 [#plural-logic]
+
+`<Plural>` 组件根据 `n` 的值自动处理复数化逻辑。
+组件会根据给定的数字和语言环境动态选择适当的复数形式。
+
+```javascript copy
+import { T, Plural } from 'gt-next';
+
+export default function ItemCount({ count }) {
+  return (
+    <T id="item_count">
+      <Plural
+        n={count}
+        one={<>您有 <Num>1</Num> 件物品。</>}
+        other={<>您有 <Num>{count}</Num> 件物品。</>}
+      />
+    </T>
+  );
+}
+```
+
+可用的复数形式取决于语言环境，并遵循[Unicode CLDR 复数化规则](https://cldr.unicode.org/index/cldr-spec/plural-rules)。
+
+---
+
+## 示例
+
+### `<Branch>` 示例
+
+`<Branch>` 组件根据提供的 branch 属性动态渲染内容。
+在此示例中，它根据用户的订阅计划显示不同的描述。
+```javascript copy
+import { Branch } from 'gt-next';
+
+export default function SubscriptionDetails({ plan }) {
+  return (
+    <Branch
+      branch={plan}
+      free={<p>您正在使用免费计划。升级以解锁更多功能！</p>}
+      premium={<p>您正在享受高级计划，拥有完整的功能访问权限。</p>}
+      enterprise={<p>您正在使用企业计划。请联系支持以获取定制解决方案。</p>}
+    >
+      <p>未检测到订阅计划。</p>
+    </Branch>
+  );
+}
+```
+
+ * branch 属性决定显示哪个计划消息。
+ * 如果 plan 是 `"free"`、`"premium"` 或 `"enterprise"`，则显示相应的消息。
+ * 如果 plan 不匹配这些值中的任何一个，则显示备用内容（`"未检测到订阅计划。"`）。
+
+
+### `<Plural>` 示例
+
+`<Plural>` 组件根据 `n` 的值动态处理单数和复数内容。
+此示例显示用户收件箱中未读消息的数量。
+
+```javascript copy
+import { T, Plural, Num } from 'gt-next';
+
+export default function UnreadMessages({ unreadCount }) {
+  return (
+    <T id="unread_messages">
+      <Plural
+        n={unreadCount}
+        one={<>您有 <Num>{unreadCount}</Num> 条未读消息。</>}
+        other={<>您有 <Num>{unreadCount}</Num> 条未读消息。</>}
+      />
+    </T>
+  );
+}
+```
+ * `n` 属性指定未读消息的数量。
+ * 如果 `unreadCount` 是 `1`，则渲染：`"您有 1 条未读消息。"`
+ * 对于任何其他值，渲染：`"您有 X 条未读消息。"` 其中 `X` 是由 `<Num>` 格式化的 `unreadCount` 的值。
+
+---
+
+## 常见陷阱
+
+### 缺少分支值 [#missing-branch]
+
+如果未提供分支值或不匹配任何键，`<Branch>` 组件将渲染备用子内容。
+始终确保可能的分支键与传递给分支属性的值匹配。
+
+```javascript copy
+import { Branch } from 'gt-next';
+
+export default function StatusMessage({ status }) {
+  return (
+    <Branch
+      branch={status}
+      active={<p>用户处于活跃状态。</p>}
+      inactive={<p>用户处于非活跃状态。</p>}
+    >
+      <p>状态未知。</p>
+    </Branch>
+  );
+}
+```
+如果 `status` 是 `undefined` 或者是 `active` 或 `inactive` 之外的值，将显示备用内容 `“状态未知。”`。
+
+
+### 缺少复数形式 [#plural-locale]
+
+请记得在您的备用语言中指定所有必要的复数形式。
+这就是 `gt-next` 确保您的应用程序始终有备用内容可显示的方式。
+
+---
+
+## 注意事项
+ * 分支组件对于管理应用程序中的动态和本地化内容至关重要。
+ * `<Branch>` 组件具有高度的灵活性，可以适应各种条件和状态。
+ * `<Plural>` 组件通过自动遵循特定语言环境的规则来简化复数化。
+ * 始终包含一个备用的 `children` 属性，以改善错误处理和用户体验。
+
+## 下一步
+ * 查看 API 参考中的 [`<Branch>`](/docs/next/api/components/branch) 和 [`<Plural>`](/docs/next/api/components/plural) 以获取更多详细信息。
+ * 了解更多关于复数化规则和分支逻辑的信息，请参阅 [Unicode CLDR Pluralization Rules](https://cldr.unicode.org/index/cldr-spec/plural-rules)。
+ * 在我们的参考指南中探索 [Variable Components](/docs/next/reference/using-variable-components)。

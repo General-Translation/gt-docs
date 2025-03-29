@@ -1,0 +1,115 @@
+---
+title: useGT()
+description: useGT() 字符串翻译函数的 API 参考
+---
+
+## 概述
+
+`useGT()` 函数是一个用于在构建时翻译字符串的客户端钩子。
+
+```jsx
+const t = useGT();
+
+<p>{  t('这段文字将被翻译')  }</p>;
+```
+
+<Callout>
+**构建时翻译：**
+`useGT()` 翻译发生在构建时，在您的应用部署之前。
+虽然您可以将变量传递给翻译的字符串，但您只能翻译在构建时已知的内容。
+</Callout>
+
+## 参考
+### 参数
+无
+
+### 返回值
+
+一个回调函数，`t()`，用于翻译提供的内容。
+
+```jsx
+(content: string, options?: InlineTranslationOptions) => string
+```
+
+| 名称                  | 类型 | 描述                                                                 |
+|-----------------------|--|-----------------------------------------------------------------------------|
+| `content`             | `string` | 要翻译的字符串内容。                                     |
+| `options?`            | [`InlineTranslationOptions`](/docs/next/api/types/InlineTranslationOptions) | 自定义 `t()` 行为的翻译选项。 |
+
+---
+
+## 行为
+
+
+### 生产环境
+在 CD 过程中，任何位于 `t()` 函数内的内容将在应用程序部署之前被翻译。
+这确保了所有语言环境的快速加载时间，但它只能翻译构建时已知的内容。
+
+一旦生成，翻译内容将根据您的配置（1）存储在 CDN 中或（2）存储在应用程序的构建输出中。
+从那里，翻译后的内容将提供给您的用户。
+如果找不到翻译，它将回退到原始内容。
+
+请确保遵循[此处的部署指南](/docs/next/tutorials/quickdeploy)。
+
+### 开发环境
+在开发过程中，`t()` 函数将按需翻译内容。
+这对于原型设计您的应用在不同语言中的外观非常有用。
+请记得在您的环境中添加一个开发 API 密钥以启用此行为。
+
+在开发中，按需翻译时您会看到延迟。
+除非内容被明确按需翻译，否则在生产构建中不会发生这种情况，
+即使用 [`tx()`](/docs/next/api/strings/tx) 或 [`<Tx>`](/docs/next/api/components/tx)。
+
+---
+
+
+## 示例
+
+### 基本用法
+您可以使用 `useGT()` 来翻译字符串。
+
+```javascript copy
+"use client";
+import { useGT } from 'gt-next/client';
+
+export default function TranslateGreeting() {
+  const t = useGT();
+
+  return (
+    <p>
+      {t('Hello, Alice!')}
+    </p>
+  );
+}
+```
+注意: "Alice" 将被翻译为用户的首选语言。
+
+### 使用变量 [#variables]
+您可以将变量传递给字典翻译。
+
+```javascript copy
+"use client";
+import { useGT } from 'gt-next/client';
+
+export default function TranslateGreeting() {
+  const t = useGT();
+
+  return (
+    <p>
+      {t('Hello, {name}!', { variables: { name: 'Alice' } })}
+    </p>
+  );
+}
+```
+注意: "Alice" 不会被翻译为用户的首选语言，因为它是一个变量。
+
+---
+
+## 注意事项
+ * `useGT()` 函数是一个客户端钩子，用于翻译字符串。
+ * 使用 `useGT()` 的翻译字符串在运行时之前发生，在构建过程中进行（除非在开发中）。
+
+## 下一步
+ * 查看 [`getGT()`](/docs/next/api/strings/getGT) 以获取构建时服务器端字符串翻译。
+ * 对于运行时翻译，请参阅 [`tx()`](/docs/next/api/strings/tx) 和 [`<Tx>`](/docs/next/api/components/tx)。
+ * 查看 [`InlineTranslationOptions`](/docs/next/api/types/InlineTranslationOptions) 以获取有关自定义翻译的更多信息。

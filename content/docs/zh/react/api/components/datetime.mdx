@@ -1,0 +1,136 @@
+---
+title: <DateTime>
+description: <DateTime> 组件的 API 参考
+---
+
+## 概述
+
+`<DateTime>` 组件渲染一个格式化的日期或时间字符串，支持格式选项和区域设置等自定义。
+日期或时间根据当前区域设置和传递的任何可选参数进行格式化。
+
+```jsx
+<DateTime>{1738010355}</DateTime>
+// 输出: 1/27/2025
+```
+
+所有格式化均使用 [`Intl.DateTimeFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) 库在本地处理。
+
+## 参考
+
+### 属性
+
+<TypeTable
+  type={{
+    "children?": {
+        description: '要格式化的日期内容。',
+        type: 'any',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "value?": {
+        type: 'string | number | Date',
+        optional: true,
+        default: 'undefined',
+    },
+    "options?": {
+        type: 'Intl.DateTimeFormatOptions',
+        optional: true,
+        default: '{}',
+    },
+    "locales?": {
+        type: 'string[]',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### 描述
+| 属性名称 | 描述 |
+|-----------|-------------|
+| `children` | 要在组件内部渲染的内容。通常是日期或时间值。如果提供，它将优先于 `value` 属性。 |
+| `value`    | 日期或时间的默认值。可以是字符串、数字（时间戳）或 Date 对象。 |
+| `options`  | 日期或时间的可选格式化选项，遵循 [`Intl.DateTimeFormatOptions` 规范](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat)。使用此选项定义样式，如星期名称、时区等。 |
+| `locales`  | 可选的区域设置，用于指定格式化的区域。如果未提供，则使用用户的区域设置。阅读更多关于指定区域设置的信息 [这里](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument)。|
+
+### 返回值
+
+包含格式化日期或时间的字符串的 `JSX.Element`。
+
+---
+## 示例
+
+### 基本用法
+`<DateTime>` 组件可以用于显示本地化的日期或时间值。
+
+```jsx title="EventDate.jsx" copy
+import { DateTime } from 'gt-react';
+
+export default function EventDate(event) {
+    return (
+        <DateTime> {event.date} </DateTime>. // [!code highlight]
+    );
+}
+```
+
+### 指定语言环境
+`<DateTime>` 组件可以用于在特定语言环境中显示日期或时间值。
+
+```jsx title="EventDate.jsx" copy
+
+import { DateTime } from 'gt-react';
+
+export default function EventDate(event) {
+    return (
+        <DateTime locales={['fr-FR']}> {event.date} </DateTime>. // [!code highlight]
+    );
+}
+```
+
+### 翻译 `<DateTime>`
+假设您希望日期时间显示在一个也被翻译的句子中。
+您可以将 `<DateTime>` 组件包裹在 `<T>` 组件中。
+```jsx title="EventDate.jsx" copy
+import { T, DateTime } from 'gt-react';
+
+export default function EventDate(event) {
+    return (
+        <T id="eventDate">
+            活动的时间是 <DateTime> {event.date} </DateTime>. // [!code highlight]
+        </T>
+    );
+}
+```
+
+### 自定义格式
+`<DateTime>` 组件支持自定义格式选项。
+```jsx title="EventDate.jsx" copy
+import { DateTime } from 'gt-react';
+
+export default function EventDate(event) {
+    return (
+        <DateTime options={{
+            dateStyle: 'full', // [!code highlight]
+            timeStyle: 'long', // [!code highlight]
+            timeZone: 'Australia/Sydney', // [!code highlight]
+        }}>
+            {event.date}
+        </DateTime>.
+    );
+}
+```
+
+---
+
+## 注意事项
+ * `<DateTime>` 组件是一个可变组件，可用于格式化日期和时间值。
+ * 该组件使用 [`Intl.DateTimeFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) 库进行格式化。
+
+## 下一步
+ * 有关 `<DateTime>` 组件和其他变量组件如 `<Currency>`、`<Num>` 和 `<Var>` 的更多详细信息和使用示例，
+  请参阅 [使用变量组件](/docs/react/reference/using-variable-components) 文档。

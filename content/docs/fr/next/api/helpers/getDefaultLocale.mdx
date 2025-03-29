@@ -1,0 +1,56 @@
+---
+title: getDefaultLocale()
+description: Référence API pour la méthode côté serveur getDefaultLocale
+---
+
+## Vue d'ensemble
+
+La fonction `getDefaultLocale()` récupère la locale par défaut de l'application.
+Cette locale est déterminée au démarrage du serveur et est utilisée comme langue de secours pour les traductions.
+Elle renvoie une [chaîne de locale](/docs/reference/locale-strings), par exemple, `'en-US'`.
+
+<Callout>
+    `getDefaultLocale()` est une méthode côté serveur et ne peut être utilisée que sur des composants côté serveur.
+</Callout>
+
+Voir [`withGTConfig()`](/docs/next/api/config/withGTConfig) pour la configuration.
+Si aucune locale par défaut n'est spécifiée dans [`withGTConfig()`](/docs/next/api/config/withGTConfig), elle est par défaut à `'en-US'`.
+Pour le côté client, voir [`useDefaultLocale()`](/docs/next/api/helpers/useDefaultLocale).
+
+## Référence
+
+### Retours
+
+Une chaîne représentant la langue par défaut de l'application, par exemple, `'en-US'`.
+
+
+---
+
+
+
+## Exemples
+
+### Utilisation de base
+
+Récupérez la langue par défaut de l'application et utilisez-la dans votre logique côté serveur.
+
+```jsx title="GetDefaultLocale.jsx" copy
+import getDefaultLocale from 'gt-next/server';
+
+export default function GetDefaultLocale() {
+    const defaultLocale = getDefaultLocale(); // [!code highlight]
+    return <p>Langue par défaut : {defaultLocale}</p>;
+}
+```
+
+---
+
+
+## Notes
+ * Le `getDefaultLocale()` renvoie la locale par défaut définie dans [`withGTConfig()`](/docs/next/api/config/withGTConfig).
+ * `getDefaultLocale()` est uniquement côté serveur.
+ * La locale renvoyée respecte le format des [chaînes de locale](/docs/reference/locale-strings).
+
+## Prochaines étapes
+ * Voir [`useLocale()`](/docs/next/api/helpers/useLocale) et [`getLocale()`](/docs/next/api/helpers/getLocale) pour récupérer la locale de l'utilisateur.
+ * Explorer [`useDefaultLocale()`](/docs/next/api/helpers/useDefaultLocale) pour récupérer la locale par défaut dans les composants client.

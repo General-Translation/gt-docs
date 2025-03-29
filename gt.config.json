@@ -5,12 +5,7 @@
       "include": ["content/ui.[locale].json"]
     },
     "mdx": {
-      "include": [
-        "content/docs/[locale]/cli/**/*.mdx",
-        "content/docs/[locale]/reference/**/*.mdx",
-        "content/docs/[locale]/usage/**/*.mdx",
-        "content/docs/[locale]/generaltranslation/**/*.mdx"
-      ]
+      "include": ["content/docs/[locale]/**/*.mdx"]
     }
   },
   "locales": ["zh", "de", "fr", "es", "ja"],

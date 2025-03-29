@@ -1,0 +1,199 @@
+---
+title: <GTProvider>
+description: API-Referenz für die <GTProvider>-Komponente
+---
+
+## Überblick
+
+Die `<GTProvider>`-Komponente bietet einen allgemeinen Übersetzungskontext (GT) für ihre Kinder, sodass sie auf übersetzte Inhalte zugreifen können.
+Sie ist erforderlich für alle clientseitigen Übersetzungen in Ihrer Anwendung.
+
+### Wann zu verwenden
+
+- Umhüllen Sie Ihre gesamte Anwendung mit `<GTProvider>`, um Übersetzungen auf dem Client zu aktivieren.
+- Wenn Sie mit Wörterbüchern arbeiten, geben Sie optional eine `id` an, um die an den Client gesendeten Wörterbuchdaten zu begrenzen und die Leistung für große Wörterbücher zu optimieren.
+- Die `<GTProvider>`-Komponente wird sowohl für [inline `<T>`](/docs/react/reference/t-reference) als auch für [Wörterbücher](/docs/react/reference/dictionary-reference) verwendet.
+
+## Referenz
+
+### Props
+
+<TypeTable
+  type={{
+    "children": {
+      type: 'ReactNode',
+      optional: false,
+    },
+    "projectId": {
+      type: 'string',
+      optional: true,
+    },
+    "id?": {
+      type: 'string',
+      optional: true,
+      default: 'undefined',
+    },
+    "dictionary?": {
+      type: 'Dictionary',
+      optional: true,
+      default: 'defaultDictionary',
+    },
+    "locales?": {
+      type: 'string[]',
+      optional: true,
+    },
+    "defaultLocale?": {
+      type: 'string',
+      optional: true,
+      default: 'libraryDefaultLocale',
+    },
+    "locale?": {
+      type: 'string',
+      optional: true,
+    },
+    "cacheUrl?": {
+      type: 'string',
+      optional: true,
+      default: "'https://cdn.gtx.dev'",
+    },
+    "runtimeUrl?": {
+      type: 'string',
+      optional: true,
+      default: "'https://runtime.gtx.dev'",
+    },
+    "renderSettings?": {
+      type: 'RenderSettings',
+      optional: true,
+      default: 'defaultRenderSettings',
+    },
+    "_versionId?": {
+      type: 'string',
+      optional: true,
+    },
+    "devApiKey?": {
+      type: 'string',
+      optional: true,
+    },
+    "metadata?": {
+      type: 'object',
+      optional: true,
+    },
+  }}
+/>
+
+### Beschreibung
+
+| Prop | Beschreibung |
+|-----------|-------------|
+| `children` | Jedes Komponente oder die Eltern jeder Komponente, die auf der Client-Seite übersetzen oder auf Übersetzungsinformationen zugreifen muss. Diese sollten alle Komponenten umfassen, die `<T>`, `useGT` oder andere Übersetzungswerkzeuge verwenden. |
+| `projectId?` | Die Projekt-ID, die für General Translation Cloud-Dienste erforderlich ist. |
+| `id?` | Die ID eines verschachtelten Wörterbuchs, um die an den Client gesendeten Daten zu begrenzen. Dies ist nützlich für große Projekte mit umfangreichen Wörterbüchern. |
+| `dictionary?` | Das Übersetzungswörterbuch für das Projekt. |
+| `locales?` | Die Liste der genehmigten Lokalisierungen für das Projekt. |
+| `defaultLocale?` | Die Standard-Lokalisierung, die verwendet wird, wenn keine andere Lokalisierung gefunden wird. |
+| `locale?` | Die aktuelle Lokalisierung, falls bereits festgelegt. |
+| `cacheUrl?` | Die URL des Cache-Dienstes zum Abrufen von Übersetzungen. |
+| `runtimeUrl?` | Die URL des Laufzeitdienstes zum Abrufen von Übersetzungen. |
+| `renderSettings?` | Die Einstellungen für das Rendern von Übersetzungen. |
+| `_versionId?` | Die Versions-ID zum Abrufen von Übersetzungen. |
+| `devApiKey?` | Der API-Schlüssel für Entwicklungsumgebungen. |
+| `metadata?` | Zusätzliche Metadaten, die an den Kontext übergeben werden sollen. |
+
+### Rückgabe
+
+`React.JSX.Element|undefined`, das die an diese Komponente übergebenen Kinder enthält.
+
+## Beispiele
+
+### Grundlegende Verwendung
+
+Um Ihrer Anwendung Übersetzungen hinzuzufügen, umschließen Sie sie mit `<GTProvider>`.
+Vergessen Sie nicht, eine [Liste der unterstützten Sprachen](/docs/reference/supported-locales) hinzuzufügen, um die Übersetzung zu aktivieren.
+
+```jsx title="index.js" copy
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import { GTProvider } from "gt-react";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <GTProvider locales={['es', 'fr']}> // Aktivieren Sie Spanisch und Französisch // [!code highlight]
+      <App />
+    </GTProvider> // [!code highlight]
+  </StrictMode>
+);
+```
+
+### Wörterbücher
+
+Sie können dem `<GTProvider>`-Komponente auch ein Wörterbuch übergeben und dann mit dem [`useDict()`](/docs/next/api/components/dictionary/useDict) Hook darauf zugreifen.
+
+```jsx title="index.js" copy
+import dictionary from "./dictionary.js";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <GTProvider locales={['es', 'fr']} dictionary={dictionary}> // [!code highlight]
+      <App />
+    </GTProvider>
+  </StrictMode>
+);
+```
+
+Für weitere Informationen zur Verwendung von Wörterbüchern lesen Sie diesen [Leitfaden](/docs/react/reference/dictionary-reference).
+
+### Konfiguration hinzufügen
+
+Wenn Sie kein Fan davon sind, Props direkt an die `<GTProvider>`-Komponente zu übergeben, können Sie eine Konfigurationsdatei erstellen und an die Komponente übergeben.
+Es integriert sich auch direkt mit dem [`gtx-cli translate` Befehl](/docs/cli/translate), sodass Sie Dinge wie Sprachen nicht manuell als Parameter angeben müssen.
+
+```json title="gt.config.json" copy
+{
+  "projectId": "your-project-id",
+  "locales": ["es", "fr"],
+  "defaultLocale": "en-US",
+  "_versionId": "translation-version-id" // ermöglicht das Zurücksetzen auf vorherige Übersetzungen (automatisch vom CLI generiert)
+}
+```
+
+Alles, was Sie tun müssen, ist, dies an die `<GTProvider>`-Komponente zu übergeben.
+
+```jsx title="index.js" copy
+import config from "../gt.config.json";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <GTProvider {...config}> // [!code highlight]
+      <App />
+    </GTProvider>
+  </StrictMode>
+);
+```
+
+### Benutzerdefinierter Übersetzungslader
+
+Sie können die `loadTranslations`-Prop verwenden, um Übersetzungen aus einer benutzerdefinierten Quelle zu laden.
+Dies ist nützlich, wenn Sie Übersetzungen aus einer anderen Quelle laden müssen, wie z.B. einer benutzerdefinierten API.
+
+```jsx title="index.js" copy
+import loadTranslations from "./loadTranslations";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <GTProvider locales={['es', 'fr']} loadTranslations={loadTranslations}> // [!code highlight]
+      <App />
+    </GTProvider>
+  </StrictMode>
+);
+```
+
+---
+
+## Notizen
+ * Der `<GTProvider>` muss alle [`<T>` Komponenten](/docs/react/api/components/t) und andere übersetzungsbezogene Funktionen umschließen. Erfahren Sie mehr [hier](/docs/react/reference/t-reference#gtprovider).
+
+## Nächste Schritte
+ * Erfahren Sie mehr über die [`<T>` Komponente](/docs/react/reference/t-reference) zum Übersetzen von Text und Komponenten.
+ * Schauen Sie sich Übersetzungskomponenten und -funktionen an: [`<T>`](/docs/react/api/components/t), [`useGT()`](/docs/react/api/strings/useGT) oder [`useDict()`](/docs/react/api/dictionary/useDict).

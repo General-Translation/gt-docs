@@ -1,0 +1,172 @@
+---
+title: <Tx>
+description: <Tx>コンポーネントのAPIリファレンス
+---
+
+
+## 概要
+
+`<Tx>` コンポーネントは、実行時に jsx コンテンツを翻訳します。
+
+```jsx
+<Tx> // [!code highlight]
+    今日は、私は
+    {" 店に行きました"}
+    <p>
+        <b>買う</b>ために <i>食料品</i>を。
+    </p>
+</Tx> // [!code highlight]
+```
+
+`<Tx>` コンポーネントは、プレーンテキストだけでなく、複雑な JSX 構造の翻訳をサポートします。
+さらに、変数、複数形、およびコンテキスト固有の翻訳を処理するための機能を提供します。
+`<Tx>` はサーバーサイド専用です。
+
+<Callout>
+**実行時翻訳:**
+`<Tx>` の翻訳は実行時に行われます。
+これは、翻訳がライブで行われることを意味します。
+</Callout>
+
+---
+
+## リファレンス
+### Props
+<TypeTable
+  type={{
+    "children": {
+        type: 'any',
+        optional: false,
+    },
+    "context?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "locale?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### 説明
+| Prop            | 説明                                                                                           |
+|-----------------|-------------------------------------------------------------------------------------------------|
+| `children`  | 翻訳されるコンテンツ。プレーンテキストやJSX構造を含むことができます。                             |
+| `context`   | 翻訳を洗練するための追加のコンテキスト。曖昧なフレーズを解決するのに役立ちます。                 |
+| `locale`    | 翻訳に使用するオプションのロケール。アプリがサポートするブラウザの最も優先されるロケールがデフォルトになります。 |
+
+---
+
+## 振る舞い
+
+`<Tx>`は、実行時にjsxを翻訳します。
+これは、翻訳がライブで行われることを意味し、実行時にのみ知られるコンテンツを翻訳することができます。
+その代償として、オンデマンド翻訳の読み込みを待つ間に遅延が発生し、かなり遅くなります。
+
+読み込み中、`<Tx>`は言語が類似している場合（en-USとen-GBなど）を除き、未定義を返しますが、この動作はレンダー設定でカスタマイズできます。
+エラーが発生した場合、`<Tx>`は元のコンテンツを返します。
+
+私たちのアドバイスは、[`<T>`](/docs/next/api/components/t)、[`getGT()`](/docs/next/api/strings/useGT)、または[`useGT()`](/docs/next/api/strings/useGT)を使用して、ビルド時にできる限りすべてを翻訳し、必要な場合にのみ`<Tx>`や[`tx()`](/docs/next/api/strings/tx)のようなオンデマンド翻訳を使用することです。
+
+[こちらのデプロイメントガイド](/docs/next/tutorials/quickdeploy)に従うことを確認してください。
+
+---
+
+## 例
+
+### 基本的な使い方
+
+`<Tx>` コンポーネントは、実行時にその子要素を翻訳します。
+
+```jsx title="SimpleTranslation.jsx" copy
+import { Tx } from 'gt-next';
+
+export default function Greeting() {
+    return (
+        <Tx id="greeting"> // [!code highlight]
+            こんにちは、世界！
+        </Tx> // [!code highlight]
+    );
+}
+```
+
+
+### 変数を使用する場合
+`<Var>` コンポーネントを使用して、子要素を変数としてマークできます。
+これにより、翻訳されるべきでないコンテンツをマークすることができます。
+
+```jsx title="DynamicGreeting.jsx" copy
+import { Tx, Var } from 'gt-next';
+
+export default function DynamicGreeting(user) {
+    return (
+        <Tx>
+            こんにちは、<Var>{user.name}</Var>! // [!code highlight]
+        </Tx>
+    );
+}
+```
+
+### 複数形を使用する場合
+`<T>` コンポーネントは、`<Plural>` コンポーネントを使用して複数形をサポートします。
+
+```jsx title="ItemCount.jsx" copy
+import { Tx, Plural } from 'gt-next';
+
+export default function ItemCount({ count }) {
+    return (
+        <Tx>
+            <Plural n={count}  // [!code highlight] 
+                singular={<>アイテムがあります。</>}  // [!code highlight] 
+                plural={<>アイテムがあります。</>}  // [!code highlight] 
+            />  // [!code highlight]
+        </Tx>
+    );
+}
+```
+
+
+### 制限事項
+
+`<Tx>` 関数はその子孫のみを翻訳します。
+
+```jsx title="Example.jsx" copy
+import { Tx } from 'gt-next';
+
+const ValidTranslation = ({ children }) => (<div><b>{children}</b></div>);
+
+const InvalidTranslation = ({ children }) => (<div><b>翻訳なし</b></div>);
+
+export default function Example() {
+    return (
+        <Tx>
+            <div><b>これは有効です！</b></div> // 翻訳されます // [!code highlight]
+
+            <ValidTranslation> // 翻訳されます // [!code highlight]
+                こんにちは、世界！ // [!code highlight]
+            </ValidTranslation> // [!code highlight]
+
+            <InvalidTranslation /> // 翻訳されません
+        </Tx>
+    );
+}
+```
+<Callout>
+**注意:** 良い指針として、ファイル内の2つの `<Tx>` の間に*文字通り*あるコンテンツは翻訳されます。
+翻訳されていないコンテンツを翻訳するために、別の `<Tx>` を追加することができますが、`<Tx>` コンポーネントをネストすることは推奨されません。
+</Callout>
+
+---
+    
+## メモ
+ * `<Tx>` コンポーネントは、アプリケーション内のコンテンツを実行時に翻訳するために設計されています。
+ * `<Tx>` コンポーネントを使用して、変数や複数形を含むプレーンテキストやJSX構造を翻訳します。
+
+## 次のステップ
+ * ビルドタイム翻訳については、[`<T>`](/docs/next/api/components/T) コンポーネントを調べてください。
+ * より高度な機能については、[`<T>` リファレンス](/docs/next/reference/t-reference)を参照してください。
+ * 文字列の翻訳については、[`tx()`](/docs/next/api/strings/tx)、[`getGT()`](/docs/next/api/dictionary/getGT)、および [`useGT()`](/docs/next/api/dictionary/useGT)を調べてください。
+ * より高度な翻訳パターンについては、[変数コンポーネントの使用](/docs/next/reference/using-variable-components)および[分岐コンポーネントの使用](/docs/next/reference/using-branching-components)を確認してください。

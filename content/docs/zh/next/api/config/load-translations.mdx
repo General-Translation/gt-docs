@@ -1,0 +1,137 @@
+---
+title: loadTranslations()
+description: loadTranslations() 函数的 API 参考。
+---
+
+## 概述
+
+使用 `loadTranslations()` 来指定翻译加载行为。
+默认情况下，您的应用将在生产环境中从 GT CDN 加载翻译。
+您可以指定一个 `loadTranslations()` 函数，从不同的来源加载翻译，例如：
+ * 从您的应用程序包中（最常见）
+ * 从数据库中
+ * 从 API 中
+ * 从不同的 CDN
+
+我们已集成支持从应用程序包中的本地文件加载翻译。
+请遵循[本指南](/docs/next/reference/local-tx)在您的 Next.js 应用中设置本地翻译。
+
+如果您希望手动定义自己的翻译，请查看[自定义翻译指南](/docs/next/reference/stand-alone)和[`loadDictionary()`](/docs/next/api/config/load-dictionary)函数。
+
+## 参考
+
+### 参数
+<TypeTable
+  type={{
+    "locale": {
+        type: 'string',
+        optional: false,
+    },
+  }}
+/>
+
+### 描述
+| 类型 | 描述 |
+| ---- | ---- |
+| `locale` | 应加载翻译的语言环境。 |
+
+### 返回值
+
+一个 `Promise<any>`，解析为将 ID 映射到给定语言环境的翻译的字典。
+
+---
+
+## 设置
+
+将您的 `loadTranslations()` 定义为名为 `loadTranslations.js` 或 `loadTranslations.ts` 的文件的默认导出，该文件可以位于 `src/` 目录或根目录。
+确保该函数返回一个 promise，该 promise 解析为一个包含给定语言环境翻译的对象。
+
+```js title="src/loadTranslations.js"
+export default async function loadTranslations(locale) {
+  const translations = await import(`../public/locales/${locale}.json`);
+  return translations.default;
+};
+```
+
+如果您想使用不同的名称或路径，请通过 [`withGTConfig()`](/docs/next/api/config/with-gt-config) 中的 `loadTranslationsPath` 参数传递相对路径。
+
+---
+
+
+
+## 示例
+
+### 从您的包中获取翻译
+
+```js title="src/loadTranslations.js"
+export default async function loadTranslations(locale) {
+  const translations = await import(`../public/locales/${locale}.json`);
+  return translations.default;
+};
+```
+
+当配置为使用[本地翻译](/docs/next/reference/local-tx)时，[`gtx-cli translate`](/docs/cli/translate)命令，
+将会在您的项目文件树中保存翻译。
+
+您可以使用此命令为您的包生成翻译文件：
+
+```bash
+npx gtx-cli translate --no-publish --translations-dir ./public/locales
+```
+
+
+
+### 从CDN加载翻译
+
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
+  try {
+    const translations = await fetch(`https://your-cdn.com/translations/${locale}.json`);
+    const data = await translations.json();
+    return data;
+  } catch (e) {
+    console.error(e);
+    return {};
+  }
+};
+```
+
+### 从您自己的数据库加载翻译
+
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
+  try {
+    const translations = await prisma.translation.findUnique({
+      where: {
+        locale: locale,
+      },
+    });
+    return translations;
+  } catch (e) {
+    console.error(e);
+    return {};
+  }
+};
+```
+
+
+<Callout>
+  **问题：** [`loadTranslations()`](/docs/next/api/config/load-translations) 和 [`loadDictionary()`](/docs/next/api/config/load-dictionary) 之间有什么区别？
+
+  * [`loadTranslations()`](/docs/next/api/config/load-translations) 用于定义自定义加载行为，以获取您应用的翻译。
+  这可以是从CDN、数据库或您应用的包中获取翻译。
+  这些通常是由cli工具管理的机器生成翻译，不太适合用户编辑。
+  * [`loadDictionary()`](/docs/next/api/config/load-dictionary) 旨在作为独立库实现`gt-next`。
+  用户自带翻译，不使用翻译基础设施。
+</Callout>
+
+---
+
+## 注意事项
+ * `loadTranslations()` 使您能够自定义在生产环境中如何在您的应用中加载翻译。
+ * 最常见的用例是添加[本地翻译](/docs/next/reference/local-tx)
+
+## 下一步
+ * 了解为什么您可能想要使用[本地翻译](/docs/next/reference/local-tx)
+ * 使用[自定义翻译指南](/docs/next/reference/stand-alone)添加您自己的翻译
+

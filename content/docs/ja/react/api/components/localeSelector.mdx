@@ -1,0 +1,42 @@
+---
+title: <LocaleSelector>
+description: <LocaleSelector> コンポーネントのAPIリファレンス
+---
+
+## 概要
+
+`<LocaleSelector>` コンポーネントは、ユーザーのロケールを選択するために使用されます。
+これは、ロケールを選択するためのドロップダウンを提供するクライアントサイドのコンポーネントです。
+
+## リファレンス
+
+### 戻り値
+
+ユーザーが自分のロケールを選択できるコンポーネント。
+
+---
+
+## 例
+
+### 基本的な使用法
+
+```jsx
+import { LocaleSelector } from 'gt-react';
+
+export default function MyComponent() {
+    return (
+        <LocaleSelector />
+    );
+}
+```
+
+---
+
+## メモ
+* `<LocaleSelector>` コンポーネントを使用すると、アプリのロケールを変更できます。
+* `<LocaleSelector>` コンポーネントはサーバーコンポーネントでは利用できません。
+
+## 次のステップ
+
+* [`useLocale()`](/docs/react/api/helpers/useLocale) フックについてもっと学びましょう。
+* ロケール文字列については[こちら](/docs/reference/locale-strings)をご覧ください。

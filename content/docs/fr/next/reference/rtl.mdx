@@ -1,0 +1,39 @@
+---
+title: Support de droite à gauche
+description: Un guide étape par étape pour ajouter le support de droite à gauche (RTL) à votre application
+---
+
+## Aperçu
+
+Alors que la plupart des langues s'écrivent de gauche à droite (LTR), certaines langues s'écrivent de droite à gauche (RTL).
+Ces langues incluent l'arabe, l'hébreu, le persan et l'ourdou, qui comptent ensemble plus de 500 millions de locuteurs dans le monde.
+
+Regardez la page d'accueil de la traduction générale en [anglais](https://generaltranslation.com/en-US/welcome)
+et en [arabe](https://generaltranslation.com/ar/welcome) pour illustrer la différence entre le rendu ltr et rtl.
+
+## Guide
+
+Pour ajouter la prise en charge de RTL à votre application, il suffit de déterminer la direction de la langue et de définir la direction du texte à l'écran en conséquence.
+
+Vous pouvez utiliser la fonction `getLanguageDirection()` de la bibliothèque `generaltranslation` pour déterminer si une langue est `"rtl"` ou `"ltr"`.
+
+Utilisez la fonction `getLocale()` pour obtenir la locale dans la mise en page racine, puis ajoutez les props `lang` et `dir` à la balise `<html>` :
+
+```javascript title="my-app/app/layout.tsx" copy
+import { getLocale } from 'gt-next'
+import { getLanguageDirection } from 'generaltranslation';
+
+export default async function RootLayout({ children }) {
+        
+  const locale = await getLocale(); // e.g. "ar" for Arabic
+  const dir = getLanguageDirection(locale); // e.g. "rtl" for "right-to-left"
+
+  return (
+    <html lang={locale} dir={dir}>
+      <body> 
+        {children}
+      </body>
+    </html>
+  )
+}
+```

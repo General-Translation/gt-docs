@@ -1,0 +1,60 @@
+---
+title: Übersetzen von Zeichenfolgen
+description: Wie man Zeichenfolgen übersetzt
+---
+
+## Überblick
+
+Diese Anleitung ist ein Schritt-für-Schritt-Tutorial, wie man Zeichenfolgen in Ihrer React-App mit [`useGT()`](/docs/react/api/strings/useGT) übersetzt.
+
+
+## Einrichtung
+
+### Voraussetzungen
+
+Wir gehen davon aus, dass Sie `gt-react` bereits in Ihrem Projekt installiert haben und dem [Schnellstart-Leitfaden](/docs/react/tutorials/quickstart) gefolgt sind oder gerade folgen.
+
+
+### Übersetzen von Zeichenfolgen
+Für alle Zeichenfolgen verwenden Sie [`useGT()`](/docs/react/api/strings/useGT).
+Denken Sie daran, dass `useGT()` innerhalb eines Kindkomponenten von [`<GTProvider>`](/docs/react/api/components/gtprovider) aufgerufen werden muss.
+
+```jsx title="src/components/MyComponent.jsx" copy
+import { useGT } from 'gt-react';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+### Hinzufügen von Variablen
+Variablen sind Werte, die sich ändern können, aber nicht übersetzt werden.
+Um Variablen zu Ihren Zeichenfolgen hinzuzufügen, verwenden Sie folgendes Muster:
+
+```jsx title="MyComponent.jsx" copy
+import { useGT } from 'gt-react';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('Hello there, {username}', { variables: { username: 'Brian123' }})}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+---
+
+## Notizen
+ * Für die Übersetzung von Zeichenfolgen verwenden Sie [`useGT()`](/docs/react/api/strings/useGT).
+ * Variablen können zu Zeichenfolgen hinzugefügt werden, indem das Muster `{ variables: { key: value } }` verwendet wird.
+
+## Nächste Schritte
+ * Kehren Sie zum [Schnellstart-Leitfaden](/docs/react/tutorials/quickstart) zurück, um die Einrichtung Ihres Projekts für die Übersetzung abzuschließen.
+ * Sehen Sie sich die API-Referenz für [`useGT()`](/docs/next/react/strings/useGT) an.

@@ -1,0 +1,44 @@
+---
+title: <LocaleSelector>
+description: API-Referenz für die <LocaleSelector>-Komponente
+---
+
+## Übersicht
+
+Die `<LocaleSelector>` Komponente wird verwendet, um die Spracheinstellung des Benutzers auszuwählen.
+Es ist eine clientseitige Komponente, die ein Dropdown-Menü zur Auswahl der Spracheinstellung bereitstellt.
+
+## Referenz
+
+### Rückgaben
+
+Eine Komponente, die es dem Benutzer ermöglicht, seine Sprache auszuwählen.
+
+---
+
+## Beispiele
+
+### Grundlegende Verwendung
+
+```jsx
+"use client";
+import { LocaleSelector } from 'gt-next/client';
+
+export default function MyComponent() {
+    return (
+        <LocaleSelector />
+    );
+}
+```
+
+---
+
+## Notizen
+* Die `<LocaleSelector>` Komponente ermöglicht es Ihnen, eine andere Sprache für Ihre App auszuwählen.
+* Die `<LocaleSelector>` Komponente ist in der Serverkomponente nicht verfügbar.
+
+## Nächste Schritte
+
+* Erfahren Sie mehr über den [`useLocale()`](/docs/next/api/helpers/useLocale) Hook.
+* Schauen Sie sich den [`useLocaleSelector()`](/docs/next/api/helpers/useLocaleSelector) Hook an, um einen benutzerdefinierten Locale-Selector zu definieren.
+* Erfahren Sie mehr über Locale-Strings [hier](/docs/reference/locale-strings).

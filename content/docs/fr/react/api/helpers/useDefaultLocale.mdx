@@ -1,0 +1,49 @@
+---
+title: useDefaultLocale()
+description: Référence API pour le hook useDefaultLocale
+---
+
+## Aperçu
+
+Le hook `useDefaultLocale` récupère la locale par défaut de l'application à partir du [contexte `<GTProvider>`](/docs/react/api/components/gtprovider).
+Cette locale représente la langue de secours pour votre application et est généralement utilisée lorsque la locale préférée d'un utilisateur n'est pas disponible.
+
+<Callout>
+    Assurez-vous que votre application est enveloppée dans un [`<GTProvider>`](/docs/react/api/components/gtprovider).
+</Callout>
+
+Voir [`<GTProvider>`](/docs/react/api/config/gtprovider) pour la configuration.
+Si aucune locale par défaut n'est spécifiée, elle est par défaut à `'en-US'`.
+
+
+## Référence
+
+### Retours
+
+Une chaîne représentant la langue par défaut de l'application, par exemple, `'en-US'`.
+
+---
+
+## Exemples
+
+### Utilisation de base
+
+Récupérez la langue par défaut de l'application et affichez-la dans votre composant.
+
+```jsx title="DefaultLocale.jsx" copy
+import { useDefaultLocale } from 'gt-react';
+
+export default function DefaultLocale() {
+    const defaultLocale = useDefaultLocale();// [!code highlight]
+
+    return <p>Langue par défaut : {defaultLocale}</p>; // Affichez la langue par défaut
+}
+```
+
+## Notes
+ * Le hook `useDefaultLocale()` dépend du [`<GTProvider>`](/docs/react/api/components/gtprovider) pour accéder au contexte.
+   Assurez-vous que votre application est enveloppée avec un fournisseur au niveau racine.
+ * En savoir plus sur les chaînes de locale [ici](/docs/reference/locale-strings).
+
+## Prochaines étapes
+ * Voir [`useLocale`](/docs/react/api/helpers/useLocale) pour récupérer la locale de l'utilisateur.

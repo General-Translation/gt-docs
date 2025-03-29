@@ -1,0 +1,72 @@
+---
+title: loadDictionary()
+description: API-Referenz für die Funktion loadDictionary().
+---
+
+## Überblick
+
+`loadDictionary()` lädt eine Übersetzungs-JSON-Datei für eine gegebene Locale.
+
+Diese Funktion ist für diejenigen gedacht, die `gt-next` als eigenständige i18n-Bibliothek verwenden möchten.
+
+Diese Funktion wird hauptsächlich verwendet, um bestehende Projekte mit i18n zu General Translation zu migrieren, während ihre bestehenden Übersetzungen beibehalten werden.
+Folgen Sie [dieser Anleitung](/docs/next/reference/stand-alone), um dies einzurichten.
+
+Wenn mehrere Übersetzungen existieren, haben Übersetzungen aus Wörterbüchern, die von `loadDictionary()` geladen werden, immer Vorrang vor anderen.
+`loadDictionary()` unterstützt nur die Verwendung von JSON-Dateien mit Zeichenkettenübersetzungen.
+
+
+## Referenz
+
+### Parameter
+<TypeTable
+  type={{
+    "locale": {
+        type: 'string',
+        optional: false,
+    },
+  }}
+/>
+
+### Beschreibung
+| Typ | Beschreibung |
+| ---- | ----------- |
+| `locale` | Das Gebietsschema, für das Übersetzungen geladen werden sollen. |
+
+### Rückgabewerte
+
+Ein `Promise<any>`, das zu einem Wörterbuch aufgelöst wird, das IDs den Übersetzungen für das gegebene Gebietsschema zuordnet.
+
+---
+
+## Verwendung
+
+Im Allgemeinen laden Sie das Wörterbuch aus dem Verzeichnis `./public/locales`.
+
+```jsx title="src/loadDictionary.js"
+export default async function loadDictionary(locale) {
+  const translations = await import(`../public/locales/${locale}.json`);
+  return translations.default;
+}
+```
+
+<Callout>
+  **Frage:** Was ist der Unterschied zwischen [`loadTranslations()`](/docs/next/api/config/load-translations) und [`loadDictionary()`](/docs/next/api/config/load-dictionary)?
+
+  * [`loadTranslations()`](/docs/next/api/config/load-translations) wird verwendet, um benutzerdefiniertes Ladeverhalten für das Abrufen von Übersetzungen für Ihre App zu definieren.
+  Dies könnte das Abrufen von Übersetzungen von einem CDN, einer Datenbank oder dem Bundle Ihrer App sein.
+  Diese sind normalerweise maschinell generierte Übersetzungen, die vom CLI-Tool verwaltet werden und nicht sehr benutzerfreundlich zu bearbeiten sind.
+  * [`loadDictionary()`](/docs/next/api/config/load-dictionary) ist für Implementierungen von `gt-next` als eigenständige Bibliothek gedacht.
+  Benutzer bringen ihre eigenen Übersetzungen mit und es wird keine Übersetzungsinfrastruktur verwendet.
+</Callout>
+
+---
+
+## Notizen
+ * `loadDictionary()` wird verwendet, um benutzerdefinierte Übersetzungen für Ihre App zu laden.
+ * Von `loadDictionary()` geladene Wörterbücher haben Vorrang vor Übersetzungen, die von [`loadTranslations()`](/docs/next/api/config/load-translations) geladen werden.
+
+## Nächste Schritte
+ * Wenn Sie Ihre eigenen Übersetzungen schreiben möchten, schauen Sie sich [benutzerdefinierte Übersetzungen](/docs/next/reference/stand-alone) an.
+ * Siehe [`loadTranslations()`](/docs/next/api/config/load-translations) für weitere Informationen zum Schreiben eines benutzerdefinierten Übersetzungs-Laders.
+

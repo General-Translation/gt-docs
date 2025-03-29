@@ -1,0 +1,65 @@
+---
+title: In Produktion bereitstellen (5m)
+description: Lassen Sie uns Ihre Next.js-App mit GT bereitstellen.
+---
+
+## Überblick
+
+Dies ist ein kurzes Tutorial, um Ihnen zu helfen, Ihre Next.js-App mit GT bereitzustellen.
+
+Wir werden dies in 2 Schritten tun:
+<Steps>
+  <Step>
+    Fügen Sie Ihre Produktions-API-Schlüssel hinzu.
+  </Step>
+  <Step>
+    Fügen Sie den Übersetzungsbefehl zu Ihrem Build-Skript hinzu.
+  </Step>
+</Steps>
+
+## Voraussetzungen
+
+Stellen Sie sicher, dass Sie dem [Schnellstart-Leitfaden](/docs/next/tutorials/quickstart) gefolgt sind, um Ihre Next.js-App mit GT einzurichten.
+
+## Schritt 1: Fügen Sie Ihre Produktions-API-Schlüssel hinzu 🔑
+
+Fügen Sie Ihren **Produktions**-API-Schlüssel und Ihre Projekt-ID zu Ihren Produktionsumgebungsvariablen hinzu.
+
+Gehen Sie in Ihrem [Dashboard](https://www.generaltranslation.com/signin) in der Seitenleiste zu **API-Schlüssel**.
+Klicken Sie auf **API-Schlüssel erstellen** und fügen Sie sie Ihrer Produktionsumgebung hinzu.
+
+```bash copy
+GT_API_KEY="YOUR_GT_API_KEY"
+GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+```
+
+<Callout type="warn">
+    **Schützen Sie Ihre API-Schlüssel!**
+
+    Produktionsschlüssel sollten **nur** in der Produktion verwendet werden.
+    Ebenso sollten Entwicklungsschlüssel **nur** in der Entwicklung verwendet werden.
+    *Niemals Ihre API-Schlüssel in ein öffentliches Repository einfügen!*
+</Callout>
+
+## Schritt 2: Fügen Sie den Übersetzungsbefehl zu Ihrem Build-Skript hinzu 🏗️
+
+Der nächste Schritt besteht darin, den [Übersetzungsbefehl](/docs/cli/translate) zu Ihrem Build-Skript hinzuzufügen
+und die [Sprachversionen](/docs/reference/supported-locales) anzugeben, die Sie in die Produktion bringen möchten.
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales pt es && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+Hier haben wir Portugiesisch und Spanisch zu unserer Konfiguration hinzugefügt.
+
+Das war's! Sie sind jetzt bereit, Ihr Next.js mit GT bereitzustellen!
+
+---
+
+## Nächste Schritte
+ * Folgen Sie dieser Anleitung zu [Wie man Lokalisierungen verwaltet](/docs/next/reference/locale-management).
+ * Erfahren Sie, wie man [Zeichenketten übersetzt](/docs/next/reference/translating-strings).
+ * Erfahren Sie mehr über die [`<T>` Komponente](/docs/usage/t).

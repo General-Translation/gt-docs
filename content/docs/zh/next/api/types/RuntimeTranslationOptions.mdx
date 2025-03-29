@@ -1,0 +1,129 @@
+---
+title: RuntimeTranslationOptions
+description: RuntimeTranslationOptions 类型的 API 参考
+---
+
+## 概述
+
+`RuntimeTranslationOptions` 类型用于将变量传递给内联翻译并指定其渲染行为。
+您还可以添加一个语言环境以指定翻译的不同语言。
+这与 [`tx()`](/docs/next/api/strings/tx) 函数一起使用。
+
+<Callout>
+  **运行时翻译：**
+  要按需翻译变量，请将它们直接包含在传递给 [`tx()`](/docs/next/api/strings/tx) 的字符串中。
+  通过 `options` 对象传递给 `tx()` 的变量不会被翻译。
+</Callout>
+
+## 参考
+
+### 参数
+
+<TypeTable
+  type={{
+    "locale?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "variables?": {
+        type: 'Record<string, any>',
+        optional: true,
+        default: 'undefined',
+    },
+    "variablesOptions?": {
+        type: 'Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### 描述
+
+| Prop | 描述 |
+| ---- | ----------- |
+| `locale` | 一个可选的语言环境用于翻译。默认将使用浏览器最优先支持的语言环境。 |
+| `variables` | 一个对象，其中的键标识每个值在字符串中的映射位置。|
+| `variablesOptions` | 一个对象，其中的键标识变量，值定义变量的行为。更多信息请参见 [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) 和 [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat)。 |
+
+---
+
+## 示例
+
+
+### 传递变量
+为了在字符串中添加变量，我们使用 `{variable-name}` 语法，其中大括号包裹变量的名称。
+
+```jsx title="Component.tsx"
+// [!code word:username]
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>
+    {tx(`你好, {username}!`,{ variables: { 'username' : 'Brian123' } })}
+  </div>;
+};
+```
+
+
+### 添加变量选项
+
+您还可以使用 `variablesOptions` 属性自定义变量的呈现方式。
+```jsx title="Component.tsx"
+// [!code word:account-balance]
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>
+    { tx(
+      '您的账户余额: {account-balance}!',
+      {
+        variables: { "account-balance" : 1000000 },
+        variableOptions: { "account-balance": { style: 'currency', currency: 'USD' } }
+      }
+    ) }
+  </div>;
+};
+```
+
+
+### 翻译变量
+为了翻译变量，请直接将其包含在传递给 `tx()` 的字符串中。
+
+```jsx title="Component.tsx"
+import { tx } from 'gt-next/server';
+
+const Component = ({ hairColor }: { hairColor: string }) => {
+  return <div>{tx(
+    `你好, {username}! 你的发色是 ${hairColor}`,
+    { variables: { 'username' : 'Brian123' } }
+  )}</div>;
+};
+```
+
+请注意，变量 `hairColor` 会被翻译，但 `username` 不会。
+
+
+### 指定语言环境
+您可以指定用于翻译的语言环境。
+```jsx title="Component.tsx"
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>{tx('你好, 世界!', { locale: 'fr' })}</div>;
+};
+```
+这将始终被翻译为法语。
+
+---
+
+## 注意事项
+ * `RuntimeTranslationOptions` 用于在运行时进行字符串翻译。
+ * `variables` 对象将值传递给文本。
+ * `variablesOptions` 对象定义变量的行为。
+
+
+## 下一步
+ * 查看 [`tx()`](/docs/next/api/strings/tx) 以获取有关内联字符串翻译的更多信息。
+ * 查看 [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) 和 [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) 以获取有关格式选项的更多信息。

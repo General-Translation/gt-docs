@@ -1,0 +1,198 @@
+---
+title: Variable Komponenten
+description: Umfassende Referenz für Variable Komponenten in gt-next
+---
+
+## Überblick
+
+Variable Komponenten in `gt-next` ermöglichen es Ihnen, dynamische, nicht übersetzbare Inhalte in Übersetzungen einzufügen.
+Diese Komponenten umfassen:
+
+- [`<Var>`](/docs/next/api/components/var): Zum Rendern von Variablen.
+- [`<Num>`](/docs/next/api/components/num): Zum Formatieren von Zahlen mit Lokalisierung.
+- [`<Currency>`](/docs/next/api/components/currency): Zum Formatieren von Währungswerten mit Lokalisierung.
+- [`<DateTime>`](/docs/next/api/components/datetime): Zum Formatieren von Daten und Zeiten.
+
+Diese Komponenten werden innerhalb von `<T>` Komponenten oder als Teil von Vorlagenwörterbucheinträgen verwendet, um sicherzustellen, dass dynamische Inhalte genau und konsistent angezeigt werden.
+
+In dieser Referenz werden wir behandeln:
+ * Was Variable Komponenten sind und wie sie funktionieren.
+ * Designmuster für die Verwendung von Variablenkomponenten in Ihren Anwendungen.
+ * Einige Beispiele, wie jede Variable Komponente verwendet wird.
+ * Häufige Fallstricke, die vermieden werden sollten, wenn mit Variablenkomponenten gearbeitet wird.
+
+
+## Was sind Variable Komponenten?
+
+Variable Komponenten werden verwendet, um dynamische Inhalte einzubinden.
+Dazu gehören Benutzernamen, numerische Werte, Daten und Währungen.
+Diese Komponenten sind entscheidend für die Wahrung der Integrität lokalisierter Inhalte, da sie es ermöglichen, dynamische Werte in einer Weise zu formatieren und anzuzeigen, die mit der Region des Benutzers übereinstimmt.
+
+Jede Variable Komponente hat ein spezialisiertes Verhalten:
+
+- [`<Var>`](/docs/next/api/components/var): Zeigt allgemeine Variablen an, wie Benutzernamen oder Kennungen.
+- [`<Num>`](/docs/next/api/components/num): Formatiert numerische Werte gemäß regionsspezifischen Regeln.
+- [`<Currency>`](/docs/next/api/components/currency): Formatiert Währungswerte mit Symbolen und Lokalisierungsregeln.
+- [`<DateTime>`](/docs/next/api/components/datetime): Formatiert Daten und Zeiten nach regionsspezifischen Konventionen.
+
+Während JSX-Inhalte und Zeichenfolgen über die allgemeinen Übersetzungs-APIs übersetzt werden, werden Variable Komponenten vollständig lokal gehandhabt.
+Das bedeutet, dass der Inhalt innerhalb dieser Komponenten niemals an den Übersetzungsdienst gesendet wird, was die Datensicherheit und den Datenschutz gewährleistet.
+
+Während die `<Var>` Komponente als Auffanglösung für allgemeine Variablen verwendet wird, werden die `<Num>`, `<Currency>` und `<DateTime>` Komponenten für spezifische Datentypen verwendet, die eine Lokalisierungsformatierung erfordern.
+Für diese verwenden wir die [JS i18n API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl), um den Inhalt gemäß der Region des Benutzers zu formatieren.
+
+---
+
+## Designmuster
+
+### Variable Komponenten in `<T>` einwickeln [#variable-in-t]
+
+Variable Komponenten werden oft innerhalb einer `<T>` Komponente oder als Teil eines Wörterbucheintrags eingewickelt.
+Dies stellt sicher, dass der umgebende Inhalt übersetzt wird, während der variable Inhalt dynamisch und unverändert gerendert wird.
+
+```javascript copy
+import { T, Var } from 'gt-next';
+
+export default function UserGreeting({ user }) {
+  return (
+    <T id="greeting">
+      Hello, <Var>{user.name}</Var>!
+    </T>
+  );
+}
+```
+
+
+### Variable Komponenten und Lokalisierung [#localization]
+
+Bestimmte Variable Komponenten, wie `<Num>`, `<Currency>` und `<DateTime>`, beinhalten integrierte Unterstützung für Lokalisierung.
+Diese Komponenten formatieren ihren Inhalt automatisch basierend auf der Benutzer-Lokale oder zusätzlichen Optionen, die als Props übergeben werden.
+
+Zum Beispiel:
+* [`<Num>`](/docs/next/api/components/Num) kann Zahlen mit lokalisierten Dezimaltrennzeichen anzeigen.
+* [`<Currency>`](/docs/next/api/components/Currency) kann Werte mit dem korrekten Währungssymbol und der Positionierung formatieren.
+* [`<DateTime>`](/docs/next/api/components/DateTime) kann Daten und Zeiten gemäß lokalspezifischen Regeln formatieren.
+
+Sie können auch die Standard-Lokale und Formatierungsoptionen überschreiben, indem Sie Props direkt an diese Komponenten übergeben.
+
+### Datenschutz [#privacy]
+
+Wie oben erwähnt, bearbeiten Variable Komponenten alle Umformatierungen lokal; daher werden keine Informationen an die General Translation APIs zur Übersetzung gesendet.
+Dies ist ideal, um sensible Daten, wie Benutzernamen oder Kontonummern, privat und sicher zu halten.
+
+Jede Variable Komponente behandelt die Formatierung unterschiedlich und sollte für bestimmte Arten von privaten Inhalten verwendet werden:
+* [`<Var>`](/docs/next/api/components/var): Private Informationen, die ihr Format nicht basierend auf der Lokale ändern: z.B. Benutzernamen, Kontonummern.
+* [`<Num>`](/docs/next/api/components/Num): Private numerische Werte, die gemäß der Lokale formatiert werden sollten: z.B. Bestellmengen, Alter, Entfernung.
+* [`<Currency>`](/docs/next/api/components/Currency): Private Währungswerte, die gemäß der Lokale formatiert werden sollten: z.B. Transaktionsbeträge, Kontostände.
+* [`<DateTime>`](/docs/next/api/components/DateTime): Private Datums- und Zeitwerte, die gemäß der Lokale formatiert werden sollten: z.B. Kontoerstellungsdaten, Bestellzeitstempel.
+
+Es sollte beachtet werden, dass dies nicht für [Branching Components](/docs/next/reference/using-branching-components)
+und [`<T>` Komponenten](/docs/next/reference/t-reference) gilt, die Daten an die General Translation APIs zur Übersetzung senden.
+
+---
+
+## Beispiele
+
+### `<Var>` Beispiel
+
+Da die `<Var>` Komponente den Inhalt nicht umformatiert, wird sie fast ausschließlich in eine `<T>` Komponente eingebettet.
+
+In diesem Beispiel sehen wir, dass das Übergeben einer Variablen an das `value` Feld oder das Übergeben einer Variablen als Kind der `<Var>` Komponente denselben Effekt hat.
+Wie bei jeder anderen Komponente kann die `<Var>` Komponente verwendet werden, um beliebigen JSX-Inhalt zu umschließen.
+
+```jsx
+import { T, Var } from 'gt-next';
+
+export default function UserGreeting({ user }) {
+  return (
+    <T id="greeting">
+      Hallo, <Var>{user.name}</Var>!
+      Ihre Adresse ist <Var value={user.addr} />
+    </T>
+  );
+}
+```
+
+### `<Num>` Beispiel
+Im Gegensatz zur `<Var>` Komponente wird die `<Num>` Komponente verwendet, um numerische Werte gemäß lokalspezifischen Regeln zu formatieren.
+In diesem Beispiel sehen wir, wie die `<Num>` Komponente sowohl als Kind einer `<T>` Komponente als auch als eigenständige Komponente verwendet werden kann.
+
+```jsx
+import { T, Num } from 'gt-next';
+import { Badge } from '@components/custom/cart/Badge';
+
+export default function OrderSummary({ order }) {
+  return (
+    <>
+      <T id="orderSummary">
+        Sie haben <Num value={order.quantity} /> Artikel in Ihrem Warenkorb.
+      </T>
+      <Badge>
+        <Num>{order.quantity}</Num>
+      </Badge>
+    </>
+  );
+}
+```
+
+### `<Currency>` Beispiel
+Die `<Currency>` Komponente nimmt einen numerischen Wert und formatiert ihn gemäß der angegebenen Währungszeichenfolge.
+In diesem Beispiel sehen wir, wie die `<Currency>` Komponente sowohl als Kind einer `<T>` Komponente als auch als eigenständige Komponente verwendet werden kann.
+
+```jsx
+import { T, Currency } from 'gt-next';
+import { Badge } from '@components/custom/cart/Badge';
+
+export default function OrderSummary({ order }) {
+  return (
+    <>
+      <T id="orderSummary">
+        Ihr Gesamtbetrag ist <Currency currency={curr}>{order.total}</Currency>.
+      </T>
+      <Badge>
+        <Currency value={order.total} currency={curr} />
+      </Badge>
+    </>
+  );
+}
+
+```
+
+### `<DateTime>` Beispiel
+
+Die `<DateTime>` Komponente formatiert Datums- und Zeitwerte gemäß der Benutzerlokale.
+Wieder sehen wir, wie die `<DateTime>` Komponente sowohl als Kind einer `<T>` Komponente als auch als eigenständige Komponente verwendet werden kann.
+
+```jsx
+import { T, DateTime } from 'gt-next';
+
+export default function OrderSummary({ order }) {
+  return (
+    <T id="orderSummary">
+      Ihre Bestellung wurde am <DateTime value={order.date} />
+    </T>
+    <DateTime>{order.date}</DateTime>
+  );
+}
+```
+
+---
+
+## Häufige Fallstricke
+
+### Lokalisierungsoptionen ignorieren [#localization-options]
+
+Für `<Currency>` stellen Sie sicher, dass Sie die `currency`-Eigenschaft übergeben, um den Währungstyp anzugeben.
+Dies stellt sicher, dass das korrekte Währungssymbol und die Formatierung beim Anzeigen des Wertes verwendet werden.
+
+Andere Komponenten, wie `<Num>` und `<DateTime>`, haben ebenfalls optionale Eigenschaften, die es Ihnen ermöglichen, die Formatierung anzupassen.
+
+## Notizen
+ * Variable Komponenten sind wesentlich, um dynamische und private Inhalte in Übersetzungen anzuzeigen.
+ * Alle Umformatierungen werden lokal durchgeführt, um sicherzustellen, dass keine sensiblen Daten an die allgemeinen Übersetzungs-APIs gesendet werden.
+ * Komponenten wie [`<Num>`](/docs/next/api/components/num), [`<Currency>`](/docs/next/api/components/currency) und [`<DateTime>`](/docs/next/api/components/datetime) bieten Lokalisierungsfunktionen, um eine genaue Formatierung sicherzustellen,
+ während die [`<Var>`](/docs/next/api/components/var) Komponente für allgemeine Variablen verwendet wird, die keine Umformatierung erfordern.
+
+## Nächste Schritte
+ * Erkunden Sie die bedingte Logik in [Verzweigungskomponenten](/docs/reference/using-branching-components).
+ * Erfahren Sie mehr über Formatierungsoptionen für spezifische Variablenkomponenten in der [API-Referenz](/docs/api/components/var).

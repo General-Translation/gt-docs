@@ -1,0 +1,204 @@
+---
+title: i18n-Routing
+description: Eine Schritt-für-Schritt-Anleitung zum Hinzufügen von Internationalisierungs-(i18n)-Routing zu Ihrer Anwendung
+---
+
+## Überblick
+Diese Anleitung führt Sie durch das Hinzufügen von i18n-Routing und lokalisierten Pfaden zu Ihrer Next.js-Anwendung unter Verwendung der integrierten Middleware von `gt-next`.
+
+### Was ist i18n-Routing?
+
+Das Erstellen neuer Routen für jede Sprache hat den Vorteil, dass Ihre Website benutzerfreundlicher wird und das SEO verbessert.
+i18n-Routing ermöglicht es Ihnen, spezifische URLs mit verschiedenen Lokalen zu verknüpfen.
+Zum Beispiel können Sie `/en/airplanes` für Englisch, `/zh/airplanes` für Chinesisch und so weiter haben.
+
+Sie können dies mit lokalisierten Pfaden noch einen Schritt weiterführen.
+Diese sind eine Erweiterung des i18n-Routings, die es Ihnen ermöglicht, einen Alias-Pfad für ein Lokale anzugeben.
+Zum Beispiel können Sie `/en/airplanes` für Englisch, `/zh/飞机` für Chinesisch und so weiter angeben.
+
+---
+
+## Einrichtung des i18n-Routings
+
+Wir führen Sie durch zwei einfache Schritte, um i18n-Routing zu Ihrer Next.js-Anwendung hinzuzufügen:
+
+<Steps>
+    <Step>
+        Fügen Sie Ihrer App einen dynamischen Pfad hinzu.
+    </Step>
+    <Step>
+        Erstellen Sie die Middleware-Datei.
+    </Step>
+</Steps>
+
+
+### Schritt 1: Fügen Sie eine dynamische Route hinzu [#dynamic-route]
+
+Fügen Sie ein Verzeichnis in Ihrem App-Ordner mit dem Namen `[locale]` ein (z.B. `app/[locale]`).
+Fügen Sie alle Ihre Seiten und Layouts unter diesem Verzeichnis ein.
+
+<Files>
+  <Folder name="my-app" defaultOpen={true}>
+    <File name="middleware.js" />
+    <Folder name="app" defaultOpen={true}>
+      <Folder name="[locale]" defaultOpen={true}>
+        <File name="layout.js" />
+        <File name="page.js" />
+        <Folder name="some-page">
+          <File name="page.js" />
+        </Folder>
+      </Folder>
+      <Folder name="api">
+        <File name="route.js" />
+      </Folder>
+    </Folder>
+    <Folder name="public">
+      <Folder name="images">
+        <File name="logo.png" />
+      </Folder>
+    </Folder>
+    <Folder name="styles">
+      <File name="globals.css" />
+    </Folder>
+    <File name="next.config.js" />
+  </Folder>
+</Files>
+
+Stellen Sie sicher, dass alle speziellen Dateien innerhalb von `app/` unter `app/[locale]` verschachtelt sind.
+
+
+
+### Schritt 2: Fügen Sie die Middleware-Datei hinzu [#middleware]
+
+Erstellen Sie in Next.js eine Datei namens `middleware.js` (oder `.ts`, wenn Sie TypeScript verwenden) im Stammverzeichnis.
+Wenn Sie den `src/`-Ordner verwenden, platzieren Sie sie stattdessen in `src/middleware.js` (oder `.ts`).
+Fügen Sie die [`createNextMiddleware()`](/docs/next/api/middleware/createNextMiddleware)-Funktion zur Datei hinzu.
+
+```js title="middleware.js" copy
+import { createNextMiddleware } from 'gt-next/middleware'
+
+export default createNextMiddleware();
+
+export const config = {
+  matcher: [
+    /*
+      * Alle Anforderungspfade abgleichen, außer denen, die beginnen mit:
+      * - api (API-Routen)
+      * - _next (interne Dateien)
+      * - statische Dateien
+      */
+    "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
+
+---
+
+## Lokalisierte Pfade einrichten
+
+Sie können lokalisierte Pfade über die `pathConfig`-Option in der Middleware-Datei angeben.
+
+```js title="middleware.js" copy
+export default createNextMiddleware({
+  pathConfig: {
+    // Sie können einen gemeinsamen Pfad angeben (optional)
+    // Dies wird "/en/about" und "/zh/about" erstellen
+    "/about": "/about",
+
+    // Lokalisierte Pfade angeben
+    // Dies wird "/en/airplanes" und "/zh/飞机" erstellen
+    "/airplanes": {
+      "zh": "/飞机",
+    }
+
+    // Dynamische Pfadparameter hinzufügen
+    // Dies wird "/en/airports/123" und "/zh/飞机机场/123" erstellen
+    "/airports/[id]": {
+      "zh": "/飞机机场/[id]",
+    }
+  },
+});
+```
+In diesem Beispiel erstellen wir einen Standardpfad für `/en/about` und lokalisierte Pfade für `/en/airplanes` und `/en/airports/[id]`.
+Auf Chinesisch werden diese entsprechend als `/zh/about`, `/zh/飞机` und `/zh/飞机机场/[id]` aliasiert.
+
+<Callout>
+  **Tipp:**
+  Da der `/about`-Pfad für alle Lokalisierungen gleich bleibt, müssen Sie ihn nicht im `pathConfig`-Objekt aufnehmen.
+  Alle Pfade, die nicht im `pathConfig`-Objekt angegeben sind, verwenden denselben Pfad für alle Lokalisierungen, gefolgt vom Lokalisierungspräfix.
+</Callout>
+
+---
+
+## Routing-Verhalten
+
+### Standardmäßiges Locale-Präfix
+Standardmäßig wird Ihr `defaultLocale` (d.h. die Standardsprache Ihrer App) nicht mit einem Locale-Code in der URL versehen.
+Zum Beispiel, wenn Ihr Standard-Locale `en` ist und Sie eine Seite unter `/about` haben, wird sie auf Englisch unter `/about` zugänglich sein.
+Im Chinesischen wird sie jedoch unter `/zh/about` auf Chinesisch zugänglich sein.
+
+Wenn Sie dieses Verhalten nicht wünschen, kann es deaktiviert werden, indem `prefixDefaultLocale` in der Middleware-Konfiguration auf `false` gesetzt wird.
+
+### Locale-Erkennung und Umleitung
+Die Middleware erkennt das Locale des Benutzers basierend auf (1) dem URL-Pfad-Locale, (2) dem Referrer-Locale, (3) den akzeptierten Sprachen des Browsers und (4) schließlich dem `defaultLocale`.
+Der Benutzer wird dann entsprechend umgeleitet.
+
+<Steps>
+  <Step>
+    Das Locale wird immer zuerst aus dem URL-Pfad überprüft.
+    Das bedeutet, dass wenn Sie `/zh/about` besuchen, Ihre Sprache als Chinesisch angenommen wird.
+  </Step>
+  <Step>
+    Wenn die Seite, die Sie besuchen, nicht mit einem Locale versehen ist, überprüft die Middleware das vorherige Locale des Benutzers.
+    Zum Beispiel, wenn Sie auf `/zh` sind und `/about` besuchen, wird Ihre Sprache als Chinesisch angenommen und Sie werden zu `/zh/about` umgeleitet.
+  </Step>
+  <Step>
+    Wenn keines davon verfügbar ist, fällt die Locale-Erkennung auf die Browsersprache des Benutzers zurück.
+    Zum Beispiel, wenn jemandes bevorzugte Sprache Chinesisch ist und er zum ersten Mal `/about` besucht, wird er zu `/zh/about` umgeleitet.
+  </Step>
+  <Step>
+    Wenn keine dieser Bedingungen erfüllt ist, wird das `defaultLocale` als Fallback verwendet.
+  </Step>
+</Steps>
+
+Wenn jederzeit eine lokalisierte Version der Seite existiert, werden sie zur lokalisierten URL umgeleitet.
+Zum Beispiel wird `/zh/airplanes` immer zu `/zh/飞机` umgeleitet.
+
+#### Sonderfall: Lokalisierte Pfade ohne Locale-Präfix
+
+Wenn Sie zu einem lokalisierten Pfad ohne Locale-Präfix navigieren (z.B. `/飞机`), wird die Middleware diesen Pfad mit dem Präfix versehen, das sie für Ihr aktuelles Locale hält.
+
+Zum Beispiel wird der Besuch von `/飞机` nur zu `/zh/飞机` umgeleitet, wenn die Middleware Ihr Locale explizit als `zh` erkennt.
+Das ist großartig, funktioniert aber nur, wenn die Middleware Ihr Locale als `zh` ansieht.
+
+Andernfalls wird Ihr Pfad mit Ihrem aktuellen Locale versehen.
+Zum Beispiel wird der Besuch von `/飞机` zu `/en/飞机` umgeleitet, wenn die Middleware Ihr Locale als `en` ansieht.
+Dies führt zu einem 404.
+
+Wir empfehlen, immer den Pfad aus Ihrem `defaultLocale` für alle Links in Ihrem Projekt zu verwenden.
+Dies wird immer automatisch zum korrekten lokalisierten Pfad umleiten.
+```jsx
+<Link href="/about">About</Link>
+<Link href="/planes">Planes</Link>
+<Link href="/airports/123">Airport 123</Link>
+```
+
+Wenn Sie explizit zu einem anderen Locale verlinken möchten, können Sie dies tun, indem Sie den lokalisierten Pfad verwenden.
+```jsx
+<Link href="/zh/about">About in Chinese</Link>
+<Link href="/zh/飞机">Planes in Chinese</Link>
+<Link href="/zh/飞机机场/123">Airport 123 in Chinese</Link>
+```
+
+---
+
+
+## Hinweise
+ * i18n-Routing ändert die URL-Struktur Ihrer Anwendung. Jede Sprache hat ihre eigene URL.
+ * Die Middleware-Datei ist erforderlich, um die Routing-Logik zu verarbeiten.
+ * Sie können die unterstützten Sprachen in der Middleware-Konfiguration und in der Next-Konfigurationsdatei angeben.
+
+## Nächste Schritte
+ * Siehe die API-Dokumentation für [`createNextMiddleware()`](/docs/next/api/middleware/createNextMiddleware).
+ * Erfahre mehr über [Locale-Management](/docs/next/reference/locale-management).
+ * Lerne, wie du [Deine Anwendung übersetzen](/docs/next/reference/translate-your-application) kannst.

@@ -1,0 +1,107 @@
+---
+title: Traduire des chaînes
+description: Comment traduire des chaînes
+---
+
+## Aperçu
+
+Ce guide est un tutoriel étape par étape sur la façon de traduire des chaînes dans votre application Next.js en utilisant
+[`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT), et [`tx()`](/docs/next/api/strings/tx).
+
+## Prérequis
+
+Nous supposons que vous avez déjà installé `gt-next` dans votre projet et que vous avez suivi ou suivez actuellement le [Guide de démarrage rapide](/docs/next/tutorials/quickstart).
+
+## Traduction de chaînes
+
+### Composants côté client
+Pour toutes les chaînes côté client, utilisez [`useGT()`](/docs/next/api/strings/useGT).
+N'oubliez pas que `useGT()` doit être appelé dans un composant enfant de [`<GTProvider>`](/docs/next/api/components/gtprovider).
+
+```jsx title="src/components/MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+### Composants côté serveur
+Pour toutes les chaînes côté serveur, utilisez [`getGT()`](/docs/next/api/strings/getGT).
+
+```jsx title="src/pages/index.jsx" copy
+import { getGT } from 'gt-next/server';
+
+export default async function Home() {
+  const t = await getGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+<Callout>
+  **Remarque :**
+  En développement, si vous traduisez du contenu à l'exécution, vous devrez actualiser la page pour voir la version traduite d'une chaîne à partir de [`getGT()`](/docs/next/api/strings/getGT).
+  **Cela ne se produit pas en production.**
+</Callout>
+
+### Ajout de variables
+Les variables sont des valeurs qui peuvent changer, mais ne sont pas traduites.
+Pour ajouter des variables à vos chaînes, utilisez le modèle suivant :
+
+```jsx title="MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT();
+  return (
+    <div>
+      <h1>{t('Hello there, {username}', { variables: { username: 'Brian123' }})}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+Cela fonctionne avec à la fois [`useGT()`](/docs/next/api/strings/useGT) et [`getGT()`](/docs/next/api/strings/getGT).
+
+### Contenu dynamique
+Disons que vous avez une chaîne qui change.
+Vous pouvez utiliser la fonction [`tx()`](/docs/next/api/strings/tx) pour traduire la chaîne à l'exécution.
+
+```jsx title="MyComponent.jsx" copy
+import { tx } from 'gt-next/server';
+
+export default async function MyComponent({ username }) {
+  const translation = await tx(`Hello, ${username}. How is your day?`); // [!code highlight]
+  return (
+    <div>
+      <h1>{translation}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+<Callout>
+  **Remarque :**
+  La fonction [`tx()`](/docs/next/api/strings/tx) est uniquement disponible côté serveur, et ne doit être utilisée que si nécessaire.
+  La traduction à l'exécution crée souvent un délai.
+  Utilisez [`getGT()`](/docs/next/api/strings/getGT) ou [`useGT()`](/docs/next/api/strings/useGT) chaque fois que possible pour traduire avant le déploiement.
+</Callout>
+
+---
+
+## Notes
+ * Pour traduire des chaînes, utilisez [`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT), et [`tx()`](/docs/next/api/strings/tx).
+ * `useGT()` et `getGT()` traduisent avant le déploiement, tandis que `tx()` traduit à l'exécution. Utilisez `tx()` avec parcimonie.
+ * Des variables peuvent être ajoutées aux chaînes en utilisant le modèle `{ variables: { key: value } }`.
+
+## Prochaines étapes
+ * Retournez au [Guide de démarrage rapide](/docs/next/tutorials/quickstart) pour terminer la configuration de votre projet pour la traduction.
+ * Consultez la référence API pour [`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT), et [`tx()`](/docs/next/api/strings/tx).

@@ -1,0 +1,181 @@
+---
+title: Verzweigungskomponenten
+description: Umfassende Referenz für Verzweigungskomponenten in gt-next
+---
+
+## Überblick
+
+Verzweigungskomponenten in `gt-next` ermöglichen die dynamische Inhaltsdarstellung basierend auf spezifischen Bedingungen. Diese Komponenten umfassen:
+
+- [`<Branch>`](/docs/next/api/components/branch): Rendert Inhalte basierend auf einem passenden `branch`-Prop.
+- [`<Plural>`](/docs/next/api/components/plural): Rendert Inhalte basierend auf Pluralisierungsregeln für eine gegebene Zahl.
+
+Beide Komponenten bieten leistungsstarke Werkzeuge zur Verwaltung von bedingter Logik und dynamischen Inhalten in lokalisierten Anwendungen.
+
+In dieser Referenz werden wir behandeln:
+- Was Verzweigungskomponenten sind und wie sie funktionieren.
+- Entwurfsmuster für die effektive Nutzung von Verzweigungskomponenten.
+- Einige Beispiele, wie jede Verzweigungskomponente verwendet wird.
+- Häufige Fallstricke, die bei der Arbeit mit Verzweigungskomponenten zu vermeiden sind.
+
+## Was sind verzweigende Komponenten?
+
+Verzweigende Komponenten wählen dynamisch aus, welcher Inhalt basierend auf einer bestimmten Bedingung oder einem Wert gerendert wird.
+
+### `<Branch>` Komponente
+Die `<Branch>` Komponente ermöglicht es Ihnen, basierend auf einem bereitgestellten `branch` Wert unterschiedlichen Inhalt zu rendern.
+Wenn kein passender Zweig gefunden wird, wird der alternative `children` Inhalt gerendert.
+
+Zum Beispiel ist die `<Branch>` Komponente perfekt für die bedingte Darstellung basierend auf dem Anwendungszustand, den Benutzereinstellungen oder beliebigen dynamischen Daten.
+
+### `<Plural>` Komponente
+Die `<Plural>` Komponente erweitert die Funktionalität von `<Branch>`, indem sie Pluralisierung und Zahlenübereinstimmung automatisch handhabt.
+Sie verwendet den bereitgestellten `n` Wert, um zu bestimmen, welche Pluralform basierend auf lokalspezifischen Regeln angezeigt werden soll.
+
+Zum Beispiel ist die `<Plural>` Komponente ideal für die dynamische Darstellung von Singular- und Pluraltexten, wie "1 Artikel" vs. "2 Artikel."
+
+## Entwurfsmuster
+
+### Verzweigungslogik mit `<Branch>` [#branch-logic]
+
+Die `<Branch>` Komponente wird für flexibles Umschalten von Inhalten basierend auf einem `branch` Wert verwendet.
+Sie können mehrere mögliche Zweige definieren, und die Komponente rendert den Inhalt, der dem passenden Zweigschlüssel entspricht.
+
+```javascript copy
+import { T, Branch } from 'gt-next';
+
+export default function UserStatus({ status }) {
+  return (
+    <T id="UserStatus">
+      <Branch
+        branch={status}
+        active={<p>Der Benutzer ist aktiv.</p>}
+        inactive={<p>Der Benutzer ist inaktiv.</p>}
+      >
+        <p>Status unbekannt.</p>
+      </Branch>
+    </T>
+  );
+}
+```
+### Pluralisierung mit `<Plural>` [#plural-logic]
+
+Die `<Plural>` Komponente automatisiert die Pluralisierungslogik basierend auf dem Wert von `n`.
+Die Komponente wählt dynamisch die passende Pluralform für die gegebene Zahl und das gegebene Gebietsschema aus.
+
+```javascript copy
+import { T, Plural } from 'gt-next';
+
+export default function ItemCount({ count }) {
+  return (
+    <T id="item_count">
+      <Plural
+        n={count}
+        one={<>Sie haben <Num>1</Num> Artikel.</>}
+        other={<>Sie haben <Num>{count}</Num> Artikel.</>}
+      />
+    </T>
+  );
+}
+```
+
+Die verfügbaren Pluralformen hängen vom Gebietsschema ab und folgen den [Unicode CLDR Pluralisierungsregeln](https://cldr.unicode.org/index/cldr-spec/plural-rules).
+
+---
+
+## Beispiele
+
+### `<Branch>` Beispiel
+
+Die `<Branch>` Komponente rendert dynamisch Inhalte basierend auf dem bereitgestellten branch-Prop.
+In diesem Beispiel zeigt sie unterschiedliche Beschreibungen basierend auf dem Abonnementplan des Benutzers an.
+```javascript copy
+import { Branch } from 'gt-next';
+
+export default function SubscriptionDetails({ plan }) {
+  return (
+    <Branch
+      branch={plan}
+      free={<p>Sie sind im Free-Plan. Upgrade, um mehr Funktionen freizuschalten!</p>}
+      premium={<p>Sie genießen den Premium-Plan mit vollem Zugriff auf Funktionen.</p>}
+      enterprise={<p>Sie sind im Enterprise-Plan. Kontaktieren Sie den Support für maßgeschneiderte Lösungen.</p>}
+    >
+      <p>Kein Abonnementplan erkannt.</p>
+    </Branch>
+  );
+}
+```
+
+ * Der branch-Prop bestimmt, welche Plan-Nachricht angezeigt wird.
+ * Wenn plan `"free"`, `"premium"` oder `"enterprise"` ist, wird die entsprechende Nachricht angezeigt.
+ * Wenn plan keinem dieser Werte entspricht, wird der Fallback-Inhalt (`"Kein Abonnementplan erkannt."`) angezeigt.
+
+
+### `<Plural>` Beispiel
+
+Die `<Plural>` Komponente behandelt dynamisch singuläre und plurale Inhalte basierend auf dem Wert von `n`.
+Dieses Beispiel zeigt die Anzahl ungelesener Nachrichten im Posteingang eines Benutzers an.
+
+```javascript copy
+import { T, Plural, Num } from 'gt-next';
+
+export default function UnreadMessages({ unreadCount }) {
+  return (
+    <T id="unread_messages">
+      <Plural
+        n={unreadCount}
+        one={<>Sie haben <Num>{unreadCount}</Num> ungelesene Nachricht.</>}
+        other={<>Sie haben <Num>{unreadCount}</Num> ungelesene Nachrichten.</>}
+      />
+    </T>
+  );
+}
+```
+ * Der `n`-Prop gibt die Anzahl der ungelesenen Nachrichten an.
+ * Wenn `unreadCount` `1` ist, wird gerendert: `"Sie haben 1 ungelesene Nachricht."`
+ * Für jeden anderen Wert wird gerendert: `"Sie haben X ungelesene Nachrichten."` wobei `X` der von `<Num>` formatierte Wert von `unreadCount` ist.
+
+---
+
+## Häufige Fallstricke
+
+### Fehlende Zweigwerte [#missing-branch]
+
+Wenn ein Zweigwert nicht bereitgestellt wird oder keine Schlüssel übereinstimmt, rendert die `<Branch>`-Komponente den Fallback-Kinderinhalt.
+Stellen Sie immer sicher, dass die möglichen Zweigschlüssel mit den an die branch-Eigenschaft übergebenen Werten übereinstimmen.
+
+```javascript copy
+import { Branch } from 'gt-next';
+
+export default function StatusMessage({ status }) {
+  return (
+    <Branch
+      branch={status}
+      active={<p>Der Benutzer ist aktiv.</p>}
+      inactive={<p>Der Benutzer ist inaktiv.</p>}
+    >
+      <p>Status unbekannt.</p>
+    </Branch>
+  );
+}
+```
+Wenn `status` `undefined` oder ein anderer Wert als `active` oder `inactive` ist, wird der Fallback-Inhalt `“Status unbekannt.”` angezeigt.
+
+
+### Fehlende Pluralformen [#plural-locale]
+
+Denken Sie daran, alle notwendigen Pluralformen in Ihrer Fallback-Sprache anzugeben.
+So stellt `gt-next` sicher, dass Ihre Anwendung immer Fallback-Inhalte zum Anzeigen hat.
+
+---
+
+## Notizen
+ * Verzweigungskomponenten sind unerlässlich für die Verwaltung dynamischer und lokalisierter Inhalte in Anwendungen.
+ * Die `<Branch>`-Komponente ist äußerst flexibel und kann sich an verschiedene Bedingungen und Zustände anpassen.
+ * Die `<Plural>`-Komponente vereinfacht die Pluralisierung, indem sie automatisch lokalspezifische Regeln befolgt.
+ * Fügen Sie immer eine Fallback-`children`-Eigenschaft für eine bessere Fehlerbehandlung und Benutzererfahrung hinzu.
+
+## Nächste Schritte
+ * Schauen Sie sich [`<Branch>`](/docs/next/api/components/branch) und [`<Plural>`](/docs/next/api/components/plural) im API-Referenzhandbuch für weitere Details an.
+ * Erfahren Sie mehr über Pluralisierungsregeln und Verzweigungslogik in den [Unicode CLDR Pluralisierungsregeln](https://cldr.unicode.org/index/cldr-spec/plural-rules).
+ * Entdecken Sie [Variable Komponenten](/docs/next/reference/using-variable-components) in unserem Referenzhandbuch.

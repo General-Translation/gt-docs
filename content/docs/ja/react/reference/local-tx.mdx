@@ -1,0 +1,115 @@
+---
+title: ローカル翻訳
+description: Reactアプリのローカル翻訳を設定する
+---
+
+## 概要
+
+このガイドでは、CDNを使用するのではなく、Reactアプリ内に翻訳を保存する方法を紹介します。
+これにより、翻訳はアプリのバンドル内に存在します。
+これにより、読み込み時間が速くなり、外部インフラストラクチャへの依存を避けることができます。
+
+このドキュメントでは、(1) ローカル翻訳とは何か、それがどのように機能するかを説明し、
+(2) Reactアプリのローカル翻訳を設定する方法を示します。
+
+---
+
+## ローカル翻訳とは何ですか？
+
+ローカル翻訳は、CDN（コンテンツ配信ネットワーク）から取得されるのではなく、アプリのバンドルに保存されます。
+
+[`gtx-cli translate`](/docs/cli/translate) コマンドをCDプロセスに追加したとしましょう。
+これにより、アプリの翻訳を含むJSONファイルが生成されます。
+最終ステップは、これらの翻訳をAPIから取り出し、アプリに組み込むことです。
+
+これを行う方法は2つあります：
+ * **アプリのバンドルに:** 翻訳が生成された後、それらをアプリのバンドルに追加します。
+ * **CDNに（デフォルト）:** 実行時にCDNから翻訳を取得します。
+
+<Callout>
+  **注意:**
+  GTインフラストラクチャを使用していない場合は、好みのインフラストラクチャから翻訳をロードするためのカスタム [`loadTranslations()`](/docs/react/api/config/load-translations) メソッドを書く必要があります。
+</Callout>
+
+### 利点は何ですか？
+
+*読み込み時間の短縮:* ローカル翻訳はアプリから直接提供されるため、CDNから提供される翻訳よりも速く読み込まれます。
+
+*外部サービスへの依存なし:* 翻訳を読み込むアプリの能力は、CDNの可用性に依存しません。
+
+### 欠点は何ですか？
+
+*バンドルサイズの増加:* ローカル翻訳はアプリと一緒に提供されるため、アプリのバンドルサイズが増加します。
+これにより、初回の読み込みが少し長くなる可能性があります。
+
+*ロケール管理:* ロケールのサポートを追加または削除するには、毎回アプリを再デプロイする必要があります。
+
+*コンテンツ管理:* ロケール管理と同様に、翻訳を変更したい場合（例：他の言語でのコンテンツの表現が気に入らない場合）、
+新しい翻訳でアプリを再デプロイする必要があります。
+
+---
+
+## セットアップ
+
+### 前提条件
+
+ReactアプリをGTでセットアップするために、[クイックスタートガイド](/docs/react/tutorials/quickstart)に従ってください。
+
+
+### 手順
+<Steps>
+  <Step>
+    次の内容で`./src`に`loadTranslations.js`ファイルを追加します:
+
+    ```js title="src/loadTranslations.js" copy
+    export default async function loadTranslations(locale) {
+      const t = await import(`./_gt/${locale}.json`);
+      return t.default;
+    }
+    ```
+
+  </Step>
+
+  <Step>
+    `<GTProvider>`コンポーネントに`loadTranslations`をプロップとして渡します。
+
+    ```jsx title="src/App.jsx" copy
+    import { GTProvider } from 'gt-react';
+    import loadTranslations from './loadTranslations'; // [!code highlight]
+
+    export default function App() {
+      return (
+        <GTProvider loadTranslations={loadTranslations} locales={['es', 'fr']}> // [!code highlight]
+          <YourApp />
+        </GTProvider>
+      );
+    }
+    ```
+  </Step>
+
+  <Step>
+    次のコマンドを実行し、「言語ファイルはどこに保存されていますか？」と聞かれたら、「ローカル」オプションを選択します。
+    ```bash
+    npx gtx-cli init
+    ```
+    その後、翻訳コマンドを実行します。
+    ```bash
+    npx gtx-cli translate
+    ```
+    <Callout type="warn">
+      使用している特定のフレームワークによっては、翻訳JSONが最終的なバンドルに含まれるようにする必要があるかもしれません。
+    </Callout>
+  </Step>
+</Steps>
+
+以上です！これでアプリはローカルファイルからのみ翻訳を読み込むようになります。
+
+---
+
+## メモ
+ * ローカル翻訳は、CDNから翻訳を取得する代替手段です。
+ * [`loadTranslations()`](/docs/react/api/config/load-translations)をカスタマイズして、データベースや独自のCDNなど、他のソースから翻訳をロードすることもできます。
+
+## 次のステップ
+ * カスタム翻訳ローダーの作成に関する詳細は、[`loadTranslations()`](/docs/react/api/config/load-translations) を参照してください。
+ * いくつかのプロジェクト例については、[Examples](/docs/reference/examples) ページを参照してください。

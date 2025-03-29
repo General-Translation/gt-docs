@@ -1,0 +1,426 @@
+---
+title: <T> 参考
+description: 这是对 <T> 组件和 gt-next 库的详细探讨。
+---
+
+
+## 概述
+
+本文将深入探讨如何在 `gt-next` 库中使用 [`<T>` 组件](/docs/next/api/components/t)。
+请根据需要随意跳转到本页的不同部分。
+我们将涵盖以下内容：
+ * [`<T>` 组件](#what-is-the-t-component)
+ * [设计模式](#design-patterns)
+ * [生产注意事项](#production)
+ * [一些示例](#examples)
+ * [常见陷阱](#common-pitfalls)
+
+如果您正在寻找如何使用 [变量组件](/docs/next/reference/using-variable-components) 或 [分支组件](/docs/next/reference/using-branching-components)，请参阅各自的文章。
+
+---
+
+## `<T>` 组件是什么？
+
+`<T>` 组件是 `gt-next` 库中翻译文本和内容的主要方式。
+它允许内联翻译文本和 JSX 结构，为在应用程序中管理翻译提供了一种更直接的方法。
+这通常对开发人员来说更方便，因为它允许对翻译内容进行更直接的控制。
+
+`<T>` 组件支持静态文本、JSX 结构和上下文感知的翻译。
+当没有可用的翻译时，它会优雅地回退到显示应用程序默认语言的内容。
+
+```jsx
+<T>
+  <p>Hello, world!</p>
+</T>
+```
+
+## 设计模式
+
+在本节中，我们将详细介绍与 `<T>` 组件一起使用的常见设计模式。
+这也将涉及与 `<T>` 组件相关但同样重要的主题，例如字符串翻译、提前翻译内容和隐私问题。
+
+### 在 `<GTProvider>` 中包装你的 `<T>` 组件 [#gtprovider]
+
+`<T>` 用于翻译静态文本和 JSX 结构。
+对于客户端组件，`<T>` **必须** 在更高层级被 [`<GTProvider>`](/docs/next/api/components/gtprovider) 包装。
+我们的建议是在根级别用 `<GTProvider>` 包装你的应用程序以提供此上下文。
+
+```javascript copy
+import { GTProvider } from 'gt-next';
+import { getLocale } from "gt-next/server";
+
+export default async function RootLayout({ children }) {
+  const locale = await getLocale();
+  return (
+    <html lang={locale}>
+      <body>
+        <GTProvider>{children}</GTProvider> // [!code highlight]
+      </body>
+    </html>
+  );
+}
+```
+
+#### 例外情况：服务器端 `<T>` 组件 [#server-t]
+
+对于服务器端渲染，`<T>` 组件的 `<GTProvider>` 是可选的。
+
+```javascript copy
+import { GTProvider } from 'gt-next';
+import { getLocale } from "gt-next/server";
+
+export default function RootLayout({ children }) {
+  const locale = await getLocale();
+  return (
+    <html lang={locale}>
+      <body>
+        <T> Hello, world! </T>  // [!code highlight]
+        
+        <GTProvider>{children}</GTProvider> // [!code highlight]
+      </body>
+    </html>
+  );
+}
+```
+
+### `<T>` 组件中的变量
+
+变量组件可以在 `<T>` 组件中使用，以 (1) 显示动态值和/或 (2) 标记不应翻译的内容。
+想想用户的名字：它 (1) 因人而异，并且 (2) 即使语言改变也不应改变。
+
+```jsx title="DynamicGreeting.js" copy
+import { T, Var } from 'gt-next';
+
+export default function DynamicGreeting({ user }) {
+  return (
+    <T>
+      Hello, <Var>{user.name}</Var>! // [!code highlight]
+    </T>
+  );
+}
+```
+
+有许多变量组件：[`<Var>`](/docs/next/api/components/var)、[`<Num>`](/docs/next/api/components/num)、[`<Currency>`](/docs/next/api/components/currency) 和 [`<DateTime>`](/docs/next/api/components/datetime)。
+其中一些将根据用户的语言环境自动重新格式化内容。其他的则只是将内容标记为“不要翻译”。
+此外，这些组件不一定需要包装在 `<T>` 组件中即可重新格式化内容。
+
+在[这篇关于变量组件的文章](/docs/next/reference/using-variable-components)中阅读更多相关信息。
+
+### `<T>` 组件中的分支
+
+分支组件可以用于根据翻译条件显示不同的内容。
+这些包括 [`<Plural>`](/docs/next/api/components/plural) 和 [`<Branch>`](/docs/next/api/components/branch) 组件。
+我们使用这些组件是因为它们允许更优化的翻译过程。
+
+例如，`<Plural>` 组件允许你标记在翻译时应复数化的句子。
+
+```jsx title="Count.js" copy
+import { T, Plural } from 'gt-next';
+
+export default function Count({ num }) {
+  return (
+    <T>
+      <Plural
+        n={num} // <-- 变量检查 // [!code highlight]
+        singular={<p>There is one item.</p>}  // [!code highlight]
+        plural={<p>There are multiple items.</p>}  // [!code highlight]
+      />
+    </T>
+  );
+}
+```
+
+它也很有用，因为它在你的应用程序的基础语言中标准化了你的复数化逻辑。
+
+你可以根据使用的组件指定不同的选项。
+在[分支组件](/docs/next/reference/using-branching-components)文章中阅读更多相关信息。
+
+### 翻译字符串 [#translating-strings]
+
+如果你只想翻译一个字符串，可以使用 [`useGT()`](/docs/next/api/components/strings/useGT)、[`getGT()`](/docs/next/api/components/strings/getGT) 或 [`tx()`](/docs/next/api/components/strings/tx)。
+
+[`useGT()`](/docs/next/api/components/strings/useGT) 和 [`getGT()`](/docs/next/api/components/strings/getGT) 用于在构建时翻译字符串。
+```jsx title="Greeting.js" copy
+function Greeting() {
+  const t = useGT();  // client side
+  const t = await getGT(); // server side
+  return <p>{t('Hello, my friend!')}</p>; // [!code highlight]
+}
+```
+
+[`tx()`](/docs/next/api/components/strings/tx) 用于在运行时翻译字符串。
+```jsx title="FavoriteFlavor.js" copy
+function async FavoriteFlavor({ flavor }) {
+  return <p>{await tx(`Your favorite ice cream flavor is ${flavor}`)}</p>; // [!code highlight]
+}
+```
+
+有关更多信息，您可以参考[我们的字符串翻译指南](/docs/next/reference/translating-strings)。
+
+### 为 `<T>` 组件添加 ids
+
+一个方便的调试技巧是为您的 `<T>` 组件添加一个 `id` 属性。
+这使您能够跟踪在应用程序中使用了哪些翻译。
+它还允许您使用[翻译编辑器](/signin)在不重新部署的情况下更改翻译。
+
+```jsx title="Greeting.js" copy
+import { T } from 'gt-next';
+
+export default function Greeting() {
+  return (
+    <T id="greeting">
+      Hello, world!
+    </T>
+  );
+}
+```
+
+---
+
+## 生产注意事项 [#production]
+
+### 部署到生产环境
+
+确保在部署到生产环境之前运行翻译命令，以便在运行时所有翻译都可用。我们建议将其添加到您的 CD 管道中或作为构建脚本的一部分。
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --languages fr es ja && next build",
+  }
+}
+```
+
+就是这样！您已成功将您的应用程序翻译成法语、西班牙语和日语。
+
+有关部署应用程序的更详细指南，请参阅[部署](/docs/next/tutorials/quickdeploy)指南。
+有关命令的更多信息，请参阅[CLI 工具](/docs/cli/translate)参考指南。
+
+### 行为：开发与生产
+
+在开发中，`<T>` 组件将按需翻译内容。这意味着当组件被渲染时，它将立即执行翻译。我们这样做是为了方便，使得使用其他语言进行开发更容易。
+
+要启用此行为，只需将开发 API 密钥添加到您的环境中。
+
+在生产中，`<T>` 组件将在构建时翻译内容。这意味着您必须在部署应用程序之前运行翻译命令。
+
+<Callout>
+  **提示：**
+  如果您想在开发中模拟生产行为，只需在开发构建中使用生产 API 密钥。
+</Callout>
+
+### 隐私问题
+
+除了一些例外，所有包裹在 `<T>` 组件中的内容都会发送到通用翻译 API 进行翻译。这可能不适合渲染敏感数据，如用户名、账号等。
+
+为了解决这个问题，请使用[变量组件](/docs/next/reference/using-variable-components#privacy)来处理私人信息。这确保没有敏感数据被发送到通用翻译 API 进行翻译。所有包裹在任何变量组件中的内容的本地化都在本地处理。
+
+---
+
+## 示例
+
+### 基本用法
+
+`<T>` 的最简单用例是翻译静态文本。
+
+```javascript copy
+import { T } from 'gt-next';
+
+export default function BasicUsage() {
+  return (
+    <T>
+      Hello, world!
+    </T>
+  );
+}
+```
+
+此示例确保根据用户的语言环境翻译 `"Hello, world!"`。
+例如，在西班牙语环境中，它可能呈现为 `"¡Hola, mundo!"`。
+
+### 上下文
+
+`<T>` 组件支持附加上下文以优化翻译。
+添加一个上下文属性允许相同的 id 根据提供的上下文解析为不同的翻译。
+
+```javascript copy
+import { T } from 'gt-next';
+
+export default function FormalGreeting() {
+  return (
+    <T context="formal">
+      Hi there!
+    </T>
+  );
+}
+```
+
+例如，上下文 `"formal"` 可能会产生翻译为 `"Good day, everyone!"`，而没有上下文的相同 `id` 可能在其他语言中产生 `"Hi there!"`。
+当然，对于基础语言不会发生变化。
+
+### 嵌套组件
+
+`<T>` 组件还可以翻译 JSX 结构。
+`<T>` 的任何子元素都会被翻译。
+
+```javascript copy
+import { T } from 'gt-next';
+import CustomButton from './CustomButton';
+
+export default function Page() {
+  return (
+    <T>
+      This will be translated
+      <div>
+        <div>
+          <div>
+            <div>
+              <CustomButton>This text will also be translated!</CustomButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </T>
+  );
+}
+```
+
+---
+
+## 常见陷阱
+
+### 仅限直接子元素 [#direct-text]
+
+`<T>` 组件仅翻译直接作为子元素传递的文本。
+这意味着如果您在一个组件中有内容但没有直接传递给 `<T>`，它将不会被翻译。
+
+让我们用一个例子来说明：
+
+```javascript copy
+function UntranslatedContent() {
+  return (
+    <p>此内容未翻译</p>
+  );
+}
+
+export default function DisplayGreetings() {
+  return (
+    <T>
+      <h1>你好，这段文字将被翻译</h1>
+      <UntranslatedContent />
+    </T>
+  );
+}
+```
+
+在这个例子中，`<UntranslatedContent>` 内的内容将不会被翻译。
+只有直接在 `<T>` 内的内容会被翻译，比如 `<h1>` 标签及其子元素。
+
+这发生是因为 React 渲染组件的方式。
+这有点复杂，但要点是 React 在渲染之前不知道组件的内容。
+因此，像 `<UntranslatedContent>` 这样的组件的内容不会被翻译。
+然而，任何直接在两个 `<T>` 标签之间的文本将被翻译。
+<Callout>
+    **注意：** 一个好的经验法则是，文件中*字面上*在两个 `<T>` 之间的任何内容都会被翻译。
+    您可以随时添加另一个 `<T>` 来翻译未被翻译的内容，尽管不推荐嵌套 `<T>` 组件。
+</Callout>
+
+#### 如何解决？
+
+您的第一个直觉可能是在 `<UntranslatedContent>` 内添加一个额外的 `<T>` 组件，但这不推荐。
+我们在[下面](#nested-t)对此进行了更多讨论。
+
+解决方案是始终直接将文本包裹在 `<T>` 组件中，如下所示：
+
+```javascript copy
+function TranslatedContent() {
+  return (
+    <T>
+      <p>此内容<b>已</b>翻译</p>
+    </T>
+  );
+}
+
+export default function DisplayGreetings() {
+  return (
+    <>
+      <T>
+        <h1>你好，这段文字将被翻译</h1>
+      </T>
+      <TranslatedContent />
+    </>
+  );
+}
+```
+
+
+#### 那变量呢？ [#variables]
+
+变量稍微复杂一些，因为它们的值可能会改变。
+我们建议使用[变量组件](/docs/next/reference/using-variable-components)来显示动态值，并使用[分支组件](/docs/next/reference/using-branching-components)来处理条件逻辑。
+
+如果您想在运行时翻译动态内容，请查看 [`tx()`](/docs/next/api/components/strings/tx) 和 [`<Tx>`](/docs/next/api/components/tx)。
+
+
+### 嵌套 `<T>` 组件 [#nested-t]
+
+不允许嵌套 `<T>` 组件。
+由于 React 的渲染系统，这可能导致按需翻译时出现意外行为和性能问题。
+
+以下是**不该做的**示例：
+
+```jsx copy
+function SomeComponent() {
+  return (
+    <T>
+      你好，朋友！
+    </T>
+  );
+}
+
+export default function NestedTranslation() {
+  return (
+    <T>
+      <T> {/* 不要这样做！ */} // [!code highlight]
+        你好，世界！
+      </T>
+      <SomeComponent /> {/* 这仍然算数。不要这样做！ */} // [!code highlight]
+    </T>
+  );
+}
+```
+
+这里的解决方案是移除最外层的 `<T>` 组件。
+
+### 条件内容 [#conditional-content]
+
+类似于[渲染变量内容](#variables)，`<T>` 组件内的条件内容需要正确处理。
+最佳实践是将条件内容包裹在[分支组件](/docs/next/reference/using-branching-components)中，以优化内容的翻译。
+
+```jsx copy
+import { T, Branch } from 'gt-next';
+
+export default function Header({ user }) {
+  return (
+    <T>
+      <h2>
+        <Branch
+          branch={user.hasAccount}
+          true={<p>欢迎回来，{user.name}！</p>}
+          false={<p>请登录以继续。</p>}
+        />
+      </h2>
+    </T>
+  );
+}
+```
+
+## 注意事项
+ * `<T>` 组件用于翻译任意 JSX 内容。
+ * 使用 [`<GTProvider>`](/docs/next/api/components/gtprovider) 包裹您的应用，以在客户端组件中启用翻译。
+ * `<T>` 在构建时翻译内容，而不是在运行时。开发过程中会为了方便进行按需翻译，但在生产环境中并非如此。
+
+## 下一步
+ * 探索[可变组件文章](/docs/next/reference/using-variable-components)和[分支组件指南](/docs/next/references/using-branching-components)。
+ * 了解在您的应用程序中[翻译字符串](/docs/next/reference/translating-strings)。
+ * 对于运行时翻译，请查看[`tx()`](/docs/next/api/components/strings/tx)和[`<Tx>`](/docs/next/api/components/tx)。
+

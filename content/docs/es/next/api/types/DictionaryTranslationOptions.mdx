@@ -1,0 +1,120 @@
+---
+title: OpcionesDeTraducciónDelDiccionario
+description: Referencia de API para el tipo OpcionesDeTraducciónDelDiccionario
+---
+
+## Resumen
+
+El tipo `DictionaryTranslationOptions` se utiliza para pasar variables a las entradas del diccionario y especificar su comportamiento de renderizado.
+Se utiliza con [`useDict()`](/docs/next/api/dictionary/useDict) y [`getDict()`](/docs/next/api/dictionary/getDict) para pasar variables a las entradas del diccionario.
+
+<Callout>
+**Traducción en tiempo de compilación:**
+Las variables no se traducen con [`useDict()`](/docs/next/api/dictionary/useDict) y [`getDict()`](/docs/next/api/dictionary/getDict), solo la cadena original.
+Consulte [`tx()`](/docs/next/api/strings/tx) para traducir cadenas con contenido dinámico.
+</Callout>
+
+
+## Referencia
+
+
+### Parámetros
+
+<TypeTable
+  type={{
+    "variables?": {
+        type: 'Record<string, any>',
+        optional: true,
+        default: 'undefined',
+    },
+    "variablesOptions?": {
+        type: 'Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### Descripción
+
+| Prop | Descripción |
+| ---- | ----------- |
+| `variables` | Un objeto donde las claves identifican dónde se asigna cada valor en la entrada del diccionario.|
+| `variablesOptions` | Un objeto donde las claves identifican la variable y los valores definen el comportamiento de las variables. Consulte [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) y [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) para más información. |
+
+
+---
+
+## Ejemplos
+
+### Pasando variables
+
+Para pasar una variable a la entrada del diccionario, necesitamos hacer dos cosas: (1) agregar una variable a la entrada y (2) referenciar dicha variable en la invocación de [`d()`](/docs/next/api/dictionary/useGT).
+
+Primero, agregamos una variable a la entrada del diccionario con la siguiente sintaxis: `{username}`.
+`username` es el nombre de la variable.
+```jsx title="dictionary.ts"
+// [!code word:username]
+const dictionary = {
+  greeting: {
+    hello: 'Hello, {username}!',
+  },
+};
+
+export default dictionary;
+```
+
+A continuación, referenciamos la variable:
+```jsx title="Component.tsx"
+// [!code word:username]
+import { useDict } from 'gt-next/client';
+
+const Component = () => {
+  const d = useDict();
+  return <div>{d('greeting.hello', { variables: { username : 'Brian123' } })}</div>;
+};
+```
+
+### Agregando opciones de variables
+
+Las opciones de variables te permiten personalizar cómo se renderiza una variable.
+Utiliza la misma sintaxis que el objeto `variables`.
+
+```jsx title="dictionary.ts"
+// [!code word:account-balance]
+const dictionary = {
+  account: {
+    balance: 'Your account balance: {account-balance}!',
+  },
+};
+
+export default dictionary;
+```
+
+A continuación, referenciamos la variable:
+```jsx title="Component.tsx"
+// [!code word:account-balance]
+import { useDict } from 'gt-next/client';
+
+const Component = () => {
+  const d = useDict();
+  return <div>
+    { d(
+      'account.balance',
+      {
+        variables: { "account-balance" : 1000000 },
+        variableOptions: { "account-balance": { style: 'currency', currency: 'USD' } }
+      }
+    ) }
+  </div>;
+};
+```
+
+## Notas
+ * El objeto `variables` pasa valores a una entrada de diccionario.
+ * El objeto `variablesOptions` define el comportamiento de las variables.
+
+### Próximos pasos
+ * Consulte [diccionarios](/docs/next/reference/dictionary) para obtener más información sobre diccionarios y prácticas comunes.
+ * Consulte [`useDict()`](/docs/next/api/dictionary/useDict) o [`getDict()`](/docs/next/api/dictionary/getDict) para obtener más información sobre la interfaz de diccionarios.
+ * Consulte [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) y [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) para obtener más información sobre las opciones de formato.

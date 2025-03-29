@@ -1,0 +1,129 @@
+---
+title: ランタイム翻訳オプション
+description: RuntimeTranslationOptions型のAPIリファレンス
+---
+
+## 概要
+
+`RuntimeTranslationOptions` 型は、インライン翻訳に変数を渡し、そのレンダー動作を指定するために使用されます。
+翻訳のために異なる言語を指定するためにロケールを追加することもできます。
+これは [`tx()`](/docs/next/api/strings/tx) 関数と共に使用されます。
+
+<Callout>
+  **ランタイム翻訳:**
+  変数をオンデマンドで翻訳するには、[`tx()`](/docs/next/api/strings/tx) に渡される文字列に直接含めてください。
+  `options` オブジェクトを介して `tx()` に渡された変数は翻訳されません。
+</Callout>
+
+## リファレンス
+
+### パラメーター
+
+<TypeTable
+  type={{
+    "locale?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "variables?": {
+        type: 'Record<string, any>',
+        optional: true,
+        default: 'undefined',
+    },
+    "variablesOptions?": {
+        type: 'Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### 説明
+
+| Prop | 説明 |
+| ---- | ----------- |
+| `locale` | 翻訳に使用するオプションのロケール。アプリがサポートするブラウザの最も優先されるロケールがデフォルトになります。 |
+| `variables` | 各値が文字列内のどこにマッピングされるかを識別するキーを持つオブジェクト。|
+| `variablesOptions` | 変数を識別するキーと変数の動作を定義する値を持つオブジェクト。詳細は [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) および [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) を参照してください。 |
+
+---
+
+## 例
+
+
+### 変数を渡す
+文字列に変数を追加するには、`{variable-name}` 構文を使用します。ここで、波括弧が変数名を囲みます。
+
+```jsx title="Component.tsx"
+// [!code word:username]
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>
+    {tx(`こんにちは、{username}さん！`,{ variables: { 'username' : 'Brian123' } })}
+  </div>;
+};
+```
+
+
+### 変数オプションを追加する
+
+`variablesOptions` プロップを使用して、変数の表示方法をカスタマイズすることもできます。
+```jsx title="Component.tsx"
+// [!code word:account-balance]
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>
+    { tx(
+      'あなたの口座残高: {account-balance}!',
+      {
+        variables: { "account-balance" : 1000000 },
+        variableOptions: { "account-balance": { style: 'currency', currency: 'USD' } }
+      }
+    ) }
+  </div>;
+};
+```
+
+
+### 変数を翻訳する
+変数を翻訳するには、`tx()` に渡される文字列に直接含めます。
+
+```jsx title="Component.tsx"
+import { tx } from 'gt-next/server';
+
+const Component = ({ hairColor }: { hairColor: string }) => {
+  return <div>{tx(
+    `こんにちは、{username}さん！あなたの髪の色は${hairColor}です`,
+    { variables: { 'username' : 'Brian123' } }
+  )}</div>;
+};
+```
+
+変数 `hairColor` は翻訳されますが、`username` は翻訳されません。
+
+
+### ロケールを指定する
+翻訳に使用するロケールを指定できます。
+```jsx title="Component.tsx"
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>{tx('こんにちは、世界！', { locale: 'fr' })}</div>;
+};
+```
+これは常にフランス語に翻訳されます。
+
+---
+
+## メモ
+ * `RuntimeTranslationOptions` は、実行時の文字列翻訳に使用されます。
+ * `variables` オブジェクトは、テキストに値を渡します。
+ * `variablesOptions` オブジェクトは、変数の動作を定義します。
+
+
+## 次のステップ
+ * インライン文字列の翻訳についての詳細は、[`tx()`](/docs/next/api/strings/tx) を参照してください。
+ * フォーマットオプションの詳細については、[`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) および [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) を参照してください。

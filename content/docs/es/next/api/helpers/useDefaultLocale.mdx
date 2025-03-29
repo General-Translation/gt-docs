@@ -1,0 +1,58 @@
+---
+title: useDefaultLocale()
+description: Referencia de API para el hook useDefaultLocale
+---
+
+## Resumen
+
+El hook `useDefaultLocale` recupera la configuración regional predeterminada de la aplicación desde el [contexto `<GTProvider>`](/docs/next/api/components/gtprovider).
+Esta configuración regional representa el idioma de respaldo para tu aplicación y se utiliza típicamente cuando la configuración regional preferida de un usuario no está disponible.
+
+
+
+<Callout>
+    `useDefaultLocale` es un hook del lado del cliente y *solo puede usarse en componentes del lado del cliente*.
+    Asegúrate de que tu aplicación esté envuelta en un [`<GTProvider>`](/docs/next/api/components/gtprovider).
+</Callout>
+
+Consulta [`withGTConfig()`](/docs/next/api/config/withGTConfig) para la configuración.
+Si no se especifica una configuración regional predeterminada en [`withGTConfig()`](/docs/next/api/config/withGTConfig), se establece por defecto en `'en-US'`.
+Para el lado del servidor, consulta [`getDefaultLocale()`](/docs/next/api/helpers/getDefaultLocale).
+
+
+## Referencia
+
+### Devuelve
+
+Una cadena que representa la configuración regional predeterminada de la aplicación, por ejemplo, `'en-US'`.
+
+---
+
+## Ejemplos
+
+### Uso Básico
+
+Recupera la configuración regional predeterminada de la aplicación y muéstrala en tu componente.
+
+```jsx title="DefaultLocale.jsx" copy
+"use client";
+import { useDefaultLocale } from 'gt-next/client';
+
+export default function DefaultLocale() {
+    const defaultLocale = useDefaultLocale();// [!code highlight]
+
+    return <p>Default locale: {defaultLocale}</p>; // Display the default locale
+}
+```
+
+---
+
+## Notas
+ * El hook `useDefaultLocale()` depende del [`<GTProvider>`](/docs/next/api/components/gtprovider) para acceder al contexto.
+   Asegúrate de que tu aplicación esté envuelta con un proveedor en el nivel raíz.
+ * `useDefaultLocale()` es solo del lado del cliente.
+ * Aprende más sobre las cadenas de localización [aquí](/docs/reference/locale-strings).
+
+## Próximos Pasos
+ * Consulte [`useLocale`](/docs/next/api/helpers/useLocale) y [`getLocale`](/docs/next/api/helpers/getLocale) para recuperar la configuración regional del usuario.
+ * Explore [`getDefaultLocale()`](/docs/next/api/helpers/getDefaultLocale) para recuperar la configuración regional predeterminada en componentes del servidor.

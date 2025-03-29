@@ -1,0 +1,154 @@
+---
+title: Lokale Übersetzungen
+description: Lokale Übersetzungen für Ihre Next.js-App einrichten
+---
+
+## Überblick
+
+Diese Anleitung zeigt Ihnen, wie Sie Übersetzungen in Ihrer Next.js-App speichern können, anstatt ein CDN zu verwenden.
+Das bedeutet, dass Übersetzungen im Bundle Ihrer App enthalten sind.
+Dies kann zu schnelleren Ladezeiten führen und vermeidet die Abhängigkeit von externer Infrastruktur.
+
+In diesem Dokument werden wir (1) erklären, was lokale Übersetzungen sind und wie sie funktionieren und
+(2) Ihnen zeigen, wie Sie lokale Übersetzungen für Ihre Next.js-App einrichten.
+
+---
+
+### Was sind lokale Übersetzungen?
+
+Lokale Übersetzungen werden im Bundle Ihrer App gespeichert, im Gegensatz zu Übersetzungen, die von einem CDN (Content Distribution Network) abgerufen werden.
+
+Angenommen, Sie haben den Befehl [`gtx-cli translate`](/docs/cli/translate) zu Ihrem CD-Prozess hinzugefügt.
+Dadurch werden JSON-Dateien mit Übersetzungen für Ihre App generiert.
+Der letzte Schritt besteht darin, diese Übersetzungen aus unserer API in Ihre App zu übertragen.
+
+Es gibt zwei Möglichkeiten, dies zu tun:
+ * **Im Bundle Ihrer App:** Nachdem Übersetzungen generiert wurden, fügen Sie sie zum Bundle Ihrer App hinzu.
+ * **In einem CDN (Standard):** Abrufen von Übersetzungen aus einem CDN zur Laufzeit.
+
+### Was sind die Vorteile?
+
+*Schnellere Ladezeiten:* Lokale Übersetzungen werden direkt von Ihrer App bereitgestellt,
+was bedeutet, dass sie schneller geladen werden als Übersetzungen, die von einem CDN bereitgestellt werden.
+
+*Keine Abhängigkeit von externen Diensten:* Die Fähigkeit Ihrer App, Übersetzungen zu laden, ist nicht von der Verfügbarkeit eines CDN abhängig.
+
+### Was sind die Nachteile?
+
+*Erhöhte Bundle-Größe:* Lokale Übersetzungen vergrößern das Bundle Ihrer App, da sie zusammen mit Ihrer App bereitgestellt werden.
+Das bedeutet, dass Ihre App beim ersten Laden etwas länger dauern kann.
+
+*Verwaltung von Sprachen:* Um Unterstützung für Sprachen hinzuzufügen oder zu entfernen, müssen Sie Ihre App jedes Mal neu bereitstellen.
+
+*Content-Management:* Ähnlich wie bei der Sprachverwaltung müssen Sie, wenn Sie eine Übersetzung ändern möchten (z.B. wenn Ihnen die Formulierung Ihres Inhalts in einer anderen Sprache nicht gefällt),
+Ihre App mit der neuen Übersetzung neu bereitstellen.
+
+---
+
+## Einrichtung
+
+### Voraussetzungen
+
+Stellen Sie sicher, dass Sie der [Schnellstartanleitung](/docs/next/tutorials/quickstart) gefolgt sind.
+
+### Schritte
+
+<Steps>
+  <Step>
+    Fügen Sie eine `loadTranslations.js` Datei unter `./src` mit folgendem Inhalt hinzu:
+
+    ```js title="src/loadTranslations.js" copy
+    export default async function loadTranslations(locale) {
+      const t = await import(`../public/_gt/${locale}.json`);
+      return t.default;
+    }
+    ```
+  </Step>
+
+  <Step>
+    Führen Sie den folgenden Befehl aus und wählen Sie bei der Frage "Where are your language files stored?" die Option "Local".
+    ```bash
+    npx gtx-cli init
+    ```
+    Führen Sie dann den Übersetzungsbefehl aus.
+    ```bash
+    npx gtx-cli translate
+    ```
+  </Step>
+</Steps>
+
+Das war's! Ihre App wird jetzt nur Übersetzungen aus Ihren lokalen Dateien laden.
+
+{/* ---
+
+## Using your own translations
+
+To use your own translations (and not use the GT AI translation service), there are a few options:
+
+**Option 1:** Create your own language dictionaries
+**Option 2:** Modify files created by the [`gtx-cli generate`](/docs/cli/generate) command
+
+### Option 1: Create your own language dictionaries
+
+You can do this by marking the file with your preferred language as your dictionary file in `gt.config.json`.
+
+For example, say that `./dictionary/en.json` is your base language file:
+```json title="gt.config.json" copy
+{
+  "projectId": "your-project-id",
+  "dictionary": "./dictionary/en.json",
+  "locales": ["en", "fr", "de"],
+  ...
+}
+```
+
+And add your load translations function:
+```js title="src/loadTranslations.js" copy
+export default async function loadTranslations(locale) {
+  const t = await import(`../public/locales/${locale}.json`);
+  return t.default;
+}
+```
+
+When you run the translate command, it will generate translations in the `./public/locales` directory.
+```bash
+npx gtx-cli translate --no-publish --translations-dir ./public/locales --dictionary ./dictionary/en.json
+```
+
+To access these translations, you can use [`useDict`](/docs/nest/api/dictionary/useDict) and [`getDict`](/docs/nest/api/dictionary/getDict) to access your translations.
+You can read more about using dictionaries [here](/docs/next/reference/dictionary-reference).
+
+```jsx title="pages/index.jsx" copy
+import { useDict } from 'gt-next/client';
+import { getDict } from 'gt-next/server';
+
+export default function Home() {
+  const d = useDict(); // client-side // [!code highlight]
+  const d = await getDict(); // server-side // [!code highlight]
+  return (
+    <div>
+      <h1>{d('identifier')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+For a more detailed guide, see the [custom translations reference](/docs/next/reference/dictionary-reference).
+
+
+### Option 2: Modify files created by the `gtx-cli generate` command
+
+🚧 This section is currently under construction. 🚧 */}
+
+
+---
+
+
+## Hinweise
+ * Lokale Übersetzungen sind eine Alternative zum Abrufen von Übersetzungen von einem CDN.
+ * Sie können [`loadTranslations()`](/docs/next/api/config/load-translations) anpassen, um auch Übersetzungen aus anderen Quellen zu laden, wie Ihrer Datenbank oder Ihrem eigenen CDN.
+
+## Nächste Schritte
+ * Siehe [`loadTranslations()`](/docs/next/api/config/load-translations) für weitere Informationen zum Schreiben eines benutzerdefinierten Übersetzungsloaders.
+ * Wenn Sie Ihre eigenen Übersetzungen schreiben möchten, schauen Sie sich [benutzerdefinierte Übersetzungen](/docs/next/reference/stand-alone) an.
+ * Weitere Informationen zur Wörterbuchsyntax finden Sie in der [Wörterbuchreferenz](/docs/next/reference/dictionary-reference).

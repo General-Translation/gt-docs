@@ -1,0 +1,316 @@
+---
+title: Démarrage rapide de React
+description: Internationalisez votre application React en 5 minutes avec gt-react
+---
+
+## Aperçu
+
+Ce guide décrit comment internationaliser un projet [React](https://react.dev) existant.
+
+Nous couvrirons 4 étapes simples :
+
+<Steps>
+  <Step>
+    Installer les bibliothèques requises
+  </Step>
+  <Step>
+    Sélectionner les langues
+  </Step>
+  <Step>
+    Ajouter le composant `<T>`
+  </Step>
+  <Step>
+    Ajouter vos variables d'environnement
+  </Step>
+</Steps>
+
+Ce processus entier devrait prendre moins de **5 minutes**.
+
+---
+
+## Configuration
+
+### 1. Installer les bibliothèques
+
+Installez les bibliothèques [gt-react](https://www.npmjs.com/package/gt-react) et [gtx-cli](https://www.npmjs.com/package/gtx-cli).
+
+<Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gt-react
+  npm i gtx-cli --save-dev
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gt-react
+  yarn add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash 
+  bun add gt-react
+  bun add -d gtx-cli
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gt-react
+  pnpm add -D gtx-cli
+  ```
+  </Tab>
+</Tabs>
+
+### 2. Sélectionner les langues
+
+[`<GTProvider>`](/docs/react/api/components/gtprovider) est utilisé pour configurer le comportement de `gt-react`. 
+Il doit être placé aussi haut que possible dans votre application, idéalement à la racine.
+
+Il suffit de passer une liste de [codes de locale](/docs/reference/supported-locales) pour les ajouter à votre application.
+
+```jsx title="App.js" copy
+import { GTProvider } from "gt-react";
+import MyApp from "./MyApp";
+
+export default function App() {
+  return (
+    // Support du français et du chinois 
+    // [!code highlight]
+    <GTProvider locales={['fr', 'zh']}> 
+      <MyApp />
+    </GTProvider> // [!code highlight]
+  );
+}
+```
+
+Pour une liste complète des props de `<GTProvider>` et une documentation étendue, consultez la [référence API](/docs/react/api/components/gtprovider).
+
+### 3. Ajouter le composant `<T>`
+
+Enveloppez tout contenu JSX imbriqué dans le [composant `<T>`](/docs/react/api/components/t) pour le rendre traduisible.
+Pour plus d'informations, consultez le [guide sur l'utilisation des composants `<T>`](/docs/react/reference/t-reference).
+
+```jsx title="Example.js" copy
+import { T } from "gt-react";
+
+export default function Example() {
+  return (
+    // [!code highlight]
+    <T>
+      <p>
+        Ceci est traduit.
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+Utilisez le [composant `<Var>`](/docs/react/api/components/var) pour désigner le contenu JSX qui ne doit pas être traduit.
+
+```jsx title="Example.js" copy
+import { T, Var } from "gt-react";
+
+export default function Example() {
+  return (
+    // [!code highlight]
+    <T>
+      <p>
+        Ceci est traduit. <Var>Ceci ne l'est pas.</Var>
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+<Callout type="info">
+  **Astuce :**
+  Pour gagner du temps, exécutez [la commande de configuration](/docs/cli/setup).
+  Cela analysera votre code pour le JSX traduisible et insérera les balises [`<T>`](/docs/react/api/components/t) pour vous.
+
+  ```bash title="shell" copy
+  npx gtx-cli setup
+  ```
+</Callout>
+
+Pour les chaînes de caractères, vous pouvez utiliser [`useGT()`](/docs/react/api/strings/useGT) pour la traduction.
+Pour plus d'informations, consultez [ce guide](/docs/react/reference/translating-strings).
+
+```jsx title="Example.js" copy
+import { useGT } from "gt-react";
+
+export default function Example() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <p>
+      {/* [!code highlight] */}
+      {t("Ceci est traduit.")}
+    </p>
+  );
+}
+```
+
+### 4. Ajouter vos variables d'environnement
+
+Ajoutez votre clé API et votre ID de projet à vos variables d'environnement.
+
+<Steps>
+    <Step>
+        Accédez au [Tableau de bord](https://generaltranslation.com/dashboard).
+            * Accédez à la page **Clés de développeur** dans la barre latérale.
+    </Step>
+
+    <Step>
+        Cliquez sur **Créer une clé API de développement** puis copiez la clé API et l'ID de projet dans votre presse-papiers.
+    </Step>
+    <Step>
+        Ajoutez l'ID de projet et la clé API à vos variables d'environnement.
+        Selon votre framework React, les variables d'environnement peuvent sembler légèrement différentes.
+        Ces instructions sont uniquement pour les **ENVIRONNEMENTS DE DÉVELOPPEMENT**.
+        <Tabs items={["Vite", "Gatsby", "RedwoodJS", "create-react-app", "Autre"]}>
+            <Tab value="Vite">
+            ```bash copy
+            VITE_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            VITE_GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+            <Tab value="Gatsby">
+            ```bash copy
+            GATSBY_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            GATSBY_GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+            <Tab value="RedwoodJS">
+            ```bash copy
+            REDWOOD_ENV_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            REDWOOD_ENV_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+            <Tab value="create-react-app">
+            ```bash copy
+            REACT_APP_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            REACT_APP_GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+            <Tab value="Autre">
+            De nombreux frameworks React ont chacun une manière unique d'exporter les variables d'environnement vers le client.
+            Dans les environnements de développement, `GT_API_KEY` et `GT_PROJECT_ID` doivent être exportés vers le client.
+
+            Nous avons ajouté la prise en charge de quelques bibliothèques jusqu'à présent,
+            mais veuillez nous faire savoir si votre framework n'est pas listé en créant un problème sur notre [dépôt GitHub](https://github.com/General-Translation/gt-libraries/issues/new).
+            </Tab>
+        </Tabs>
+    </Step>
+</Steps>
+<Callout type="warn">
+    **Protégez vos clés API !**
+
+    Les variables d'environnement React sont souvent intégrées dans votre application au moment de la construction et sont visibles publiquement dans le code côté client.
+    Pour des raisons de sécurité, vous devriez :
+    
+    - Utiliser uniquement des clés API de développement pendant le développement local
+    - Utiliser uniquement des clés API de production avec l'outil CLI pour le déploiement
+    - **Ne jamais inclure de clés API comme variables d'environnement en production**
+</Callout>
+
+
+---
+
+## Essayons-le !
+
+Félicitations ! 🥳 Votre application est maintenant multilingue ! Voyons-la en action.
+
+### Voir votre application dans une autre langue
+
+<Steps>
+  <Step>
+    Ajoutez le composant [`<LocaleSelector>`](/docs/react/api/components/localeSelector) à votre application.
+    Cela vous permettra de sélectionner une langue différente pour votre application.
+    <Callout>
+      **Astuce :**
+      Vous pouvez également changer votre langue dans les paramètres de votre navigateur.
+    </Callout>
+  </Step>
+  <Step>
+    Démarrez votre application React en mode développement.
+    <Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+      <Tab value="npm">
+      ```bash
+      npm run dev 
+      ```
+      </Tab>
+      <Tab value="yarn">
+      ```bash 
+      yarn run dev 
+      ```
+      </Tab>
+      <Tab value="bun">
+      ```bash
+      bun run dev 
+      ```
+      </Tab>
+      <Tab value="pnpm">
+      ```bash
+      pnpm run dev 
+      ```
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step>
+    Ouvrez votre application dans votre navigateur préféré (généralement à
+    [http://localhost:3000](http://localhost:3000)).
+  </Step>
+</Steps>
+
+### Dépannage
+
+<Accordions>
+  <Accordion title="La langue de mon application ne change pas, même si j'ai changé la langue de mon navigateur.">
+    **Cookies du navigateur**
+
+    Si vous décidez de tester différentes langues en changeant la langue de votre navigateur, ce problème peut survenir.
+
+    Vérifiez les cookies de votre navigateur pour votre application.
+    La traduction générale utilise des cookies pour stocker la préférence de langue de l'utilisateur.
+    Le cookie s'appelle `generaltranslation.locale`, et tout ce que vous avez à faire est de le supprimer.
+    Ensuite, vérifiez simplement que vous utilisez la langue préférée souhaitée, puis
+    actualisez la page.
+
+    Comment vérifier les cookies :
+    * [Chrome](https://support.google.com/chrome/answer/95647)
+    * [Firefox](https://support.mozilla.org/en-US/kb/delete-cookies-remove-info-websites-stored)
+    * [Safari](https://support.apple.com/en-mn/guide/safari/sfri11471/16.0/mac/11.0)
+    * [Edge](https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09)
+
+    Si cela ne fonctionne pas, assurez-vous que la liste des locales dans votre [`<GTProvider>`](/docs/react/api/components/gtprovider) est à jour.
+  </Accordion>
+  <Accordion title="Pourquoi les nouvelles langues mettent-elles du temps à se charger ?">
+    **Traduction à la demande**
+
+    Vous pouvez remarquer lors du chargement des langues en développement, que les traductions prennent quelques secondes à s'afficher.
+    Cela se produit parce que votre application est traduite en temps réel.
+    Nous appelons ce processus une "traduction à la demande".
+    
+    Cela **n'arrive qu'en dev** pour que vous puissiez facilement prototyper votre site web dans différentes langues.
+    Toutes les traductions sont préchargées en production, donc il n'y aura pas de délai.
+    Suivez notre guide sur [l'envoi en production](/docs/next/tutorials/quickdeploy).
+  </Accordion>
+  <Accordion title="Pourquoi certaines choses se traduisent-elles et d'autres non ?">
+    **Traduction JSX**
+
+    Actuellement, l'outil de configuration ajoute automatiquement des composants `<T>` autour du contenu textuel.
+    Nous travaillons actuellement sur une solution qui configurera automatiquement les traductions de chaînes.
+    D'ici là, si vous affichez une chaîne, veuillez suivre [ce guide](/docs/react/reference/translating-strings) pour traduire les chaînes.
+  </Accordion>
+</Accordions>
+
+---
+
+## Expédition en Production
+
+Suivez notre guide sur [l'expédition en production](/docs/react/tutorials/quickdeploy).
+
+---
+
+## Prochaines étapes
+ * Consultez notre [référence API React](/docs/react/api/components/t) pour des informations détaillées sur le composant `<T>` et d'autres composants disponibles.
+ * Créez une liste de langues approuvées pour votre application avec le [plugin React](/docs/react/reference/local-management#include-locales).

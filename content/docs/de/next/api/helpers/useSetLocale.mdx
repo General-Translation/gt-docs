@@ -1,0 +1,46 @@
+---
+title: useSetLocale()
+description: API-Referenz für den useSetLocale-Hook
+---
+
+## Übersicht
+
+Der `useSetLocale` Hook wird verwendet, um die Spracheinstellung des Benutzers festzulegen.
+Dies ist nur clientseitig und muss in eine [`<GTProvider>`](/docs/next/api/components/gtprovider) Komponente eingebettet werden.
+
+
+## Referenz
+
+### Rückgaben
+
+Eine Funktion, die die Spracheinstellung des Benutzers festlegt.
+
+---
+
+## Beispiele
+
+### Grundlegende Verwendung
+
+```jsx
+import { useSetLocale } from 'gt-next/client';
+
+export default function MyComponent() {
+    const setLocale = useSetLocale();
+
+    return (
+        <button onClick={() => setLocale('en')}>Sprache festlegen</button>
+    );
+}
+```
+
+---
+
+## Notizen
+
+* Der `useSetLocale()` wird verwendet, um die Spracheinstellung des Benutzers festzulegen.
+* Erfahren Sie mehr über Sprachzeichenfolgen [hier](/docs/reference/locale-strings).
+
+## Nächste Schritte
+
+* Erfahren Sie mehr über die [`<GTProvider>`](/docs/next/api/components/gtprovider) Komponente.
+* Erfahren Sie mehr über den [`useLocale()`](/docs/next/api/helpers/useLocale) Hook.

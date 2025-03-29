@@ -1,0 +1,246 @@
+---
+title: CLIツール
+description: 一般的な翻訳CLIツール
+---
+
+## 概要
+
+これは、General Translation CLIツールに関するリファレンスドキュメントです。
+`gtx-cli`についての詳細は[こちら](/docs/cli)を参照してください。
+
+ステップバイステップガイドについては、[本番環境へのデプロイ](/docs/react/tutorials/quickdeploy)ガイドをチェックしてください。
+
+## インストール
+
+<Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gtx-cli --save-dev
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash 
+  bun add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gtx-cli --save-dev
+  ```
+  </Tab>
+</Tabs>
+
+## CLIツールは何をしますか？
+
+CLIツールは、プロジェクトと翻訳を管理するために使用されます。
+知っておくべき主なコマンドは2つあります：`translate`と`setup`です。
+
+ * [`translate`コマンド](/docs/cli/translate)はCDパイプラインに追加することを目的としています。
+   プロジェクト内の翻訳対象のコンテンツをスキャンするために使用されます。
+   コンテンツはCDNにアップロードされるか、実行時に使用するためにアプリバンドルに追加されます。
+ * [`setup`コマンド](/docs/cli/setup)は、General Translationライブラリをプロジェクトに自動的に統合するために使用されます。
+   プロジェクトをスキャンし、すべてのJSXコンテンツを`<T>`コンポーネントでラップします。
+
+### 翻訳
+
+CLIツールを使用するには、プロジェクトのルートから次のコマンドを実行します：
+
+```bash title="shell" copy
+npx gtx-cli translate
+```
+
+<Callout type="warn">
+    **本番環境でのみ使用してください！**
+
+    このCLIツールは翻訳されたコンテンツをCDNに公開するため、本番ビルドでのみ使用することを目的としており、**開発中には使用しないでください**。
+    このコマンドを実行する前に、本番で使用するブランチにいることを確認してください。
+    また、環境変数に本番APIキーとプロジェクトIDを指定することを忘れないでください。
+</Callout>
+
+### フラグ
+
+<TypeTable
+  type={{
+    "--api-key": {
+        description:
+            '本番APIキー',
+        type: 'string',
+        optional: true,
+    },
+    "--project-id": {
+        description:
+            'プロジェクトID',
+        type: 'string',
+        optional: true,
+    },
+    "--options": {
+        description:
+            'GTオプションファイルへのパス',
+        type: 'string',
+        optional: true,
+        default: 'gt.config.json',
+    },
+    "--new": {
+        description:
+            'プロジェクトを翻訳する新しいロケール',
+        type: 'string',
+        optional: true,
+    },
+    "--dictionary": {
+        description:
+            '辞書ファイルへのパス',
+        type: 'string',
+        optional: true,
+    },
+    "--dry-run": {
+        description:
+            'コマンドをドライランする',
+        type: 'boolean',
+        optional: true,
+        default: 'false',
+    },
+    "--ignore-errors": {
+        description:
+            'エラーを無視し、有効なコンテンツの翻訳を強制する',
+        type: 'boolean',
+        optional: true,
+        default: 'false',
+    },
+    "--inline": {
+        description:
+            '辞書に加えてインライン<T>タグを含める',
+        type: 'boolean',
+        optional: true,
+        default: 'true',
+    },
+  }}
+/>
+
+CLIツールを初めて実行すると、プロジェクトのルートに`gt.config.json`ファイルを作成しようとします。
+このファイルには、コンテンツを翻訳するために使用されるプロジェクトに関するメタデータが含まれています。
+
+---
+
+## セットアップ
+
+さらに、CLI ツールはプロジェクトを自動的にスキャンして翻訳のセットアップを行うことができます。
+初めて General Translation を使用する場合は、セットアップを実行して開始することをお勧めします。
+
+```bash title="shell" copy
+npx gtx-cli setup
+```
+
+<Callout type="warn">
+    **変更を保存してください！**
+
+    これはコードベースを変更するため、最初に変更を保存またはコミットしてください。
+</Callout>
+
+このコマンドを実行すると、翻訳可能なコンテンツを含む JSX 要素の最上位に `<T>` コンポーネントがラップされます。
+
+また、非静的なコンテンツには `<Var>` コンポーネントがラップされます。
+
+スキャンが変換する例をいくつか示します：
+
+<Tabs items={["例 1", "例 2", "例 3", "例 4", "例 5"]}>
+  <Tab value="例 1">
+
+
+  ```jsx
+  <div>Hello, World!</div>
+  ```
+
+  次のように変換されます：
+
+  ```jsx
+  <T id="">Hello, World!</T>
+  ```
+
+  </Tab>
+  <Tab value="例 2">
+
+
+  ```jsx
+  <div>Hello, {name}</div>
+  ```
+
+  次のように変換されます：
+
+  ```jsx
+  <T id="">Hello, <Var>{name}</Var></T>
+  ```
+
+  </Tab>
+  <Tab value="例 3">
+
+
+  ```jsx
+  <p>{true && "Hello, World!"}</p>;
+  ```
+
+  次のように変換されます：
+
+  ```jsx
+  <T id=""><p><Var>{true && <T id="">{"Hello, World!"}</T>}</Var></p></T>;
+  ```
+
+  </Tab>
+  <Tab value="例 4">
+
+
+  ```jsx
+  <p>{"Hello," + " World!"}</p>
+  ```
+
+  次のように変換されます：
+
+  ```jsx
+  <T id=""><p>{"Hello," + " World!"}</p></T>
+  ```
+
+  </Tab>
+  <Tab value="例 5">
+
+
+  ```jsx
+  <p>{`${temp}`}</p>
+  ```
+
+  次のように変換されます：
+
+  ```jsx
+  <T id=""><p><Var>{`${temp}`}</Var></p></T>
+  ```
+
+  </Tab>
+</Tabs>
+
+CLI は JSX 要素内の直接の子要素のみをラップします。他の JSX 要素はそれぞれ独自の `<T>` コンポーネントで別々にラップされます。
+
+<Callout type="warn">
+    **実験的**
+
+    この機能は現在実験的であり、完全には動作しない可能性があります。
+    スキャンを実行した後、出力を手動で確認し、正しいことを確認してください。
+    特に、非静的な JSX 式 `{...}` は `<Var>` コンポーネントでラップされます。
+    これらのケースを手動で確認し、編集する必要があるかもしれません。
+    問題が発生した場合は、[こちら](https://github.com/General-Translation/gt-libraries/issues)に報告してください。
+</Callout>
+
+### フラグ
+
+<TypeTable
+  type={{
+    "--src": {
+        description:
+            'スキャンするソースディレクトリ',
+        type: 'string',
+        optional: true,
+    },
+  }}
+/>

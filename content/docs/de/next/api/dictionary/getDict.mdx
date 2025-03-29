@@ -1,0 +1,159 @@
+---
+title: getDict()
+description: API-Referenz für die serverseitige Übersetzungsfunktion getDict()
+---
+
+## Überblick
+
+`getDict()` wird verwendet, um Zeichenkettenübersetzungen aus dem [Übersetzungswörterbuch](/docs/next/reference/dictionary) für serverseitige Komponenten zu erhalten.
+
+```jsx
+const d = await getDict(); // Holen Sie sich die Übersetzungsfunktion
+d('greeting.hello'); // übergeben Sie die ID, um eine Übersetzung zu erhalten
+```
+
+`getDict()` unterstützt:
+  * Übersetzung von Zeichenketten- und JSX-Inhalten.
+  * Variableneinfügung und bedingte Logik innerhalb von Übersetzungen.
+  * Optionale ID-Präfixe.
+
+Für clientseitige Übersetzungen siehe [`useDict()`](/docs/next/api/dictionary/useDict).
+
+<Callout>
+  `getDict()` und `useDict()` verwenden ein [Wörterbuch](/docs/next/reference/dictionary), um alle Inhalte für die Übersetzung zu speichern.
+  Dies unterscheidet sich von der Verwendung der [`<T>` Komponente](/docs/next/reference/t-reference) für Übersetzungen.
+  Wenn Sie daran interessiert sind, nur `<T>` Komponenten für Übersetzungen zu verwenden, ist dieses Dokument nicht relevant.
+</Callout>
+
+## Referenz
+
+### Props
+
+<TypeTable
+  type={{
+    "id?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### Beschreibung
+| Prop | Beschreibung |
+| ---- | ----------- |
+| `id` | Ein optionales Präfix, das allen Übersetzungsschlüsseln vorangestellt wird. Dies ist nützlich für die Arbeit mit verschachtelten Wörterbuchwerten. |
+
+
+### Rückgaben
+
+Ein Versprechen einer Übersetzungsfunktion `d()`, die, wenn eine id angegeben wird, die übersetzte Version des entsprechenden Eintrags zurückgibt
+
+```jsx
+Promise<(id: string, options?: DictionaryTranslationOptions) => React.ReactNode>
+```
+
+| Name                  | Typ | Beschreibung                                                                 |
+|-----------------------|--|-----------------------------------------------------------------------------|
+| `id`             | `string` | Die id des zu übersetzenden Eintrags                                     |
+| `options?`            | [`DictionaryTranslationOptions`](/docs/react/api/types/DictionaryTranslationOptions) | Übersetzungsoptionen zur Anpassung des Verhaltens von `d()`. |
+
+
+---
+
+## Beispiele
+
+### Grundlegende Verwendung
+Jeder Eintrag in Ihrem Wörterbuch wird übersetzt.
+
+```jsx title="dictionary.jsx" copy
+const dictionary = {
+  greeting: <>Hallo, Alice!</>, // [!code highlight]
+};
+export default dictionary;
+```
+
+Wenn wir auf diese Einträge zugreifen möchten (auf der Serverseite), rufen wir `getDict()` auf.
+Dies gibt eine Funktion zurück, die den Schlüssel einer Übersetzung aus dem Wörterbuch akzeptiert.
+
+```jsx title="TranslateGreeting.jsx" copy
+import { getDict } from 'gt-next/server';
+
+export default async function TranslateGreeting() {
+  
+  const d = await getDict(); // [!code highlight]
+
+  return (
+    <p>
+      {d('greeting')} // Hallo, Alice // [!code highlight]
+    </p>
+  );
+}
+```
+
+### Verwendung von Variablen [#variables]
+Um Werte zu übergeben, müssen Sie (1) einen Bezeichner zuweisen und (2) den Bezeichner referenzieren, wenn Sie die `d()` Funktion aufrufen.
+
+In diesem Beispiel verwenden wir `{}` um Variablen an die Übersetzungen zu übergeben.
+Im Wörterbuch weisen wir den Bezeichner `{userName}` zu.
+
+
+```jsx title="dictionary.jsx" copy
+// [!code word:userName]
+const dictionary = {
+  greeting: "Hallo, {userName}!", // [!code highlight]
+};
+export default dictionary;
+```
+
+```jsx title="TranslateGreeting.jsx" copy
+// [!code word:userName]
+import { getDict } from 'gt-next/server';
+
+export default async function TranslateGreeting() {
+  const d = await getDict();
+  
+  // Hallo Alice!
+  const greetingAlice = d('greeting', { userName: "Alice" }); // [!code highlight]
+
+  return (
+    <p>
+      {greetingAlice}
+    </p>
+  );
+}
+```
+
+### Verwendung von Präfixen
+Wir können Präfixe verwenden, um nur einen Teil des Wörterbuchs abzurufen.
+```jsx  title="dictionary.jsx" copy
+const dictionary = {
+  prefix1: { // [!code highlight]
+    prefix2: { // [!code highlight]
+      greeting: "Hallo, Bob",
+    }
+  }
+};
+export default dictionary;
+```
+Da wir den Wert `'prefix1.prefix2'` zur `getDict` Methode hinzugefügt haben, sind alle Schlüssel mit `prefix1.prefix2` vorangestellt:
+```jsx title="UserDetails.jsx" copy
+import { getDict } from 'gt-next/server';
+
+export default function UserDetails() {
+  const d = await getDict('prefix1.prefix2'); // [!code highlight]
+  return (
+    <div>
+      <p>{d('greeting')}</p> // greeting => prefix1.prefix2.greeting // [!code highlight]
+    </div>
+  );
+}
+```
+---
+
+## Notizen
+ * Die Funktion `getDict()` ermöglicht den Zugriff auf Wörterbuchübersetzungen auf der Serverseite.
+
+## Nächste Schritte
+ * Siehe [`useDict()`](/docs/next/api/dictionary/useDict) für das clientseitige Äquivalent von `getDict()`.
+ * Erfahren Sie mehr über die Verwendung von Wörterbüchern in der [Wörterbuchreferenz](/docs/next/reference/dictionary).

@@ -1,0 +1,133 @@
+---
+title: <Num>
+description: API-Referenz für die <Num>-Komponente
+---
+## Übersicht
+
+Die `<Num>` Komponente rendert eine formatierte Zahlenzeichenfolge in der Sprache des Benutzers und kann mit Formatierungsoptionen angepasst werden.
+```jsx
+<Num>{100}</Num>
+// Ausgabe: 100
+```
+Alle Umformatierungen werden lokal mit der [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) Bibliothek durchgeführt.
+
+
+## Referenz
+
+### Props
+
+<TypeTable
+  type={{
+    "children?": {
+        type: 'any',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "value?": {
+        type: 'string | number',
+        optional: true,
+        default: 'undefined',
+    },
+    "options?": {
+        type: 'Intl.NumberFormatOptions',
+        optional: true,
+        default: '{}',
+    },
+    "locales?": {
+        type: 'string[]',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### Beschreibung
+| Prop     | Beschreibung                                                                                                                                       |
+|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `children` | Der Inhalt, der innerhalb der Komponente gerendert werden soll. Typischerweise eine Zahl, die gemäß der aktuellen Lokalisierung und Optionen formatiert wird. Wenn angegeben, hat es Vorrang vor der `value`-Prop. |
+| `name`     | Optionaler Name für das Zahlenfeld, der für Metadatenzwecke verwendet wird.                                                                                   |
+| `value`    | Der Standardwert für die Zahl. Kann ein String oder eine Zahl sein. Strings werden vor der Formatierung in Zahlen umgewandelt.                               |
+| `options`  | Optionale Formatierungsoptionen für die Zahl, gemäß der [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) Spezifikation. Verwenden Sie dies, um Stile wie Währung, Dezimalpräzision usw. zu definieren. |
+| `locales`   | Optionale Lokalisierungen, um die Formatierungslokalisierung anzugeben. Wenn nicht angegeben, wird die Standardlokalisierung des Benutzers verwendet. Lesen Sie mehr über die Angabe von Lokalisierungen [hier](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).                                            |
+
+### Rückgabewert
+
+`JSX.Element`, das die formatierte Zahl als String enthält.
+
+---
+
+## Beispiele
+
+### Einfaches Beispiel
+In diesem Beispiel wird `item.quantity` gemäß der Benutzersprache formatiert.
+
+```jsx title="QuantityDisplay.jsx" copy
+import { Num } from 'gt-next';
+
+export default function Inventory(item) {
+  return (
+    <Num> {item.quantity} </Num>  // [!code highlight]
+  );
+}
+```
+
+### Festlegen von Sprachregionen
+Standardmäßig werden die Sprachregionen durch die Browsereinstellungen des Benutzers bestimmt,
+aber Sie können die Sprachregion für die `<Num>` Komponente explizit festlegen.
+
+```jsx title="PriceDisplay.jsx" copy
+import { Num } from 'gt-next';
+
+export default function CountDisplay(item) {
+  return (
+    <Num locales={['fr-FR']}> {item.count} </Num> // [!code highlight]
+  );
+}
+```
+
+### Übersetzen von `<Num>` Komponenten
+Angenommen, Sie möchten, dass Ihre Zahl in einem größeren Satz steht, der übersetzt wird.
+Fügen Sie einfach die `<T>` Komponenten um den Inhalt hinzu.
+
+```jsx title="DynamicPriceDisplay.jsx" copy
+import { T, Num } from 'gt-next';
+
+export default function DynamicPriceDisplay(item) {
+  return (
+    <T id="price">
+      Es sind <Num> {item.count} </Num> Einheiten verfügbar. // [!code highlight]
+    </T>
+  );
+}
+```
+
+### Benutzerdefinierte Formatierung
+`<Num>` verwendet die [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) Bibliothek zur Formatierung.
+```jsx
+import { Num } from 'gt-next';
+
+export default function CustomFormat(number) {
+  return (
+    <Num
+      options={{ style: "decimal", maximumFractionDigits: 2 }}
+    >
+      {number}
+    </Num>
+  );
+}
+```
+
+---
+
+## Notizen
+ * Die `<Num>` Komponente wird verwendet, um Zahlen gemäß der Benutzersprache zu formatieren.
+ * Wenn Sie sich innerhalb einer `<T>` Komponente befinden, stellen Sie sicher, dass alle dynamischen Zahlen in eine `<Num>` Komponente eingeschlossen sind.
+
+## Nächste Schritte
+ * Für weitere Details und Anwendungsbeispiele der `<Num>` Komponente und anderer Variablenkomponenten wie `<Currency>`, `<DateTime>` und `<Var>`,
+   siehe die [Verwendung von Variablenkomponenten](/docs/next/reference/using-variable-components) Dokumentation.

@@ -1,0 +1,174 @@
+---
+title: <Plural>
+description: Referencia de API para el componente <Plural>
+---
+
+## Resumen
+
+Usamos el componente `<Plural>` para manejar la conjugación de oraciones.
+Piensa en la diferencia entre las oraciones: "Tienes un artículo." y "Tienes dos artículos."
+
+En inglés, tienes que definir dos oraciones diferentes según el número de artículos.
+En otros idiomas, tienes que definir hasta seis.
+
+```jsx
+const count = 1;
+<Plural n={count}
+  singular={You have one item.}
+  plural={You have some items.}
+/>
+```
+
+## Referencia
+
+### Props
+
+<TypeTable
+  type={{
+    "n": {
+      description: 'El número utilizado para determinar la forma plural.',
+      type: 'number',
+      optional: false,
+    },
+    "children?": {
+      description: 'Contenido alternativo cuando no coinciden las formas plurales',
+      type: 'any',
+      optional: true,
+      default: 'undefined',
+    },
+    "locales?": {
+      type: 'string[]',
+      optional: true,
+      default: 'undefined',
+    },
+    "[key]: string": {
+      type: 'string | JSX.Element',
+      optional: false,
+    },
+  }}
+/>
+
+La sintaxis `[key]: string` indica claves arbitrarias que representan posibles ramas de pluralización.
+Por ejemplo, se pueden agregar ramas como `singular` y `plural` como parámetros.
+
+### Descripción
+| Nombre del Prop | Descripción |
+|-----------------|-------------|
+| `n` | El número utilizado para determinar la forma plural. Esto es necesario para la pluralización. |
+| `children` | Contenido alternativo para renderizar si no se encuentra una rama plural coincidente. |
+| `locales`   | Locales opcionales para especificar el formato de la localidad. Si no se proporciona, se utiliza la localidad predeterminada del usuario. Lea más sobre cómo especificar locales [aquí](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).                                            |
+| `[key]: string` | Ramas que representan formas plurales. Las ramas exactas dependen de la localidad. |
+
+
+### Devuelve
+
+`JSX.Element` que contiene el contenido correspondiente a la forma plural de `n`, o el contenido alternativo.
+
+### Lanza
+
+`Error` si `n` no se proporciona o no es un número válido.
+
+---
+
+## ¿Qué formas debo agregar?
+
+Solo necesitas usar las formas plurales en tu idioma.
+
+Las formas posibles son: `"singular"`, `"plural"`, `"dual"`, `"zero"`, `"one"`, `"two"`, `"few"`, `"many"`, `"other"`.
+
+ * Si eres un desarrollador usando `"en-US"`, solo usa dos: `"singular"` y `"plural"`.
+ * Si eres un desarrollador en `"zh-CN"`, solo usa `"other"`.
+
+Lee más sobre las diferentes formas [aquí](https://cldr.unicode.org/index/cldr-spec/plural-rules).
+
+---
+
+## Ejemplos
+
+### Uso básico
+Utiliza el componente `<Plural>` para manejar la pluralización.
+
+```jsx title="BasicExample.jsx" copy
+import { Plural } from 'gt-next';
+
+export default function ItemCount({ count }) {
+  return (
+    <Plural n={count} // [!code highlight]
+      singular={Tienes un artículo.}
+      plural={Tienes algunos artículos.}
+    />
+  );
+}
+```
+
+### Alternativas
+Puedes proporcionar una alternativa en caso de que el valor pasado a `n` no tenga ramas coincidentes.
+
+```jsx title="FallbackExample.jsx" copy
+import { Plural } from 'gt-next';
+
+export default function ItemCount({ count }) {
+  return (
+    <Plural n={count}
+      singular={Tienes un artículo.}
+    >
+      Tienes algunos artículos. // [!code highlight]
+    </Plural>
+  );
+}
+```
+
+### Traduciendo plurales
+Todo lo que tienes que hacer para traducir es añadir el componente `<T>`.
+
+```jsx title="PluralExample.jsx" copy
+import { T, Plural } from 'gt-next';
+
+export default function ItemCount({ count }) {
+  return (
+  <T id="itemCount">
+    <Plural n={count}
+      singular={Tienes un artículo.} // [!code highlight]
+      plural={Tienes algunos artículos.} // [!code highlight]
+    />
+  );
+}
+```
+
+### Añadiendo variables
+¿Qué pasa si queremos añadir algunas variables a la oración pluralizada?
+
+```jsx title="PluralExample.jsx" copy
+import { T, Plural, Num } from 'gt-next';
+
+export default function ItemCount({ count }) {
+  return (
+    <Plural n={count}
+      singular={Tienes <Num>{count}</Num> artículo.} // [!code highlight]
+      plural={Tienes <Num>{count}</Num> artículos.} // [!code highlight]
+    />
+  );
+}
+```
+
+Cuando estés dentro de un componente `<T>`, envuelve todo el contenido dinámico con un `<Currency>`, `<DateTime>`, `<Num>`, o `<Var>`.
+```jsx
+<T id="itemCount">
+  <Plural n={count}
+    singular={Tienes <Num>{count}</Num> artículo.} // [!code highlight]
+    plural={Tienes <Num>{count}</Num> artículos.} // [!code highlight]
+  />
+</T>
+```
+
+---
+
+## Notas
+ * El componente `<Plural>` se utiliza para manejar la pluralización.
+ * Las ramas plurales disponibles (por ejemplo, one, other, few, many) dependen del locale y siguen las [reglas de pluralización de Unicode CLDR](https://cldr.unicode.org/index/cldr-spec/plural-rules).
+
+## Próximos pasos
+ * Para más ejemplos, consulta el documento de referencia sobre componentes de ramificación [aquí](/docs/next/reference/using-branching-components).
+ * Para un uso más avanzado, combina `<Plural>` con componentes variables como `<Currency>`, `<DateTime>`, `<Num>`, y `<Var>`. Lee más sobre componentes variables [aquí](/docs/next/reference/using-variable-components).
+
+Para profundizar en la pluralización y ramificación, visita [Uso de Componentes de Ramificación](/docs/next/reference/using-branching-components).

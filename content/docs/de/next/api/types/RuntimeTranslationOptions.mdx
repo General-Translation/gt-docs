@@ -1,0 +1,129 @@
+---
+title: LaufzeitÜbersetzungsOptionen
+description: API-Referenz für den Typ LaufzeitÜbersetzungsOptionen
+---
+
+## Überblick
+
+Der Typ `RuntimeTranslationOptions` wird verwendet, um Variablen an Inline-Übersetzungen zu übergeben und ihr Renderverhalten festzulegen.
+Sie können auch eine Locale hinzufügen, um eine andere Sprache für die Übersetzung anzugeben.
+Dies wird mit der [`tx()`](/docs/next/api/strings/tx) Funktion verwendet.
+
+<Callout>
+  **Laufzeitübersetzung:**
+  Um eine Variable bei Bedarf zu übersetzen, fügen Sie sie direkt in den String ein, der an [`tx()`](/docs/next/api/strings/tx) übergeben wird.
+  Variablen, die über das `options`-Objekt an `tx()` übergeben werden, werden nicht übersetzt.
+</Callout>
+
+## Referenz
+
+### Parameter
+
+<TypeTable
+  type={{
+    "locale?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "variables?": {
+        type: 'Record<string, any>',
+        optional: true,
+        default: 'undefined',
+    },
+    "variablesOptions?": {
+        type: 'Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### Beschreibung
+
+| Prop | Beschreibung |
+| ---- | ----------- |
+| `locale` | Eine optionale Locale, die für die Übersetzung verwendet werden soll. Standardmäßig wird die bevorzugte Locale des Browsers verwendet, die von Ihrer App unterstützt wird. |
+| `variables` | Ein Objekt, bei dem die Schlüssel angeben, wo jeder Wert in der Zeichenkette zugeordnet wird. |
+| `variablesOptions` | Ein Objekt, bei dem die Schlüssel die Variable identifizieren und die Werte das Verhalten der Variablen definieren. Siehe [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) und [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) für weitere Informationen. |
+
+---
+
+## Beispiele
+
+
+### Variablen übergeben
+Um eine Variable zum String hinzuzufügen, verwenden wir die `{variable-name}`-Syntax, wobei geschweifte Klammern den Namen der Variable umschließen.
+
+```jsx title="Component.tsx"
+// [!code word:username]
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>
+    {tx(`Hallo, {username}!`,{ variables: { 'username' : 'Brian123' } })}
+  </div>;
+};
+```
+
+
+### Variable Optionen hinzufügen
+
+Sie können auch anpassen, wie Ihre Variablen mit der `variablesOptions`-Prop gerendert werden.
+```jsx title="Component.tsx"
+// [!code word:account-balance]
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>
+    { tx(
+      'Ihr Kontostand: {account-balance}!',
+      {
+        variables: { "account-balance" : 1000000 },
+        variableOptions: { "account-balance": { style: 'currency', currency: 'USD' } }
+      }
+    ) }
+  </div>;
+};
+```
+
+
+### Variablen übersetzen
+Um eine Variable zu übersetzen, fügen Sie sie direkt in den String ein, der an `tx()` übergeben wird.
+
+```jsx title="Component.tsx"
+import { tx } from 'gt-next/server';
+
+const Component = ({ hairColor }: { hairColor: string }) => {
+  return <div>{tx(
+    `Hallo, {username}! Ihre Haarfarbe ist ${hairColor}`,
+    { variables: { 'username' : 'Brian123' } }
+  )}</div>;
+};
+```
+
+Beachten Sie, dass die Variable `hairColor` übersetzt wird, aber `username` nicht.
+
+
+### Eine Locale angeben
+Sie können eine Locale angeben, die für die Übersetzung verwendet werden soll.
+```jsx title="Component.tsx"
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>{tx('Hallo, Welt!', { locale: 'fr' })}</div>;
+};
+```
+Dies wird immer ins Französische übersetzt.
+
+---
+
+## Notizen
+ * `RuntimeTranslationOptions` wird für die Übersetzung von Zeichenfolgen zur Laufzeit verwendet.
+ * Das `variables`-Objekt übergibt Werte an den Text.
+ * Das `variablesOptions`-Objekt definiert das Verhalten der Variablen.
+
+
+## Nächste Schritte
+ * Siehe [`tx()`](/docs/next/api/strings/tx) für weitere Informationen zu Inline-String-Übersetzungen.
+ * Siehe [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) und [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) für weitere Informationen zu Formatierungsoptionen.

@@ -1,0 +1,49 @@
+---
+title: useDefaultLocale()
+description: useDefaultLocale フックのAPIリファレンス
+---
+
+## 概要
+
+`useDefaultLocale` フックは、アプリケーションのデフォルトのロケールを [`<GTProvider>` コンテキスト](/docs/react/api/components/gtprovider) から取得します。
+このロケールは、アプリのフォールバック言語を表し、通常、ユーザーの希望するロケールが利用できない場合に使用されます。
+
+<Callout>
+    アプリが [`<GTProvider>`](/docs/react/api/components/gtprovider) でラップされていることを確認してください。
+</Callout>
+
+設定については [`<GTProvider>`](/docs/react/api/config/gtprovider) を参照してください。
+デフォルトのロケールが指定されていない場合、デフォルトで `'en-US'` になります。
+
+
+## リファレンス
+
+### 戻り値
+
+アプリケーションのデフォルトのロケールを表す文字列、例: `'en-US'`。
+
+---
+
+## 例
+
+### 基本的な使用法
+
+アプリケーションのデフォルトのロケールを取得し、コンポーネントに表示します。
+
+```jsx title="DefaultLocale.jsx" copy
+import { useDefaultLocale } from 'gt-react';
+
+export default function DefaultLocale() {
+    const defaultLocale = useDefaultLocale();// [!code highlight]
+
+    return <p>Default locale: {defaultLocale}</p>; // Display the default locale
+}
+```
+
+## メモ
+ * `useDefaultLocale()` フックは、コンテキストにアクセスするために [`<GTProvider>`](/docs/react/api/components/gtprovider) に依存しています。
+   アプリがルートレベルでプロバイダーでラップされていることを確認してください。
+ * ロケール文字列についての詳細は[こちら](/docs/reference/locale-strings)をご覧ください。
+
+## 次のステップ
+ * ユーザーのロケールを取得するには、[`useLocale`](/docs/react/api/helpers/useLocale) を参照してください。

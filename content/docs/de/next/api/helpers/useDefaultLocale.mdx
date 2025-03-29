@@ -1,0 +1,58 @@
+---
+title: useDefaultLocale()
+description: API-Referenz für den useDefaultLocale-Hook
+---
+
+## Überblick
+
+Der `useDefaultLocale` Hook ruft die Standard-Lokalisierung der Anwendung aus dem [`<GTProvider>` Kontext](/docs/next/api/components/gtprovider) ab.
+Diese Lokalisierung stellt die Fallback-Sprache für Ihre App dar und wird typischerweise verwendet, wenn die bevorzugte Lokalisierung eines Benutzers nicht verfügbar ist.
+
+
+
+<Callout>
+    `useDefaultLocale` ist ein clientseitiger Hook und *kann nur in clientseitigen Komponenten verwendet werden*.
+    Stellen Sie sicher, dass Ihre App in einen [`<GTProvider>`](/docs/next/api/components/gtprovider) eingebettet ist.
+</Callout>
+
+Siehe [`withGTConfig()`](/docs/next/api/config/withGTConfig) für die Konfiguration.
+Wenn keine Standard-Lokalisierung in [`withGTConfig()`](/docs/next/api/config/withGTConfig) angegeben ist, wird standardmäßig `'en-US'` verwendet.
+Für serverseitige Anwendungen siehe [`getDefaultLocale()`](/docs/next/api/helpers/getDefaultLocale).
+
+
+## Referenz
+
+### Rückgaben
+
+Ein String, der die Standard-Lokalisierung der Anwendung darstellt, z.B. `'en-US'`.
+
+---
+
+## Beispiele
+
+### Grundlegende Verwendung
+
+Rufen Sie die Standard-Locale der Anwendung ab und zeigen Sie sie in Ihrer Komponente an.
+
+```jsx title="DefaultLocale.jsx" copy
+"use client";
+import { useDefaultLocale } from 'gt-next/client';
+
+export default function DefaultLocale() {
+    const defaultLocale = useDefaultLocale();// [!code highlight]
+
+    return <p>Standard-Locale: {defaultLocale}</p>; // Display the default locale
+}
+```
+
+---
+
+## Notizen
+ * Der `useDefaultLocale()` Hook basiert auf dem [`<GTProvider>`](/docs/next/api/components/gtprovider), um auf den Kontext zuzugreifen.
+   Stellen Sie sicher, dass Ihre App auf der obersten Ebene mit einem Provider umschlossen ist.
+ * `useDefaultLocale()` ist nur clientseitig.
+ * Erfahren Sie mehr über Locale-Strings [hier](/docs/reference/locale-strings).
+
+## Nächste Schritte
+ * Siehe [`useLocale`](/docs/next/api/helpers/useLocale) und [`getLocale`](/docs/next/api/helpers/getLocale), um die Spracheinstellung des Benutzers abzurufen.
+ * Erkunde [`getDefaultLocale()`](/docs/next/api/helpers/getDefaultLocale), um die Standardspracheinstellung in Serverkomponenten abzurufen.

@@ -1,0 +1,203 @@
+---
+title: <T>
+description: <T>コンポーネントのAPIリファレンス
+---
+
+## 概要
+
+`<T>` コンポーネントは `gt-next` の主要な翻訳メソッドです。
+
+```jsx
+<T> // [!code highlight]
+    今日は、私は
+    {" 店に行きました"}
+    <p>
+        <b>買う</b>ためにいくつかの<i>食料品</i>を。
+    </p>
+</T> // [!code highlight]
+```
+
+`<T>` コンポーネントは、プレーンテキストだけでなく、複雑なJSX構造の翻訳もサポートしています。
+さらに、変数、複数形、およびコンテキスト固有の翻訳を処理するための機能を提供します。
+
+<Callout>
+**ビルドタイム翻訳:**
+`<T>` の翻訳はビルドタイムに行われます。
+これは、デプロイ前に翻訳が行われるため、レイテンシーを削減します。
+[こちらのデプロイガイド](/docs/next/tutorials/quickdeploy)に従ってください。
+</Callout>
+
+---
+
+## リファレンス
+
+
+### Props
+<TypeTable
+  type={{
+    "children": {
+        type: 'any',
+        optional: false,
+    },
+    "id": {
+        type: 'string',
+        optional: false,
+    },
+    "context?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### 説明
+| Prop            | 説明                                                                                     |
+|-----------------|-------------------------------------------------------------------------------------------------|
+| `children`  | 翻訳されるコンテンツ。これにはプレーンテキストやJSX構造が含まれます。                    |
+| `id`        | 翻訳文字列の一意の識別子。これにより、アプリ全体で一貫した翻訳が保証されます。 |
+| `context`   | 翻訳を洗練するための追加のコンテキスト。曖昧なフレーズを解決するのに役立ちます。           |
+
+### 戻り値
+
+
+`React.JSX.Element|undefined` は、提供された設定に基づいてレンダリングされた翻訳またはフォールバックコンテンツを含みます。
+
+---
+
+## 動作
+
+### 本番環境
+CDプロセス中に、`<T>` 内の子要素はアプリケーションがデプロイされる前に翻訳されます。
+これにより、すべてのロケールでの高速な読み込み時間が保証されますが、ビルド時に既知のコンテンツのみを翻訳できます。
+
+生成された翻訳は、設定に応じて (1) CDN に保存されるか、(2) アプリのビルド出力に保存されます。
+そこから、翻訳されたコンテンツがユーザーに提供されます。
+翻訳が見つからない場合は、元のコンテンツにフォールバックします。
+
+[こちらのデプロイメントガイド](/docs/next/tutorials/quickdeploy)に従ってください。
+
+### 開発環境
+開発中は、`<T>` 関数が要求に応じてコンテンツを翻訳します。
+これは、アプリが異なる言語でどのように見えるかをプロトタイプするのに役立ちます。
+この動作を有効にするには、環境にDev APIキーを追加することを忘れないでください。
+
+読み込み中、`<T>` は言語が類似していない限り（en-USとen-GBなど）、未定義を返しますが、この動作はレンダー設定でカスタマイズできます。
+エラーが発生した場合、`<T>` は元のコンテンツを返します。
+
+開発中のオンデマンド翻訳では遅延が発生します。
+この遅延は、コンテンツが明示的にオンデマンドで翻訳されていない限り、本番ビルド中には発生しません。
+つまり、[`<Tx>`](/docs/next/api/components/tx) または [`tx()`](/docs/next/api/strings/tx) を使用することによってです。
+
+---
+
+## 例
+
+### 基本的な使い方
+
+`<T>` はその子要素を翻訳します。
+
+```jsx title="SimpleTranslation.jsx" copy
+import { T } from 'gt-next';
+
+export default function Greeting() {
+    return (
+        <T> // [!code highlight]
+            こんにちは、世界！
+        </T> // [!code highlight]
+    );
+}
+```
+
+
+### 変数を使用する場合
+`<Var>` コンポーネントを使用して、子要素を変数としてマークできます。
+これにより、翻訳されるべきでないコンテンツをマークできます。
+通常、`<Var>` コンポーネントは動的なコンテンツをラップします。
+
+```jsx title="DynamicGreeting.jsx" copy
+import { T, Var } from 'gt-next';
+
+export default function DynamicGreeting(user) {
+    return (
+        <T>
+            こんにちは、<Var>{user.name}</Var>! // [!code highlight]
+        </T>
+    );
+}
+```
+
+### 複数形を使用する場合
+`<T>` コンポーネントは、`<Plural>` コンポーネントを使用して複数形をサポートします。
+
+```jsx title="ItemCount.jsx" copy
+import { T, Plural } from 'gt-next';
+
+export default function ItemCount({ count }) {
+    return (
+        <T>
+            <Plural n={count}  // [!code highlight] 
+                singular={<>アイテムがあります。</>}  // [!code highlight] 
+                plural={<>アイテムがあります。</>}  // [!code highlight] 
+            />  // [!code highlight]
+        </T>
+    );
+}
+```
+
+### 制限事項
+
+`<T>` コンポーネントは動的なコンテンツを翻訳しません。
+
+```jsx title="DynamicContent.jsx" copy
+import { T } from 'gt-next';
+
+export default function DynamicContent({greeting}) {
+    return (
+        <T>
+            {greeting} // エラーが発生します // [!code highlight]
+        </T>
+    );
+}
+```
+
+`<T>` 関数はその子孫を翻訳します。
+
+```jsx title="Example.jsx" copy
+import { T } from 'gt-next';
+
+const ValidTranslation = ({ children }) => (<div><b>{children}</b></div>);
+
+const InvalidTranslation = ({ children }) => (<div><b>翻訳なし</b></div>);
+
+export default function Example() {
+    return (
+        <T>
+            <div><b>これは有効です！</b></div> // 翻訳されます // [!code highlight]
+
+            <ValidTranslation> // 翻訳されます // [!code highlight]
+                こんにちは、世界！ // [!code highlight]
+            </ValidTranslation> // [!code highlight]
+
+            <InvalidTranslation /> // 翻訳されません
+        </T>
+    );
+}
+```
+<Callout>
+    **注意:** 良い指針として、ファイル内の `<T>` の間に*文字通り*あるコンテンツは翻訳されます。
+    翻訳されていないコンテンツを翻訳するために、別の `<T>` を追加することができますが、`<T>` コンポーネントをネストすることは推奨されません。
+</Callout>
+
+---
+    
+## メモ
+ * `<T>` コンポーネントは、アプリケーション内のコンテンツを翻訳するために設計されています。これは `gt-next` におけるローカリゼーションの主要な方法です。
+ * `<T>` コンポーネントを使用して、変数や複数形を含むプレーンテキストやJSX構造を翻訳します。
+ * クライアントサイドで `<T>` コンポーネントを使用する場合は、翻訳コンテキストにアクセスするために [`<GTProvider>`](/docs/next/reference/t-reference#gtprovider) でラップされていることを確認してください。
+
+## 次のステップ
+ * オンデマンド翻訳については、[`<Tx>`](/docs/next/api/components/tx) コンポーネントを調べてください。
+ * より高度な機能については、[`<T>` リファレンス](/docs/next/reference/t-reference)を参照してください。
+ * 文字列の翻訳については、[`tx()`](/docs/next/api/strings/tx)、[`getGT()`](/docs/next/api/strings/getGT)、および [`useGT()`](/docs/next/api/strings/useGT) を調べてください。
+ * より高度な翻訳パターンについては、[変数コンポーネントの使用](/docs/next/reference/using-variable-components)および[分岐コンポーネントの使用](/docs/next/reference/using-branching-components)を確認してください。

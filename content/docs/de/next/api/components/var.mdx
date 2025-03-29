@@ -1,0 +1,82 @@
+---
+title: <Var>
+description: API-Referenz für die <Var>-Komponente
+---
+
+## Überblick
+Die `<Var>` Komponente wird verwendet, um Inhalte darzustellen, die nicht übersetzt werden sollen.
+Dies ist nützlich, um Variablen, Code-Snippets oder andere Inhalte darzustellen, die nicht übersetzt werden sollen.
+Zusätzlich ist dies nützlich, um Inhalte darzustellen, die privat gehalten werden sollten, wie API-Schlüssel oder persönliche Informationen.
+
+```jsx
+<Var>{user.name}</Var>
+```
+
+Die `<Var>` Komponente wird immer innerhalb einer `<T>` Komponente verwendet.
+Betrachten Sie es als eine Auffanglösung für dynamische Werte, die nicht in die Kategorie `<Currency>`, `<DateTime>` oder `<Num>` passen.
+
+## Referenz
+
+### Props
+
+<TypeTable
+    type={{
+        "children?": {
+            type: 'JSX.Element',
+            optional: true,
+            default: 'undefined',
+        },
+        "name?": {
+            type: 'string',
+            optional: true,
+            default: 'undefined',
+        },
+        "value?": {
+            type: 'string',
+            optional: true,
+            default: 'undefined',
+        },
+    }}
+/>
+
+### Beschreibung
+| Prop      | Beschreibung                                                                                                                                            |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `children`  | Der Inhalt, der innerhalb der Komponente gerendert werden soll. Wenn angegeben, hat er Vorrang vor dem Wert. |
+| `value`     | Optionaler Standardwert, der angezeigt wird, wenn children nicht angegeben ist. Kann ein String sein.                                  |
+
+
+### Rückgabewert
+`JSX.Element`, das den Inhalt enthält, der nicht übersetzt werden sollte.
+
+---
+
+## Beispiele
+
+### Einfaches Beispiel
+Die `<Var>` Komponente muss innerhalb einer `<T>` Komponente verwendet werden.
+```jsx title="Example.jsx" copy
+import { T, Var } from 'gt-next'
+
+export default function Example(user) {
+  return (
+    <T>
+      Translate this text!
+      Your name is: <Var>{user.name}</Var> // [!code highlight]
+      <Var><p>Do not translate this text</p></Var> // [!code highlight]
+    </T>
+  );
+}
+```
+
+---
+
+## Notizen
+ * Variable Komponenten sind unerlässlich, um nicht übersetzbare, dynamische Inhalte in Übersetzungen beizubehalten.
+ * Verwenden Sie immer Variable Komponenten innerhalb eines `<T>`-Komponenten.
+ * Komponenten wie `<Num>`, `<Currency>` und `<DateTime>` bieten Lokalisierungsfunktionen, um eine genaue Formatierung sicherzustellen.
+
+## Nächste Schritte
+ * Für eine ausführlichere Diskussion und Anwendungsbeispiele für die `<Var>`-Komponente und andere Variablenkomponenten wie `<Currency>`, `<DateTime>` und `<Num>`,
+  siehe die [Verwendung von Variablenkomponenten](/docs/next/reference/using-variable-components) Dokumentation.
+ * Erfahren Sie mehr über Formatierungsoptionen für spezifische Variablenkomponenten in der [API-Referenz](/docs/next/api/components/var).

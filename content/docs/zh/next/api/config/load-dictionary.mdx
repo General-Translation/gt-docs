@@ -1,0 +1,73 @@
+---
+title: loadDictionary()
+description: loadDictionary() 函数的 API 参考。
+---
+
+## 概述
+
+`loadDictionary()` 将为给定的语言环境加载一个翻译 json 文件。
+
+此函数适用于希望将 `gt-next` 作为独立 i18n 库使用的人。
+
+此函数主要用于将现有的 i18n 项目迁移到 General Translation，同时保留其现有翻译。
+按照[本指南](/docs/next/reference/stand-alone)进行设置。
+
+如果存在多个翻译，则由 `loadDictionary()` 加载的字典中的翻译将始终优先于其他翻译。
+`loadDictionary()` 仅支持使用带有字符串翻译的 JSON 文件。
+
+
+## 参考
+
+### 参数
+<TypeTable
+  type={{
+    "locale": {
+        type: 'string',
+        optional: false,
+    },
+  }}
+/>
+
+### 描述
+| 类型 | 描述 |
+| ---- | ---- |
+| `locale` | 应加载翻译的语言环境。 |
+
+### 返回值
+
+一个 `Promise<any>`，解析为将 ID 映射到给定语言环境的翻译的字典。
+
+---
+
+## 用法
+
+通常，您将从 `./public/locales` 目录加载字典。
+
+```jsx title="src/loadDictionary.js"
+export default async function loadDictionary(locale) {
+  const translations = await import(`../public/locales/${locale}.json`);
+  return translations.default;
+}
+```
+
+<Callout>
+  **问题：** [`loadTranslations()`](/docs/next/api/config/load-translations) 和 [`loadDictionary()`](/docs/next/api/config/load-dictionary) 之间有什么区别？
+
+  * [`loadTranslations()`](/docs/next/api/config/load-translations) 用于定义自定义加载行为，以获取应用程序的翻译。
+  这可以是从 CDN、数据库或应用程序的包中获取翻译。
+  这些通常是机器生成的翻译，由 cli 工具管理，不太适合用户编辑。
+  * [`loadDictionary()`](/docs/next/api/config/load-dictionary) 旨在作为独立库的 `gt-next` 实现。
+  用户自带翻译，不使用翻译基础设施。
+</Callout>
+
+---
+
+## 注意事项
+ * `loadDictionary()` 用于加载应用程序的自定义翻译。
+ * 通过 `loadDictionary()` 加载的字典将优先于通过 [`loadTranslations()`](/docs/next/api/config/load-translations) 加载的翻译。
+
+## 下一步
+
+* 如果您想编写自己的翻译，请查看[自定义翻译](/docs/next/reference/stand-alone)。
+* 查看[`loadTranslations()`](/docs/next/api/config/load-translations)以获取有关编写自定义翻译加载器的更多信息。
+

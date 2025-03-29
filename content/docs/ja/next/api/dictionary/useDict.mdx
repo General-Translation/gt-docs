@@ -1,0 +1,156 @@
+---
+title: useDict()
+description: useDictフックのAPIリファレンス
+---
+
+## 概要
+
+`useDict()` は、クライアントサイドのコンポーネント用に[翻訳辞書](/docs/next/reference/dictionary)から文字列の翻訳を取得するために使用されます。
+これは、[`<GTProvider>`](/docs/next/api/components/gtprovider)でラップされたコンポーネント内で使用する必要があります。
+
+```jsx
+const d = useDict(); // 翻訳関数を取得
+d('greeting.hello'); // idを渡して翻訳を取得
+```
+
+サーバーサイドの翻訳については、[`getDict()`](/docs/next/api/dictionary/getDict)を参照してください。
+
+<Callout>
+  `getDict()` と `useDict()` は、翻訳のためにすべてのコンテンツを保存する[辞書](/docs/next/reference/dictionary)を使用します。
+  これは、翻訳のために[`<T>` コンポーネント](/docs/next/reference/t-reference)を使用するのとは異なります。
+  `<T>` コンポーネントのみを使用して翻訳を行いたい場合、このドキュメントは該当しません。
+</Callout>
+
+## リファレンス
+
+### パラメーター
+
+<TypeTable
+  type={{
+    "id?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### 説明
+
+| Prop | 説明 |
+| ---- | ----------- |
+| `id` | すべての翻訳キーに追加するためのオプションのプレフィックスです。これはネストされた辞書値を扱う際に便利です。|
+
+### 戻り値
+
+`d()` という翻訳関数で、id を指定すると、対応するエントリの翻訳版を返します
+
+```jsx
+(id: string, options?: DictionaryTranslationOptions) => React.ReactNode
+```
+
+| 名前                  | 型 | 説明                                                                 |
+|-----------------------|--|-----------------------------------------------------------------------------|
+| `id`             | `string` | 翻訳されるエントリの id                                     |
+| `options?`            | [`DictionaryTranslationOptions`](/docs/react/api/types/DictionaryTranslationOptions) | `d()` の動作をカスタマイズするための翻訳オプション。 |
+
+---
+
+## 例
+
+### 基本的な使用法
+辞書内のすべてのエントリが翻訳されます。
+
+```jsx title="dictionary.jsx" copy
+const dictionary = {
+  greeting: "Hello, Bob", // [!code highlight]
+};
+export default dictionary;
+```
+
+これらのエントリにアクセスしたいときは（クライアント側で）、`useDict()`を呼び出します。
+これは、辞書から翻訳のキーを受け取る関数を返します。
+
+```jsx title="TranslateGreeting.jsx" copy
+"use client";
+import { useDict } from 'gt-next/client';
+
+export default async function TranslateGreeting() {
+  const d = useDict(); // [!code highlight]
+  return (
+    <p>
+      {d('greeting')} // Hello, Alice // [!code highlight]
+    </p>
+  );
+}
+```
+
+### 変数の使用 [#variables]
+値を渡すためには、(1)識別子を割り当て、(2)`d()`関数を呼び出すときに識別子を参照する必要があります。
+
+この例では、`{}`を使用して翻訳に変数を渡します。
+辞書では、識別子`{userName}`を割り当てます。
+
+```jsx title="dictionary.jsx" copy
+// [!code word:userName]
+const dictionary = {
+  greeting: "Hello, {userName}!", // [!code highlight]
+};
+export default dictionary;
+```
+
+```jsx title="src/server/TranslateGreeting.jsx" copy
+// [!code word:userName]
+"use client";
+import { useDict } from 'gt-next/client';
+
+export default async function TranslateGreeting() {
+  const d = useDict();
+  
+  // Hello Alice!
+  const greetingAlice = d('greeting', { userName: "Alice" }); // [!code highlight]
+
+  return (
+    <p>
+      {greetingAlice}
+    </p>
+  );
+}
+```
+
+### プレフィックスの使用
+
+プレフィックスを使用して、辞書のサブセットのみを翻訳できます。
+```jsx  title="dictionary.jsx" copy
+const dictionary = {
+  prefix1: { // [!code highlight]
+    prefix2: { // [!code highlight]
+      greeting: "Hello, Bob",
+    }
+  }
+};
+export default dictionary;
+```
+`useDict`フックに値`'prefix1.prefix2'`を追加したため、すべてのキーは`prefix1.prefix2`でプレフィックスされます：
+```jsx title="UserDetails.jsx" copy
+"use client";
+import { useDict } from 'gt-next/client';
+
+export default function UserDetails() {
+  const d = useDict('prefix1.prefix2'); // [!code highlight]
+  return (
+    <div>
+      <p>{d('greeting')}</p> // greeting => prefix1.prefix2.greeting // [!code highlight]
+    </div>
+  );
+}
+```
+--- 
+## メモ
+ * `useDict()` 関数は、クライアント側で辞書の翻訳にアクセスすることを可能にします。
+ * `useDict()` フックは、[`<GTProvider>` コンポーネント](/docs/next/api/components/gtprovider)でラップされたコンポーネント内でのみ使用できます。
+
+## 次のステップ
+ * サーバーサイドの翻訳については、[`getDict()`](/docs/next/api/dictionary/getDict)を参照してください。
+ * 辞書の使用方法については、[辞書リファレンス](/docs/next/reference/dictionary)を参照してください。
+ * 翻訳オプションの詳細については、[DictionaryTranslationOptions](/docs/next/api/types/DictionaryTranslationOptions)を参照してください。

@@ -1,0 +1,107 @@
+---
+title: Zeichenfolgen übersetzen
+description: Wie man Zeichenfolgen übersetzt
+---
+
+## Überblick
+
+Dieser Leitfaden ist ein Schritt-für-Schritt-Tutorial, wie man Zeichenfolgen in Ihrer Next.js-App mit
+[`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT) und [`tx()`](/docs/next/api/strings/tx) übersetzt.
+
+## Voraussetzungen
+
+Wir gehen davon aus, dass Sie `gt-next` bereits in Ihrem Projekt installiert haben und dem [Schnellstart-Leitfaden](/docs/next/tutorials/quickstart) gefolgt sind oder gerade folgen.
+
+## Übersetzen von Zeichenfolgen
+
+### Clientseitige Komponenten
+Für alle clientseitigen Zeichenfolgen verwenden Sie [`useGT()`](/docs/next/api/strings/useGT).
+Denken Sie daran, dass `useGT()` innerhalb einer Kindkomponente von [`<GTProvider>`](/docs/next/api/components/gtprovider) aufgerufen werden muss.
+
+```jsx title="src/components/MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+### Serverseitige Komponenten
+Für alle serverseitigen Zeichenfolgen verwenden Sie [`getGT()`](/docs/next/api/strings/getGT).
+
+```jsx title="src/pages/index.jsx" copy
+import { getGT } from 'gt-next/server';
+
+export default async function Home() {
+  const t = await getGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+<Callout>
+  **Hinweis:**
+  Wenn Sie in der Entwicklung sind und Inhalte zur Laufzeit übersetzen, müssen Sie die Seite aktualisieren, um die übersetzte Version einer Zeichenfolge von [`getGT()`](/docs/next/api/strings/getGT) zu sehen.
+  **Dies passiert nicht in der Produktion.**
+</Callout>
+
+### Hinzufügen von Variablen
+Variablen sind Werte, die sich ändern können, aber nicht übersetzt werden.
+Um Variablen zu Ihren Zeichenfolgen hinzuzufügen, verwenden Sie das folgende Muster:
+
+```jsx title="MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT();
+  return (
+    <div>
+      <h1>{t('Hello there, {username}', { variables: { username: 'Brian123' }})}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+Dies funktioniert sowohl mit [`useGT()`](/docs/next/api/strings/useGT) als auch mit [`getGT()`](/docs/next/api/strings/getGT).
+
+### Dynamische Inhalte
+Angenommen, Sie haben eine Zeichenfolge, die sich ändert.
+Sie können die Funktion [`tx()`](/docs/next/api/strings/tx) verwenden, um die Zeichenfolge zur Laufzeit zu übersetzen.
+
+```jsx title="MyComponent.jsx" copy
+import { tx } from 'gt-next/server';
+
+export default async function MyComponent({ username }) {
+  const translation = await tx(`Hello, ${username}. How is your day?`); // [!code highlight]
+  return (
+    <div>
+      <h1>{translation}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+<Callout>
+  **Hinweis:**
+  Die Funktion [`tx()`](/docs/next/api/strings/tx) ist nur auf der Serverseite verfügbar und sollte nur bei Bedarf verwendet werden.
+  Die Übersetzung zur Laufzeit führt oft zu einer Verzögerung.
+  Verwenden Sie wann immer möglich [`getGT()`](/docs/next/api/strings/getGT) oder [`useGT()`](/docs/next/api/strings/useGT), um vor der Bereitstellung zu übersetzen.
+</Callout>
+
+---
+
+## Notizen
+ * Zum Übersetzen von Zeichenfolgen verwenden Sie [`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT) und [`tx()`](/docs/next/api/strings/tx).
+ * `useGT()` und `getGT()` übersetzen vor der Bereitstellung, während `tx()` zur Laufzeit übersetzt. Verwenden Sie `tx()` sparsam.
+ * Variablen können zu Zeichenfolgen mit dem Muster `{ variables: { key: value } }` hinzugefügt werden.
+
+## Nächste Schritte
+ * Kehren Sie zum [Schnellstart-Leitfaden](/docs/next/tutorials/quickstart) zurück, um die Einrichtung Ihres Projekts für die Übersetzung abzuschließen.
+ * Sehen Sie sich die API-Referenz für [`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT) und [`tx()`](/docs/next/api/strings/tx) an.

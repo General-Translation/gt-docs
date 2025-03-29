@@ -1,0 +1,87 @@
+---
+title: <T> コンポーネントの使用
+description: 翻訳をしてみましょう！
+---
+
+
+
+## 概要
+
+いよいよ翻訳を始める時が来ました！
+`<T>` コンポーネントを設定すれば、アプリを好きな言語に翻訳できます！
+
+実際には、これは2つのステップに分かれます：
+<Steps>
+  <Step>
+    `<GTProvider>` コンポーネントを追加する
+  </Step>
+  <Step>
+    `<T>` コンポーネントを追加する
+    </Step>
+</Steps>
+
+
+## `<GTProvider>` コンポーネントを追加する
+
+まず、アプリに `<GTProvider>` コンポーネントを追加しましょう。
+良い点は、これを一度だけ行えば良いということです。
+
+```jsx title="src/app/layout.tsx" copy
+import { GTProvider } from 'gt-next' // [!code highlight]
+...
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <GTProvider> // [!code highlight]
+            {children}
+        </GTProvider> // [!code highlight]
+      </body>
+    </html>
+  );
+}
+
+```
+
+<Callout>
+  **なぜ `<GTProvider>` コンポーネントが必要なのですか？**
+
+  `<GTProvider>` は、サーバーからクライアントへの翻訳の受け渡しを担当します。
+  クライアント側で `<T>` コンポーネントをレンダリングしたいときは、必ず `<GTProvider>` でラップする必要があります。
+
+  `<GTProvider>` コンポーネントについての詳細は[こちら](/docs/next/reference/t-reference#gtprovider)をご覧ください。
+</Callout>
+
+
+## `<T>` コンポーネントを追加する
+
+お待ちかねの部分です...
+
+今やるべきことは、コンテンツの先頭に `<T>` を置き、最後に `</T>` を閉じることだけです。
+翻訳のための識別子として機能するユニークな文字列を追加するのを忘れないでください。
+
+```jsx title="src/app/page.tsx" copy
+import { T } from 'gt-next' // [!code highlight]
+...
+function Page() {
+  ...
+
+  return (
+    <T id="currency-converter"> // [!code highlight]
+      ...
+    </T> // [!code highlight]
+  );
+}
+
+export default Page;
+```
+
+これで完了です！アプリの翻訳を始める準備が整いました！
+
+

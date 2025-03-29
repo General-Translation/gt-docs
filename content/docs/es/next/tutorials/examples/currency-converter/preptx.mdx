@@ -1,0 +1,35 @@
+---
+title: Añadir gt-next
+description: ¡Vamos a preparar tu proyecto para la traducción!
+---
+
+
+## Introducción
+
+¡Felicidades por configurar tu proyecto de NextJS! Ahora, vamos a prepararlo para la traducción usando `gt-next`.
+
+En este momento, tu proyecto es un proyecto normal, no internacionalizado, que solo se puede leer en un idioma.
+Sin embargo, antes de que podamos comenzar a traducir, necesitamos agregar la biblioteca a tu proyecto y configurar tu entorno.
+
+### Instalar `gt-next`
+A continuación, vamos a agregar la biblioteca `gt-next` a tu proyecto. Puedes hacerlo ejecutando el siguiente comando:
+
+```bash copy
+npm i gt-next
+```
+
+### Configura tu entorno
+Crea un archivo `.env` en la raíz de tu proyecto y agrega tu clave de API y el ID del proyecto.
+
+```env copy
+GT_API_KEY="YOUR_GT_API_KEY"
+GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+```
+
+Si aún no has configurado tu proyecto, simplemente inicia sesión en tu [cuenta de General Translation](https://wwww.generaltranslation.com/signin).
+Abre la página de claves API *DEV* y crea una nueva clave API *DEV*.
+Finalmente, copia la clave API *DEV* y el ID del proyecto y pégalos en tu archivo `.env`.
+
+## Conclusión
+Para ahora, todo debería estar listo y configurado para comenzar a traducir.
+¡Todo lo que tenemos que hacer ahora es agregar el componente `<T>` a nuestro proyecto y comenzar a traducir!

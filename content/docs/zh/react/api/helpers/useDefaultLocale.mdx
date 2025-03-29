@@ -1,0 +1,49 @@
+---
+title: useDefaultLocale()
+description: useDefaultLocale 钩子的 API 参考
+---
+
+## 概述
+
+`useDefaultLocale` 钩子从 [`<GTProvider>` 上下文](/docs/react/api/components/gtprovider)中检索应用程序的默认语言环境。
+此语言环境表示应用程序的回退语言，通常在用户的首选语言环境不可用时使用。
+
+<Callout>
+    确保您的应用程序被包裹在 [`<GTProvider>`](/docs/react/api/components/gtprovider) 中。
+</Callout>
+
+查看 [`<GTProvider>`](/docs/react/api/config/gtprovider) 以获取配置。
+如果未指定默认语言环境，则默认为 `'en-US'`。
+
+
+## 参考
+
+### 返回值
+
+一个表示应用程序默认语言环境的字符串，例如，`'en-US'`。
+
+---
+
+## 示例
+
+### 基本用法
+
+获取应用程序的默认语言环境并在您的组件中显示。
+
+```jsx title="DefaultLocale.jsx" copy
+import { useDefaultLocale } from 'gt-react';
+
+export default function DefaultLocale() {
+    const defaultLocale = useDefaultLocale();// [!code highlight]
+
+    return <p>Default locale: {defaultLocale}</p>; // Display the default locale
+}
+```
+
+## 注意事项
+ * `useDefaultLocale()` 钩子依赖于 [`<GTProvider>`](/docs/react/api/components/gtprovider) 来访问上下文。
+   确保您的应用程序在根级别用提供者包裹。
+ * 在[这里](/docs/reference/locale-strings)了解更多关于语言环境字符串的信息。
+
+## 下一步
+ * 查看 [`useLocale`](/docs/react/api/helpers/useLocale) 以获取用户的语言环境。

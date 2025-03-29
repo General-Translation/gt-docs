@@ -1,0 +1,155 @@
+---
+title: <Currency>
+description: Référence API pour le composant <Currency>
+---
+
+## Vue d'ensemble
+
+Le composant `<Currency>` rend une valeur numérique sous forme de devise.
+Le nombre est formaté en fonction de la locale actuelle et de tous les paramètres optionnels passés.
+Le composant de devise ne gère que le formatage et n'effectue aucun calcul de taux de change.
+
+```jsx
+<Currency>{100}</Currency>
+// Output: $100.00
+```
+
+Tout le reformatage est géré localement à l'aide de la bibliothèque [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
+
+## Référence
+
+### Props
+
+<TypeTable
+  type={{
+    "children?": {
+        type: 'any',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "value?": {
+        decription: 'Valeur optionnelle. children sera utilisé pour la valeur si non fourni.',
+        type: 'string | number',
+        optional: true,
+        default: 'undefined',
+    },
+    "currency?": {
+        type: 'string',
+        optional: true,
+        default: '"USD"',
+    },
+    "options?": {
+        type: 'Intl.NumberFormatOptions',
+        optional: true,
+        default: '{}',
+    },
+    "locales?": {
+        type: 'string[]',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### Description
+| Prop      | Description                                                                                                                                            |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `children`  | Le contenu à rendre à l'intérieur du composant. Typiquement un nombre représentant la valeur à formater en tant que devise. Si fourni, il prend le pas sur la prop `value`. |
+| `name`      | Nom optionnel pour le champ de devise, utilisé à des fins de métadonnées.                                                                                      |
+| `value`     | La valeur par défaut pour la devise. Reviendra à children si non fourni. Peut être une chaîne ou un nombre. Les chaînes seront analysées en nombres avant le formatage.                                  |
+| `currency`  | Le type de devise, tel que "USD" ou "EUR". Cela détermine le symbole et le formatage utilisés pour la devise.                                            |
+| `options`   | Options de formatage optionnelles pour la devise, suivant la [spécification `Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat). Utilisez ceci pour définir des styles tels que le nombre maximum de chiffres fractionnaires, le regroupement, etc. |
+| `locales`   | Locales optionnelles pour spécifier la locale de formatage. Si non fourni, la locale par défaut de l'utilisateur est utilisée. En savoir plus sur la spécification des locales [ici](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).                                            |
+
+### Renvoie
+
+`JSX.Element` contenant la devise formatée en tant que chaîne.
+
+---
+
+## Exemples
+### Exemple de base
+
+Le composant `<Currency>` peut être utilisé pour afficher des valeurs monétaires localisées.
+
+```jsx title="PriceDisplay.jsx" copy
+import { Currency } from 'gt-next';
+
+export default function PriceDisplay(item) {
+  return (
+    <Currency> {item.price} </Currency>
+  );
+}
+```
+
+### Spécification de la devise
+Ici, nous affichons le prix en euros.
+
+```jsx title="PriceDisplay.jsx" copy
+import { Currency } from 'gt-next';
+
+export default function PriceDisplay(item) {
+  return (
+    <Currency currency="EUR"> {item.price} </Currency> 
+  );
+}
+```
+
+### Traduction des composants `<Currency>`
+Disons que vous voulez que la devise soit affichée dans une phrase qui est également traduite.
+Vous pouvez envelopper le composant `<Currency>` dans un composant `<T>`.
+
+```jsx title="PriceDisplay.jsx" copy
+import { T, Currency } from 'gt-next';
+
+export default function PriceDisplay(item) {
+  return (
+    {/* [!code highlight] */}
+    <T id="itemPrice">
+      Le prix est <Currency> {item.price} </Currency>.
+    </T> // [!code highlight]
+  );
+}
+```
+
+### Formatage personnalisé
+
+Ici, nous affichons le prix en GBP en spécifiant exactement les décimales et en utilisant le symbole étroit pour la devise (c'est-à-dire, "$100" plutôt que "US$100").
+Lisez-en plus sur les [Intl.NumberFormatOptions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) pour plus d'options.
+
+```jsx title="PriceDisplay.jsx" copy
+import { Currency } from 'gt-next';
+
+export default function PriceDisplay(item) {
+  return (
+    <Currency
+      currency="GBP"
+      options={{ // [!code highlight]
+        currencyDisplay: 'narrowSymbol', // [!code highlight]
+        minimumFractionDigits: 2, // [!code highlight]
+        maximumFractionDigits: 2, // [!code highlight]
+      }} // [!code highlight]
+    >
+      {item.price}
+    </Currency>
+  );
+}
+```
+
+---
+
+
+## Notes
+ * Le composant `<Currency>` est utilisé pour formater les valeurs monétaires en fonction de la locale actuelle et de tout paramètre optionnel passé.
+ * Le composant de devise ne gère que le formatage et n'effectue aucun calcul de taux de change.
+ * Le contenu du composant `<Currency>` ne sera pas envoyé à l'API pour traduction.
+   Tout le reformatage est effectué localement à l'aide de la bibliothèque [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
+
+## Prochaines étapes
+ * Pour plus de détails et des exemples d'utilisation du composant `<Currency>` et d'autres composants variables comme `<Num>`, `<DateTime>`, et `<Var>`,
+   consultez la documentation [Utilisation des composants variables](/docs/next/reference/using-variable-components).

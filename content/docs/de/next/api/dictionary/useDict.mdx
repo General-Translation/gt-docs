@@ -1,0 +1,156 @@
+---
+title: useDict()
+description: API-Referenz für den useDict-Hook
+---
+
+## Überblick
+
+`useDict()` wird verwendet, um auf Zeichenkettenübersetzungen aus dem [Übersetzungswörterbuch](/docs/next/reference/dictionary) für clientseitige Komponenten zuzugreifen.
+Es muss innerhalb einer Komponente verwendet werden, die von einem [`<GTProvider>`](/docs/next/api/components/gtprovider) umschlossen ist.
+
+```jsx
+const d = useDict(); // Holen Sie sich die Übersetzungsfunktion
+d('greeting.hello'); // übergeben Sie die ID, um eine Übersetzung zu erhalten
+```
+
+Für serverseitige Übersetzungen siehe [`getDict()`](/docs/next/api/dictionary/getDict).
+
+<Callout>
+  `getDict()` und `useDict()` verwenden ein [Wörterbuch](/docs/next/reference/dictionary), um alle Inhalte für die Übersetzung zu speichern.
+  Dies unterscheidet sich von der Verwendung der [`<T>` Komponente](/docs/next/reference/t-reference) für die Übersetzung.
+  Wenn Sie daran interessiert sind, nur `<T>` Komponenten für die Übersetzung zu verwenden, ist dieses Dokument nicht relevant.
+</Callout>
+
+## Referenz
+
+### Parameter
+
+<TypeTable
+  type={{
+    "id?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### Beschreibung
+
+| Prop | Beschreibung |
+| ---- | ----------- |
+| `id` | Ein optionales Präfix, das allen Übersetzungsschlüsseln vorangestellt wird. Dies ist nützlich für die Arbeit mit verschachtelten Wörterbuchwerten.|
+
+### Rückgaben
+
+Eine Übersetzungsfunktion `d()`, die, gegeben eine id, die übersetzte Version des entsprechenden Eintrags zurückgibt
+
+```jsx
+(id: string, options?: DictionaryTranslationOptions) => React.ReactNode
+```
+
+| Name                  | Typ | Beschreibung                                                                 |
+|-----------------------|--|-----------------------------------------------------------------------------|
+| `id`             | `string` | Die id des zu übersetzenden Eintrags                                     |
+| `options?`            | [`DictionaryTranslationOptions`](/docs/react/api/types/DictionaryTranslationOptions) | Übersetzungsoptionen zur Anpassung des Verhaltens von `d()`. |
+
+---
+
+## Beispiele
+
+### Grundlegende Verwendungen
+Jeder Eintrag in Ihrem Wörterbuch wird übersetzt.
+
+```jsx title="dictionary.jsx" copy
+const dictionary = {
+  greeting: "Hello, Bob", // [!code highlight]
+};
+export default dictionary;
+```
+
+Wenn wir auf diese Einträge zugreifen möchten (auf der Client-Seite), rufen wir `useDict()` auf.
+Dies gibt eine Funktion zurück, die den Schlüssel einer Übersetzung aus dem Wörterbuch akzeptiert.
+
+```jsx title="TranslateGreeting.jsx" copy
+"use client";
+import { useDict } from 'gt-next/client';
+
+export default async function TranslateGreeting() {
+  const d = useDict(); // [!code highlight]
+  return (
+    <p>
+      {d('greeting')} // Hello, Alice // [!code highlight]
+    </p>
+  );
+}
+```
+
+### Verwendung von Variablen [#variables]
+Um Werte zu übergeben, müssen Sie (1) einen Bezeichner zuweisen und (2) den Bezeichner referenzieren, wenn Sie die `d()` Funktion aufrufen.
+
+In diesem Beispiel verwenden wir `{}`, um Variablen an die Übersetzungen zu übergeben.
+Im Wörterbuch weisen wir den Bezeichner `{userName}` zu.
+
+```jsx title="dictionary.jsx" copy
+// [!code word:userName]
+const dictionary = {
+  greeting: "Hello, {userName}!", // [!code highlight]
+};
+export default dictionary;
+```
+
+```jsx title="src/server/TranslateGreeting.jsx" copy
+// [!code word:userName]
+"use client";
+import { useDict } from 'gt-next/client';
+
+export default async function TranslateGreeting() {
+  const d = useDict();
+  
+  // Hello Alice!
+  const greetingAlice = d('greeting', { userName: "Alice" }); // [!code highlight]
+
+  return (
+    <p>
+      {greetingAlice}
+    </p>
+  );
+}
+```
+
+### Verwendung von Präfixen
+
+Wir können Präfixe verwenden, um nur einen Teil des Wörterbuchs zu übersetzen.
+```jsx  title="dictionary.jsx" copy
+const dictionary = {
+  prefix1: { // [!code highlight]
+    prefix2: { // [!code highlight]
+      greeting: "Hello, Bob",
+    }
+  }
+};
+export default dictionary;
+```
+Da wir den Wert `'prefix1.prefix2'` zum `useDict` Hook hinzugefügt haben, sind alle Schlüssel mit `prefix1.prefix2` vorangestellt:
+```jsx title="UserDetails.jsx" copy
+"use client";
+import { useDict } from 'gt-next/client';
+
+export default function UserDetails() {
+  const d = useDict('prefix1.prefix2'); // [!code highlight]
+  return (
+    <div>
+      <p>{d('greeting')}</p> // greeting => prefix1.prefix2.greeting // [!code highlight]
+    </div>
+  );
+}
+```
+--- 
+## Notizen
+ * Die `useDict()` Funktion ermöglicht es Ihnen, Wörterbuchübersetzungen auf der Clientseite zuzugreifen.
+ * Der `useDict()` Hook kann nur innerhalb einer Komponente verwendet werden, die von einer [`<GTProvider>` Komponente](/docs/next/api/components/gtprovider) umschlossen ist.
+
+## Nächste Schritte
+ * Für serverseitige Übersetzungen siehe [`getDict()`](/docs/next/api/dictionary/getDict).
+ * Erfahren Sie mehr über die Verwendung von Wörterbüchern in der [Wörterbuchreferenz](/docs/next/reference/dictionary).
+ * Weitere Informationen zu Übersetzungsoptionen finden Sie unter [DictionaryTranslationOptions](/docs/next/api/types/DictionaryTranslationOptions).

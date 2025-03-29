@@ -1,0 +1,133 @@
+---
+title: <Num>
+description: <Num> 组件的 API 参考
+---
+## 概述
+
+`<Num>` 组件以用户的区域设置渲染格式化的数字字符串，并且可以通过格式选项进行自定义。
+```jsx
+<Num>{100}</Num>
+// 输出: 100
+```
+所有重新格式化都是使用 [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) 库在本地处理的。
+
+
+## 参考
+
+### 属性
+
+<TypeTable
+  type={{
+    "children?": {
+        type: 'any',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "value?": {
+        type: 'string | number',
+        optional: true,
+        default: 'undefined',
+    },
+    "options?": {
+        type: 'Intl.NumberFormatOptions',
+        optional: true,
+        default: '{}',
+    },
+    "locales?": {
+        type: 'string[]',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### 描述
+| 属性     | 描述                                                                                                                                       |
+|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `children` | 要在组件内部渲染的内容。通常是一个数字，将根据当前的语言环境和选项进行格式化。如果提供，它将优先于 `value` 属性。 |
+| `name`     | 数字字段的可选名称，用于元数据目的。                                                                                   |
+| `value`    | 数字的默认值。可以是字符串或数字。字符串将在格式化之前解析为数字。                               |
+| `options`  | 数字的可选格式化选项，遵循 [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) 规范。使用此选项定义样式，如货币、十进制精度等。 |
+| `locales`   | 指定格式化语言环境的可选语言环境。如果未提供，则使用默认的用户语言环境。阅读更多关于指定语言环境的信息 [这里](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument)。                                            |
+
+### 返回
+
+包含格式化数字的字符串的 `JSX.Element`。
+
+---
+
+## 示例
+
+### 基本示例
+在此示例中，`item.quantity` 将根据用户的区域设置重新格式化。
+
+```jsx title="QuantityDisplay.jsx" copy
+import { Num } from 'gt-next';
+
+export default function Inventory(item) {
+  return (
+    <Num> {item.quantity} </Num>  // [!code highlight]
+  );
+}
+```
+
+### 指定区域设置
+默认情况下，区域设置由用户的浏览器设置决定，
+但您可以为 `<Num>` 组件显式设置区域设置。
+
+```jsx title="PriceDisplay.jsx" copy
+import { Num } from 'gt-next';
+
+export default function CountDisplay(item) {
+  return (
+    <Num locales={['fr-FR']}> {item.count} </Num> // [!code highlight]
+  );
+}
+```
+
+### 翻译 `<Num>` 组件
+假设您希望您的数字位于一个较大的句子中并被翻译。
+只需在内容周围添加 `<T>` 组件。
+
+```jsx title="DynamicPriceDisplay.jsx" copy
+import { T, Num } from 'gt-next';
+
+export default function DynamicPriceDisplay(item) {
+  return (
+    <T id="price">
+      有 <Num> {item.count} </Num> 单位可用。 // [!code highlight]
+    </T>
+  );
+}
+```
+
+### 自定义格式
+`<Num>` 使用 [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) 库进行格式化。
+```jsx
+import { Num } from 'gt-next';
+
+export default function CustomFormat(number) {
+  return (
+    <Num
+      options={{ style: "decimal", maximumFractionDigits: 2 }}
+    >
+      {number}
+    </Num>
+  );
+}
+```
+
+---
+
+## 注意事项
+ * `<Num>` 组件用于根据用户的区域设置格式化数字。
+ * 在 `<T>` 组件内部时，请确保将所有动态数字包装在 `<Num>` 组件中。
+
+## 下一步
+ * 有关 `<Num>` 组件和其他变量组件（如 `<Currency>`、`<DateTime>` 和 `<Var>`）的更多详细信息和使用示例，
+   请参阅 [使用变量组件](/docs/next/reference/using-variable-components) 文档。

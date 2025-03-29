@@ -1,0 +1,106 @@
+---
+title: Gérer les Locales
+description: Comment gérer les locales de votre application
+---
+
+
+## Aperçu
+
+Ce document fournit des conseils sur la façon de gérer les paramètres régionaux dans votre application React avec le `gt-react`.
+Nous allons parcourir la configuration de la liste des paramètres régionaux que vous souhaitez prendre en charge, puis déclencher la génération des traductions.
+Nous aborderons également comment passer le fichier de configuration à votre application.
+
+Cette bibliothèque utilise la [norme BCP-47](/docs/reference/locale-strings) pour définir les paramètres régionaux.
+Voir une liste des paramètres régionaux actuellement pris en charge [ici](/docs/reference/supported-locales).
+
+---
+
+## Configuration des paramètres régionaux
+
+Il existe deux façons de changer vos paramètres régionaux pour la production :
+ 1. L'outil CLI
+ 2. Le fichier `gt.config.json` (préféré)
+
+
+### Gestion des paramètres régionaux avec l'outil CLI
+
+La façon la plus simple de gérer les paramètres régionaux est de les spécifier via la commande [`npx gtx-cli translate`](/docs/cli/translate) en utilisant l'option `--locales`.
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales zh jp && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+
+Cela générera des traductions pour le chinois (`zh`) et le japonais (`jp`).
+
+
+Assurez-vous que votre application sait que ces paramètres régionaux sont pris en charge en passant le fichier de configuration au composant GTProvider.
+```jsx title="App.js" copy
+import { GTProvider } from 'gt-react';
+import config from './gt.config.json';
+
+function App() {
+  return (
+    <GTProvider locales={["zh", "jp"]}>
+      <YourApp />
+    </GTProvider>
+  );
+}
+```
+
+
+### Utilisation de `gt.config.json` (préféré)
+
+Une méthode plus robuste pour gérer les paramètres régionaux est d'utiliser le fichier `gt.config.json`.
+vous pouvez spécifier la liste des paramètres régionaux que vous souhaitez prendre en charge avec la propriété `locales`.
+
+```json title="gt.config.json" copy
+{
+  "locales": ["zh", "jp"],
+}
+```
+
+Ensuite, il suffit de passer le fichier de configuration à votre composant GTProvider.
+
+```jsx title="App.js" copy
+import { GTProvider } from 'gt-react';
+import config from './gt.config.json';
+
+function App() {
+  return (
+    <GTProvider {...config}>
+      <YourApp />
+    </GTProvider>
+  );
+}
+```
+
+La dernière étape consiste à ajouter la commande de traduction à votre script de construction.
+Vous n'avez pas besoin de spécifier les paramètres régionaux avec l'option `--locales` car ils sont déjà définis dans le fichier `gt.config.json`.
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+
+---
+
+## Locales autorisés
+
+En tant que fonctionnalité optionnelle, vous pouvez ajouter une liste de locales autorisées.
+Ceci est accessible via le tableau de bord sous la page Locales du projet.
+Si vous activez cette fonctionnalité, toute tentative d'appeler npx translate avec des locales non autorisées échouera.
+
+---
+
+## Notes
+ * Vous pouvez gérer les paramètres régionaux via le tableau de bord, le fichier `gt.config.json` ou l'outil CLI.
+ * N'oubliez pas de passer les paramètres régionaux à [`<GTProvider>`](/docs/react/api/componenets/gtprovider) dans votre application.
+
+ ## Prochaines étapes
+ * Apprenez-en plus sur la syntaxe locale dans la référence [Chaînes de localisation](/docs/reference/locale-strings).

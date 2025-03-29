@@ -1,0 +1,96 @@
+---
+title: <GTProvider>
+description: <GTProvider>コンポーネントのAPIリファレンス
+---
+
+## 概要
+
+`<GTProvider>` コンポーネントは、子要素に一般翻訳 (GT) コンテキストを提供し、翻訳されたコンテンツにアクセスできるようにします。
+これは、アプリケーションでクライアント側の翻訳を行うために必要です。
+
+### 使用するタイミング
+
+- クライアントでの翻訳を有効にするために、アプリケーション全体を `<GTProvider>` でラップします。
+- 辞書を使用する場合、`id` を指定してクライアントに送信される辞書データを制限し、大規模な辞書のパフォーマンスを最適化することができます。
+- `<GTProvider>` コンポーネントは、[インライン `<T>`](/docs/next/reference/t-reference) および [辞書デザインパターン](/docs/next/reference/dictionary) の両方に使用されます。
+
+## リファレンス
+
+### Props
+
+<TypeTable
+  type={{
+    "children": {
+      type: 'ReactNode',
+      optional: false,
+    },
+    "id?": {
+      type: 'string',
+      optional: true,
+      default: 'undefined',
+    },
+  }}
+/>
+
+### 説明
+
+| Prop | 説明 |
+|-----------|-------------|
+| `children` | クライアント側で翻訳情報を翻訳またはアクセスする必要がある任意のコンポーネントまたは任意のコンポーネントの親。これには、`<T>`、`useGT`、または他の翻訳ユーティリティを使用する任意のコンポーネントが含まれるべきです。 |
+| `id?` | クライアントに送信されるデータを制限するためのネストされた辞書のID。これは、広範な辞書を持つ大規模なプロジェクトに役立ちます。 |
+
+### 戻り値
+
+このコンポーネントに渡された子を含む `JSX.Element|undefined`。
+
+## 例
+
+### 基本的な使い方
+
+アプリケーションを `<GTProvider>` でラップして、アプリに翻訳コンテキストを提供します。
+
+```jsx title="layout.js" copy
+import { GTProvider } from 'gt-next';
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang="en">
+            <body>
+                <GTProvider> // [!code highlight]
+                    {children}
+                </GTProvider> // [!code highlight]
+            </body>
+        </html>
+    );
+}
+```
+
+### サブセットのための `id` プロップの使用
+
+`id` プロップを指定して、辞書のサブセットのみをクライアントに送信することでパフォーマンスを最適化します。
+
+```jsx title="layout.js" copy
+import { GTProvider } from 'gt-next';
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang="en">
+            <body>
+                <GTProvider id="nested.dictionary.key"> // [!code highlight]
+                    {children}
+                </GTProvider>
+            </body>
+        </html>
+    );
+}
+```
+
+---
+
+## メモ
+ * `<GTProvider>` は、すべての `<T>` コンポーネントおよびその他の翻訳関連コンポーネントをクライアントコンポーネント内でラップする必要があります。詳細は[こちら](/docs/next/reference/t-reference#gtprovider)を参照してください。
+ * サーバーサイドの翻訳には `<GTProvider>` は必要ありませんが、使用することもできます。
+
+## 次のステップ
+ * テキストとコンポーネントを翻訳するための [`<T>` コンポーネント](/docs/next/reference/t-reference) について詳しく学びましょう。
+ * 高度なカスタマイズオプションについては、[i18n 設定](/docs/next/reference/i18n-configuration) を参照してください。

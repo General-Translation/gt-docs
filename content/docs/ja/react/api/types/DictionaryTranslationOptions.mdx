@@ -1,0 +1,125 @@
+---
+title: DictionaryTranslationOptions
+description: DictionaryTranslationOptions型のAPIリファレンス
+---
+
+## 概要
+
+`DictionaryTranslationOptions` 型は、辞書エントリに変数を渡し、そのレンダー動作を指定するために使用されます。
+これは、辞書エントリに変数を渡すために [`useDict()`](/docs/react/api/dictionary/useDict) と共に使用されます。
+
+<Callout>
+  **ビルド時翻訳:**
+  `useDict()` の翻訳はビルド時に行われますが、変数は決して翻訳されません。
+  代わりに、フォーマットを使用して翻訳に挿入されます。
+  [こちらのデプロイガイド](/docs/next/tutorials/quickdeploy)に従うことを確認してください。
+</Callout>
+
+
+## リファレンス
+
+
+### パラメーター
+
+<TypeTable
+  type={{
+    "variables?": {
+        type: 'Record<string, any>',
+        optional: true,
+        default: 'undefined',
+    },
+    "variablesOptions?": {
+        type: 'Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### 説明
+
+| Prop | 説明 |
+| ---- | ----------- |
+| `variables` | 各値が辞書エントリにマッピングされる場所をキーで識別するオブジェクト。|
+| `variablesOptions` | 変数を識別するキーと変数の動作を定義する値を持つオブジェクト。詳細は [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) および [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) を参照してください。 |
+
+
+---
+
+## 例
+
+### 変数の渡し方
+
+辞書エントリに変数を渡すためには、2つのことを行う必要があります。(1) エントリに変数を追加し、(2) [`d()`](/docs/react/api/dictionary/useGT) 呼び出しでその変数を参照します。
+
+まず、次の構文で辞書エントリに変数を追加します: `{username}`。
+`username` は変数の名前です。
+```jsx title="dictionary.ts"
+// [!code word:username]
+const dictionary = {
+  greeting: {
+    hello: 'Hello, {username}!',
+  },
+};
+
+export default dictionary;
+```
+
+次に、変数を参照します:
+```jsx title="Component.tsx"
+// [!code word:username]
+import { useDict } from 'gt-react';
+
+const Component = () => {
+  const d = useDict();
+  return <div>{d('greeting.hello', { variables: { username : 'Brian123' } })}</div>;
+};
+```
+
+### 変数オプションの追加
+
+変数オプションを使用すると、変数の表示方法をカスタマイズできます。
+`variables` オブジェクトと同じ構文を使用します。
+
+```jsx title="dictionary.ts"
+// [!code word:account-balance]
+const dictionary = {
+  account: {
+    balance: 'Your account balance: {account-balance}!',
+  },
+};
+
+export default dictionary;
+```
+
+次に、変数を参照します:
+```jsx title="Component.tsx"
+// [!code word:account-balance]
+import { useDict } from 'gt-react';
+
+const Component = () => {
+  const d = useDict();
+  return <div>
+    { d(
+      'account.balance',
+      {
+        variables: { "account-balance" : 1000000 },
+        variableOptions: { "account-balance": { style: 'currency', currency: 'USD' } }
+      }
+    ) }
+  </div>;
+};
+```
+
+
+
+---
+
+## メモ
+ * `variables` オブジェクトは辞書エントリに値を渡します。
+ * `variablesOptions` オブジェクトは変数の動作を定義します。
+
+### 次のステップ
+ * 辞書と一般的なプラクティスについての詳細は、[dictionaries](/docs/react/reference/dictionary-reference) を参照してください。
+ * 辞書インターフェースについての詳細は、[`useDict()`](/docs/react/api/dictionary/useDict) を参照してください。
+ * フォーマットオプションについての詳細は、[`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) および [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) を参照してください。

@@ -1,0 +1,106 @@
+---
+title: ロケールを管理する
+description: アプリのロケールを管理する方法
+---
+
+
+## 概要
+
+このドキュメントは、`gt-react` を使用して React アプリケーションでロケールを管理する方法についてのガイダンスを提供します。
+サポートしたいロケールのリストを設定し、翻訳の生成をトリガーする方法を説明します。
+また、設定ファイルをアプリに渡す方法についても説明します。
+
+このライブラリは、ロケールを定義するために [BCP-47 標準](/docs/reference/locale-strings) を使用します。
+現在サポートされているロケールのリストは [こちら](/docs/reference/supported-locales) を参照してください。
+
+---
+
+## ロケールの設定
+
+本番環境のロケールを変更する方法は2つあります：
+ 1. CLIツール
+ 2. `gt.config.json` ファイル（推奨）
+
+
+### CLIツールでロケールを管理する
+
+ロケールを管理する最も簡単な方法は、`--locales` フラグを使用して [`npx gtx-cli translate`](/docs/cli/translate) コマンドで指定することです。
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales zh jp && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+
+これにより、中国語（`zh`）と日本語（`jp`）の翻訳が生成されます。
+
+
+アプリがこれらのロケールをサポートしていることを認識するために、設定ファイルをGTProviderコンポーネントに渡してください。
+```jsx title="App.js" copy
+import { GTProvider } from 'gt-react';
+import config from './gt.config.json';
+
+function App() {
+  return (
+    <GTProvider locales={["zh", "jp"]}>
+      <YourApp />
+    </GTProvider>
+  );
+}
+```
+
+
+### `gt.config.json` を使用する（推奨）
+
+ロケールを管理するより堅牢な方法は、`gt.config.json` ファイルを使用することです。
+サポートしたいロケールのリストを `locales` プロパティで指定できます。
+
+```json title="gt.config.json" copy
+{
+  "locales": ["zh", "jp"],
+}
+```
+
+その後、設定ファイルをGTProviderコンポーネントに渡すだけです。
+
+```jsx title="App.js" copy
+import { GTProvider } from 'gt-react';
+import config from './gt.config.json';
+
+function App() {
+  return (
+    <GTProvider {...config}>
+      <YourApp />
+    </GTProvider>
+  );
+}
+```
+
+最後のステップは、ビルドスクリプトに翻訳コマンドを追加することです。
+`gt.config.json` ファイルにすでに定義されているため、`--locales` フラグでロケールを指定する必要はありません。
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+
+---
+
+## ホワイトリストに登録されたロケール
+
+オプション機能として、ホワイトリストに登録されたロケールのリストを追加できます。
+これは、プロジェクトロケールページのダッシュボードからアクセスできます。
+この機能を有効にすると、ホワイトリストに登録されていないロケールで `npx translate` を呼び出そうとすると失敗します。
+
+---
+
+## メモ
+ * ロケールはダッシュボード、`gt.config.json` ファイル、または CLI ツールを通じて管理できます。
+ * アプリ内でロケールを [`<GTProvider>`](/docs/react/api/componenets/gtprovider) に渡すことを忘れないでください。
+
+ ## 次のステップ
+ * [ロケール文字列](/docs/reference/locale-strings) リファレンスでロケール構文について学ぶ。

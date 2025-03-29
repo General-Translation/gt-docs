@@ -1,0 +1,157 @@
+---
+title: <Branch>
+description: API-Referenz für die <Branch>-Komponente
+---
+
+## Überblick
+
+Die `<Branch>` Komponente ermöglicht es Ihnen, bedingte Logik zu einer Übersetzung hinzuzufügen.
+
+```jsx
+const status = 'active';
+<Branch branch={status}
+    active={<p>Der Benutzer ist aktiv.</p>}
+    inactive={<p>Der Benutzer ist inaktiv.</p>}
+/>
+```
+Sie übergeben einen Wert an den `branch` Parameter, und dieser wird mit einem Ausgabewert basierend auf den von Ihnen bereitgestellten Schlüsseln abgeglichen.
+
+## Referenz
+
+### Props
+
+<TypeTable
+  type={{
+    "branch": {
+        description: 'Der Name des Branches, der gerendert werden soll.',
+        type: 'string',
+        optional: false,
+    },
+    "children?": {
+        description: 'Fallback-Inhalt',
+        type: 'any',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "[key]: string": {
+        type: 'string | JSX.Element',
+        optional: false,
+    },
+  }}
+/>
+
+Die `[key]: string` Syntax zeigt beliebige Schlüssel an, die potenzielle Branches darstellen.
+Zum Beispiel können Branches wie `active` und `inactive` als Parameter hinzugefügt werden.
+
+| Prop       | Beschreibung                                                                 |
+|------------|-----------------------------------------------------------------------------|
+| `branch`     | Der Name des Branches, der gerendert werden soll.                           |
+| `children`   | Fallback-Inhalt, der gerendert wird, wenn kein passender Branch gefunden wird. |
+| `[key]: string` | Branches, die möglichen Inhalt für den angegebenen Branch-Wert darstellen. Jeder Schlüssel entspricht einem Branch, und sein Wert ist der Inhalt, der gerendert werden soll. |
+
+### Rückgaben
+
+`JSX.Element`, das den Inhalt enthält, der dem angegebenen Branch oder dem Fallback-Inhalt entspricht.
+
+### Ausnahmen
+
+`Error`, wenn die `branch` Prop nicht bereitgestellt wird oder ungültig ist.
+
+## Beispiele
+
+### Grundlegende Verwendung
+`<Branch>` muss eine unterschiedliche Ausgabe für jeden möglichen Wert der `branch`-Eigenschaft haben.
+
+In diesem Beispiel wird der Wert von `user.hairColor` verwendet, um die Ausgabe zu bestimmen.
+Wir haben die Eigenschaften `black`, `brown` und `blonde` definiert, um die möglichen Werte von `user.hairColor` zuzuordnen.
+```jsx title="BranchExample.jsx" copy
+import { Branch } from 'gt-react';
+
+export default function HairColor({ user }) {
+  return (
+    <Branch branch={user.hairColor} // [!code highlight]
+      black={<p>Ihr Haar ist dunkel.</p>}
+      brown="Ihr Haar ist in der Mitte." // (Sie können einen String übergeben, wenn Sie möchten)
+      blonde={<p>Ihr Haar ist hell.</p>}
+    />
+  );
+}
+```
+
+### Fallback-Inhalt
+Die `children` werden immer als Fallback verwendet, wenn keine Eigenschaft mit dem an `branch` übergebenen Wert übereinstimmt.
+
+```jsx title="BranchExample.jsx" copy
+import { Branch } from 'gt-react';
+
+export default function HairColor({ user }) {
+  return (
+    <Branch branch={user.hairColor}
+      black={<p>Ihr Haar ist dunkel.</p>}
+      brown={<p>Ihr Haar ist in der Mitte.</p>}
+      blonde={<p>Ihr Haar ist hell.</p>}
+    >
+      <p>Ihr Haar ist unbekannt.</p> // [!code highlight]
+    </Branch>
+  );
+}
+```
+
+### Übersetzen von `<Branch>`
+
+Wenn Sie den Inhalt übersetzen möchten, umwickeln Sie ihn einfach mit einer `<T>`-Komponente.
+
+```jsx title="BranchExample.jsx" copy
+import { T, Branch } from 'gt-react';
+
+export default function HairColor({ user }) {
+  return (
+    <T id="example"> // [!code highlight]
+      <Branch branch={user.hairColor}
+        black={<p>Ihr Haar ist dunkel.</p>}
+        brown={<p>Ihr Haar ist in der Mitte.</p>}
+        blonde={<p>Ihr Haar ist hell.</p>}
+      >
+        <p>Ihr Haar ist unbekannt.</p> 
+      </Branch>
+    </T> // [!code highlight]
+  );
+}
+```
+
+### Hinzufügen von Variablen
+Wenn Sie dynamische Werte im Branch rendern möchten, stellen Sie sicher, dass Sie sie in `<Currency>`, `<DateTime>`, `<Num>` oder `<Var>`-Komponenten einwickeln.
+
+```jsx title="BranchExample.jsx" copy
+import { Branch, T, Var } from 'gt-react';
+
+export default function HairColor({ user }) {
+  return (
+    <T id="example">
+      <Branch branch={user.hairColor}
+        black={<p>Ihr Haar ist dunkel.</p>}
+        brown={<p>Ihr Haar ist in der Mitte.</p>}
+        blonde={<p>Ihr Haar ist hell.</p>}
+      >
+        <p>Unbehandelte Haarfarbe: <Var>{user.hairColor}</Var></p> // [!code highlight]
+      </Branch>
+    </T>
+  );
+}
+```
+
+---
+
+
+## Notizen
+ * Die Schlüssel für Zweige können beliebige Zeichenfolgen sein, die mit der branch-Eigenschaft übereinstimmen. Diese Flexibilität macht es einfach, `<Branch>` an eine Vielzahl von Anwendungsfällen anzupassen.
+ * Kombinieren Sie `<Branch>` mit anderen Komponenten, wie `<T>` für Übersetzungen und [variable Komponenten](/docs/react/reference/using-branching-components) für dynamische Inhalte, um reichhaltige und lokalisierte Schnittstellen zu erstellen.
+
+## Nächste Schritte
+ * Für eine fortgeschrittene Nutzung und Beispiele, siehe [Verwendung von verzweigenden Komponenten](/docs/react/reference/using-branching-components).
+ * Um mehr über variable Komponenten wie `<Currency>`, `<DateTime>`, `<Num>`, und `<Var>` zu erfahren, siehe die Dokumentation [Verwendung von variablen Komponenten](/docs/react/reference/using-variable-components).

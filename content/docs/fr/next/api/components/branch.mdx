@@ -1,0 +1,160 @@
+---
+title: <Branch>
+description: Référence API pour le composant <Branch>
+---
+
+## Aperçu
+
+Le composant `<Branch>` vous permet d'ajouter une logique conditionnelle à une traduction.
+
+```jsx
+const status = 'active';
+<Branch branch={status}
+    active={<p>L'utilisateur est actif.</p>}
+    inactive={<p>L'utilisateur est inactif.</p>}
+/>
+```
+Vous passez une valeur au paramètre `branch`, et celle-ci est associée à une valeur de sortie basée sur les clés que vous fournissez.
+
+## Référence
+
+### Props
+
+<TypeTable
+  type={{
+    "branch": {
+        description: 'Le nom de la branche à rendre.',
+        type: 'string',
+        optional: false,
+    },
+    "children?": {
+        description: 'Contenu de secours',
+        type: 'any',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "[key]: string": {
+        type: 'string | JSX.Element',
+        optional: false,
+    },
+  }}
+/>
+
+La syntaxe `[key]: string` indique des clés arbitraires représentant des branches potentielles.
+Par exemple, des branches comme `active` et `inactive` peuvent être ajoutées en tant que paramètres.
+
+| Prop       | Description                                                                 |
+|------------|-----------------------------------------------------------------------------|
+| `branch`     | Le nom de la branche à rendre.                                              |
+| `children`   | Contenu de secours à rendre si aucune branche correspondante n'est trouvée. |
+| `[key]: string` | Branches représentant le contenu possible pour la valeur de la branche donnée. Chaque clé correspond à une branche, et sa valeur est le contenu à rendre. |
+
+### Renvoie
+
+`JSX.Element` contenant le contenu correspondant à la branche spécifiée ou le contenu de secours.
+
+### Lève
+
+`Error` si la prop `branch` n'est pas fournie ou est invalide.
+
+## Exemples
+
+### Utilisation de base
+`<Branch>` doit avoir une sortie différente pour chaque valeur possible de la prop `branch`.
+
+Dans cet exemple, la valeur `user.hairColor` est utilisée pour déterminer la sortie.
+Nous avons défini les props `black`, `brown`, et `blonde` pour correspondre aux valeurs possibles de `user.hairColor`.
+```jsx title="BranchExample.jsx" copy
+import { Branch } from 'gt-next';
+
+export default function HairColor({ user }) {
+  return (
+    {/* [!code highlight] */}
+    <Branch branch={user.hairColor}
+      black={<p>Leurs cheveux sont foncés.</p>}
+      brown="Leurs cheveux sont au milieu." // (vous pouvez passer une chaîne si vous préférez)
+      blonde={<p>Leurs cheveux sont clairs.</p>}
+    />
+  );
+}
+```
+
+### Contenu de secours
+Les `children` seront toujours utilisés comme solution de secours si aucune prop ne correspond à la valeur passée à `branch`.
+
+```jsx title="BranchExample.jsx" copy
+import { Branch } from 'gt-next';
+
+export default function HairColor({ user }) {
+  return (
+    <Branch branch={user.hairColor}
+      black={<p>Leurs cheveux sont foncés.</p>}
+      brown={<p>Leurs cheveux sont au milieu.</p>}
+      blonde={<p>Leurs cheveux sont clairs.</p>}
+    >
+      <p>Leur couleur de cheveux est inconnue.</p> // [!code highlight]
+    </Branch>
+  );
+}
+```
+
+### Traduire `<Branch>`
+
+Si vous souhaitez traduire le contenu, il suffit de l'envelopper dans un composant `<T>`.
+
+```jsx title="BranchExample.jsx" copy
+import { T, Branch } from 'gt-next';
+
+export default function HairColor({ user }) {
+  return (
+    {/* [!code highlight] */}
+    <T id="example">
+      <Branch branch={user.hairColor}
+        black={<p>Leurs cheveux sont foncés.</p>}
+        brown={<p>Leurs cheveux sont au milieu.</p>}
+        blonde={<p>Leurs cheveux sont clairs.</p>}
+      >
+        <p>Leur couleur de cheveux est inconnue.</p> 
+      </Branch>
+    </T> // [!code highlight]
+  );
+}
+```
+
+### Ajouter des variables
+Si vous souhaitez afficher des valeurs dynamiques dans la branche, assurez-vous de les envelopper dans les composants `<Currency>`, `<DateTime>`, `<Num>`, ou `<Var>`.
+
+```jsx title="BranchExample.jsx" copy
+import { Branch, T, Var } from 'gt-next';
+
+export default function HairColor({ user }) {
+  return (
+    <T id="example">
+      <Branch branch={user.hairColor}
+        black={<p>Leurs cheveux sont foncés.</p>}
+        brown={<p>Leurs cheveux sont au milieu.</p>}
+        blonde={<p>Leurs cheveux sont clairs.</p>}
+      >
+      {/* [!code highlight] */}
+        <p>Couleur de cheveux non gérée : <Var>{user.hairColor}</Var></p>
+      </Branch>
+    </T>
+  );
+}
+```
+
+---
+
+
+## Notes
+ * Les clés pour les branches peuvent être n'importe quelle valeur de chaîne qui correspond à la prop branch. Cette flexibilité facilite l'adaptation de `<Branch>` à un large éventail de cas d'utilisation.
+ * Combinez `<Branch>` avec d'autres composants, tels que `<T>` pour les traductions et [composants variables](/docs/next/reference/using-branching-components) pour le contenu dynamique, afin de créer des interfaces riches et localisées.
+
+## Prochaines étapes
+ * Pour une utilisation plus avancée et des exemples, consultez [Utilisation des composants de branchement](/docs/next/reference/using-branching-components).
+ * Pour en savoir plus sur les composants variables comme `<Currency>`, `<DateTime>`, `<Num>`, et `<Var>`, consultez la documentation [Utilisation des composants variables](/docs/next/reference/using-variable-components).

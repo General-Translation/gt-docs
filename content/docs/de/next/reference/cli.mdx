@@ -1,0 +1,51 @@
+---
+title: Das CLI-Tool
+description: Das allgemeine Übersetzungs-CLI-Tool 
+---
+
+## Überblick
+
+Dies ist ein Referenzdokument zum General Translation CLI-Tool.
+
+Das CLI-Tool wird zur Verwaltung der Übersetzungen Ihres Projekts verwendet.
+Es ermöglicht Ihnen, [Übersetzungen zu generieren](/docs/cli/translate), [Übersetzungsvorlagen zu erstellen](/docs/cli/generate) und [Ihr Projekt für Übersetzungen einzurichten](/docs/cli/setup).
+Lesen Sie mehr über `gtx-cli` [hier](/docs/cli).
+
+### Installation
+
+<Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gtx-cli --save-dev
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash 
+  bun add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gtx-cli --save-dev
+  ```
+  </Tab>
+</Tabs>
+
+---
+
+## Was macht das CLI-Tool?
+
+Wenn Sie `gt-next` verwenden, werden Sie sich hauptsächlich mit den Befehlen [`translate`](/docs/cli/translate) und [`setup`](/docs/cli/setup) beschäftigen.
+Das CLI-Tool wird zur Verwaltung Ihres Projekts und Ihrer Übersetzungen verwendet.
+
+ * Der [Befehl `translate`](/docs/cli/translate) soll zur CD-Pipeline hinzugefügt werden.
+   Er wird verwendet, um Ihr Projekt nach zu übersetzenden Inhalten zu durchsuchen.
+   Der Inhalt wird dann zu einem CDN hochgeladen oder Ihrem App-Bundle hinzugefügt, um zur Laufzeit verwendet zu werden.
+ * Der [Befehl `setup`](/docs/cli/setup) wird verwendet, um die General Translation-Bibliothek automatisch in Ihr Projekt zu integrieren.
+   Er durchsucht Ihr Projekt und umschließt jeglichen JSX-Inhalt mit einer `<T>`-Komponente.
+

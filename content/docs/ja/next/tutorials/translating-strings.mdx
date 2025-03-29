@@ -1,0 +1,106 @@
+---
+title: 文字列の翻訳
+description: 文字列を翻訳する方法
+---
+
+## 概要
+
+このガイドは、[`useGT()`](/docs/next/api/strings/useGT)、[`getGT()`](/docs/next/api/strings/getGT)、および [`tx()`](/docs/next/api/strings/tx) を使用して、Next.js アプリ内の文字列を翻訳する方法についてのステップバイステップのチュートリアルです。
+
+## 前提条件
+
+プロジェクトに `gt-next` を既にインストールしており、[クイックスタートガイド](/docs/next/tutorials/quickstart)に従っているか、現在従っていることを前提としています。
+
+## 文字列の翻訳
+
+### クライアントサイドコンポーネント
+クライアントサイドの文字列には、[`useGT()`](/docs/next/api/strings/useGT)を使用します。
+`useGT()`は[`<GTProvider>`](/docs/next/api/components/gtprovider)の子コンポーネント内で呼び出す必要があることを忘れないでください。
+
+```jsx title="src/components/MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+### サーバーサイドコンポーネント
+サーバーサイドの文字列には、[`getGT()`](/docs/next/api/strings/getGT)を使用します。
+
+```jsx title="src/pages/index.jsx" copy
+import { getGT } from 'gt-next/server';
+
+export default async function Home() {
+  const t = await getGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+<Callout>
+  **注意:**
+  開発中に、実行時にコンテンツを翻訳している場合、[`getGT()`](/docs/next/api/strings/getGT)からの文字列の翻訳版を見るためにはページをリフレッシュする必要があります。
+  **これは本番環境では発生しません。**
+</Callout>
+
+### 変数の追加
+変数は変更される可能性のある値ですが、翻訳されません。
+文字列に変数を追加するには、次のパターンを使用します:
+
+```jsx title="MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT();
+  return (
+    <div>
+      <h1>{t('Hello there, {username}', { variables: { username: 'Brian123' }})}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+これは、[`useGT()`](/docs/next/api/strings/useGT)と[`getGT()`](/docs/next/api/strings/getGT)の両方で機能します。
+
+### 動的コンテンツ
+変更される文字列があるとします。
+実行時に文字列を翻訳するには、[`tx()`](/docs/next/api/strings/tx)関数を使用できます。
+
+```jsx title="MyComponent.jsx" copy
+import { tx } from 'gt-next/server';
+
+export default async function MyComponent({ username }) {
+  const translation = await tx(`Hello, ${username}. How is your day?`); // [!code highlight]
+  return (
+    <div>
+      <h1>{translation}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+<Callout>
+  **注意:**
+  [`tx()`](/docs/next/api/strings/tx)関数はサーバーサイドでのみ利用可能で、必要な場合にのみ使用するべきです。
+  実行時の翻訳はしばしば遅延を引き起こします。
+  可能な限り、[`getGT()`](/docs/next/api/strings/getGT)または[`useGT()`](/docs/next/api/strings/useGT)を使用して、デプロイ前に翻訳してください。
+</Callout>
+
+---
+
+## メモ
+ * 文字列を翻訳するには、[`useGT()`](/docs/next/api/strings/useGT)、[`getGT()`](/docs/next/api/strings/getGT)、および [`tx()`](/docs/next/api/strings/tx) を使用します。
+ * `useGT()` と `getGT()` はデプロイ前に翻訳し、`tx()` は実行時に翻訳します。`tx()` は控えめに使用してください。
+ * 文字列に変数を追加するには、`{ variables: { key: value } }` パターンを使用できます。
+
+## 次のステップ
+ * プロジェクトの翻訳設定を完了するために、[クイックスタートガイド](/docs/next/tutorials/quickstart)に戻ります。
+ * [`useGT()`](/docs/next/api/strings/useGT)、[`getGT()`](/docs/next/api/strings/getGT)、および [`tx()`](/docs/next/api/strings/tx) のAPIリファレンスを参照してください。

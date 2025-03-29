@@ -1,0 +1,107 @@
+---
+title: Traduciendo Cadenas
+description: Cómo traducir cadenas
+---
+
+## Resumen
+
+Esta guía es un tutorial paso a paso sobre cómo traducir cadenas en tu aplicación Next.js usando
+[`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT), y [`tx()`](/docs/next/api/strings/tx).
+
+## Prerrequisitos
+
+Asumimos que ya has instalado `gt-next` en tu proyecto y has seguido o estás siguiendo la [Guía de Inicio Rápido](/docs/next/tutorials/quickstart).
+
+## Traduciendo Cadenas
+
+### Componentes del Lado del Cliente
+Para cualquier cadena del lado del cliente, use [`useGT()`](/docs/next/api/strings/useGT).
+Recuerde que `useGT()` debe ser llamado dentro de un componente hijo de [`<GTProvider>`](/docs/next/api/components/gtprovider).
+
+```jsx title="src/components/MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+### Componentes del Lado del Servidor
+Para cualquier cadena del lado del servidor, use [`getGT()`](/docs/next/api/strings/getGT).
+
+```jsx title="src/pages/index.jsx" copy
+import { getGT } from 'gt-next/server';
+
+export default async function Home() {
+  const t = await getGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+<Callout>
+  **Nota:**
+  Cuando esté en desarrollo, si está traduciendo contenido en tiempo de ejecución, tendrá que refrescar la página para ver la versión traducida de una cadena de [`getGT()`](/docs/next/api/strings/getGT).
+  **Esto no ocurre en producción.**
+</Callout>
+
+### Añadiendo Variables
+Las variables son valores que pueden cambiar, pero no se traducen.
+Para añadir variables a sus cadenas, use el siguiente patrón:
+
+```jsx title="MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT();
+  return (
+    <div>
+      <h1>{t('Hello there, {username}', { variables: { username: 'Brian123' }})}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+Esto funciona con ambos [`useGT()`](/docs/next/api/strings/useGT) y [`getGT()`](/docs/next/api/strings/getGT).
+
+### Contenido Dinámico
+Supongamos que tiene una cadena que cambia.
+Puede usar la función [`tx()`](/docs/next/api/strings/tx) para traducir la cadena en tiempo de ejecución.
+
+```jsx title="MyComponent.jsx" copy
+import { tx } from 'gt-next/server';
+
+export default async function MyComponent({ username }) {
+  const translation = await tx(`Hello, ${username}. How is your day?`); // [!code highlight]
+  return (
+    <div>
+      <h1>{translation}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+<Callout>
+  **Nota:**
+  La función [`tx()`](/docs/next/api/strings/tx) solo está disponible en el lado del servidor, y solo debe usarse cuando sea necesario.
+  La traducción en tiempo de ejecución a menudo crea un retraso.
+  Use [`getGT()`](/docs/next/api/strings/getGT) o [`useGT()`](/docs/next/api/strings/useGT) siempre que sea posible para traducir antes del despliegue.
+</Callout>
+
+---
+
+## Notas
+ * Para traducir cadenas, use [`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT) y [`tx()`](/docs/next/api/strings/tx).
+ * `useGT()` y `getGT()` traducen antes del despliegue, mientras que `tx()` traduce en tiempo de ejecución. Use `tx()` con moderación.
+ * Las variables se pueden agregar a las cadenas usando el patrón `{ variables: { key: value } }`.
+
+## Próximos Pasos
+ * Regresa a la [Guía de Inicio Rápido](/docs/next/tutorials/quickstart) para terminar de configurar tu proyecto para la traducción.
+ * Consulta la referencia de la API para [`useGT()`](/docs/next/api/strings/useGT), [`getGT()`](/docs/next/api/strings/getGT), y [`tx()`](/docs/next/api/strings/tx).

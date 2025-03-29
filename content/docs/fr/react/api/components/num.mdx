@@ -1,0 +1,133 @@
+---
+title: <Num>
+description: Référence API pour le composant <Num>
+---
+## Aperçu
+
+Le composant `<Num>` rend une chaîne de nombre formatée dans la langue de l'utilisateur, et peut être personnalisé avec des options de formatage.
+```jsx
+<Num>{100}</Num>
+// Output: 100
+```
+Tout le reformatage est géré localement en utilisant la bibliothèque [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
+
+
+## Référence
+
+### Props
+
+<TypeTable
+  type={{
+    "children?": {
+        type: 'any',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "value?": {
+        type: 'string | number',
+        optional: true,
+        default: 'undefined',
+    },
+    "options?": {
+        type: 'Intl.NumberFormatOptions',
+        optional: true,
+        default: '{}',
+    },
+    "locales?": {
+        type: 'string[]',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### Description
+| Prop     | Description                                                                                                                                       |
+|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `children` | Le contenu à rendre à l'intérieur du composant. Typiquement un nombre, qui sera formaté selon la locale et les options actuelles. Si fourni, il prend le pas sur la prop `value`. |
+| `name`     | Nom optionnel pour le champ numérique, utilisé à des fins de métadonnées.                                                                                   |
+| `value`    | La valeur par défaut pour le nombre. Peut être une chaîne ou un nombre. Les chaînes seront analysées en nombres avant le formatage.                               |
+| `options`  | Options de formatage optionnelles pour le nombre, suivant la spécification [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat). Utilisez ceci pour définir des styles tels que la devise, la précision décimale, etc. |
+| `locales`   | Locales optionnelles pour spécifier la locale de formatage. Si non fourni, la locale par défaut de l'utilisateur est utilisée. En savoir plus sur la spécification des locales [ici](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).                                            |
+
+### Renvoie
+
+`JSX.Element` contenant le nombre formaté en tant que chaîne.
+
+---
+
+## Exemples
+
+### Exemple de base
+Dans cet exemple, `item.quantity` sera reformaté selon la locale de l'utilisateur.
+
+```jsx title="QuantityDisplay.jsx" copy
+import { Num } from 'gt-react';
+
+export default function Inventory(item) {
+  return (
+    <Num> {item.quantity} </Num>  // [!code highlight]
+  );
+}
+```
+
+### Spécification des locales
+Par défaut, les locales sont déterminées par les paramètres du navigateur de l'utilisateur,
+mais vous pouvez explicitement définir la locale pour le composant `<Num>`.
+
+```jsx title="PriceDisplay.jsx" copy
+import { Num } from 'gt-react';
+
+export default function CountDisplay(item) {
+  return (
+    <Num locales={['fr-FR']}> {item.count} </Num> // [!code highlight]
+  );
+}
+```
+
+### Traduction des composants `<Num>`
+Disons que vous voulez que votre nombre soit dans une phrase plus longue qui est traduite.
+Il suffit d'ajouter les composants `<T>` autour du contenu.
+
+```jsx title="DynamicPriceDisplay.jsx" copy
+import { T, Num } from 'gt-react';
+
+export default function DynamicPriceDisplay(item) {
+  return (
+    <T id="price">
+      Il y a <Num> {item.count} </Num> unités disponibles. // [!code highlight]
+    </T>
+  );
+}
+```
+
+### Formatage personnalisé
+`<Num>` utilise la bibliothèque [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) pour le formatage.
+```jsx
+import { Num } from 'gt-react';
+
+export default function CustomFormat(number) {
+  return (
+    <Num
+      options={{ style: "decimal", maximumFractionDigits: 2 }}
+    >
+      {number}
+    </Num>
+  );
+}
+```
+
+---
+
+## Notes
+ * Le composant `<Num>` est utilisé pour formater les nombres selon la locale d'un utilisateur.
+ * Lorsqu'il est à l'intérieur d'un composant `<T>`, assurez-vous d'envelopper tous les nombres dynamiques dans un composant `<Num>`.
+
+## Prochaines étapes
+ * Pour plus de détails et des exemples d'utilisation du composant `<Num>` et d'autres composants de variable comme `<Currency>`, `<DateTime>`, et `<Var>`,
+   consultez la documentation [Utilisation des composants de variable](/docs/react/reference/using-variable-components).

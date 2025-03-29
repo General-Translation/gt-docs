@@ -1,0 +1,81 @@
+---
+title: <Var>
+description: <Var>コンポーネントのAPIリファレンス
+---
+
+## 概要
+`<Var>` コンポーネントは、翻訳されるべきでないコンテンツをレンダリングするために使用されます。
+これは、変数、コードスニペット、または翻訳されるべきでない他のコンテンツをレンダリングするのに便利です。
+さらに、APIキーや個人情報のようにプライベートに保つべきコンテンツをレンダリングするのにも便利です。
+
+```jsx
+<Var>{user.name}</Var>
+```
+
+`<Var>` コンポーネントは常に `<T>` コンポーネントの内部で使用されます。
+これは、`<Currency>`, `<DateTime>`, または `<Num>` のカテゴリに当てはまらない動的な値のためのキャッチオールとして考えてください。
+
+## リファレンス
+
+### Props
+
+<TypeTable
+    type={{
+        "children?": {
+            type: 'JSX.Element',
+            optional: true,
+            default: 'undefined',
+        },
+        "name?": {
+            type: 'string',
+            optional: true,
+            default: 'undefined',
+        },
+        "value?": {
+            type: 'string',
+            optional: true,
+            default: 'undefined',
+        },
+    }}
+/>
+
+### 説明
+| Prop      | 説明                                                                                                                                            |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `children`  | コンポーネント内にレンダリングするコンテンツ。提供されている場合、valueより優先されます。 |
+| `value`     | childrenが提供されていない場合に表示されるオプションのデフォルト値。文字列であることができます。                                  |
+
+
+### 戻り値
+翻訳されるべきではないコンテンツを含む`JSX.Element`。
+
+---
+
+## 例
+
+### 基本的な例
+`<Var>` コンポーネントは `<T>` コンポーネントの中で使用する必要があります。
+```jsx title="Example.jsx" copy
+import { T, Var } from 'gt-next'
+
+export default function Example(user) {
+  return (
+    <T>
+      Translate this text!
+      Your name is: <Var>{user.name}</Var> // [!code highlight]
+      <Var><p>Do not translate this text</p></Var> // [!code highlight]
+    </T>
+  );
+}
+```
+
+---
+
+## メモ
+ * 変数コンポーネントは、翻訳において翻訳不可能で動的なコンテンツを維持するために不可欠です。
+ * 常に `<T>` コンポーネント内で変数コンポーネントを使用してください。
+ * `<Num>`, `<Currency>`, `<DateTime>` のようなコンポーネントは、正確なフォーマットを保証するためのローカリゼーション機能を提供します。
+
+## 次のステップ
+ * `<Var>` コンポーネントや `<Currency>`, `<DateTime>`, `<Num>` のような他の変数コンポーネントの詳細な議論と使用例については、[変数コンポーネントの使用](/docs/next/reference/using-variable-components) ドキュメントを参照してください。
+ * 特定の変数コンポーネントのフォーマットオプションについては、[API リファレンス](/docs/next/api/components/var) を参照してください。

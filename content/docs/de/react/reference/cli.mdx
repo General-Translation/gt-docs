@@ -1,0 +1,248 @@
+---
+title: Das CLI-Tool
+description: Das allgemeine Übersetzungs-CLI-Tool
+---
+
+## Überblick
+
+Dies ist ein Referenzdokument über das General Translation CLI-Tool.
+Lesen Sie mehr über `gtx-cli` [hier](/docs/cli).
+
+Für eine Schritt-für-Schritt-Anleitung, schauen Sie sich den [Bereitstellung in die Produktion](/docs/react/tutorials/quickdeploy) Leitfaden an.
+
+## Installation
+
+<Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gtx-cli --save-dev
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash 
+  bun add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gtx-cli --save-dev
+  ```
+  </Tab>
+</Tabs>
+
+## Was macht das CLI-Tool?
+
+Das CLI-Tool wird zur Verwaltung Ihres Projekts und Ihrer Übersetzungen verwendet.
+Es gibt zwei Hauptbefehle, die Sie kennen sollten: `translate` und `setup`.
+
+ * [Der `translate`-Befehl](/docs/cli/translate) soll zur CD-Pipeline hinzugefügt werden.
+   Er wird verwendet, um Ihr Projekt nach zu übersetzendem Inhalt zu durchsuchen.
+   Der Inhalt wird dann zu einem CDN hochgeladen oder Ihrem App-Bundle hinzugefügt, um zur Laufzeit verwendet zu werden.
+ * [Der `setup`-Befehl](/docs/cli/setup) wird verwendet, um die General Translation-Bibliothek automatisch in Ihr Projekt zu integrieren.
+   Er durchsucht Ihr Projekt und umschließt jeden JSX-Inhalt mit einer `<T>`-Komponente.
+
+### Übersetzen
+
+Um das CLI-Tool zu verwenden, führen Sie den folgenden Befehl vom Stammverzeichnis Ihres Projekts aus:
+
+```bash title="shell" copy
+npx gtx-cli translate
+```
+
+<Callout type="warn">
+    **Nur für den Produktionseinsatz!**
+
+    Da dieses CLI-Tool übersetzten Inhalt auf das CDN veröffentlicht, ist es nur für Produktions-Builds gedacht und **sollte nicht in der Entwicklung verwendet werden**.
+    Bevor Sie diesen Befehl ausführen, stellen Sie bitte sicher, dass Sie sich auf dem Branch befinden, der für die Produktion verwendet wird.
+    Denken Sie auch daran, Ihren Produktions-API-Schlüssel und Ihre Projekt-ID in Ihren Umgebungsvariablen anzugeben.
+</Callout>
+
+### Flags
+
+<TypeTable
+  type={{
+    "--api-key": {
+        description:
+            'Produktions-API-Schlüssel',
+        type: 'string',
+        optional: true,
+    },
+    "--project-id": {
+        description:
+            'Die Projekt-ID',
+        type: 'string',
+        optional: true,
+    },
+    "--options": {
+        description:
+            'Pfad zur GT-Optionsdatei',
+        type: 'string',
+        optional: true,
+        default: 'gt.config.json',
+    },
+    "--new": {
+        description:
+            'Neue Lokalisierungen, in die Ihr Projekt übersetzt werden soll',
+        type: 'string',
+        optional: true,
+    },
+    "--dictionary": {
+        description:
+            'Pfad zur Wörterbuchdatei',
+        type: 'string',
+        optional: true,
+    },
+    "--dry-run": {
+        description:
+            'Befehl im Trockendurchlauf ausführen',
+        type: 'boolean',
+        optional: true,
+        default: 'false',
+    },
+    "--ignore-errors": {
+        description:
+            'Fehler ignorieren und Übersetzung für gültigen Inhalt erzwingen',
+        type: 'boolean',
+        optional: true,
+        default: 'false',
+    },
+    "--inline": {
+        description:
+            'Inline-<T>-Tags zusätzlich zum Wörterbuch einfügen',
+        type: 'boolean',
+        optional: true,
+        default: 'true',
+    },
+  }}
+/>
+
+Wenn Sie das CLI-Tool zum ersten Mal ausführen, wird es versuchen, eine `gt.config.json`-Datei im Stammverzeichnis Ihres Projekts zu erstellen.
+Diese Datei enthält Metadaten über Ihr Projekt, die zur Übersetzung Ihres Inhalts verwendet werden.
+
+---
+
+## Einrichtung
+
+Zusätzlich kann das CLI-Tool Ihr Projekt automatisch scannen und für die Übersetzung einrichten.
+Wenn Sie die Allgemeine Übersetzung zum ersten Mal verwenden, empfehlen wir, die Einrichtung durchzuführen, um loszulegen.
+
+```bash title="shell" copy
+npx gtx-cli setup
+```
+
+<Callout type="warn">
+    **Änderungen sichern!**
+
+    Dies wird Ihren Code ändern, also stellen Sie sicher, dass Sie entweder Ihre Änderungen sichern oder committen.
+</Callout>
+
+Das Ausführen dieses Befehls wird `<T>`-Komponenten um die oberste Ebene der JSX-Elemente wickeln, die übersetzbaren Inhalt enthalten.
+
+Es wird auch jeglichen nicht-statischen Inhalt mit `<Var>`-Komponenten umwickeln.
+
+Hier sind einige Beispiele dafür, was der Scan konvertieren wird:
+
+
+<Tabs items={["Beispiel 1", "Beispiel 2", "Beispiel 3", "Beispiel 4", "Beispiel 5"]}>
+  <Tab value="Beispiel 1">
+
+
+  ```jsx
+  <div>Hello, World!</div>
+  ```
+
+  Wird konvertiert zu:
+
+  ```jsx
+  <T id="">Hello, World!</T>
+  ```
+
+  </Tab>
+  <Tab value="Beispiel 2">
+
+
+  ```jsx
+  <div>Hello, {name}</div>
+  ```
+
+  Wird konvertiert zu:
+
+  ```jsx
+  <T id="">Hello, <Var>{name}</Var></T>
+  ```
+
+  </Tab>
+  <Tab value="Beispiel 3">
+
+
+  ```jsx
+  <p>{true && "Hello, World!"}</p>;
+  ```
+
+  Wird konvertiert zu:
+
+  ```jsx
+  <T id=""><p><Var>{true && <T id="">{"Hello, World!"}</T>}</Var></p></T>;
+  ```
+
+  </Tab>
+  <Tab value="Beispiel 4">
+
+
+  ```jsx
+  <p>{"Hello," + " World!"}</p>
+  ```
+
+  Wird konvertiert zu:
+
+  ```jsx
+  <T id=""><p>{"Hello," + " World!"}</p></T>
+  ```
+
+  </Tab>
+  <Tab value="Beispiel 5">
+
+
+  ```jsx
+  <p>{`${temp}`}</p>
+  ```
+
+  Wird konvertiert zu:
+
+  ```jsx
+  <T id=""><p><Var>{`${temp}`}</Var></p></T>
+  ```
+
+  </Tab>
+</Tabs>
+
+Das CLI wird nur direkte Kinder innerhalb von JSX-Elementen umwickeln. Es wird andere JSX-Elemente separat mit ihren eigenen `<T>`-Komponenten umwickeln.
+
+
+<Callout type="warn">
+    **Experimentell**
+
+    Diese Funktion ist derzeit experimentell und funktioniert möglicherweise nicht perfekt.
+    Nach dem Ausführen des Scans sollten Sie die Ausgabe manuell überprüfen und sicherstellen, dass sie korrekt ist.
+    Beachten Sie insbesondere, dass alle nicht-statischen JSX-Ausdrücke `{...}` in `<Var>`-Komponenten umwickelt werden.
+    Möglicherweise müssen Sie diese Fälle manuell überprüfen und bearbeiten.
+    Bitte melden Sie alle Probleme, auf die Sie stoßen, [hier](https://github.com/General-Translation/gt-libraries/issues).
+</Callout>
+
+### Flags
+
+<TypeTable
+  type={{
+    "--src": {
+        description:
+            'Das Quellverzeichnis zum Scannen',
+        type: 'string',
+        optional: true,
+    },
+  }}
+/>

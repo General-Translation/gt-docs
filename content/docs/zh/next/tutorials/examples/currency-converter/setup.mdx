@@ -1,0 +1,275 @@
+---
+title: 设置
+description: 设置一个教程项目
+---
+
+## 介绍
+
+这是一个更深入的教程指南，教您如何使用 `gt-next` 设置一个非常简单的 NextJS 项目。
+我们将从头到尾带您完成，包括设置项目然后翻译它。
+在本教程中，我们将从简单的概念逐步构建到更高级的概念。
+本教程假设您对 Typescript、Next.js 和 React 有一般的了解。
+
+以下是本教程中将涵盖的项目列表：
+* 设置一个新的 Next.js 项目
+* 使用 `<T>` 组件翻译应用程序
+* 使用像 `<Var>`、`<Currency>`、`<DateTime>` 和 `<Num>` 这样的变量组件翻译动态内容
+* 使用像 `<Plural>` 和 `<Branch>` 这样的分支组件翻译条件内容
+* 在您的应用中使用 i18n 路由
+
+我们的应用将是一个简单的应用，允许我们检查货币之间的转换率。
+我们将仅使用内联样式，并且只使用 `gt-next` 库，以保持尽可能简单。
+此示例基于 GeeksforGeeks 上的 [货币转换器](https://www.geeksforgeeks.org/how-to-create-a-currency-converter-app-in-reactjs/) 教程构建。
+
+## 设置您的下一个应用程序
+
+首先，让我们创建一个新的 NextJS 应用程序。您可以通过运行以下命令来完成此操作：
+
+```bash copy
+npx create-next-app@latest
+```
+这将带您进入设置向导，您可以在其中选择应用程序的名称和要使用的模板。
+对于本教程，请使用名称 `currencies`，并在询问是否要使用 TypeScript 时选择 `Yes`。
+
+导航到项目目录，让我们启动应用程序！
+
+```bash copy
+cd currencies
+npm install
+npm run dev
+```
+
+这将在 `http://localhost:3000` 上启动应用程序。
+
+## 让我们添加一些内容！
+
+现在我们已经设置好了应用程序，让我们覆盖应用程序的内容以显示一个简单的货币转换器。
+只需将以下代码复制并粘贴到 `src/app/page.tsx` 文件和 `src/app/layout.tsx` 文件中。
+
+现在不用太担心它是如何工作的。
+所有这些代码所做的只是模拟从货币兑换 API 获取数据，并显示两种货币之间的汇率。
+
+<Tabs items={['layout.tsx', 'page.tsx']}>
+<Tab value="page.tsx">
+```jsx title="src/app/page.tsx" copy
+"use client";
+
+import { useEffect, useState, useCallback } from "react";
+
+// A map between two currencies and their exchange rate (from -> to)
+type ExchTable = Record<string, Record<string, number>>;
+
+const EXCH_RATES: ExchTable = {
+  usd: { usd: 1, inr: 73.5, eur: 0.85, jpy: 105.45, gbp: 0.72 },
+  inr: { usd: 0.014, inr: 1, eur: 0.012, jpy: 1.46, gbp: 0.01 },
+  eur: { usd: 1.18, inr: 85.5, eur: 1, jpy: 123.5, gbp: 0.85 },
+  jpy: { usd: 0.0095, inr: 0.68, eur: 0.0081, jpy: 1, gbp: 0.0068 },
+  gbp: { usd: 1.39, inr: 99.5, eur: 1.17, jpy: 146.5, gbp: 1 },
+};
+
+// some styles for button
+const buttonStyle = {
+  backgroundColor: "#007bff",
+  color: "white",
+  border: "none",
+  padding: "10px 20px",
+  cursor: "pointer",
+  borderRadius: "5px",
+  fontSize: "16px",
+  margin: "20px",
+};
+
+/**
+ * This function is meant to simulate an api fetch request to get the current exchange.
+ * Waits for 1 second before returning the exchange rate.
+ * @returns the exchange rate between two currencies
+ */
+async function fetchExchangeRate(from: string, to: string): Promise<number> {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return EXCH_RATES[from][to];
+}
+
+function Page() {
+  // exch rates
+  const [info, setInfo] = useState<ExchTable>({});
+  const options = ["usd", "inr", "eur", "jpy", "gbp"];
+
+  // currencies
+  const [from, setFrom] = useState("usd");
+  const [to, setTo] = useState("inr");
+
+  // values
+  const [input, setInput] = useState(0);
+  const [output, setOutput] = useState(0);
+
+  // Function to convert the currency
+  const convert = useCallback(() => {
+    if (info?.[from]?.[to]) {
+      const rate = info[from][to];
+      setOutput(input * rate);
+    } else {
+      setOutput(0);
+    }
+  }, [info, input, to, from]);
+
+  // Calling the api whenever from or to currency changes
+  useEffect(() => {
+    // If the exchange rate is already present, then convert
+    if (info?.[from]?.[to]) {
+      convert();
+      return;
+    }
+    // Fetch the exchange rate
+    (async () => {
+      const response = await fetchExchangeRate(from, to);
+      // Enter new response without overwriting old info
+      setInfo((prevInfo) => ({
+        ...prevInfo,
+        [from]: {
+          ...(prevInfo?.[from] || undefined),
+          [to]: response,
+        },
+      }));
+    })();
+  }, [from, to, convert, info]);
+
+  // Call convert whenever a user switches the currency
+  useEffect(() => {
+    convert();
+  }, [info, convert]);
+
+  // Function to switch between two currency
+  function flip() {
+    const temp = from;
+    setFrom(to);
+    setTo(temp);
+  }
+
+  return (
+    <div style={{ margin: "0 auto", width: "50%", textAlign: "center" }}>
+      <div style={{ margin: "20px 0", paddingBottom: "20px" }}>
+        <h1 style={{ fontSize: "2.5em", fontWeight: "bold" }}>
+          货币转换器
+        </h1>
+      </div>
+      <div style={{ flex: 2, textAlign: "center", margin: "20px 0" }}>
+        <h3>金额</h3>
+        <input
+          type="text"
+          placeholder="输入金额"
+          style={{ textAlign: "center" }}
+          onChange={(e) => {
+            setInput(Number(e.target.value));
+          }}
+        />
+      </div>
+      <div
+        style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}
+      >
+        <div style={{ flex: 1, textAlign: "center" }}>
+          <label htmlFor="from">
+            <h3>从</h3>
+          </label>
+          <select
+            name="from"
+            id="from"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+          >
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option.toUpperCase()}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div style={{ flex: 1, textAlign: "center" }}>
+          <button
+            onClick={() => {
+              flip();
+            }}
+            style={buttonStyle}
+          >
+            切换
+          </button>
+        </div>
+        <div style={{ flex: 1, textAlign: "center" }}>
+          <label htmlFor="to">
+            <h3>到</h3>
+          </label>
+          <select
+            name="to"
+            id="to"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          >
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option.toUpperCase()}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div style={{ margin: "0 auto", width: "50%", textAlign: "center" }}>
+        <button
+          onClick={() => {
+            convert();
+          }}
+          style={buttonStyle}
+        >
+          转换
+        </button>
+        <h2>转换金额：</h2>
+        <p>{input + " " + from + " = " + output.toFixed(2) + " " + to}</p>
+      </div>
+    </div>
+  );
+}
+
+export default Page;
+```
+</Tab>
+<Tab value="layout.tsx">
+```jsx title="src/app/layout.tsx" copy
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "Currency Converter",
+  description: "A simple currency converter",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
+      </body>
+    </html>
+  );
+}
+
+```
+</Tab>
+</Tabs>
+## 结论
+
+现在，您已经设置并准备好使用 `gt-next` 翻译的普通 NextJS 应用程序。

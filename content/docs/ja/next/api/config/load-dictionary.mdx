@@ -1,0 +1,72 @@
+---
+title: loadDictionary()
+description: loadDictionary() 関数のAPIリファレンス。
+---
+
+## 概要
+
+`loadDictionary()` は、指定されたロケールの翻訳jsonファイルを読み込みます。
+
+この関数は、`gt-next` をスタンドアロンのi18nライブラリとして使用したい人向けに設計されています。
+
+この関数は主に、既存のi18nプロジェクトを既存の翻訳を維持しながらGeneral Translationに移行するために使用されます。
+これを設定するには、[このガイド](/docs/next/reference/stand-alone)に従ってください。
+
+複数の翻訳が存在する場合、`loadDictionary()` によって読み込まれた辞書からの翻訳が常に他の翻訳よりも優先されます。
+`loadDictionary()` は、文字列翻訳を含むJSONファイルの使用のみをサポートします。
+
+
+## リファレンス
+
+### パラメーター
+<TypeTable
+  type={{
+    "locale": {
+        type: 'string',
+        optional: false,
+    },
+  }}
+/>
+
+### 説明
+| タイプ | 説明 |
+| ---- | ----------- |
+| `locale` | 翻訳を読み込むべきロケール。 |
+
+### 戻り値
+
+指定されたロケールの翻訳をidにマッピングする辞書に解決される`Promise<any>`。
+
+---
+
+## 使用法
+
+一般的に、辞書は `./public/locales` ディレクトリから読み込まれます。
+
+```jsx title="src/loadDictionary.js"
+export default async function loadDictionary(locale) {
+  const translations = await import(`../public/locales/${locale}.json`);
+  return translations.default;
+}
+```
+
+<Callout>
+  **質問:** [`loadTranslations()`](/docs/next/api/config/load-translations) と [`loadDictionary()`](/docs/next/api/config/load-dictionary) の違いは何ですか？
+
+  * [`loadTranslations()`](/docs/next/api/config/load-translations) は、アプリの翻訳を取得するためのカスタムロード動作を定義するために使用されます。
+  これは、CDN、データベース、またはアプリのバンドルから翻訳を取得することができます。
+  これらは通常、cliツールによって管理される機械生成の翻訳であり、編集があまりユーザーフレンドリーではありません。
+  * [`loadDictionary()`](/docs/next/api/config/load-dictionary) は、`gt-next` をスタンドアロンライブラリとして実装するために意図されています。
+  ユーザーは自分の翻訳を持ち込み、翻訳インフラストラクチャは使用されません。
+</Callout>
+
+---
+
+## メモ
+ * `loadDictionary()` は、アプリのカスタム翻訳を読み込むために使用されます。
+ * `loadDictionary()` によって読み込まれた辞書は、[`loadTranslations()`](/docs/next/api/config/load-translations) によって読み込まれた翻訳よりも優先されます。
+
+## 次のステップ
+ * 独自の翻訳を書きたい場合は、[カスタム翻訳](/docs/next/reference/stand-alone)をチェックしてください。
+ * カスタム翻訳ローダーの書き方については、[`loadTranslations()`](/docs/next/api/config/load-translations)をご覧ください。
+

@@ -1,0 +1,109 @@
+---
+title: createNextMiddleware()
+description: Referencia de API para el método createNextMiddleware().
+---
+
+## Descripción general
+`createNextMiddleware()` es una función de utilidad que crea una función de middleware para usar con Next.js.
+Te permite agregar una ruta diferente para cada localización en tu aplicación Next.js.
+
+Por ejemplo, un usuario francés sería dirigido a `/fr/landing` y un usuario inglés sería dirigido a `/en/landing`.
+
+Para obtener más información sobre cómo usar este middleware, consulta la [guía de enrutamiento i18n](/docs/next/reference/i18n-routing).
+
+
+## Referencia
+
+### Props
+
+<TypeTable
+  type={{
+    "pathConfig": {
+        type: 'any',
+        optional: true,
+        default: '{}',
+    },
+    "localeRouting": {
+        type: 'string',
+        optional: true,
+        default: true,
+    },
+    "prefixDefaultLocale": {
+        decription: 'Valor opcional. children se usará para el valor si no se proporciona.',
+        type: 'string | number',
+        optional: true,
+        default: false,
+    },
+  }}
+/>
+
+### Descripción
+| Prop      | Descripción                                                                                                                                            |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `pathConfig`  | Un objeto anidado que especifica rutas localizadas para su aplicación. |
+| `localeRouting`      | Una bandera para habilitar o deshabilitar el enrutamiento i18n.                                                                                      |
+| `prefixDefaultLocale`     | Una bandera para habilitar o deshabilitar la eliminación del prefijo de la configuración regional del idioma predeterminado. (por ejemplo, `/en/about` -> `/about`)                                 |
+
+---
+
+## Ejemplo
+
+### Uso básico
+
+Simplemente invoca y agrega esta función y el emparejador de rutas a tu archivo de middleware para habilitar el enrutamiento de locales.
+
+```js title="middleware.js" copy
+import { createNextMiddleware } from 'gt-next/middleware'
+
+export default createNextMiddleware();
+
+export const config = {
+  matcher: [
+    /*
+      * Coincide con todas las rutas de solicitud excepto con las que comienzan con:
+      * - api (rutas de API)
+      * - _next (archivos internos)
+      * - archivos estáticos
+      */
+    "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
+
+### Rutas localizadas
+
+Puedes especificar rutas localizadas a través de la opción `pathConfig` en el archivo de middleware.
+
+```js title="middleware.js" copy
+export default createNextMiddleware({
+  pathConfig: {
+    "/about": "/about",
+    "/airplanes": {
+      "zh": "/飞机",
+    }
+  },
+});
+```
+
+Consulta la [guía de enrutamiento i18n](/docs/next/reference/i18n-routing) para una explicación detallada de cómo funciona esto.
+
+### Eliminar el prefijo de localización predeterminado
+
+Puedes eliminar el prefijo de localización predeterminado configurando la opción `prefixDefaultLocale` en `false`.
+
+```js title="middleware.js" copy
+export default createNextMiddleware({
+  prefixDefaultLocale: true,
+});
+```
+
+Cuando esto es verdadero, entonces cada ruta debe estar precedida por la localización.
+Si configuras esto en `false` (que es el valor predeterminado), entonces solo se eliminará la localización predeterminada de la ruta.
+
+---
+
+## Notas
+ * La función `createNextMiddleware()` es una función de utilidad que crea una función de middleware para usar con Next.js.
+
+## Próximos pasos
+ * Vea [instrucciones](/docs/next/reference/i18n-routing) sobre cómo agregar enrutamiento i18n a su aplicación Next.js.

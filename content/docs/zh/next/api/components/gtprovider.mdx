@@ -1,0 +1,96 @@
+---
+title: <GTProvider>
+description: <GTProvider> 组件的 API 参考
+---
+
+## 概述
+
+`<GTProvider>` 组件为其子组件提供通用翻译 (GT) 上下文，使它们能够访问翻译后的内容。
+在您的应用程序中进行客户端翻译时，这是必需的。
+
+### 何时使用
+
+- 将您的整个应用程序包裹在 `<GTProvider>` 中，以启用客户端翻译。
+- 当使用字典时，可以选择指定一个 `id` 来限制发送到客户端的字典数据，从而优化大型字典的性能。
+- `<GTProvider>` 组件用于 [内联 `<T>`](/docs/next/reference/t-reference) 和 [字典设计模式](/docs/next/reference/dictionary)。
+
+## 参考
+
+### 属性
+
+<TypeTable
+  type={{
+    "children": {
+      type: 'ReactNode',
+      optional: false,
+    },
+    "id?": {
+      type: 'string',
+      optional: true,
+      default: 'undefined',
+    },
+  }}
+/>
+
+### 描述
+
+| 属性 | 描述 |
+|-----------|-------------|
+| `children` | 任何需要在客户端翻译或访问翻译信息的组件或其父组件。这些应包括使用 `<T>`、`useGT` 或其他翻译工具的任何组件。 |
+| `id?` | 限制发送到客户端的数据的嵌套字典的 ID。这对于具有大量字典的大型项目非常有用。 |
+
+### 返回
+
+`JSX.Element|undefined` 包含传递给此组件的子元素。
+
+## 示例
+
+### 基本用法
+
+将您的应用程序包裹在 `<GTProvider>` 中，以为您的应用提供翻译上下文。
+
+```jsx title="layout.js" copy
+import { GTProvider } from 'gt-next';
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang="en">
+            <body>
+                <GTProvider> // [!code highlight]
+                    {children}
+                </GTProvider> // [!code highlight]
+            </body>
+        </html>
+    );
+}
+```
+
+### 使用 `id` 属性进行子集
+
+指定 `id` 属性，通过仅向客户端发送字典的子集来优化性能。
+
+```jsx title="layout.js" copy
+import { GTProvider } from 'gt-next';
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang="en">
+            <body>
+                <GTProvider id="nested.dictionary.key"> // [!code highlight]
+                    {children}
+                </GTProvider>
+            </body>
+        </html>
+    );
+}
+```
+
+---
+
+## 注意事项
+ * `<GTProvider>` 必须包裹所有 `<T>` 组件和其他与翻译相关的客户端组件。阅读更多信息 [这里](/docs/next/reference/t-reference#gtprovider)。
+ * 对于服务器端翻译，`<GTProvider>` 不是必需的，但仍然可以使用。
+
+## 下一步
+ * 了解更多关于[`<T>` 组件](/docs/next/reference/t-reference)的信息，用于翻译文本和组件。
+ * 查看[i18n 配置](/docs/next/reference/i18n-configuration)以获取高级自定义选项。

@@ -1,0 +1,274 @@
+---
+title: withGTConfig()
+description: API-Referenz für die withGTConfig(), ehemals initGT()
+---
+
+## Überblick
+
+`withGTConfig()` ist die primäre Methode, um die `gt-next` Bibliothek zu konfigurieren.
+Es umschließt direkt ein `NextConfig` Objekt.
+
+```js title="next.config.mjs"
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {
+    // Ihre bestehende next.config.js
+}
+
+export default withGTConfig(nextConfig, {
+  defaultLocale: 'en-US',
+  locales: ['en-US', 'es', 'fr'],
+});
+```
+
+<Callout>
+**Veraltet**
+
+`initGT()` ist die veraltete Methode, um die `gt-next` Bibliothek zu konfigurieren. Es gibt einen Funktions-Callback zurück, der dann auf das `NextConfig` Objekt aufgerufen wird.
+Die Eigenschaften für beide Funktionen sind gleich, mit der Ausnahme, dass `withGTProps` erfordert, dass `NextConfig` ebenfalls übergeben wird.
+</Callout>
+
+Es ist nicht erforderlich, `withGTConfig()` zu verwenden, um die Übersetzungsfunktionalität zu aktivieren, aber es wird empfohlen, die Bibliothek an Ihre Bedürfnisse anzupassen.
+
+Verwenden Sie `withGTConfig()`, um:
+ * Unterstützte Sprachen und Standardsprache (auch als Fallback-Sprache bekannt) zu konfigurieren.
+ * API-Schlüssel und Projekt-IDs für den Zugriff auf GT-Dienste festzulegen.
+ * Ladeverhalten einzustellen.
+ * Timeout-Einstellungen zu konfigurieren.
+ * Benutzerdefinierte Endpunkte einzurichten.
+ * Übersetzungsverhalten, Caching und Anforderungsbündelung anzupassen.
+
+ <Callout>
+    `withGTConfig()` muss in Ihrer `next.config.js` Datei verwendet werden, um die Übersetzungsfunktionalität zu aktivieren.
+</Callout>
+
+## Referenz
+
+### Erforderliche Props 
+
+<TypeTable
+  type={{
+    "nextConfig": {
+      type: 'NextConfig',
+      optional: false,
+    },
+  }}
+/>
+
+### Empfohlene Props [#props]
+<TypeTable
+  type={{
+    "defaultLocale?": {
+        type: 'string',
+        optional: true,
+        default: "locales[0] || 'en'"
+    },
+    "locales?": {
+        type: 'string[]',
+        optional: true,
+        default: 'undefined',
+    },
+    "description?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+| Prop           | Beschreibung                                                                 |
+|----------------|-----------------------------------------------------------------------------|
+| `defaultLocale`| Standard-Locale für die Anwendung. Englisch wird die Fallback-Sprache sein, wenn keine angegeben ist. |
+| `locales`      | Eine exklusive Liste der unterstützten Locales für die Anwendung. Wenn eine nicht unterstützte Anfrage empfangen wird, wird auf die nächste bevorzugte Sprache des Browsers in der Liste umgeleitet. Fällt auf `defaultLocale` zurück, wenn keine Übereinstimmungen gefunden werden können. |
+| `description`  | Eine natürliche Sprachbeschreibung der Website, die zur Unterstützung der Übersetzung verwendet wird.         |
+
+### Erweiterte Props [#advanced-props]
+<TypeTable
+    type={{
+        "projectId?": {
+                type: 'string',
+                optional: true,
+        },
+        "apiKey?": {
+                type: 'string',
+                optional: true,
+        },
+        "devApiKey?": {
+                type: 'string',
+                optional: true,
+        },
+        "preferredModelProvider?": {
+                type: '"anthropic" | "openai"',
+                optional: true,
+        },
+        "runtimeUrl?": {
+                type: 'string',
+                optional: true,
+        },
+        "cacheUrl?": {
+                type: 'string',
+                optional: true,
+        },
+        "cacheExpiryTime?": {
+            type: 'number',
+            optional: true,
+            default: 60000,
+        },
+        "renderSettings?": {
+            type: 'RenderSettings',
+            optional: true,
+        },
+        "maxConcurrentRequests?": {
+            type: 'number',
+            optional: true,
+            default: 100,
+        },
+        "batchInterval?": {
+            type: 'number',
+            optional: true,
+            default: 50,
+        },
+        "maxBatchSize?": {
+            type: 'number',
+            optional: true,
+            default: 25,
+        },
+        "i18n?": {
+            type: 'string',
+            optional: true,
+        },
+        "dictionary?": {
+            type: 'string',
+            optional: true,
+        },
+    }}
+/>
+
+
+| Prop                     | Beschreibung                                                                                                                                                                                                 |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `projectId`              | Projekt-ID, die hier oder als Umgebungsvariable enthalten sein kann.                                                                                         |
+| `apiKey`                 | Obwohl nicht empfohlen, ein API-Schlüssel, der hier enthalten sein kann. Er kann auch als Umgebungsvariable enthalten sein.                                                                                           |
+| `devApiKey`              | Obwohl nicht empfohlen, ein Entwicklungs-API-Schlüssel, der hier enthalten sein kann. Er kann auch als Umgebungsvariable enthalten sein.                                                                         |
+| `preferredModelProvider` | Ihr bevorzugter KI-Modellanbieter. Derzeit sind nur [Anthropic](https://anthropic.com) oder [OpenAI](https://openai.com) aktiviert. Lassen Sie dieses Feld leer, und wir finden den besten Anbieter auf Basis jeder einzelnen Übersetzung. In Zeiten hoher Nutzung oder wenn ein Anbieter deaktiviert ist, können wir nicht garantieren, dass Ihr bevorzugter Anbieter verwendet wird. |
+| `runtimeUrl`             | Basis-URL für die GT-API. Um die automatische Übersetzung zu deaktivieren, setzen Sie dies auf einen leeren String.                                                                                                                      |
+| `cacheUrl`               | URL, unter der zwischengespeicherte Übersetzungen gespeichert werden. Kann angepasst werden, um auf einen benutzerdefinierten Cache-Server zu verweisen.                                                                                                               |
+| `cacheExpiryTime`        | Zeit in Millisekunden, bevor lokal zwischengespeicherte Übersetzungen ablaufen.                                                                                                                                                     |
+| `renderSettings`         | Ein Objekt, das das Ladeverhalten für Laufzeitübersetzungen angibt.                                                                                                         |
+| `maxConcurrentRequests` | Maximale Anzahl gleichzeitiger Übersetzungsanfragen, die an die GT-API erlaubt sind.                                                                                                                                    |
+| `maxBatchSize`           | Maximale Anzahl von Übersetzungen, die vor dem Senden einer Anfrage zusammengefasst werden.                                                                                                                                   |
+| `batchInterval`         | Intervall in Millisekunden zwischen gebündelten Übersetzungsanfragen. Hilft, die Rate zu kontrollieren, mit der Anfragen gesendet werden.                                                                                           |
+| `i18n`                   | Optionaler Konfigurationsdateipfad für benutzerdefinierte `getLocale()`-Funktionen. Wenn als String angegeben, wird er als Pfad aufgelöst. Andernfalls werden Standardwerte verwendet (empfohlen).                                      |
+| `dictionary`             | Optionaler Konfigurationsdateipfad für das Wörterbuch. Ähnlich wie `i18n` akzeptiert es einen String, um einen benutzerdefinierten Pfad anzugeben. Wörterbücher, die `dictionary.js` (oder `.jsx`, `.ts`, `.tsx` etc.) genannt werden und im Root oder im `src`-Ordner platziert sind, werden standardmäßig unterstützt. |
+
+
+
+### Rückgaben
+
+Eine Funktion `(NextConfig) => NextConfig`, die das Next.js-Konfigurationsobjekt mit den angegebenen GT-Einstellungen erweitert.
+ 
+### Ausnahmen
+
+Wirft einen `Error`, wenn die `projectId` fehlt und Standard-URLs verwendet werden, oder wenn der API-Schlüssel erforderlich und fehlt.
+
+---
+
+## Rendereinstellungen
+
+Rendereinstellungen steuern das Verhalten von Übersetzungen, während sie geladen werden.
+Dies gilt nur für Übersetzungen, die zur Laufzeit stattfinden.
+Wenn die Übersetzung zwischengespeichert ist, ist die Antwortzeit zu gering, um das Ladeverhalten zu rechtfertigen.
+
+<TypeTable
+  type={{
+    method: {
+        description: 'Die Methode, die zum Rendern der Seite verwendet wird.',
+        type: '"skeleton" | "replace" | "default"',
+        optional: false,
+        default: "default"
+    },
+    timout: {
+        description: 'Die Zeit in Millisekunden, bevor die Methode abläuft.',
+        type: 'number',
+        optional: true,
+        default: 8000,
+    },
+  }}
+/>
+| Prop      | Beschreibung                                                                 |
+|-----------|-----------------------------------------------------------------------------|
+| `method`  | Die Methode, die zum Rendern der Seite verwendet wird. Optionen sind `skeleton`, `replace` und `default`. |
+| `timeout` | Die Zeit in Millisekunden, bevor die Methode abläuft. Standard ist 8000 ms.    |
+
+### Render-Methoden
+ * `skeleton`: Rendert ein Fragment.
+ * `replace`: Rendert Inhalte in der Standardsprache, während gewartet wird.
+ * `default`: Für Gebiete mit derselben Sprache (z.B. `en-US` und `en-GB`) verhält sich wie replace. Für Gebiete mit unterschiedlichen Sprachen (z.B. `en-US` und `fr`) verhält sich wie skeleton.
+
+### Timeout
+Timeouts gelten nur für Übersetzungen zur Laufzeit oder Übersetzungen, die bei Bedarf durchgeführt werden müssen, da sie nicht zwischengespeichert wurden.
+
+Timeouts sind standardmäßig auf 8 Sekunden eingestellt.
+Diese Designentscheidung soll Vercel-Nutzern helfen, die einen Standard-Timeout von 10 Sekunden für serverlose Funktionen im kostenlosen Plan haben.
+
+---
+
+## Beispiele
+
+
+### Unterstützte Sprachen [#supported-locales]
+Dieses Beispiel konfiguriert `gt-next` mit Englisch (`en-US`) als Standardsprache.
+Es unterstützt ausschließlich Übersetzungen in Spanisch (`es`) und Französisch (`fr`) und bietet eine Beschreibung für kontextbezogene Übersetzungen.
+
+Die Seite wird auf die am besten geeignete Sprache zurückgreifen, wenn keine der Sprachen übereinstimmt.
+Es wird nach passenden Sprachen suchen (d.h. `en-US` und `en-GB`) sowie nach den anderen bevorzugten Sprachen, die der Benutzer in seinem Browser eingestellt hat.
+Wenn alles andere fehlschlägt, wird auf die Standardsprache zurückgegriffen.
+
+<Callout>
+    Wenn Sie alle Sprachen unterstützen möchten, lassen Sie `locales` leer.
+    Zusätzlich können Sprachen im Dashboard konfiguriert werden.
+</Callout>
+
+```js title="next.config.mjs" copy
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {
+  // Ihre anderen next.js Konfigurationen
+}
+
+export default withGTConfig(nextConfig, {
+  defaultLocale: 'en-US',
+  locales: ['en-US', 'es', 'fr'],
+  description: 'Ein persönlicher Blog über Technologie und Reisen',
+});
+```
+### Render-Einstellungen
+Dieses Beispiel konfiguriert `gt-next`, um ein Skelett zu rendern, während auf das Laden der Übersetzungen gewartet wird.
+Wenn die Übersetzung länger als 8 Sekunden dauert, wird die Methode abgebrochen und der Inhalt der Standardsprache gerendert.
+
+```js title="next.config.mjs" copy
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {
+  // Ihre anderen next.js Konfigurationen
+};
+
+// locales-Feld bleibt leer, sodass diese Konfiguration alle 100+ Sprachen unterstützt
+export default withGTConfig(nextConfig, {
+  defaultLocale: 'en-US',
+  renderSettings: {
+    method: 'skeleton',
+    timeout: 10000,
+  },
+});
+```
+---
+
+## Notizen
+ * `withGTConfig()` integriert die GT-Übersetzungsfunktionalität in Ihre Next.js-App und muss in der Hauptkonfigurationsdatei verwendet werden.
+ * Parameter wie `apiKey` und `projectId` können direkt in der Konfiguration oder als Umgebungsvariablen festgelegt werden.
+ * Erweiterte Parameter wie `renderSettings` und `_batchInterval` ermöglichen eine feinkörnige Kontrolle über das Übersetzungsverhalten und die Leistung.
+
+## Nächste Schritte
+ * Fügen Sie [Übersetzung zu Ihrem CD-Prozess hinzu](/docs/next/tutorials/quickdeploy).
+ * Lesen Sie mehr über [i18n-Konfiguration](/docs/next/reference/i18n-configuration) in unserem Referenzhandbuch.

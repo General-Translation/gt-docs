@@ -1,0 +1,283 @@
+---
+title: Next.js 快速入门
+description: 使用 gt-next 在5分钟内实现你的 Next.js 应用国际化
+---
+
+## 概述
+
+本指南描述了如何国际化一个使用[App Router](https://nextjs.org/docs#app-router-vs-pages-router)的现有[Next.js](https://nextjs.org)项目。
+
+对于使用Pages Router的项目，请参照[React文档](/docs/react/tutorials/quickstart)。
+
+我们将涵盖4个简单步骤：
+
+<Steps>
+  <Step>
+    安装`gt-next`和`gtx-cli`
+  </Step>
+  <Step>
+    选择语言
+  </Step>
+  <Step>
+    添加`<T>`组件
+  </Step>
+  <Step>
+    添加您的环境变量
+  </Step>
+</Steps>
+
+整个过程应该不超过**5分钟**。
+
+<Callout>
+  您是否正在使用Next.js pages router？请改为参照[React快速入门](/docs/react/tutorials/quickstart)指南。
+</Callout>
+
+---
+
+## 设置
+
+### 1. 安装库
+
+安装 [gt-next](https://www.npmjs.com/package/gt-next) 和 [gtx-cli](https://www.npmjs.com/package/gtx-cli) 库。
+
+<Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gt-next
+  npm i gtx-cli --save-dev
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gt-next
+  yarn add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash 
+  bun add gt-next
+  bun add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gt-next
+  pnpm add gtx-cli --save-dev
+  ```
+  </Tab>
+</Tabs>
+
+
+### 2. 添加 `withGTConfig()` 插件
+
+将 [`withGTConfig()`](/docs/next/api/config/withGTConfig) 添加到你的 `next.config.js` 文件中。
+你可以通过传递一个[语言代码](/docs/reference/supported-locales)数组来指定你想要支持的语言。
+
+```js title="next.config.js" copy
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {};
+
+export default withGTConfig(nextConfig, {
+  locales: ['pt', 'es'], // 支持葡萄牙语和西班牙语
+});
+```
+
+
+### 3. 添加 `<T>` 组件
+
+将任何嵌套的 JSX 内容包装在 [`<T>` 组件](/docs/next/api/components/t) 中，使其可翻译。
+有关更多信息，请查看[使用 `<T>` 组件的指南](/docs/next/reference/t-reference)。
+
+```jsx title="Example.js" copy
+import { T } from "gt-next";
+
+export default function Example() {
+  return (
+    // [!code highlight]
+    <T>
+      <p>
+        这部分会被翻译。
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+使用 [`<Var>` 组件](/docs/next/api/components/var) 来指定不应该被翻译的 JSX 内容。
+
+```jsx title="Example.js" copy
+import { T, Var } from "gt-next";
+
+export default function Example() {
+  return (
+    // [!code highlight]
+    <T>
+      <p>
+        这部分会被翻译。 <Var>这部分不会被翻译。</Var>
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+<Callout type="info">
+  **提示：**
+  为了节省时间，运行[设置命令](/docs/cli/setup)。
+  这将扫描你的代码库中可翻译的 JSX 并为你插入 [`<T>`](/docs/next/api/components/t) 标签。
+
+  ```bash title="shell" copy
+  npx gtx-cli setup
+  ```
+</Callout>
+
+对于字符串，你可以使用 [`useGT()`](/docs/next/api/strings/useGT) 或 [`getGT()`](/docs/next/api/strings/getGT) 进行翻译。
+有关更多信息，请查看[此指南](/docs/next/reference/translating-strings)。
+
+```jsx title="Example.js" copy
+import { useGT } from "gt-next/client";
+import { getGT } from "gt-next/server";
+
+export default function Example() {
+  const t = useGT(); // 客户端 // [!code highlight]
+  const t = await getGT(); // 服务器端 // [!code highlight]
+  return (
+    <p>
+      {/* [!code highlight] */}
+      {t("这部分会被翻译。")}
+    </p>
+  );
+}
+```
+
+### 4. 添加你的环境变量
+
+将你的 API 密钥和项目 ID 添加到本地环境中。
+
+<Steps>
+  <Step>
+    导航到[控制面板](https://generaltranslation.com/en-US/signin)。
+    在侧边栏中进入**开发者密钥**页面。
+  </Step>
+
+  <Step>
+    点击**创建开发 API 密钥**。
+  </Step>
+
+  <Step>
+    将项目 ID 和开发 API 密钥添加到你的环境中。
+    ```bash title=".env.local" copy
+    GT_API_KEY="YOUR_GT_API_KEY"
+    GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+    ```
+  </Step>
+</Steps>
+<Callout type="warn">
+  **保护你的 API 密钥！**
+
+  开发密钥**只**应该在开发环境中使用。
+  同样，生产密钥**只**应该在生产环境中使用。
+  *永远不要将你的 API 密钥提交到公共仓库！*
+</Callout>
+
+---
+
+## 让我们试试看！
+
+恭喜！🥳 您的应用程序现在支持多语言了！让我们看看它的实际效果。
+
+### 以不同语言查看您的应用程序 [#see-your-app-in-a-different-language]
+
+<Steps>
+  <Step>
+    将 [`<LocaleSelector>`](/docs/next/api/components/localeSelector) 组件添加到您的应用程序中。
+    这将允许您为应用程序选择不同的语言。
+    <Callout>
+      **提示：**
+      您也可以在浏览器设置中更改语言。
+    </Callout>
+  </Step>
+  <Step>
+    在开发模式下启动您的 Next.js 应用程序。
+    <Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+      <Tab value="npm">
+      ```bash
+      npm run dev 
+      ```
+      </Tab>
+      <Tab value="yarn">
+      ```bash 
+      yarn run dev 
+      ```
+      </Tab>
+      <Tab value="bun">
+      ```bash
+      bun run dev 
+      ```
+      </Tab>
+      <Tab value="pnpm">
+      ```bash
+      pnpm run dev 
+      ```
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step>
+    在您喜欢的浏览器中打开应用程序（通常在
+    [http://localhost:3000](http://localhost:3000)）。
+  </Step>
+</Steps>
+
+### 故障排除
+
+<Accordions>
+  <Accordion title="即使我已更改浏览器的语言，我的应用程序语言也没有改变。">
+    **浏览器 Cookies**
+
+    如果您决定通过更改浏览器的语言来测试不同的语言，可能会出现此问题。
+
+    检查浏览器中应用程序的 cookies。
+    通用翻译使用 cookies 来存储用户的语言偏好。
+    这个 cookie 名为 `generaltranslation.locale`，您只需要删除它。
+    然后，只需再次确认您正在使用所需的首选语言，并刷新页面。
+
+    如何检查 cookies：
+    * [Chrome](https://support.google.com/chrome/answer/95647)
+    * [Firefox](https://support.mozilla.org/en-US/kb/delete-cookies-remove-info-websites-stored)
+    * [Safari](https://support.apple.com/en-mn/guide/safari/sfri11471/16.0/mac/11.0)
+    * [Edge](https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09)
+  </Accordion>
+  <Accordion title="为什么在开发环境中语言加载需要很长时间？">
+    **按需翻译**
+
+    您可能会注意到，在开发环境中加载语言时，翻译需要几秒钟才能显示。
+    这是因为您的应用程序正在实时翻译。
+    我们将此过程称为"按需翻译"。
+    
+    这**仅在开发环境中发生**，以便您可以轻松地用不同语言原型化您的网站。
+    所有翻译在生产环境中都是预加载的，因此不会有延迟。
+    请按照我们的[部署到生产环境](/docs/next/tutorials/quickdeploy)指南进行操作。
+  </Accordion>
+  <Accordion title="为什么有些内容被翻译而其他内容没有？">
+    **JSX 翻译**
+
+    目前，设置工具会自动在文本内容周围添加 `<T>` 组件。
+    我们正在开发一个自动设置字符串翻译的解决方案。
+    在此之前，如果您正在渲染字符串，请按照[此指南](/docs/next/reference/translating-strings)进行字符串翻译。
+  </Accordion>
+</Accordions>
+
+---
+
+## 部署到生产环境
+
+请参考我们关于[部署到生产环境](/docs/next/tutorials/quickdeploy)的指南。
+
+## 下一步
+{/* - Learn about how to use dictionaries with [`useGT()`](/docs/next/reference/dictionary) */}
+- 查看我们的 [Next.js API 参考](/docs/next/api/components/t)，了解关于 `<T>` 组件和其他可用组件的详细信息。
+- 使用 [`<Num>`](/docs/next/api/components/num)、[`<Currency>`](/docs/next/api/components/currency)、
+ [`<Branch>`](/docs/next/api/components/branch) 和 [`<Plural>`](/docs/next/api/components/plural) 组件改进您的内容。
+- 了解如何通过 [i18n 路由](/docs/next/reference/i18n-routing)（为每个语言环境添加路由，例如 `example.com/en`、`example.com/fr`）来提高 SEO。
+- 镜像您的应用以支持[从右到左的语言](/docs/next/reference/rtl)，如阿拉伯语和希伯来语。
+- 使用 [Next.js 插件](/docs/next/reference/locale-management#include-locales)为您的应用创建已批准语言的列表。

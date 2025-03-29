@@ -1,0 +1,68 @@
+---
+title: getLocale()
+description: getLocale 服务器端方法的 API 参考
+---
+
+## 概述
+
+`getLocale()` 函数在服务器端渲染期间检索用户的当前语言环境。
+返回的语言环境是[格式化为字符串](/docs/reference/locale-strings)，例如，`'en-US'`。
+
+<Callout>
+    `getLocale()` 是一个服务器端方法，只能用于服务器端组件。
+</Callout>
+
+对于客户端使用，请参见 [`useLocale()`](/docs/next/api/helpers/useLocale)。
+
+## 参考
+
+### 返回
+
+一个 promise，解析为表示用户当前语言环境的字符串，例如，`'en-US'`。
+
+---
+
+## 回退行为
+当请求不支持的区域设置时，将选择一个回退区域设置。
+
+例如，在不支持的区域设置的情况下，
+如果 (1) 用户在其浏览器设置中配置了多个首选区域设置，
+并且 (2) 这些区域设置之一被您的应用程序支持，
+那么区域设置将回退到最佳语言。
+
+此外，如果没有可用的回退区域设置，
+但两个区域设置共享相同的语言（例如，`en-US` 和 `en-GB`），
+那么区域设置将回退到支持的共享相同语言的区域设置。
+
+如果这两个条件都无法满足，则将使用默认区域设置。
+
+有关配置支持的区域设置的信息，请参阅 [`区域设置管理指南()`](/docs/next/reference/locale-management)。
+
+---
+
+## 示例
+
+### 基本用法
+
+在服务器端渲染期间获取用户的区域设置。
+
+```javascript title="GetUserLocale.jsx" copy
+import getLocale from 'gt-next/server';
+
+export default async function GetUserLocale() {
+    const locale = await getLocale(); // [!code highlight]
+    return <p>User locale: {locale}</p>;
+}
+```
+
+---
+
+
+## 注意事项
+ * `getLocale()` 函数是异步的，必须使用 await 来获取语言环境。
+ * 它专为服务器端使用而设计。有关客户端组件，请参阅 [`useLocale()`](/docs/next/api/helpers/useLocale)。
+ * 返回的语言环境遵循 [locale strings](/docs/reference/locale-strings) 格式。
+
+## 下一步
+ * 了解如何使用[i18n 配置](/docs/next/reference/i18n-configuration)配置支持的语言环境。
+ * 要管理备用语言环境，请参阅[`getDefaultLocale()`](/docs/next/api/helpers/getDefaultLocale)。

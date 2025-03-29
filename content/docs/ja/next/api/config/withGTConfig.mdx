@@ -1,0 +1,274 @@
+---
+title: withGTConfig()
+description: withGTConfig() の API リファレンス、以前は initGT()
+---
+
+## 概要
+
+`withGTConfig()`は、`gt-next`ライブラリを設定するための主要な方法です。
+これは、`NextConfig`オブジェクトを直接ラップします。
+
+```js title="next.config.mjs"
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {
+    // 既存のnext.config.js
+}
+
+export default withGTConfig(nextConfig, {
+  defaultLocale: 'en-US',
+  locales: ['en-US', 'es', 'fr'],
+});
+```
+
+<Callout>
+**レガシー**
+
+`initGT()`は、`gt-next`ライブラリを設定するためのレガシーな方法です。これは、`NextConfig`オブジェクトで呼び出される関数コールバックを返します。
+両方の関数のプロップは同じですが、`withGTProps`は`NextConfig`も渡す必要がある点が異なります。
+</Callout>
+
+翻訳機能を有効にするために`withGTConfig()`を使用する必要はありませんが、ニーズに合わせてライブラリを設定することをお勧めします。
+
+`withGTConfig()`を使用して以下を行います:
+ * サポートされている言語とデフォルトのロケール（フォールバック言語とも呼ばれます）を設定します。
+ * GTサービスにアクセスするためのAPIキーとプロジェクトIDを設定します。
+ * ローディングの動作を設定します。
+ * タイムアウト設定を構成します。
+ * カスタムエンドポイントを設定します。
+ * 翻訳の動作、キャッシング、およびリクエストのバッチ処理をカスタマイズします。
+
+ <Callout>
+    翻訳機能を有効にするには、`withGTConfig()`を`next.config.js`ファイルで使用する必要があります。
+</Callout>
+
+## リファレンス
+
+### 必須プロップ
+
+<TypeTable
+  type={{
+    "nextConfig": {
+      type: 'NextConfig',
+      optional: false,
+    },
+  }}
+/>
+
+### 推奨プロップ [#props]
+<TypeTable
+  type={{
+    "defaultLocale?": {
+        type: 'string',
+        optional: true,
+        default: "locales[0] || 'en'"
+    },
+    "locales?": {
+        type: 'string[]',
+        optional: true,
+        default: 'undefined',
+    },
+    "description?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+| プロップ        | 説明                                                                 |
+|----------------|---------------------------------------------------------------------|
+| `defaultLocale`| アプリケーションのデフォルトロケール。指定がない場合、英語がフォールバック言語になります。 |
+| `locales`      | アプリケーションでサポートされているロケールの排他的リスト。サポートされていないリクエストが受信された場合、リスト内のブラウザの次の優先言語にリルートされます。マッチが見つからない場合は `defaultLocale` にフォールバックします。 |
+| `description`  | サイトの自然言語による説明で、翻訳を支援するために使用されます。         |
+
+### 高度なプロップ [#advanced-props]
+<TypeTable
+    type={{
+        "projectId?": {
+                type: 'string',
+                optional: true,
+        },
+        "apiKey?": {
+                type: 'string',
+                optional: true,
+        },
+        "devApiKey?": {
+                type: 'string',
+                optional: true,
+        },
+        "preferredModelProvider?": {
+                type: '"anthropic" | "openai"',
+                optional: true,
+        },
+        "runtimeUrl?": {
+                type: 'string',
+                optional: true,
+        },
+        "cacheUrl?": {
+                type: 'string',
+                optional: true,
+        },
+        "cacheExpiryTime?": {
+            type: 'number',
+            optional: true,
+            default: 60000,
+        },
+        "renderSettings?": {
+            type: 'RenderSettings',
+            optional: true,
+        },
+        "maxConcurrentRequests?": {
+            type: 'number',
+            optional: true,
+            default: 100,
+        },
+        "batchInterval?": {
+            type: 'number',
+            optional: true,
+            default: 50,
+        },
+        "maxBatchSize?": {
+            type: 'number',
+            optional: true,
+            default: 25,
+        },
+        "i18n?": {
+            type: 'string',
+            optional: true,
+        },
+        "dictionary?": {
+            type: 'string',
+            optional: true,
+        },
+    }}
+/>
+
+
+| Prop                     | 説明                                                                                                                                                                                                 |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `projectId`              | プロジェクトID。ここに含めるか、環境変数として含めることができます。                                                                                         |
+| `apiKey`                 | 推奨されませんが、APIキーをここに含めることができます。また、環境変数として含めることもできます。                                                                                           |
+| `devApiKey`              | 推奨されませんが、開発用APIキーをここに含めることができます。また、環境変数として含めることもできます。                                                                         |
+| `preferredModelProvider` | 第一選択のAIモデルプロバイダー。現在は[Anthropic](https://anthropic.com)または[OpenAI](https://openai.com)のみが有効です。これを空白のままにしておくと、翻訳ごとに最適なプロバイダーを見つけます。使用量が多い時期やプロバイダーが無効になっている場合、希望するプロバイダーが使用されることを保証できません。 |
+| `runtimeUrl`             | GT APIのベースURL。自動翻訳を無効にするには、これを空の文字列に設定します。                                                                                                                      |
+| `cacheUrl`               | キャッシュされた翻訳が保存されるURL。カスタムキャッシュサーバーを指すようにカスタマイズできます。                                                                                                               |
+| `cacheExpiryTime`        | ローカルにキャッシュされた翻訳が期限切れになるまでの時間（ミリ秒）。                                                                                                                                                     |
+| `renderSettings`         | ランタイム翻訳の読み込み動作を指定するオブジェクト。                                                                                                         |
+| `maxConcurrentRequests` | GT APIへの同時翻訳リクエストの最大数。                                                                                                                                    |
+| `maxBatchSize`           | リクエストを送信する前にバッチ処理する翻訳の最大数。                                                                                                                                   |
+| `batchInterval`         | バッチ翻訳リクエスト間の間隔（ミリ秒）。リクエストが送信される速度を制御するのに役立ちます。                                                                                           |
+| `i18n`                   | カスタム`getLocale()`関数のためのオプションの設定ファイルパス。文字列として提供された場合、それはパスとして解決されます。それ以外の場合、デフォルトが使用されます（推奨）。                                      |
+| `dictionary`             | 辞書のためのオプションの設定ファイルパス。`i18n`と同様に、カスタムパスを指定するために文字列を受け入れます。`dictionary.js`（または`.jsx`、`.ts`、`.tsx`など）と呼ばれる辞書は、ルートまたは`src`フォルダに配置されている場合、デフォルトでサポートされます。 |
+
+
+
+### 戻り値
+
+指定されたGT設定でNext.jsの設定オブジェクトを強化する関数`(NextConfig) => NextConfig`。
+
+### 例外
+
+`projectId`が欠落しており、デフォルトのURLが使用されている場合、またはAPIキーが必要で欠落している場合、`Error`をスローします。
+
+---
+
+## レンダー設定
+
+レンダー設定は、翻訳が読み込まれている間の動作を制御します。
+これは、実行時に発生する翻訳にのみ適用されます。
+翻訳がキャッシュされている場合、応答時間が短すぎて読み込み動作を正当化できません。
+
+<TypeTable
+  type={{
+    method: {
+        description: 'ページをレンダリングするために使用されるメソッド。',
+        type: '"skeleton" | "replace" | "default"',
+        optional: false,
+        default: "default"
+    },
+    timout: {
+        description: 'メソッドがタイムアウトするまでの時間（ミリ秒）。',
+        type: 'number',
+        optional: true,
+        default: 8000,
+    },
+  }}
+/>
+| Prop      | 説明                                                                 |
+|-----------|---------------------------------------------------------------------|
+| `method`  | ページをレンダリングするために使用されるメソッド。オプションは `skeleton`、`replace`、`default` です。 |
+| `timeout` | メソッドがタイムアウトするまでの時間（ミリ秒）。デフォルトは8000 msです。    |
+
+### レンダーメソッド
+ * `skeleton`: フラグメントをレンダリングします。
+ * `replace`: 待機中にデフォルト言語でコンテンツをレンダリングします。
+ * `default`: 同じ言語のロケール（例：`en-US` と `en-GB`）の場合、replaceのように動作します。異なる言語のロケール（例：`en-US` と `fr`）の場合、skeletonのように動作します。
+
+### タイムアウト
+タイムアウトは、実行時翻訳、またはキャッシュされていないためにオンデマンドで実行する必要がある翻訳にのみ適用されます。
+
+タイムアウトはデフォルトで8秒に設定されています。
+この設計上の決定は、無料プランでサーバーレス関数のデフォルトの10秒タイムアウトを持つvercelユーザーを支援するためです。
+
+---
+
+## 例
+
+
+### サポートされているロケール [#supported-locales]
+この例では、`gt-next` をデフォルトのロケールとして英語 (`en-US`) で設定しています。
+スペイン語 (`es`) とフランス語 (`fr`) の翻訳のみをサポートし、文脈に応じた翻訳のための説明を提供します。
+
+ロケールが一致しない場合、サイトは最適な言語にフォールバックします。
+一致する言語（例：`en-US` と `en-GB`）や、ユーザーがブラウザで設定した他の優先言語を探します。
+すべてが失敗した場合、デフォルトの言語にフォールバックします。
+
+<Callout>
+    すべての言語をサポートしたい場合は、`locales` を空白のままにしてください。
+    さらに、ロケールはダッシュボードで設定できます。
+</Callout>
+
+```js title="next.config.mjs" copy
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {
+  // Your other next.js configurations
+}
+
+export default withGTConfig(nextConfig, {
+  defaultLocale: 'en-US',
+  locales: ['en-US', 'es', 'fr'],
+  description: 'A personal blog about technology and travel',
+});
+```
+### レンダー設定
+この例では、翻訳の読み込みを待つ間にスケルトンをレンダリングするように `gt-next` を設定しています。
+翻訳に8秒以上かかる場合、メソッドはタイムアウトし、デフォルトの言語コンテンツをレンダリングします。
+
+```js title="next.config.mjs" copy
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {
+  // Your other next.js configurations
+};
+
+// locales field is left empty, so this configuration supports all 100+ languages
+export default withGTConfig(nextConfig, {
+  defaultLocale: 'en-US',
+  renderSettings: {
+    method: 'skeleton',
+    timeout: 10000,
+  },
+});
+```
+---
+
+## メモ
+ * `withGTConfig()`はGT翻訳機能をNext.jsアプリに統合し、ルート設定ファイルで使用する必要があります。
+ * `apiKey`や`projectId`のようなパラメータは、設定内で直接設定するか、環境変数として設定できます。
+ * `renderSettings`や`_batchInterval`のような高度なパラメータは、翻訳の動作やパフォーマンスを詳細に制御することができます。
+
+## 次のステップ
+ * [CDプロセスへの翻訳の追加](/docs/next/tutorials/quickdeploy)。
+ * リファレンスガイドで[i18n設定](/docs/next/reference/i18n-configuration)についてさらに読む。

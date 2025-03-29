@@ -1,0 +1,80 @@
+---
+title: useLocaleSelector
+description: Referencia de API para el hook useLocaleSelector
+---
+
+## Resumen
+Este hook devuelve la configuración regional actual, la lista de configuraciones regionales y el hook [`useSetLocale()`](/docs/next/api/helpers/useSetLocale).
+Esto está diseñado para un uso fácil al crear tu propio componente selector de configuración regional.
+
+Si no deseas implementar el tuyo propio, puedes usar el componente [`<LocaleSelector>`](/docs/next/api/components/localeSelector) en su lugar.
+
+## Referencia
+
+### Devuelve
+
+Un objeto que contiene la configuración regional actual, la lista de configuraciones regionales y el gancho [`useSetLocale()`](/docs/next/api/helpers/useSetLocale).
+
+---
+
+## Ejemplos
+
+### [`<LocaleSelector>`
+Este es el ejemplo de implementación del componente [`<LocaleSelector>`](/docs/next/api/components/localeSelector).
+
+```jsx
+export default function LocaleSelector({
+  locales: _locales,
+  ...props
+}: {
+  locales?: string[];
+  [key: string]: any;
+}): React.JSX.Element | null {
+  // Obtener propiedades del selector de locales
+  const { locale, locales, setLocale } = useLocaleSelector(
+    _locales ? _locales : undefined
+  );
+
+  // Obtener nombre para mostrar
+  const getDisplayName = (locale: string) => {
+    return capitalizeLanguageName(
+      getLocaleProperties(locale).nativeNameWithRegionCode
+    );
+  };
+
+  // Si no se devuelven locales, simplemente no renderizar nada o manejarlo adecuadamente
+  if (!locales || locales.length === 0 || !setLocale) {
+    return null;
+  }
+
+  return (
+    <select
+      {...props}
+      // Volver a una cadena vacía si currentLocale es indefinido
+      value={locale || ''}
+      onChange={(e) => setLocale(e.target.value)}
+    >
+      {/* Fallback opcional para cuando no se establece un locale */}
+      {!locale && <option value='' />}
+
+      {locales.map((locale) => (
+        <option key={locale} value={locale} suppressHydrationWarning>
+          {getDisplayName(locale)}
+        </option>
+      ))}
+    </select>
+  );
+}
+```
+
+---
+
+## Notas
+
+* Este hook es solo del lado del cliente.
+* Aprende más sobre cadenas de localización [aquí](/docs/reference/locale-strings).
+
+## Próximos Pasos
+
+* Aprende más sobre el componente [`<LocaleSelector>`](/docs/next/api/components/localeSelector).
+* Aprende más sobre el hook [`useLocale()`](/docs/next/api/helpers/useLocale).

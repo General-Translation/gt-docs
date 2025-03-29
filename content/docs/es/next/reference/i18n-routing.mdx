@@ -1,0 +1,202 @@
+---
+title: Enrutamiento i18n
+description: Una guía paso a paso para añadir enrutamiento de internacionalización (i18n) a tu aplicación
+---
+
+## Visión general
+Esta guía te mostrará cómo añadir enrutamiento i18n y rutas localizadas a tu aplicación Next.js utilizando el middleware integrado de `gt-next`.
+
+### ¿Qué es el enrutamiento i18n?
+
+Crear nuevas rutas para cada idioma tiene la ventaja de hacer que tu sitio web sea más fácil de usar y mejorar el SEO.
+El enrutamiento i18n te permite asociar URLs específicas con diferentes locales.
+Por ejemplo, puedes tener `/en/airplanes` para inglés, `/zh/airplanes` para chino, y así sucesivamente.
+
+Puedes llevar esto un paso más allá con rutas localizadas.
+Estas son una extensión del enrutamiento i18n que te permiten especificar una ruta alias para un locale.
+Por ejemplo, puedes especificar `/en/airplanes` para inglés, `/zh/飞机` para chino, y así sucesivamente.
+
+---
+
+## Configurar enrutamiento i18n
+
+Te guiaremos a través de dos pasos sencillos para agregar enrutamiento i18n a tu aplicación Next.js:
+
+<Steps>
+    <Step>
+        Agrega una ruta dinámica a tu carpeta de la aplicación.
+    </Step>
+    <Step>
+        Crea el archivo de middleware.
+    </Step>
+</Steps>
+
+
+### Paso 1: Agregar una Ruta Dinámica [#dynamic-route]
+
+Inserta un directorio en tu carpeta de la aplicación llamado `[locale]` (por ejemplo, `app/[locale]`).
+Incluye todas tus páginas y diseños bajo este directorio.
+
+<Files>
+  <Folder name="my-app" defaultOpen={true}>
+    <File name="middleware.js" />
+    <Folder name="app" defaultOpen={true}>
+      <Folder name="[locale]" defaultOpen={true}>
+        <File name="layout.js" />
+        <File name="page.js" />
+        <Folder name="some-page">
+          <File name="page.js" />
+        </Folder>
+      </Folder>
+      <Folder name="api">
+        <File name="route.js" />
+      </Folder>
+    </Folder>
+    <Folder name="public">
+      <Folder name="images">
+        <File name="logo.png" />
+      </Folder>
+    </Folder>
+    <Folder name="styles">
+      <File name="globals.css" />
+    </Folder>
+    <File name="next.config.js" />
+  </Folder>
+</Files>
+
+Asegúrate de que todos los archivos especiales dentro de `app/` estén anidados bajo `app/[locale]`.
+
+
+
+### Paso 2: Agregar el archivo de middleware [#middleware]
+
+En Next.js, crea un archivo llamado `middleware.js` (o `.ts` si estás usando TypeScript) dentro del directorio raíz.
+Si estás usando la carpeta `src/`, colócalo en `src/middleware.js` (o `.ts`) en su lugar.
+Agrega la función [`createNextMiddleware()`](/docs/next/api/middleware/createNextMiddleware) al archivo.
+
+```js title="middleware.js" copy
+import { createNextMiddleware } from 'gt-next/middleware'
+
+export default createNextMiddleware();
+
+export const config = {
+  matcher: [
+    /*
+      * Coincide con todas las rutas de solicitud excepto con las que comienzan con:
+      * - api (rutas de API)
+      * - _next (archivos internos)
+      * - archivos estáticos
+      */
+    "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
+
+---
+
+## Configurar rutas localizadas
+
+Puedes especificar rutas localizadas a través de la opción `pathConfig` en el archivo de middleware.
+
+```js title="middleware.js" copy
+export default createNextMiddleware({
+  pathConfig: {
+    // Puedes especificar una ruta compartida (opcional)
+    // Esto creará "/en/about" y "/zh/about"
+    "/about": "/about",
+
+    // Especificar rutas localizadas
+    // Esto creará "/en/airplanes" y "/zh/飞机"
+    "/airplanes": {
+      "zh": "/飞机",
+    }
+
+    // Agregar parámetros de ruta dinámicos
+    // Esto creará "/en/airports/123" y "/zh/飞机机场/123"
+    "/airports/[id]": {
+      "zh": "/飞机机场/[id]",
+    }
+  },
+});
+```
+En este ejemplo, creamos una ruta predeterminada para `/en/about` y rutas localizadas para `/en/airplanes` y `/en/airports/[id]`.
+En chino, estas se aliasarán como `/zh/about`, `/zh/飞机` y `/zh/飞机机场/[id]` respectivamente.
+
+<Callout>
+  **Consejo:**
+  Debido a que la ruta `/about` permanece igual para todos los locales, no necesitas incluirla en el objeto `pathConfig`.
+  Cualquier ruta que no esté especificada en el objeto `pathConfig` usará la misma ruta para todos los locales siguiendo el prefijo del local.
+</Callout>
+
+---
+
+## Comportamiento de enrutamiento
+
+### Prefijado de localización por defecto
+Por defecto, tu `defaultLocale` (también conocido como el idioma predeterminado de tu aplicación) no será prefijado con un código de localización en la url.
+Por ejemplo, si tu localización por defecto es `en` y tienes una página en `/about`, será accesible en `/about` en inglés.
+Sin embargo, en chino, será accesible en `/zh/about` en chino.
+
+Si no deseas este comportamiento, se puede desactivar configurando `prefixDefaultLocale` a `false` en la configuración del middleware.
+
+### Detección y redirección de localización
+El middleware detectará la localización del usuario basado en (1) la localización del camino de la url, (2) la localización del referente, (3) los idiomas aceptados del navegador, y (4) finalmente el `defaultLocale`.
+El usuario será redirigido en consecuencia.
+
+<Steps>
+  <Step>
+    La localización siempre se verifica primero desde el camino de la url.
+    Esto significa que si visitas `/zh/about`, se asumirá que tu idioma es chino.
+  </Step>
+  <Step>
+    Si la página que visitas no está prefijada por una localización, entonces el middleware verificará la localización previa del usuario.
+    Por ejemplo, si estás en `/zh`, y visitas `/about`, se asumirá que tu idioma es chino, y serás redirigido a `/zh/about`.
+  </Step>
+  <Step>
+    Si ninguna de estas está disponible, entonces la detección de localización recurrirá al idioma del navegador del usuario.
+    Por ejemplo, si el idioma preferido de alguien es chino, y visita `/about` por primera vez, será redirigido a `/zh/about`.
+  </Step>
+  <Step>
+    Si ninguna de estas condiciones se cumple, entonces se usará el `defaultLocale` como recurso.
+  </Step>
+</Steps>
+
+Si en algún momento existe una versión localizada de la página, serán redirigidos a la url localizada.
+Por ejemplo, `/zh/airplanes` siempre redirigirá a `/zh/飞机`.
+
+#### Caso especial: Caminos localizados sin prefijo de localización
+
+Si navegas a un camino localizado sin el prefijo de localización (por ejemplo, `/飞机`), el middleware prefijará ese camino con lo que crea que es tu localización actual.
+
+Por ejemplo, visitar `/飞机` solo redirigirá a `/zh/飞机` si el middleware reconoce explícitamente tu localización como `zh`.
+Esto es genial, pero solo funciona cuando el middleware cree que tu localización es `zh`.
+
+De lo contrario, tu camino será prefijado con tu localización actual.
+Por ejemplo, visitar `/飞机` redirigirá a `/en/飞机` si el middleware cree que tu localización es `en`.
+Esto resultará en un 404.
+
+Recomendamos siempre usar el camino de tu `defaultLocale` para cualquier enlace en tu proyecto.
+Esto siempre redirigirá automáticamente al camino localizado correcto.
+```jsx
+<Link href="/about">About</Link>
+<Link href="/planes">Planes</Link>
+<Link href="/airports/123">Airport 123</Link>
+```
+
+Si deseas enlazar explícitamente a una localización diferente, entonces puedes hacerlo usando el camino localizado.
+```jsx
+<Link href="/zh/about">About in Chinese</Link>
+<Link href="/zh/飞机">Planes in Chinese</Link>
+<Link href="/zh/飞机机场/123">Airport 123 in Chinese</Link>
+```
+
+
+## Notas
+ * El enrutamiento i18n cambia la estructura de URL de tu aplicación. Cada idioma tiene su propia URL.
+ * El archivo middleware es necesario para manejar la lógica de enrutamiento.
+ * Puedes especificar los idiomas soportados en la configuración del middleware y en el archivo de configuración de next.
+
+## Próximos Pasos
+ * Consulta la documentación de la API para [`createNextMiddleware()`](/docs/next/api/middleware/createNextMiddleware).
+ * Lee más sobre [Gestión de Localización](/docs/next/reference/locale-management).
+ * Aprende cómo [Traducir Tu Aplicación](/docs/next/reference/translate-your-application).

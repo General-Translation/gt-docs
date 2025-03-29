@@ -1,0 +1,65 @@
+---
+title: 部署到生产环境 (5分钟)
+description: 让我们使用 GT 部署您的 Next.js 应用。
+---
+
+## 概述
+
+这是一个简短的教程，帮助您使用 GT 部署您的 Next.js 应用。
+
+我们将分两步完成：
+<Steps>
+  <Step>
+    添加您的生产 API 密钥。
+  </Step>
+  <Step>
+    将翻译命令添加到您的构建脚本中。
+  </Step>
+</Steps>
+
+## 先决条件
+
+确保您已按照[快速入门指南](/docs/next/tutorials/quickstart)设置您的 Next.js 应用程序与 GT。
+
+## 步骤 1：添加您的生产 API 密钥 🔑
+
+将您的**生产** API 密钥和项目 ID 添加到您的生产环境变量中。
+
+从您的[仪表板](https://www.generaltranslation.com/signin)，转到侧边栏中的 **API Keys**。
+点击 **Create API Key**，并将它们添加到您的生产环境中。
+
+```bash copy
+GT_API_KEY="YOUR_GT_API_KEY"
+GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+```
+
+<Callout type="warn">
+    **保护您的 API 密钥！**
+
+    生产密钥应**仅**在生产中使用。
+    同样，开发密钥应**仅**在开发中使用。
+    *切勿将您的 API 密钥提交到公共代码库！*
+</Callout>
+
+## 步骤 2：将翻译命令添加到您的构建脚本 🏗️
+
+下一步是将[翻译命令](/docs/cli/translate)添加到您的构建脚本中，
+并指定您希望发布到生产环境的[语言环境](/docs/reference/supported-locales)。
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales pt es && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+在这里，我们将葡萄牙语和西班牙语添加到了我们的配置中。
+
+就是这样！您现在可以使用 GT 部署您的 Next.js 了！
+
+---
+
+## 下一步
+ * 请按照此指南了解[如何管理语言环境](/docs/next/reference/locale-management)。
+ * 学习如何[翻译字符串](/docs/next/reference/translating-strings)。
+ * 了解[`<T>` 组件](/docs/usage/t)。

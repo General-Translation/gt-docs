@@ -1,0 +1,154 @@
+---
+title: 本地翻译
+description: 为您的 Next.js 应用设置本地翻译
+---
+
+## 概述
+
+本指南将向您展示如何在您的 Next.js 应用中存储翻译，而不是使用 CDN。
+这意味着翻译将存在于您的应用程序包中。
+这可以导致更快的加载时间，并避免对外部基础设施的依赖。
+
+在本文档中，我们将 (1) 解释什么是本地翻译及其工作原理，以及
+(2) 向您展示如何为您的 Next.js 应用设置本地翻译。
+
+---
+
+### 什么是本地翻译？
+
+本地翻译存储在您的应用程序包中，而不是从 CDN（内容分发网络）中获取。
+
+假设您已将 [`gtx-cli translate`](/docs/cli/translate) 命令添加到您的 CD 过程中。
+这将生成包含您应用程序翻译的 JSON 文件。
+最后一步是将这些翻译从我们的 API 中提取到您的应用中。
+
+有两种方法可以做到这一点：
+ * **在您的应用程序包中：** 翻译生成后，将它们添加到您的应用程序包中。
+ * **在 CDN 中（默认）：** 在运行时从 CDN 获取翻译。
+
+### 有什么好处？
+
+*更快的加载时间：* 本地翻译直接从您的应用程序提供，
+这意味着它们将比从 CDN 提供的翻译加载更快。
+
+*不依赖外部服务：* 您的应用加载翻译的能力不依赖于 CDN 的可用性。
+
+### 有什么缺点？
+
+*增加的包大小：* 本地翻译将增加您的应用程序包的大小，因为它们将与您的应用程序一起提供。
+这意味着您的应用程序在首次加载时可能会稍微长一些。
+
+*语言环境管理：* 为了添加或删除对语言环境的支持，您每次都需要重新部署您的应用程序。
+
+*内容管理：* 就像语言环境管理一样，如果您想更改翻译（即，您不喜欢您的内容在不同语言中的措辞），
+您必须使用新的翻译重新部署您的应用程序。
+
+---
+
+## 设置
+
+### 先决条件
+
+确保您已遵循[快速入门指南](/docs/next/tutorials/quickstart)。
+
+### 步骤
+
+<Steps>
+  <Step>
+    在 `./src` 下添加一个 `loadTranslations.js` 文件，内容如下：
+
+    ```js title="src/loadTranslations.js" copy
+    export default async function loadTranslations(locale) {
+      const t = await import(`../public/_gt/${locale}.json`);
+      return t.default;
+    }
+    ```
+  </Step>
+
+  <Step>
+    运行以下命令，当被问到“您的语言文件存储在哪里？”时，选择“本地”选项。
+    ```bash
+    npx gtx-cli init
+    ```
+    然后，运行翻译命令。
+    ```bash
+    npx gtx-cli translate
+    ```
+  </Step>
+</Steps>
+
+就是这样！您的应用现在将仅从本地文件加载翻译。
+
+{/* ---
+
+## 使用您自己的翻译
+
+要使用您自己的翻译（而不是使用 GT AI 翻译服务），有几种选择：
+
+**选项 1：** 创建您自己的语言字典
+**选项 2：** 修改由 [`gtx-cli generate`](/docs/cli/generate) 命令创建的文件
+
+### 选项 1：创建您自己的语言字典
+
+您可以通过在 `gt.config.json` 中将文件标记为您首选语言的字典文件来实现。
+
+例如，假设 `./dictionary/en.json` 是您的基础语言文件：
+```json title="gt.config.json" copy
+{
+  "projectId": "your-project-id",
+  "dictionary": "./dictionary/en.json",
+  "locales": ["en", "fr", "de"],
+  ...
+}
+```
+
+并添加您的加载翻译函数：
+```js title="src/loadTranslations.js" copy
+export default async function loadTranslations(locale) {
+  const t = await import(`../public/locales/${locale}.json`);
+  return t.default;
+}
+```
+
+当您运行翻译命令时，它将在 `./public/locales` 目录中生成翻译。
+```bash
+npx gtx-cli translate --no-publish --translations-dir ./public/locales --dictionary ./dictionary/en.json
+```
+
+要访问这些翻译，您可以使用 [`useDict`](/docs/nest/api/dictionary/useDict) 和 [`getDict`](/docs/nest/api/dictionary/getDict) 来访问您的翻译。
+您可以在[这里](/docs/next/reference/dictionary-reference)阅读更多关于使用字典的信息。
+
+```jsx title="pages/index.jsx" copy
+import { useDict } from 'gt-next/client';
+import { getDict } from 'gt-next/server';
+
+export default function Home() {
+  const d = useDict(); // client-side // [!code highlight]
+  const d = await getDict(); // server-side // [!code highlight]
+  return (
+    <div>
+      <h1>{d('identifier')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+有关更详细的指南，请参阅[自定义翻译参考](/docs/next/reference/dictionary-reference)。
+
+
+### 选项 2：修改由 `gtx-cli generate` 命令创建的文件
+
+🚧 本节目前正在建设中。 🚧 */}
+
+
+---
+
+
+## 注意事项
+ * 本地翻译是从 CDN 获取翻译的替代方案。
+ * 您可以自定义 [`loadTranslations()`](/docs/next/api/config/load-translations) 以便也从其他来源加载翻译，例如您的数据库或您自己的 CDN。
+
+## 下一步
+ * 查看 [`loadTranslations()`](/docs/next/api/config/load-translations) 以获取有关编写自定义翻译加载器的更多信息。
+ * 如果您想编写自己的翻译，请查看[自定义翻译](/docs/next/reference/stand-alone)。
+ * 有关字典语法的更多信息，请参阅[字典参考](/docs/next/reference/dictionary-reference)。

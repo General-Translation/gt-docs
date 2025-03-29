@@ -1,0 +1,97 @@
+---
+title: loadTranslations()
+description: API-Referenz für die Funktion loadTranslations().
+---
+
+## Überblick
+
+Die `loadTranslations()`-Funktion ist der primäre Weg, um das Ladeverhalten von Übersetzungen anzupassen.
+
+In der Produktion müssen Ihre Übersetzungen gespeichert werden, damit sie in Ihrer App gerendert werden können.
+Standardmäßig werden Ihre Übersetzungen im GT CDN gespeichert.
+Sie können eine `loadTranslations()`-Funktion angeben, um Übersetzungen aus einer anderen Quelle zu beziehen, wie zum Beispiel:
+ * Aus dem Bundle Ihrer App (am häufigsten)
+ * Aus einer Datenbank
+ * Aus einer API
+ * Aus einem anderen CDN
+
+Wir haben integrierte Unterstützung für das Laden von Übersetzungen aus lokalen Dateien im Bundle Ihrer App.
+Folgen Sie [diesem Leitfaden](/docs/react/reference/local-tx), um lokale Übersetzungen in Ihrer React-App einzurichten.
+
+## Referenz
+
+### Parameter
+<TypeTable
+  type={{
+    "locale": {
+        type: 'string',
+        optional: false,
+    },
+  }}
+/>
+
+### Beschreibung
+| Typ | Beschreibung |
+| ---- | ----------- |
+| `locale` | Das Gebietsschema, für das Übersetzungen geladen werden sollen. |
+
+### Rückgabewerte
+
+Ein `Promise<any>`, das entweder zu einem String oder einem JSX-Objekt aufgelöst wird, das die Übersetzungen für das angegebene Gebietsschema enthält.
+
+---
+
+## Einrichtung
+
+Sie müssen die Funktion `loadTranslations()` importieren und sie als Prop an die `<GTProvider>` Komponente übergeben.
+
+```jsx title="src/index.js"
+import loadTranslations from './loadTranslations';
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <GTProvider locales={['es', 'fr']} loadTranslations={loadTranslations}> // [!code highlight]
+      <App />
+    </GTProvider>
+  </StrictMode>
+);
+```
+
+---
+
+## Beispiele
+
+### Übersetzungen aus lokalen Dateien laden
+
+Wenn konfiguriert, um [lokale Übersetzungen](/docs/react/reference/local-tx) zu verwenden, werden mit dem Befehl [`gtx-cli translate`](/docs/cli/translate) die Übersetzungen im Verzeichnis `./src/_gt` gespeichert.
+
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
+  const translations = await import(`./_gt/${locale}.json`);
+  return translations.default;
+};
+```
+
+### Übersetzungen von Ihrem eigenen CDN laden
+
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
+  try {
+    const translations = await fetch(`https://your-cdn.com/translations/${locale}.json`);
+    const data = await translations.json();
+    return data;
+  } catch (e) {
+    console.error(e);
+    return {};
+  }
+};
+```
+
+---
+
+## Notizen
+ * `loadTranslations()` gibt Ihnen die Möglichkeit, anzupassen, wie Übersetzungen in Ihrer App in der Produktion geladen werden.
+ * Der häufigste Anwendungsfall ist das Hinzufügen von [lokalen Übersetzungen](/docs/react/reference/local-tx)
+
+## Nächste Schritte
+ * Erfahren Sie, warum Sie [lokale Übersetzungen](/docs/react/reference/local-tx) verwenden möchten

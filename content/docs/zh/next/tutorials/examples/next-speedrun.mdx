@@ -1,0 +1,141 @@
+---
+title: 极速体验 Next.js
+description: 让我们快速创建一个新应用并使用 GT 进行国际化。
+---
+
+## 概述
+
+在本指南中，我们将介绍两件事：
+ - 创建一个新的 Next.js 应用
+ - 使用通用翻译进行国际化
+
+总共应该花费不到 10 分钟。
+
+
+## 前提条件
+
+我们假设您已经在某种程度上有使用 React 的经验，并且熟悉 Typescript。
+
+---
+
+## 步骤 1：创建一个新的 Next.js 应用
+
+首先，在终端中导航到您选择的目录并运行以下命令：
+
+```bash copy
+npx create-next-app next-quickstart --ts --tailwind --eslint --app --use-npm --src-dir
+```
+
+一个设置向导将会出现，您可以为每个选项选择默认值。
+
+
+## 步骤 2：安装库
+
+导航到你的 Next.js 项目的根目录并运行：
+
+```bash copy
+cd next-quickstart
+npm i gt-next
+npm i gtx-cli --save-dev
+```
+
+## 步骤 3：添加您的环境变量。
+
+导航到[仪表板](https://generaltranslation.com/en-US/signin)。
+转到导航栏上的 Dev Api Keys 页面，创建一个新的 API 密钥和项目 ID。
+然后将它们添加到您的 `.env` 文件中。
+
+```bash copy
+GT_API_KEY="YOUR_GT_API_KEY"
+GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+```
+
+## 步骤 4：运行 CLI 工具
+
+运行 CLI 工具以设置您的代码库进行翻译。
+
+```bash copy
+npx gtx-cli setup
+```
+
+## 第五步：修改根布局
+
+修改 `src/app/layout.tsx` 文件中 `<html>` 标签的 `lang` 属性。
+
+它应该使用 `await getLocale()` 来获取当前的语言环境。
+
+```javascript title="src/app/layout.tsx" copy
+import { GTProvider, getLocale } from "gt-next"; // [!code highlight]
+...
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const locale = await getLocale(); // [!code highlight]
+  return (
+    <html lang={locale}> // [!code highlight]
+      <GTProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+        {children}
+        </body>
+      </GTProvider>
+    </html>
+  );
+}
+```
+
+
+## 第六步：启动你的应用程序
+
+你的应用程序已经国际化了！🎉
+让我们来测试一下吧！
+
+让我们更改浏览器的语言设置。
+ * 在 [Chrome](https://support.google.com/chrome/answer/173424) 中更改语言
+ * 在 [Firefox](https://support.mozilla.org/en-US/kb/use-firefox-another-language) 中更改语言
+ * 在 [Edge](https://support.microsoft.com/en-us/microsoft-edge/use-microsoft-edge-in-another-language-4da8b5e0-11ce-7ea4-81d7-4e332eec551f) 中更改语言
+
+启动你的 Next.js 应用程序。
+```bash copy
+npm run dev
+```
+
+在你喜欢的浏览器中打开你的应用程序（通常在 [http://localhost:3000](http://localhost:3000)）。
+如果你一切设置正确，你应该会看到你的应用程序显示为你在浏览器中设置的语言。
+
+---
+
+## 故障排除
+<Accordions>
+    <Accordion title="即使我更改了浏览器的语言，我的应用程序的语言也没有改变。">
+        **浏览器 Cookies**
+
+        检查您应用程序的浏览器 cookies。
+        通用翻译使用 cookies 来存储用户的语言偏好。
+        这个 cookie 被称为 `generaltranslation.locale`，您只需删除它即可。
+        它将在 `localhost:3000` 下。
+        然后，只需仔细检查您正在使用所需的首选语言，然后刷新页面。
+
+        之后，您无需担心清除 cookies。
+
+        如何检查 cookies：
+        * [Chrome](https://support.google.com/chrome/answer/95647)
+        * [Firefox](https://support.mozilla.org/en-US/kb/delete-cookies-remove-info-websites-stored)
+        * [Safari](https://support.apple.com/en-mn/guide/safari/sfri11471/16.0/mac/11.0)
+        * [Edge](https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09)
+    </Accordion>
+</Accordions>
+
+---
+
+## 注意事项
+ * 使用 `<T>` 组件翻译任意 jsx。
+ * 如果更改语言后翻译不起作用，请检查浏览器的 cookies。
+
+## 下一步
+ * 给我们的 GitHub 仓库 [gt-next](https://github.com/General-Translation/gt-next) 点星。
+ * 设置[从右到左语言支持](https://generaltranslation.com/docs/next/reference/rtl)。
+ * 尝试一个更[高级的示例](/docs/next/tutorials/examples/currency-converter/setup)。

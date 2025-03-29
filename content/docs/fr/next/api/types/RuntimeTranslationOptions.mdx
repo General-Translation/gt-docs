@@ -1,0 +1,129 @@
+---
+title: OptionsDeTraductionÀL'Exécution
+description: Référence API pour le type OptionsDeTraductionÀL'Exécution
+---
+
+## Aperçu
+
+Le type `RuntimeTranslationOptions` est utilisé pour passer des variables aux traductions en ligne et spécifier leur comportement de rendu.
+Vous pouvez également ajouter une locale pour spécifier une langue différente pour la traduction.
+Cela est utilisé avec la fonction [`tx()`](/docs/next/api/strings/tx).
+
+<Callout>
+  **Traduction en temps réel :**
+  Pour traduire une variable à la demande, incluez-les directement dans la chaîne passée à [`tx()`](/docs/next/api/strings/tx).
+  Les variables passées à `tx()` via l'objet `options` ne sont pas traduites.
+</Callout>
+
+## Référence
+
+### Paramètres
+
+<TypeTable
+  type={{
+    "locale?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "variables?": {
+        type: 'Record<string, any>',
+        optional: true,
+        default: 'undefined',
+    },
+    "variablesOptions?": {
+        type: 'Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### Description
+
+| Prop | Description |
+| ---- | ----------- |
+| `locale` | Une locale optionnelle à utiliser pour la traduction. Par défaut, elle utilisera la locale préférée du navigateur qui est prise en charge par votre application. |
+| `variables` | Un objet où les clés identifient où chaque valeur est mappée dans la chaîne. |
+| `variablesOptions` | Un objet où les clés identifient la variable et les valeurs définissent le comportement des variables. Voir [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) et [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) pour plus d'informations. |
+
+---
+
+## Exemples
+
+
+### Passage de variables
+Pour ajouter une variable à la chaîne, nous utilisons la syntaxe `{variable-name}`, où les accolades entourent le nom de la variable.
+
+```jsx title="Component.tsx"
+// [!code word:username]
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>
+    {tx(`Hello, {username}!`,{ variables: { 'username' : 'Brian123' } })}
+  </div>;
+};
+```
+
+
+### Ajout d'options de variables
+
+Vous pouvez également personnaliser la façon dont vos variables s'affichent avec la prop `variablesOptions`.
+```jsx title="Component.tsx"
+// [!code word:account-balance]
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>
+    { tx(
+      'Votre solde de compte : {account-balance}!',
+      {
+        variables: { "account-balance" : 1000000 },
+        variableOptions: { "account-balance": { style: 'currency', currency: 'USD' } }
+      }
+    ) }
+  </div>;
+};
+```
+
+
+### Traduction de variables
+Pour traduire une variable, incluez-la directement dans la chaîne passée à `tx()`.
+
+```jsx title="Component.tsx"
+import { tx } from 'gt-next/server';
+
+const Component = ({ hairColor }: { hairColor: string }) => {
+  return <div>{tx(
+    `Hello, {username}! Your haircolor is ${hairColor}`,
+    { variables: { 'username' : 'Brian123' } }
+  )}</div>;
+};
+```
+
+Notez que la variable `hairColor` est traduite, mais `username` ne l'est pas.
+
+
+### Spécification d'une locale
+Vous pouvez spécifier une locale à utiliser pour la traduction.
+```jsx title="Component.tsx"
+import { tx } from 'gt-next/server';
+
+const Component = () => {
+  return <div>{tx('Hello, world!', { locale: 'fr' })}</div>;
+};
+```
+Cela sera toujours traduit en français.
+
+---
+
+## Notes
+ * `RuntimeTranslationOptions` est utilisé pour les traductions de chaînes à l'exécution.
+ * L'objet `variables` transmet des valeurs au texte.
+ * L'objet `variablesOptions` définit le comportement des variables.
+
+
+## Prochaines étapes
+ * Voir [`tx()`](/docs/next/api/strings/tx) pour plus d'informations sur les traductions de chaînes en ligne.
+ * Voir [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) et [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) pour plus d'informations sur les options de formatage.

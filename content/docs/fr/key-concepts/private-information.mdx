@@ -1,0 +1,35 @@
+---
+title: Informations Privées
+description: Un bref aperçu du travail avec les Informations Privées dans GT.
+---
+## Aperçu
+Les informations privées sont généralement toutes les informations qui doivent rester privées.
+Par exemple, le numéro de sécurité sociale d'un utilisateur (SSN), le numéro d'identification fiscale (TIN) ou l'adresse e-mail.
+
+Afin de garder ces informations privées lors de la traduction, nous utilisons le composant `<Var>`.
+Le composant `<Var>` est utilisé pour envelopper tout contenu qui ne doit pas être partagé,
+et le contenu à l'intérieur du composant `<Var>` restera toujours le même.
+C'est idéal pour les noms, les e-mails, les adresses, etc.
+
+Parfois, nous voulons afficher des informations privées, mais nous devons toujours les reformater en fonction des langues préférées de l'utilisateur, des réglementations régionales, etc.
+Par exemple, nous pourrions vouloir afficher le solde du compte bancaire d'un utilisateur dans sa devise locale.
+Dans ces cas, nous utilisons plutôt les composants `<Currency>`, `<DateTime>` ou `<Num>`.
+
+
+### Exemple
+Le composant `<Var>` est également utile pour afficher des informations privées.
+
+```jsx title="PrivateInfo.jsx" copy
+import { T, Var } from 'gt-next'
+
+export default function PrivateInfo(email) {
+    return (
+        <T id='private-info'>
+            Your email address is <Var>{email}</Var>.
+        </T>
+    );
+}
+```
+Les enfants du composant `<Var>` ne seront pas traduits.
+Son contenu ne sera jamais transmis à l'API de Traduction Générale.
+Son contenu ne sera pas distribué au CDN.

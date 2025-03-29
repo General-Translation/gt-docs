@@ -1,0 +1,120 @@
+---
+title: InlineTranslationOptions
+description: API-Referenz für den Typ InlineTranslationOptions
+---
+
+## Überblick
+
+Der `InlineTranslationOptions`-Typ wird verwendet, um Variablen an Inline-Übersetzungen zu übergeben und ihr Renderverhalten festzulegen.
+Sie können der Übersetzung auch Kontext und eine Kennung hinzufügen.
+Er wird mit [`useGT()`](/docs/next/api/strings/useGT) und [`getGT()`](/docs/next/api/strings/getGT) verwendet, um Variablen an Inline-String-Übersetzungen zu übergeben.
+
+<Callout>
+  **Buildtime-Übersetzung:**
+  Variablen werden nicht mit [`useGT()`](/docs/next/api/strings/useGT) und [`getGT()`](/docs/next/api/strings/getGT) übersetzt, nur der Originalstring.
+  Siehe [`tx()`](/docs/next/api/strings/tx) für die Übersetzung von Strings mit dynamischem Inhalt.
+</Callout>
+
+## Referenz
+
+### Parameter
+
+<TypeTable
+  type={{
+    "context?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "id?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "variables?": {
+        type: 'Record<string, any>',
+        optional: true,
+        default: 'undefined',
+    },
+    "variablesOptions?": {
+        type: 'Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### Beschreibung
+
+| Prop | Beschreibung |
+| ---- | ----------- |
+| `context` | Der Kontext des Inhalts (wird für die Übersetzung verwendet). |
+| `id` | Eine optionale Kennung zur Verwendung mit dem Übersetzungseditor. |
+| `variables` | Ein Objekt, bei dem die Schlüssel identifizieren, wo jeder Wert in der Zeichenkette zugeordnet wird.|
+| `variablesOptions` | Ein Objekt, bei dem die Schlüssel die Variable identifizieren und die Werte das Verhalten der Variablen definieren. Siehe [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) und [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) für weitere Informationen. |
+
+---
+
+## Beispiele
+
+### Kontext
+
+Um dem String Kontext hinzuzufügen, verwenden wir die `context`-Eigenschaft.
+
+```jsx title="Component.tsx"
+// [!code word:context]
+import { useGT } from 'gt-next/client';
+
+const Component = () => {
+  const t = useGT();
+  return <div>{t('Hello, world!', { context: 'a formal greeting' })}</div>;
+};
+```
+
+
+### Variablen übergeben
+Um eine Variable zum String hinzuzufügen, verwenden wir die `{variable-name}`-Syntax, wobei geschweifte Klammern den Namen der Variable umschließen.
+
+```jsx title="Component.tsx"
+// [!code word:username]
+import { useGT } from 'gt-next/client';
+
+const Component = () => {
+  const t = useGT();
+  return <div>{t('Hello, {username}! How is your day?', { variables: { 'username' : 'Brian123' } })}</div>;
+};
+```
+
+### Variable Optionen hinzufügen
+
+Sie können auch anpassen, wie Ihre Variablen mit der `variablesOptions`-Eigenschaft gerendert werden.
+```jsx title="Component.tsx"
+// [!code word:account-balance]
+import { useGT } from 'gt-next/client';
+
+const Component = () => {
+  const t = useGT();
+  return <div>
+    { t(
+      'Your account balance: {account-balance}!',
+      {
+        variables: { "account-balance" : 1000000 },
+        variableOptions: { "account-balance": { style: 'currency', currency: 'USD' } }
+      }
+    ) }
+  </div>;
+};
+```
+
+
+---
+
+## Notizen
+ * `InlineTranslationOptions` wird für die Übersetzung von Zeichenfolgen verwendet.
+ * Das `variables`-Objekt übergibt Werte an den Text.
+ * Das `variablesOptions`-Objekt definiert das Verhalten der Variablen.
+
+
+## Nächste Schritte
+ * Siehe [`useGT()`](/docs/next/api/strings/useGT) und [`getGT()`](/docs/next/api/strings/getGT) für weitere Informationen über Inline-String-Übersetzungen.
+ * Siehe [`Intl.NumberFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) und [`Intl.DateTimeFormatOptions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) für weitere Informationen zu Formatierungsoptionen.

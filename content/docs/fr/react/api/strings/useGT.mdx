@@ -1,0 +1,113 @@
+---
+title: useGT()
+description: Référence API pour la fonction de traduction de chaînes useGT()
+---
+
+## Aperçu
+
+La fonction `useGT()` est un hook pour traduire des chaînes de caractères au moment de la construction.
+
+```jsx
+const t = useGT();
+
+<p>{  t('Ce texte sera traduit')  }</p>;
+```
+
+<Callout>
+**Traduction au moment de la construction :**
+Les traductions `useGT()` se produisent au moment de la construction, avant le déploiement de votre application.
+Bien que vous puissiez passer des variables à la chaîne traduite, vous ne pouvez traduire que le contenu connu au moment de la construction.
+</Callout>
+
+## Référence
+### Paramètres
+Aucun
+
+### Renvoie
+
+Une fonction de rappel, `t()`, qui traduit le contenu fourni.
+
+```jsx
+(content: string, options?: InlineTranslationOptions) => string
+```
+
+| Nom                  | Type | Description                                                                 |
+|-----------------------|--|-----------------------------------------------------------------------------|
+| `content`             | `string` | Le contenu de la chaîne à traduire.                                     |
+| `options?`            | [`InlineTranslationOptions`](/docs/react/api/types/InlineTranslationOptions) | Options de traduction pour personnaliser le comportement de `t()`. |
+
+---
+
+## Comportement
+
+
+### Production
+Pendant le processus de CD, tout contenu à l'intérieur d'une fonction `t()` sera traduit avant que votre application ne soit déployée.
+Cela garantit des temps de chargement rapides pour toutes les localités, mais cela ne peut traduire que le contenu connu au moment de la construction.
+
+Une fois générées, les traductions sont soit (1) stockées dans le CDN, soit (2) stockées dans le résultat de la construction de votre application, selon votre configuration.
+À partir de là, le contenu traduit est servi à vos utilisateurs.
+Si une traduction n'est pas trouvée, elle reviendra au contenu original.
+
+Assurez-vous de suivre le [guide de déploiement ici](/docs/react/tutorials/quickdeploy).
+
+### Développement
+Pendant le développement, la fonction `t()` traduira le contenu à la demande.
+Ceci est utile pour prototyper l'apparence de votre application dans différentes langues.
+N'oubliez pas d'ajouter une clé API de développement à votre environnement pour activer ce comportement.
+
+Vous verrez un délai lors de la traduction à la demande en développement.
+Cela ne se produira pas lors des constructions de production.
+
+---
+
+
+## Exemple
+
+### Utilisation de base
+Vous pouvez utiliser `useGT()` pour traduire des chaînes de caractères.
+
+```javascript copy
+import { useGT } from 'gt-react';
+
+export default function TranslateGreeting() {
+  const t = useGT();
+
+  return (
+    <p>
+      {t('Hello, Alice!')}
+    </p>
+  );
+}
+```
+Remarque : "Alice" sera traduit dans la langue préférée de l'utilisateur.
+
+
+### Utilisation de variables [#variables]
+Vous pouvez passer des variables aux traductions du dictionnaire.
+
+```javascript copy
+import { useGT } from 'gt-react';
+
+export default function TranslateGreeting() {
+  const t = useGT();
+
+  return (
+    <p>
+      {t('Hello, {name}!', { variables: { name: 'Alice' } })}
+    </p>
+  );
+}
+```
+Remarque : "Alice" ne sera pas traduit dans la langue préférée de l'utilisateur car c'est une variable.
+
+---
+
+## Notes
+ * La fonction `useGT()` est un hook pour traduire des chaînes de caractères.
+ * Le hook `useGT()` ne peut être utilisé qu'à l'intérieur d'un composant enveloppé par un [composant `<GTProvider>`](/docs/react/api/components/gtprovider).
+ * Les chaînes de traduction avec `useGT()` se produisent avant l'exécution, pendant le processus de construction (sauf en développement).
+
+## Prochaines étapes
+ * Voir [`useDict()`](/docs/react/api/dictionary/useDict) pour traduire des chaînes en utilisant un dictionnaire.
+ * Voir [`InlineTranslationOptions`](/docs/react/api/types/InlineTranslationOptions) pour plus d'informations sur la personnalisation des traductions.

@@ -1,0 +1,315 @@
+---
+title: React 快速入门
+description: 在 5 分钟内使用 gt-react 为您的 React 应用程序实现国际化
+---
+
+## 概述
+
+本指南描述了如何对现有的 [React](https://react.dev) 项目进行国际化。
+
+我们将涵盖4个简单步骤：
+
+<Steps>
+  <Step>
+    安装所需的库
+  </Step>
+  <Step>
+    选择语言
+  </Step>
+  <Step>
+    添加 `<T>` 组件
+  </Step>
+  <Step>
+    添加您的环境变量
+  </Step>
+</Steps>
+
+整个过程应在 **5 分钟** 内完成。
+
+---
+
+## 设置
+
+### 1. 安装库
+
+安装 [gt-react](https://www.npmjs.com/package/gt-react) 和 [gtx-cli](https://www.npmjs.com/package/gtx-cli) 库。
+
+<Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gt-react
+  npm i gtx-cli --save-dev
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gt-react
+  yarn add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash 
+  bun add gt-react
+  bun add -d gtx-cli
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gt-react
+  pnpm add -D gtx-cli
+  ```
+  </Tab>
+</Tabs>
+
+### 2. 选择语言
+
+[`<GTProvider>`](/docs/react/api/components/gtprovider) 用于配置 `gt-react` 的行为。
+它应该尽可能放置在应用程序的高层，理想情况下在根部。
+
+只需传递一个 [语言代码](/docs/reference/supported-locales) 列表即可将它们添加到您的应用程序中。
+
+```jsx title="App.js" copy
+import { GTProvider } from "gt-react";
+import MyApp from "./MyApp";
+
+export default function App() {
+  return (
+    // 支持法语和中文
+    // [!code highlight]
+    <GTProvider locales={['fr', 'zh']}> 
+      <MyApp />
+    </GTProvider> // [!code highlight]
+  );
+}
+```
+
+有关 `<GTProvider>` 属性的完整列表和扩展文档，请参阅 [API 参考](/docs/react/api/components/gtprovider)。
+
+### 3. 添加 `<T>` 组件
+
+将任何嵌套的 JSX 内容包裹在 [`<T>` 组件](/docs/react/api/components/t) 中以使其可翻译。
+有关更多信息，请查看 [使用 `<T>` 组件的指南](/docs/react/reference/t-reference)。
+
+```jsx title="Example.js" copy
+import { T } from "gt-react";
+
+export default function Example() {
+  return (
+    // [!code highlight]
+    <T>
+      <p>
+        这将被翻译。
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+使用 [`<Var>` 组件](/docs/react/api/components/var) 指定不应翻译的 JSX 内容。
+
+```jsx title="Example.js" copy
+import { T, Var } from "gt-react";
+
+export default function Example() {
+  return (
+    // [!code highlight]
+    <T>
+      <p>
+        这将被翻译。 <Var>这不会。</Var>
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+<Callout type="info">
+  **提示：**
+  为了节省时间，运行 [设置命令](/docs/cli/setup)。
+  这将扫描您的代码库以查找可翻译的 JSX 并为您插入 [`<T>`](/docs/react/api/components/t) 标签。
+
+  ```bash title="shell" copy
+  npx gtx-cli setup
+  ```
+</Callout>
+
+对于字符串，您可以使用 [`useGT()`](/docs/react/api/strings/useGT) 进行翻译。
+有关更多信息，请查看 [本指南](/docs/react/reference/translating-strings)。
+
+```jsx title="Example.js" copy
+import { useGT } from "gt-react";
+
+export default function Example() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <p>
+      {/* [!code highlight] */}
+      {t("这将被翻译。")}
+    </p>
+  );
+}
+```
+
+### 4. 添加您的环境变量
+
+将您的 API 密钥和项目 ID 添加到您的环境变量中。
+
+<Steps>
+    <Step>
+        导航到[仪表板](https://generaltranslation.com/dashboard)。
+            * 在侧边栏中导航到**开发者密钥**页面。
+    </Step>
+
+    <Step>
+        点击**创建开发者 API 密钥**，然后将 API 密钥和项目 ID 复制到剪贴板。
+    </Step>
+    <Step>
+        将项目 ID 和 API 密钥添加到您的环境变量中。
+        根据您的 React 框架，环境变量可能会略有不同。
+        这些说明仅适用于**开发环境**。
+        <Tabs items={["Vite", "Gatsby", "RedwoodJS", "create-react-app", "其他"]}>
+            <Tab value="Vite">
+            ```bash copy
+            VITE_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            VITE_GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+            <Tab value="Gatsby">
+            ```bash copy
+            GATSBY_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            GATSBY_GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+            <Tab value="RedwoodJS">
+            ```bash copy
+            REDWOOD_ENV_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            REDWOOD_ENV_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+            <Tab value="create-react-app">
+            ```bash copy
+            REACT_APP_GT_API_KEY="YOUR_GT_DEV_API_KEY"
+            REACT_APP_GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+            ```
+            </Tab>
+            <Tab value="其他">
+            许多 React 框架都有各自独特的方式将环境变量导出到客户端。
+            在开发环境中，`GT_API_KEY` 和 `GT_PROJECT_ID` 都需要导出到客户端。
+
+            我们目前已支持一些库，
+            但如果您的框架未列出，请通过在我们的[GitHub 仓库](https://github.com/General-Translation/gt-libraries/issues/new)中创建问题来告知我们。
+            </Tab>
+        </Tabs>
+    </Step>
+</Steps>
+<Callout type="warn">
+    **保护您的 API 密钥！**
+
+    React 环境变量通常在构建时打包到您的应用程序中，并在客户端代码中公开可见。
+    出于安全原因，您应该：
+    
+    - 仅在本地开发期间使用开发 API 密钥
+    - 仅在部署时使用 CLI 工具的生产 API 密钥
+    - **切勿在生产环境中将任何 API 密钥作为环境变量包含**
+</Callout>
+
+
+---
+
+## 让我们试试看！
+
+恭喜你！🥳 你的应用程序现在支持多语言了！让我们看看它的实际效果。
+
+### 查看你的应用程序在不同语言下的表现
+
+<Steps>
+  <Step>
+    将 [`<LocaleSelector>`](/docs/react/api/components/localeSelector) 组件添加到你的应用程序中。
+    这将允许你为应用程序选择不同的语言。
+    <Callout>
+      **提示：**
+      你也可以在浏览器设置中更改语言。
+    </Callout>
+  </Step>
+  <Step>
+    在开发模式下启动你的 React 应用程序。
+    <Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+      <Tab value="npm">
+      ```bash
+      npm run dev 
+      ```
+      </Tab>
+      <Tab value="yarn">
+      ```bash 
+      yarn run dev 
+      ```
+      </Tab>
+      <Tab value="bun">
+      ```bash
+      bun run dev 
+      ```
+      </Tab>
+      <Tab value="pnpm">
+      ```bash
+      pnpm run dev 
+      ```
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step>
+    在你喜欢的浏览器中打开你的应用程序（通常在
+    [http://localhost:3000](http://localhost:3000)）。
+  </Step>
+</Steps>
+
+### 故障排除
+
+<Accordions>
+  <Accordion title="即使我更改了浏览器的语言，我的应用程序语言也没有改变。">
+    **浏览器 Cookies**
+
+    如果你决定通过更改浏览器的语言来测试不同的语言，可能会出现此问题。
+
+    检查你的应用程序的浏览器 cookies。
+    通用翻译使用 cookies 来存储用户的语言偏好。
+    这个 cookie 被称为 `generaltranslation.locale`，你只需删除它。
+    然后，仔细检查你正在使用所需的首选语言，然后刷新页面。
+
+    如何检查 cookies：
+    * [Chrome](https://support.google.com/chrome/answer/95647)
+    * [Firefox](https://support.mozilla.org/en-US/kb/delete-cookies-remove-info-websites-stored)
+    * [Safari](https://support.apple.com/en-mn/guide/safari/sfri11471/16.0/mac/11.0)
+    * [Edge](https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09)
+
+    如果这不起作用，请确保你的 [`<GTProvider>`](/docs/react/api/components/gtprovider) 中的语言列表是最新的。
+  </Accordion>
+  <Accordion title="为什么新语言加载需要很长时间？">
+    **按需翻译**
+
+    你可能会注意到在开发中加载语言时，翻译需要几秒钟才能显示。
+    这是因为你的应用程序正在实时翻译。
+    我们将此过程称为“按需翻译”。
+    
+    这**仅在开发中发生**，以便你可以轻松地在不同语言中原型化你的网站。
+    所有翻译在生产中都是预加载的，因此不会有延迟。
+    请按照我们的[生产部署指南](/docs/next/tutorials/quickdeploy)。
+  </Accordion>
+  <Accordion title="为什么有些内容翻译了而有些没有？">
+    **JSX 翻译**
+
+    目前，设置工具会自动在文本内容周围添加 `<T>` 组件。
+    我们目前正在开发一种解决方案，可以自动设置字符串翻译。
+    在此之前，如果你正在渲染一个字符串，请按照[本指南](/docs/react/reference/translating-strings)进行字符串翻译。
+  </Accordion>
+</Accordions>
+
+---
+
+## 部署到生产环境
+
+请按照我们的[部署到生产环境](/docs/react/tutorials/quickdeploy)指南进行操作。
+
+---
+
+## 下一步
+ * 查看我们的 [React API 参考](/docs/react/api/components/t) 以获取关于 `<T>` 组件和其他可用组件的详细信息。
+ * 使用 [React 插件](/docs/react/reference/local-management#include-locales) 为您的应用程序创建一个批准语言列表。

@@ -1,0 +1,80 @@
+---
+title: useLocaleSelector
+description: useLocaleSelectorフックのAPIリファレンス
+---
+
+## 概要
+このフックは、現在のロケール、ロケールのリスト、および [`useSetLocale()`](/docs/next/api/helpers/useSetLocale) フックを返します。
+これは、独自のロケールセレクターコンポーネントを作成する際に簡単に使用できるように設計されています。
+
+独自に実装したくない場合は、代わりに [`<LocaleSelector>`](/docs/next/api/components/localeSelector) コンポーネントを使用できます。
+
+## リファレンス
+
+### 戻り値
+
+現在のロケール、ロケールのリスト、および [`useSetLocale()`](/docs/next/api/helpers/useSetLocale) フックを含むオブジェクト。
+
+---
+
+## 例
+
+### [`<LocaleSelector>`]
+これは、[`<LocaleSelector>`](/docs/next/api/components/localeSelector) コンポーネントの例の実装です。
+
+```jsx
+export default function LocaleSelector({
+  locales: _locales,
+  ...props
+}: {
+  locales?: string[];
+  [key: string]: any;
+}): React.JSX.Element | null {
+  // ロケールセレクタのプロパティを取得
+  const { locale, locales, setLocale } = useLocaleSelector(
+    _locales ? _locales : undefined
+  );
+
+  // 表示名を取得
+  const getDisplayName = (locale: string) => {
+    return capitalizeLanguageName(
+      getLocaleProperties(locale).nativeNameWithRegionCode
+    );
+  };
+
+  // ロケールが返されない場合、何もレンダリングしないか、優雅に処理
+  if (!locales || locales.length === 0 || !setLocale) {
+    return null;
+  }
+
+  return (
+    <select
+      {...props}
+      // currentLocale が未定義の場合は空文字列にフォールバック
+      value={locale || ''}
+      onChange={(e) => setLocale(e.target.value)}
+    >
+      {/* ロケールが設定されていない場合のオプションのフォールバック */}
+      {!locale && <option value='' />}
+
+      {locales.map((locale) => (
+        <option key={locale} value={locale} suppressHydrationWarning>
+          {getDisplayName(locale)}
+        </option>
+      ))}
+    </select>
+  );
+}
+```
+
+---
+
+## メモ
+
+* このフックはクライアントサイドのみです。
+* ロケール文字列についての詳細は[こちら](/docs/reference/locale-strings)をご覧ください。
+
+## 次のステップ
+
+* [`<LocaleSelector>`](/docs/next/api/components/localeSelector) コンポーネントについてもっと学ぶ。
+* [`useLocale()`](/docs/next/api/helpers/useLocale) フックについてもっと学ぶ。

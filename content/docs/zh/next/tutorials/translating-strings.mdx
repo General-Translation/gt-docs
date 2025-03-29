@@ -1,0 +1,106 @@
+---
+title: 翻译字符串
+description: 如何翻译字符串
+---
+
+## 概述
+
+本指南是一个逐步教程，教您如何在 Next.js 应用中使用 [`useGT()`](/docs/next/api/strings/useGT)、[`getGT()`](/docs/next/api/strings/getGT) 和 [`tx()`](/docs/next/api/strings/tx) 来翻译字符串。
+
+## 前提条件
+
+我们假设您已经在项目中安装了 `gt-next`，并且已经遵循或正在遵循[快速入门指南](/docs/next/tutorials/quickstart)。
+
+## 翻译字符串
+
+### 客户端组件
+对于任何客户端字符串，使用 [`useGT()`](/docs/next/api/strings/useGT)。
+请记住，`useGT()` 必须在 [`<GTProvider>`](/docs/next/api/components/gtprovider) 的子组件中调用。
+
+```jsx title="src/components/MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+### 服务器端组件
+对于任何服务器端字符串，使用 [`getGT()`](/docs/next/api/strings/getGT)。
+
+```jsx title="src/pages/index.jsx" copy
+import { getGT } from 'gt-next/server';
+
+export default async function Home() {
+  const t = await getGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+<Callout>
+  **注意：**
+  在开发过程中，如果您在运行时翻译内容，您需要刷新页面以查看从 [`getGT()`](/docs/next/api/strings/getGT) 翻译的字符串版本。
+  **这在生产环境中不会发生。**
+</Callout>
+
+### 添加变量
+变量是可能会改变的值，但不会被翻译。
+要将变量添加到您的字符串中，请使用以下模式：
+
+```jsx title="MyComponent.jsx" copy
+import { useGT } from 'gt-next/client';
+
+export default function MyComponent() {
+  const t = useGT();
+  return (
+    <div>
+      <h1>{t('Hello there, {username}', { variables: { username: 'Brian123' }})}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+这适用于 [`useGT()`](/docs/next/api/strings/useGT) 和 [`getGT()`](/docs/next/api/strings/getGT)。
+
+### 动态内容
+假设您有一个会变化的字符串。
+您可以使用 [`tx()`](/docs/next/api/strings/tx) 函数在运行时翻译字符串。
+
+```jsx title="MyComponent.jsx" copy
+import { tx } from 'gt-next/server';
+
+export default async function MyComponent({ username }) {
+  const translation = await tx(`Hello, ${username}. How is your day?`); // [!code highlight]
+  return (
+    <div>
+      <h1>{translation}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+<Callout>
+  **注意：**
+  [`tx()`](/docs/next/api/strings/tx) 函数仅在服务器端可用，并且应仅在必要时使用。
+  运行时翻译通常会造成延迟。
+  尽可能使用 [`getGT()`](/docs/next/api/strings/getGT) 或 [`useGT()`](/docs/next/api/strings/useGT) 在部署前进行翻译。
+</Callout>
+
+---
+
+## 注意事项
+ * 对于翻译字符串，使用 [`useGT()`](/docs/next/api/strings/useGT)、[`getGT()`](/docs/next/api/strings/getGT) 和 [`tx()`](/docs/next/api/strings/tx)。
+ * `useGT()` 和 `getGT()` 在部署前翻译，而 `tx()` 在运行时翻译。谨慎使用 `tx()`。
+ * 可以使用 `{ variables: { key: value } }` 模式将变量添加到字符串中。
+
+## 下一步
+ * 返回到[快速入门指南](/docs/next/tutorials/quickstart)以完成项目的翻译设置。
+ * 查看 [`useGT()`](/docs/next/api/strings/useGT)、[`getGT()`](/docs/next/api/strings/getGT) 和 [`tx()`](/docs/next/api/strings/tx) 的 API 参考。

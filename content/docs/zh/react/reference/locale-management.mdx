@@ -1,0 +1,106 @@
+---
+title: 管理语言环境
+description: 如何管理您的应用程序的语言环境
+---
+
+
+## 概述
+
+本文档提供了如何在您的 React 应用程序中使用 `gt-react` 管理语言环境的指导。
+我们将逐步介绍如何配置您想要支持的语言环境列表，然后触发翻译的生成。
+我们还将介绍如何将配置文件传递给您的应用程序。
+
+此库使用 [BCP-47 标准](/docs/reference/locale-strings) 来定义语言环境。
+查看当前支持的语言环境列表 [这里](/docs/reference/supported-locales)。
+
+---
+
+## 配置语言环境
+
+有两种方法可以更改生产环境的语言环境：
+ 1. CLI 工具
+ 2. `gt.config.json` 文件（推荐）
+
+
+### 使用 CLI 工具管理语言环境
+
+管理语言环境的最简单方法是通过使用 `--locales` 标志在 [`npx gtx-cli translate`](/docs/cli/translate) 命令中指定它们。
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales zh jp && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+
+这将生成中文 (`zh`) 和日文 (`jp`) 的翻译。
+
+
+确保您的应用程序知道这些语言环境是受支持的，方法是将配置文件传递给 GTProvider 组件。
+```jsx title="App.js" copy
+import { GTProvider } from 'gt-react';
+import config from './gt.config.json';
+
+function App() {
+  return (
+    <GTProvider locales={["zh", "jp"]}>
+      <YourApp />
+    </GTProvider>
+  );
+}
+```
+
+
+### 使用 `gt.config.json`（推荐）
+
+管理语言环境的更强大方法是使用 `gt.config.json` 文件。
+您可以使用 `locales` 属性指定要支持的语言环境列表。
+
+```json title="gt.config.json" copy
+{
+  "locales": ["zh", "jp"],
+}
+```
+
+然后只需将配置文件传递给您的 GTProvider 组件。
+
+```jsx title="App.js" copy
+import { GTProvider } from 'gt-react';
+import config from './gt.config.json';
+
+function App() {
+  return (
+    <GTProvider {...config}>
+      <YourApp />
+    </GTProvider>
+  );
+}
+```
+
+最后一步是将翻译命令添加到您的构建脚本中。
+您不需要使用 `--locales` 标志指定语言环境，因为它们已经在 `gt.config.json` 文件中定义。
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+
+---
+
+## 白名单语言环境
+
+作为一个可选功能，您可以添加一个白名单语言环境列表。
+这可以通过仪表板下的项目语言环境页面访问。
+如果您启用此功能，任何尝试使用非白名单语言环境调用 npx translate 的操作都将失败。
+
+---
+
+## 注意事项
+ * 您可以通过仪表板、`gt.config.json` 文件或 CLI 工具管理语言环境。
+ * 记得在您的应用中将语言环境传递给 [`<GTProvider>`](/docs/react/api/componenets/gtprovider)。
+
+ ## 下一步
+ * 在[语言环境字符串](/docs/reference/locale-strings)参考中了解语言环境语法。

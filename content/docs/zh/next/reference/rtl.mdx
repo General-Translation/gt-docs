@@ -1,0 +1,38 @@
+---
+title: 从右到左支持
+description: 添加从右到左（RTL）支持到您的应用程序的分步指南
+---
+
+## 概述
+
+虽然大多数语言是从左到右（LTR）书写的，但有些语言是从右到左（RTL）书写的。
+这些语言包括阿拉伯语、希伯来语、波斯语和乌尔都语，全球共有超过5亿人使用这些语言。
+
+查看[英语](https://generaltranslation.com/en-US/welcome)和[阿拉伯语](https://generaltranslation.com/ar/welcome)的通用翻译主页，以展示ltr和rtl渲染之间的区别。
+
+## 指南
+
+要为您的应用程序添加 RTL 支持，我们需要做的就是确定语言的方向，并相应地设置屏幕上文本的方向。
+
+您可以使用 `generaltranslation` 库中的 `getLanguageDirection()` 函数来确定一种语言是 `"rtl"` 还是 `"ltr"`。
+
+使用 `getLocale()` 函数在根布局中获取语言环境，然后将 `lang` 和 `dir` 属性添加到 `<html>` 标签中：
+
+```javascript title="my-app/app/layout.tsx" copy
+import { getLocale } from 'gt-next'
+import { getLanguageDirection } from 'generaltranslation';
+
+export default async function RootLayout({ children }) {
+        
+  const locale = await getLocale(); // e.g. "ar" for Arabic
+  const dir = getLanguageDirection(locale); // e.g. "rtl" for "right-to-left"
+
+  return (
+    <html lang={locale} dir={dir}>
+      <body> 
+        {children}
+      </body>
+    </html>
+  )
+}
+```

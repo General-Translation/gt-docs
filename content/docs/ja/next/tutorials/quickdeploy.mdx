@@ -1,0 +1,65 @@
+---
+title: 本番環境へのデプロイ (5分)
+description: GTを使用してNext.jsアプリをデプロイしましょう。
+---
+
+## 概要
+
+これは、GTを使用してNext.jsアプリをデプロイするための短いチュートリアルです。
+
+これを2つのステップで行います：
+<Steps>
+  <Step>
+    本番環境のAPIキーを追加します。
+  </Step>
+  <Step>
+    ビルドスクリプトに翻訳コマンドを追加します。
+  </Step>
+</Steps>
+
+## 前提条件
+
+Next.jsアプリをGTでセットアップするために、[クイックスタートガイド](/docs/next/tutorials/quickstart)に従ったことを確認してください。
+
+## ステップ 1: 本番環境の API キーを追加する 🔑
+
+**本番環境**の API キーとプロジェクト ID を本番環境の変数に追加します。
+
+[ダッシュボード](https://www.generaltranslation.com/signin)から、サイドバーの **API キー** に移動します。
+**API キーを作成** をクリックし、それらを本番環境に追加します。
+
+```bash copy
+GT_API_KEY="YOUR_GT_API_KEY"
+GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+```
+
+<Callout type="warn">
+    **API キーを保護してください！**
+
+    本番環境のキーは**本番環境でのみ**使用する必要があります。
+    同様に、開発環境のキーは**開発環境でのみ**使用する必要があります。
+    *API キーを公開リポジトリにコミットしないでください！*
+</Callout>
+
+## ステップ 2: ビルドスクリプトに翻訳コマンドを追加する 🏗️
+
+次のステップは、ビルドスクリプトに[翻訳コマンド](/docs/cli/translate)を追加し、
+本番環境に出荷したい[ロケール](/docs/reference/supported-locales)を指定することです。
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales pt es && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+ここでは、ポルトガル語とスペイン語を設定に追加しました。
+
+以上です！これで、GTを使用してNext.jsをデプロイする準備が整いました！
+
+---
+
+## 次のステップ
+ * [ロケールを管理する方法](/docs/next/reference/locale-management)に関するこのガイドに従ってください。
+ * [文字列を翻訳する方法](/docs/next/reference/translating-strings)を学びましょう。
+ * [`<T>` コンポーネント](/docs/usage/t)について学びましょう。

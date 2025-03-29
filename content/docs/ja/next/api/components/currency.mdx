@@ -1,0 +1,153 @@
+---
+title: <Currency>
+description: <Currency>コンポーネントのAPIリファレンス
+---
+
+## 概要
+
+`<Currency>` コンポーネントは数値を通貨としてレンダリングします。
+数値は現在のロケールと渡された任意のパラメーターに基づいてフォーマットされます。
+通貨コンポーネントはフォーマットのみを処理し、為替レートの計算は行いません。
+
+```jsx
+<Currency>{100}</Currency>
+// 出力: $100.00
+```
+
+すべての再フォーマットは、[`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) ライブラリを使用してローカルで処理されます。
+
+## リファレンス
+
+### Props
+
+<TypeTable
+  type={{
+    "children?": {
+        type: 'any',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "value?": {
+        decription: 'Optional value. children will be used for value if not provided.',
+        type: 'string | number',
+        optional: true,
+        default: 'undefined',
+    },
+    "currency?": {
+        type: 'string',
+        optional: true,
+        default: '"USD"',
+    },
+    "options?": {
+        type: 'Intl.NumberFormatOptions',
+        optional: true,
+        default: '{}',
+    },
+    "locales?": {
+        type: 'string[]',
+        optional: true,
+        default: 'undefined',
+    },
+  }}
+/>
+
+### 説明
+| Prop      | 説明                                                                                                                                            |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `children`  | コンポーネント内にレンダリングするコンテンツ。通常は通貨としてフォーマットされる値を表す数値です。提供されている場合、`value` プロップより優先されます。 |
+| `name`      | 通貨フィールドのオプション名で、メタデータ目的で使用されます。                                                                                      |
+| `value`     | 通貨のデフォルト値。提供されていない場合は children にフォールバックします。文字列または数値で指定できます。文字列はフォーマット前に数値に解析されます。                                  |
+| `currency`  | 通貨の種類、例えば "USD" や "EUR" など。通貨に使用されるシンボルとフォーマットを決定します。                                            |
+| `options`   | 通貨のフォーマットオプションで、[`Intl.NumberFormatOptions` 仕様](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat)に従います。最大小数桁数、グルーピングなどのスタイルを定義するために使用します。 |
+| `locales`   | フォーマットのロケールを指定するためのオプションのロケール。提供されていない場合、デフォルトのユーザーのロケールが使用されます。ロケールの指定についての詳細は[こちら](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument)を参照してください。                                            |
+
+### 戻り値
+
+フォーマットされた通貨を文字列として含む `JSX.Element`。
+
+---
+
+## 例
+### 基本的な例
+
+`<Currency>` コンポーネントは、ローカライズされた通貨の値を表示するために使用できます。
+
+```jsx title="PriceDisplay.jsx" copy
+import { Currency } from 'gt-next';
+
+export default function PriceDisplay(item) {
+  return (
+    <Currency> {item.price} </Currency>
+  );
+}
+```
+
+### 通貨の指定
+ここでは、価格をユーロで表示しています。
+
+```jsx title="PriceDisplay.jsx" copy
+import { Currency } from 'gt-next';
+
+export default function PriceDisplay(item) {
+  return (
+    <Currency currency="EUR"> {item.price} </Currency> 
+  );
+}
+```
+
+### `<Currency>` コンポーネントの翻訳
+通貨を翻訳された文の中で表示したい場合、`<Currency>` コンポーネントを `<T>` コンポーネントでラップすることができます。
+
+```jsx title="PriceDisplay.jsx" copy
+import { T, Currency } from 'gt-next';
+
+export default function PriceDisplay(item) {
+  return (
+    {/* [!code highlight] */}
+    <T id="itemPrice">
+      The price is <Currency> {item.price} </Currency>.
+    </T> // [!code highlight]
+  );
+}
+```
+
+### カスタムフォーマット
+
+ここでは、GBPで価格を表示し、小数点以下の桁数を正確に指定し、通貨の狭いシンボル（例: "$100" ではなく "US$100"）を使用しています。
+より多くのオプションについては、[Intl.NumberFormatOptions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) を参照してください。
+
+```jsx title="PriceDisplay.jsx" copy
+import { Currency } from 'gt-next';
+
+export default function PriceDisplay(item) {
+  return (
+    <Currency
+      currency="GBP"
+      options={{ // [!code highlight]
+        currencyDisplay: 'narrowSymbol', // [!code highlight]
+        minimumFractionDigits: 2, // [!code highlight]
+        maximumFractionDigits: 2, // [!code highlight]
+      }} // [!code highlight]
+    >
+      {item.price}
+    </Currency>
+  );
+}
+```
+
+---
+
+
+## メモ
+ * `<Currency>` コンポーネントは、現在のロケールと渡された任意のパラメータに基づいて通貨の値をフォーマットするために使用されます。
+ * 通貨コンポーネントはフォーマットのみを処理し、為替レートの計算は行いません。
+ * `<Currency>` コンポーネントの内容は、翻訳のためにAPIに送信されません。
+   すべての再フォーマットは、[`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) ライブラリを使用してローカルで行われます。
+
+## 次のステップ
+ * `<Currency>` コンポーネントや `<Num>`, `<DateTime>`, `<Var>` のような他の変数コンポーネントの詳細と使用例については、[変数コンポーネントの使用](/docs/next/reference/using-variable-components) ドキュメントを参照してください。

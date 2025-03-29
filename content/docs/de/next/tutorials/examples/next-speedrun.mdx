@@ -1,0 +1,143 @@
+---
+title: Speedrun Next.js
+description: Lass uns im Schnellverfahren eine neue App erstellen und sie mit GT internationalisieren.
+---
+
+## Überblick
+
+In diesem Leitfaden werden wir zwei Dinge durchgehen:
+ - Erstellen einer neuen Next.js-App
+ - Internationalisierung mit allgemeiner Übersetzung
+
+Insgesamt sollte dies weniger als 10 Minuten dauern.
+
+
+## Voraussetzungen
+
+Wir gehen davon aus, dass Sie entweder Erfahrung mit der Verwendung von React in irgendeiner Form haben und mit Typescript vertraut sind.
+
+---
+
+## Schritt 1: Erstellen Sie eine neue Next.js-App
+
+Navigieren Sie zuerst im Terminal zu dem Verzeichnis Ihrer Wahl und führen Sie den folgenden Befehl aus:
+
+```bash copy
+npx create-next-app next-quickstart --ts --tailwind --eslint --app --use-npm --src-dir
+```
+
+Ein Einrichtungsassistent wird angezeigt, Sie können einfach den Standardwert für jede Option auswählen.
+
+
+## Schritt 2: Installieren Sie die Bibliotheken
+
+Navigieren Sie zum Stammverzeichnis Ihres Next.js-Projekts und führen Sie aus:
+
+```bash copy
+cd next-quickstart
+npm i gt-next
+npm i gtx-cli --save-dev
+```
+
+## Schritt 3: Fügen Sie Ihre Umgebungsvariablen hinzu.
+
+Navigieren Sie zum [Dashboard](https://generaltranslation.com/en-US/signin).
+Gehen Sie zur Dev Api Keys-Seite in der Navigationsleiste und erstellen Sie einen neuen API-Schlüssel und eine Projekt-ID.
+Fügen Sie diese dann zu Ihrer `.env`-Datei hinzu.
+
+```bash copy
+GT_API_KEY="YOUR_GT_API_KEY"
+GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+```
+
+## Schritt 4: Führen Sie das CLI-Tool aus
+
+Führen Sie das CLI-Tool aus, um Ihre Codebasis für die Übersetzung einzurichten.
+
+```bash copy
+npx gtx-cli setup
+```
+
+## Schritt 5: Ändern Sie das Root-Layout
+
+Ändern Sie das `lang`-Prop im `<html>`-Tag in der Datei `src/app/layout.tsx`.
+
+Es sollte `await getLocale()` verwenden, um die aktuelle Sprache zu erhalten.
+
+```javascript title="src/app/layout.tsx" copy
+import { GTProvider, getLocale } from "gt-next"; // [!code highlight]
+...
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const locale = await getLocale(); // [!code highlight]
+  return (
+    <html lang={locale}> // [!code highlight]
+      <GTProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+        {children}
+        </body>
+      </GTProvider>
+    </html>
+  );
+}
+```
+
+
+## Schritt 6: Starten Sie Ihre App
+
+Ihre App ist internationalisiert! 🎉
+Lassen Sie uns das testen!
+
+
+Ändern wir die Spracheinstellungen Ihres Browsers.
+ * Ändern Sie Ihre Sprache in [Chrome](https://support.google.com/chrome/answer/173424)
+ * Ändern Sie Ihre Sprache in [Firefox](https://support.mozilla.org/en-US/kb/use-firefox-another-language)
+ * Ändern Sie Ihre Sprache in [Edge](https://support.microsoft.com/en-us/microsoft-edge/use-microsoft-edge-in-another-language-4da8b5e0-11ce-7ea4-81d7-4e332eec551f)
+
+Starten Sie Ihre Next.js-App.
+```bash copy
+npm run dev
+```
+
+Öffnen Sie Ihre App in Ihrem bevorzugten Browser (normalerweise unter [http://localhost:3000](http://localhost:3000)).
+Wenn Sie alles korrekt eingerichtet haben, sollten Sie Ihre App in der Sprache sehen, die Sie in Ihrem Browser eingestellt haben.
+
+---
+
+## Fehlerbehebung
+<Accordions>
+    <Accordion title="Die Sprache meiner App ändert sich nicht, obwohl ich die Sprache meines Browsers geändert habe.">
+        **Browser-Cookies**
+
+        Überprüfen Sie die Cookies Ihres Browsers für Ihre App.
+        Die allgemeine Übersetzung verwendet Cookies, um die Sprachpräferenz des Benutzers zu speichern.
+        Das Cookie heißt `generaltranslation.locale`, und Sie müssen es nur löschen.
+        Es wird unter `localhost:3000` sein.
+        Überprüfen Sie dann einfach, ob Sie die gewünschte bevorzugte Sprache verwenden, und
+        aktualisieren Sie die Seite.
+
+        Danach müssen Sie sich keine Sorgen mehr über das Löschen der Cookies machen.
+
+        So überprüfen Sie Cookies:
+        * [Chrome](https://support.google.com/chrome/answer/95647)
+        * [Firefox](https://support.mozilla.org/en-US/kb/delete-cookies-remove-info-websites-stored)
+        * [Safari](https://support.apple.com/en-mn/guide/safari/sfri11471/16.0/mac/11.0)
+        * [Edge](https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09)
+    </Accordion>
+</Accordions>
+
+---
+
+## Notizen
+ * Übersetzen Sie beliebiges JSX mit der `<T>` Komponente.
+ * Wenn die Übersetzung nicht funktioniert, wenn Sie Ihre Sprache ändern, überprüfen Sie die Cookies Ihres Browsers.
+
+## Nächste Schritte
+ * Geben Sie unserem GitHub-Repo [gt-next](https://github.com/General-Translation/gt-next) einen Stern.
+ * Richten Sie die [Unterstützung für Rechts-nach-Links-Sprachen](https://generaltranslation.com/docs/next/reference/rtl) ein.
+ * Probieren Sie ein [fortgeschritteneres Beispiel](/docs/next/tutorials/examples/currency-converter/setup) aus.

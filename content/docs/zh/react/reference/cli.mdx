@@ -1,0 +1,248 @@
+---
+title: CLI 工具
+description: 通用翻译 CLI 工具
+---
+
+## 概述
+
+这是关于通用翻译 CLI 工具的参考文档。
+在[这里](/docs/cli)阅读更多关于 `gtx-cli` 的信息。
+
+有关分步指南，请查看[部署到生产环境](/docs/react/tutorials/quickdeploy)指南。
+
+## 安装
+
+<Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gtx-cli --save-dev
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash 
+  bun add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gtx-cli --save-dev
+  ```
+  </Tab>
+</Tabs>
+
+## CLI 工具的功能是什么？
+
+CLI 工具用于管理您的项目和翻译。
+您应该了解两个主要命令：`translate` 和 `setup`。
+
+ * [`translate` 命令](/docs/cli/translate) 旨在添加到 CD 管道中。
+   它用于扫描您的项目以查找需要翻译的内容。
+   然后将内容上传到 CDN 或添加到您的应用程序包中以便在运行时使用。
+ * [`setup` 命令](/docs/cli/setup) 用于自动将通用翻译库集成到您的项目中。
+   它将扫描您的项目并将任何 JSX 内容包装在 `<T>` 组件中。
+
+### 翻译
+
+要使用 CLI 工具，请从项目的根目录运行以下命令：
+
+```bash title="shell" copy
+npx gtx-cli translate
+```
+
+<Callout type="warn">
+    **仅供生产环境使用！**
+
+    由于此 CLI 工具将翻译内容发布到 CDN，因此仅用于生产构建，**不应在开发中使用**。
+    在运行此命令之前，请确保您在将用于生产的分支上。
+    还请记得在环境变量中指定您的生产 API 密钥和项目 ID。
+</Callout>
+
+### 标志
+
+<TypeTable
+  type={{
+    "--api-key": {
+        description:
+            '生产 API 密钥',
+        type: 'string',
+        optional: true,
+    },
+    "--project-id": {
+        description:
+            '项目 ID',
+        type: 'string',
+        optional: true,
+    },
+    "--options": {
+        description:
+            'GT 选项文件的路径',
+        type: 'string',
+        optional: true,
+        default: 'gt.config.json',
+    },
+    "--new": {
+        description:
+            '将项目翻译成的新语言环境',
+        type: 'string',
+        optional: true,
+    },
+    "--dictionary": {
+        description:
+            '字典文件的路径',
+        type: 'string',
+        optional: true,
+    },
+    "--dry-run": {
+        description:
+            '试运行命令',
+        type: 'boolean',
+        optional: true,
+        default: 'false',
+    },
+    "--ignore-errors": {
+        description:
+            '忽略错误并强制翻译有效内容',
+        type: 'boolean',
+        optional: true,
+        default: 'false',
+    },
+    "--inline": {
+        description:
+            '除了字典外，还包括内联 <T> 标签',
+        type: 'boolean',
+        optional: true,
+        default: 'true',
+    },
+  }}
+/>
+
+首次运行 CLI 工具时，它将尝试在项目的根目录中创建一个 `gt.config.json` 文件。
+此文件包含有关您的项目的元数据，用于翻译您的内容。
+
+---
+
+## 设置
+
+此外，CLI 工具可以自动扫描并设置您的项目以进行翻译。
+如果您是第一次使用通用翻译，我们建议运行设置以开始使用。
+
+```bash title="shell" copy
+npx gtx-cli setup
+```
+
+<Callout type="warn">
+    **储存您的更改！**
+
+    这将修改您的代码库，因此请确保先储存或提交您的更改。
+</Callout>
+
+运行此命令将会在包含可翻译内容的顶级 JSX 元素周围包裹 `<T>` 组件。
+
+它还会将任何非静态内容包裹在 `<Var>` 组件中。
+
+以下是扫描将转换的一些示例：
+
+
+<Tabs items={["示例 1", "示例 2", "示例 3", "示例 4", "示例 5"]}>
+  <Tab value="示例 1">
+
+
+  ```jsx
+  <div>Hello, World!</div>
+  ```
+
+  将被转换为：
+
+  ```jsx
+  <T id="">Hello, World!</T>
+  ```
+
+  </Tab>
+  <Tab value="示例 2">
+
+
+  ```jsx
+  <div>Hello, {name}</div>
+  ```
+
+  将被转换为：
+
+  ```jsx
+  <T id="">Hello, <Var>{name}</Var></T>
+  ```
+
+  </Tab>
+  <Tab value="示例 3">
+
+
+  ```jsx
+  <p>{true && "Hello, World!"}</p>;
+  ```
+
+  将被转换为：
+
+  ```jsx
+  <T id=""><p><Var>{true && <T id="">{"Hello, World!"}</T>}</Var></p></T>;
+  ```
+
+  </Tab>
+  <Tab value="示例 4">
+
+
+  ```jsx
+  <p>{"Hello," + " World!"}</p>
+  ```
+
+  将被转换为：
+
+  ```jsx
+  <T id=""><p>{"Hello," + " World!"}</p></T>
+  ```
+
+  </Tab>
+  <Tab value="示例 5">
+
+
+  ```jsx
+  <p>{`${temp}`}</p>
+  ```
+
+  将被转换为：
+
+  ```jsx
+  <T id=""><p><Var>{`${temp}`}</Var></p></T>
+  ```
+
+  </Tab>
+</Tabs>
+
+CLI 只会在 JSX 元素内包裹直接子元素。它会分别用自己的 `<T>` 组件包裹其他 JSX 元素。
+
+
+<Callout type="warn">
+    **实验性**
+
+    此功能目前是实验性的，可能无法完美运行。
+    在运行扫描后，您应该手动检查输出并确保其正确。
+    特别注意，任何非静态的 JSX 表达式 `{...}` 将会被包裹在 `<Var>` 组件中。
+    您可能需要手动检查和编辑这些情况。
+    请在 [这里](https://github.com/General-Translation/gt-libraries/issues) 报告您遇到的任何问题。
+</Callout>
+
+### 标志
+
+<TypeTable
+  type={{
+    "--src": {
+        description:
+            '要扫描的源目录',
+        type: 'string',
+        optional: true,
+    },
+  }}
+/>

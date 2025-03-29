@@ -1,0 +1,399 @@
+---
+title: Référence <T>
+description: Ceci est une exploration détaillée du composant <T> et de la bibliothèque gt-react.
+---
+
+## Aperçu
+
+Cet article va plonger en profondeur dans l'utilisation du [composant `<T>`](/docs/react/api/components/t) dans la bibliothèque `gt-react`.
+N'hésitez pas à parcourir cette page selon vos besoins.
+Nous couvrirons les points suivants :
+ * [Le composant `<T>`](#what-is-the-t-component)
+ * [Modèles de conception](#design-patterns)
+ * [Considérations de production](#production)
+ * [Quelques exemples](#examples)
+ * [Pièges courants](#common-pitfalls)
+
+Si vous cherchez comment utiliser les [Composants Variables](/docs/react/reference/using-variable-components) ou les [Composants de Bifurcation](/docs/react/reference/using-branching-components), veuillez vous référer à leurs articles respectifs.
+
+---
+
+## Qu'est-ce que le composant `<T>` ?
+
+Le composant `<T>` est le moyen principal de traduire du texte et du contenu dans la bibliothèque `gt-react`.
+Il permet la traduction en ligne de texte et de structures JSX, offrant un moyen plus direct de gérer les traductions dans votre application.
+C'est souvent plus pratique pour le développeur car cela permet un contrôle plus direct sur le contenu de la traduction.
+
+Le composant `<T>` prend en charge le texte statique, les structures JSX et les traductions contextuelles.
+Lorsqu'aucune traduction n'est disponible, il revient gracieusement à afficher le contenu dans la langue par défaut de l'application.
+
+```jsx
+<T>
+  <p>Bonjour, le monde !</p>
+</T>
+```
+
+## Modèles de Conception
+
+Dans cette section, nous détaillerons les modèles de conception courants utilisés avec le composant `<T>`.
+Cela touchera également des sujets qui sont tangentiellement liés au composant `<T>`, mais tout aussi importants, tels que
+la traduction de chaînes, la traduction de contenu à l'avance, et les préoccupations en matière de confidentialité.
+
+### Envelopper vos composants `<T>` dans un `<GTProvider>` [#gtprovider]
+
+`<T>` est utilisé pour traduire du texte statique et des structures JSX.
+`<T>` **DOIT** être enveloppé dans un [`<GTProvider>`](/docs/react/api/components/gtprovider) à un niveau supérieur.
+Notre conseil est d'envelopper votre application dans un `<GTProvider>` au niveau racine pour fournir ce contexte.
+
+```javascript copy
+import { GTProvider } from "gt-react"; 
+import MyApp from "./MyApp";
+ 
+export default function App() {
+  return (
+    <GTProvider>
+      <MyApp />
+    </GTProvider> 
+  );
+}
+```
+
+### Variables dans les Composants `<T>`
+
+Les composants de variables peuvent être utilisés dans les composants `<T>` pour (1) afficher des valeurs dynamiques et/ou (2) marquer le contenu qui ne doit pas être traduit.
+Pensez à des choses comme le nom d'un utilisateur : c'est (1) différent d'une personne à l'autre et (2) ne doit pas changer même lorsque la langue change.
+
+```jsx title="DynamicGreeting.js" copy
+import { T, Var } from 'gt-react';
+
+export default function DynamicGreeting({ user }) {
+  return (
+    <T>
+      Bonjour, <Var>{user.name}</Var>! // [!code highlight]
+    </T>
+  );
+}
+```
+
+Il existe de nombreux composants de variables : [`<Var>`](/docs/react/api/components/var), [`<Num>`](/docs/react/api/components/num), [`<Currency>`](/docs/react/api/components/currency) et [`<DateTime>`](/docs/react/api/components/datetime).
+Certains d'entre eux reformateront automatiquement le contenu en fonction de la locale de l'utilisateur. D'autres marqueront simplement le contenu comme "ne pas traduire".
+De plus, ces composants n'ont pas nécessairement besoin d'être enveloppés dans un composant `<T>` pour reformater le contenu.
+
+Lisez-en plus à ce sujet dans [cet article sur les composants de variables](/docs/react/reference/using-variable-components).
+
+### Ramification dans les Composants `<T>`
+
+Les composants de ramification peuvent être utilisés pour afficher différents contenus en fonction des conditions pour les traductions.
+Cela inclut les composants [`<Plural>`](/docs/react/api/components/plural) et [`<Branch>`](/docs/react/api/components/branch).
+Nous utilisons ces composants car ils permettent un processus de traduction plus optimisé.
+
+Par exemple, le composant `<Plural>` vous permet de marquer une phrase qui doit être pluralisée lorsque la traduction a lieu.
+
+```jsx title="Count.js" copy
+import { T, Plural } from 'gt-react';
+
+export default function Count({ num }) {
+  return (
+    <T>
+      <Plural
+        n={num} // <-- variable à vérifier // [!code highlight]
+        singular={<p>Il y a un article.</p>}  // [!code highlight]
+        plural={<p>Il y a plusieurs articles.</p>}  // [!code highlight]
+      />
+    </T>
+  );
+}
+```
+
+Il est également utile car il standardise votre logique de pluralisation dans votre application dans votre langue de base.
+
+Vous pouvez spécifier différentes options selon le composant que vous utilisez.
+Lisez-en plus à ce sujet dans l'article [Composants de Ramification](/docs/react/reference/using-branching-components).
+
+### Traduction de Chaînes [#translating-strings]
+
+Si vous souhaitez traduire simplement une chaîne, vous pouvez utiliser [`useGT()`](/docs/react/api/components/strings/useGT).
+Il est utilisé pour traduire des chaînes au moment de la construction.
+
+```jsx title="Greeting.js" copy
+function Greeting() {
+  const t = useGT();
+  return <p>{t('Bonjour, mon ami !')}</p>; // [!code highlight]
+}
+```
+Pour plus d'informations, vous pouvez vous référer à [notre guide sur la traduction de chaînes](/docs/react/reference/translating-strings).
+
+C'est tout ! Vous avez réussi à traduire votre application en français, espagnol et japonais.
+
+Pour un guide plus détaillé sur le déploiement de votre application, veuillez vous référer au guide [Déploiement](/docs/react/tutorials/quickdeploy).
+Pour plus d'informations sur la commande, veuillez vous référer au guide de référence [Outil CLI](/docs/cli/translate).
+
+### Ajouter des ids aux Composants `<T>`
+
+Une astuce de débogage pratique est d'ajouter une prop `id` à vos composants `<T>`.
+Cela vous permet de suivre quelles traductions sont utilisées dans votre application.
+Cela vous permet également d'utiliser l'[Éditeur de Traduction](/signin) pour apporter des modifications à vos traductions sans redéployer.
+
+```jsx title="Greeting.js" copy
+import { T } from 'gt-react';
+
+export default function Greeting() {
+  return (
+    <T id="greeting">
+      Bonjour, le monde !
+    </T>
+  );
+}
+```
+
+---
+
+## Considérations de production [#production]
+
+### Déploiement en production
+
+Assurez-vous d'exécuter la commande de traduction avant de déployer en production, afin que toutes les traductions soient disponibles à l'exécution.
+Nous recommandons de l'ajouter à votre pipeline CD ou comme partie de votre script de construction.
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --languages fr es ja && <YOUR_BUILD_COMMAND>",
+  }
+}
+```
+
+C'est tout ! Vous avez réussi à traduire votre application en français, espagnol et japonais.
+
+Pour un guide plus détaillé sur le déploiement de votre application, veuillez vous référer au guide de [Déploiement](/docs/react/tutorials/quickdeploy).
+Pour plus d'informations sur la commande, veuillez vous référer au guide de référence de l'[Outil CLI](/docs/cli/translate).
+
+### Comportement : Développement vs Production
+
+En développement, le composant `<T>` traduira le contenu à la demande.
+Cela signifie que lorsque le composant est rendu, il effectuera une traduction immédiatement.
+Nous faisons cela pour plus de commodité afin de faciliter le développement avec d'autres langues.
+
+Pour activer ce comportement, ajoutez simplement une clé API de développement à votre environnement.
+
+En production, le composant `<T>` traduira le contenu au moment de la construction.
+Cela signifie que vous devez exécuter la commande de traduction avant de déployer votre application.
+
+<Callout>
+  **Astuce :**
+  Si vous souhaitez simuler le comportement de production en développement, utilisez simplement une clé API de production dans votre build de développement.
+</Callout>
+
+### Préoccupations en matière de confidentialité
+
+Avec quelques exceptions, tout le contenu enveloppé dans un composant `<T>` est envoyé aux API de Traduction Générale pour traduction.
+Cela peut ne pas être souhaitable pour le rendu de données sensibles, telles que les noms d'utilisateur, les numéros de compte, etc.
+
+Pour contourner ce problème, utilisez les [Composants Variables](/docs/react/reference/using-variable-components#privacy) pour gérer les informations privées.
+Cela garantit qu'aucune donnée sensible n'est envoyée aux API de Traduction Générale pour traduction.
+La localisation de tout contenu enveloppé dans un Composant Variable est gérée localement.
+
+---
+
+## Exemples
+
+### Utilisation de base
+
+Le cas d'utilisation le plus simple pour `<T>` est de traduire du texte statique.
+
+```javascript copy
+import { T } from 'gt-react';
+
+export default function BasicUsage() {
+  return (
+    <T>
+      Hello, world!
+    </T>
+  );
+}
+```
+
+Cet exemple garantit que `"Hello, world!"` est traduit en fonction de la langue de l'utilisateur.
+Par exemple, dans une locale espagnole, cela pourrait être rendu comme `"¡Hola, mundo!"`.
+
+
+### Contexte
+
+Le composant `<T>` prend en charge un contexte supplémentaire pour affiner les traductions.
+Ajouter une prop context permet au même id de se résoudre en différentes traductions selon le contexte fourni.
+```javascript copy
+import { T } from 'gt-react';
+
+export default function FormalGreeting() {
+  return (
+    <T context="formal">
+      Hi there!
+    </T>
+  );
+}
+```
+
+Par exemple, le contexte `"formal"` pourrait donner une traduction telle que `"Good day, everyone!"`, tandis que le même `id` sans contexte pourrait donner `"Hi there!"` dans l'autre langue.
+Bien sûr, aucun changement ne se produirait pour la langue de base.
+
+### Composants imbriqués
+
+Le composant `<T>` peut également traduire des structures JSX.
+Tous les enfants du `<T>` seront traduits.
+
+```javascript copy
+import { T } from 'gt-react';
+import CustomButton from './CustomButton';
+
+export default function Page() {
+  return (
+    <T>
+      This will be translated
+      <div>
+        <div>
+          <div>
+            <div>
+              <CustomButton>This text will also be translated!</CustomButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </T>
+  );
+}
+```
+
+## Pièges Courants
+
+
+### Descendants directs uniquement [#direct-text]
+
+Le composant `<T>` ne traduit que le texte passé directement en tant qu'enfant.
+Cela signifie que si vous avez du contenu à l'intérieur d'un composant qui n'est pas directement passé à `<T>`, il ne sera pas traduit.
+
+Illustrons cela avec un exemple :
+
+```javascript copy
+function UntranslatedContent() {
+  return (
+    <p>Ce contenu n'est pas traduit</p>
+  );
+}
+
+export default function DisplayGreetings() {
+  return (
+    <T>
+      <h1>Bonjour, ce texte sera traduit</h1>
+      <UntranslatedContent />
+    </T>
+  );
+}
+```
+
+Dans cet exemple, le contenu à l'intérieur de `<UntranslatedContent>` ne sera pas traduit.
+Seul le contenu directement à l'intérieur de `<T>` sera traduit, comme la balise `<h1>` et ses enfants.
+
+Cela se produit en raison de la façon dont React rend les composants.
+C'est un peu compliqué, mais l'essentiel est que React ne connaît pas le contenu d'un composant avant qu'il ne soit rendu.
+Par conséquent, le contenu des composants comme `<UntranslatedContent>` n'est pas traduit.
+Cependant, tout texte directement entre les deux balises `<T>` sera traduit.
+<Callout>
+    **Remarque :** Une bonne règle de base est que tout contenu qui est *littéralement* entre les deux `<T>` dans le fichier sera traduit.
+    Vous pouvez toujours ajouter un autre `<T>` pour traduire le contenu qui n'est pas traduit, bien que l'imbrication des composants `<T>` ne soit pas recommandée.
+</Callout>
+
+#### Quelle est la solution ?
+
+Votre premier instinct pourrait être d'ajouter un composant `<T>` supplémentaire à l'intérieur de `<UntranslatedContent>`, mais cela n'est pas recommandé.
+Nous en discutons plus [ci-dessous](#nested-t).
+
+La solution est d'envelopper toujours le texte directement dans le composant `<T>`, comme ceci :
+
+```javascript copy
+function TranslatedContent() {
+  return (
+    <T>
+      <p>Ce contenu <b>EST</b> traduit</p>
+    </T>
+  );
+}
+
+export default function DisplayGreetings() {
+  return (
+    <>
+      <T>
+        <h1>Bonjour, ce texte sera traduit</h1>
+      </T>
+      <TranslatedContent />
+    </>
+  );
+}
+```
+
+
+#### Qu'en est-il des variables ? [#variables]
+
+Les variables sont un peu plus compliquées car elles ont tendance à changer de valeurs.
+Nous recommandons d'utiliser des [Composants de Variables](/docs/react/reference/using-variable-components) pour afficher des valeurs dynamiques et des [Composants de Bifurcation](/docs/react/reference/using-branching-components) pour la logique conditionnelle.
+
+### Composants `<T>` Imbriqués [#nested-t]
+
+L'imbrication des composants `<T>` n'est pas autorisée.
+En raison du système de rendu de React, cela peut entraîner un comportement inattendu et des problèmes de performance lors de la traduction à la demande.
+
+Voici un exemple de **ce qu'il ne faut pas faire** :
+
+```jsx copy
+function SomeComponent() {
+  return (
+    <T>
+      Bonjour, ami !
+    </T>
+  );
+}
+
+export default function NestedTranslation() {
+  return (
+    <T>
+      <T> {/* Ne faites pas ça ! */} // [!code highlight]
+        Bonjour, monde !
+      </T>
+      <SomeComponent /> {/* Cela compte toujours. Ne faites pas ça ! */} // [!code highlight]
+    </T>
+  );
+}
+```
+
+La solution ici est de supprimer le composant `<T>` le plus extérieur.
+
+### Contenu Conditionnel [#conditional-content]
+
+Similaire au [rendu de contenu variable](#variables), le contenu conditionnel à l'intérieur d'un composant `<T>` doit être géré correctement.
+Il est toujours préférable de placer le contenu conditionnel dans un [Composant de Bifurcation](/docs/react/reference/using-branching-components) pour optimiser la traduction du contenu.
+
+```jsx copy
+import { T, Branch } from 'gt-react';
+
+export default function Header({ user }) {
+  return (
+    <T>
+      <h2>
+        <Branch
+          branch={user.hasAccount}
+          true={<p>Bienvenue, {user.name} !</p>}
+          false={<p>Veuillez vous connecter pour continuer.</p>}
+        />
+      </h2>
+    </T>
+  );
+}
+```
+
+## Notes
+ * Les composants `<T>` sont utilisés pour traduire du contenu JSX arbitraire.
+ * Enveloppez votre application avec un [`<GTProvider>`](/docs/react/api/components/gtprovider) pour activer les traductions.
+ * `<T>` traduit les contenus au moment de la construction, pas à l'exécution. Le développement effectuera une traduction à la demande pour plus de commodité, mais ce n'est pas le cas en production.
+
+## Prochaines étapes
+ * Explorez l'[article sur les composants variables](/docs/react/reference/using-variable-components) et le [guide des composants de branchement](/docs/react/references/using-branching-components).
+ * Apprenez à propos de [la traduction des chaînes](/docs/react/reference/translating-strings) dans votre application.
+

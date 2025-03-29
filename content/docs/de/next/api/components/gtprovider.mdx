@@ -1,0 +1,96 @@
+---
+title: <GTProvider>
+description: API-Referenz für die <GTProvider>-Komponente
+---
+
+## Überblick
+
+Die `<GTProvider>` Komponente bietet einen allgemeinen Übersetzungskontext (GT) für ihre Kinder, sodass sie auf übersetzte Inhalte zugreifen können.
+Sie ist erforderlich für alle clientseitigen Übersetzungen in Ihrer Anwendung.
+
+### Wann zu verwenden
+
+- Umhüllen Sie Ihre gesamte Anwendung mit `<GTProvider>`, um Übersetzungen auf dem Client zu ermöglichen.
+- Wenn Sie mit Wörterbüchern arbeiten, geben Sie optional eine `id` an, um die an den Client gesendeten Wörterbuchdaten zu begrenzen und die Leistung für große Wörterbücher zu optimieren.
+- Die `<GTProvider>` Komponente wird sowohl für [inline `<T>`](/docs/next/reference/t-reference) als auch für [Wörterbuch-Designmuster](/docs/next/reference/dictionary) verwendet.
+
+## Referenz
+
+### Requisiten
+
+<TypeTable
+  type={{
+    "children": {
+      type: 'ReactNode',
+      optional: false,
+    },
+    "id?": {
+      type: 'string',
+      optional: true,
+      default: 'undefined',
+    },
+  }}
+/>
+
+### Beschreibung
+
+| Prop | Beschreibung |
+|-----------|-------------|
+| `children` | Jedes Komponente oder die Elternteile einer Komponente, die Übersetzungsinformationen auf der Client-Seite übersetzen oder darauf zugreifen müssen. Diese sollten alle Komponenten umfassen, die `<T>`, `useGT` oder andere Übersetzungswerkzeuge verwenden. |
+| `id?` | Die ID eines verschachtelten Wörterbuchs, um die an den Client gesendeten Daten zu begrenzen. Dies ist nützlich für große Projekte mit umfangreichen Wörterbüchern. |
+
+### Rückgaben
+
+`JSX.Element|undefined`, das die an diese Komponente übergebenen Kinder enthält.
+
+## Beispiel
+
+### Grundlegende Verwendung
+
+Wickeln Sie Ihre Anwendung in `<GTProvider>`, um Ihrem App den Übersetzungskontext bereitzustellen.
+
+```jsx title="layout.js" copy
+import { GTProvider } from 'gt-next';
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang="en">
+            <body>
+                <GTProvider> // [!code highlight]
+                    {children}
+                </GTProvider> // [!code highlight]
+            </body>
+        </html>
+    );
+}
+```
+
+### Verwendung des `id`-Props für Teilmengen
+
+Geben Sie das `id`-Prop an, um die Leistung zu optimieren, indem Sie nur eine Teilmenge des Wörterbuchs an den Client senden.
+
+```jsx title="layout.js" copy
+import { GTProvider } from 'gt-next';
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang="en">
+            <body>
+                <GTProvider id="nested.dictionary.key"> // [!code highlight]
+                    {children}
+                </GTProvider>
+            </body>
+        </html>
+    );
+}
+```
+
+---
+
+## Notizen
+ * Der `<GTProvider>` muss alle `<T>`-Komponenten und andere übersetzungsbezogene Komponenten in Client-Komponenten umschließen. Lesen Sie mehr darüber [hier](/docs/next/reference/t-reference#gtprovider).
+ * Für serverseitige Übersetzungen ist `<GTProvider>` nicht erforderlich, kann aber dennoch verwendet werden.
+
+## Nächste Schritte
+ * Erfahren Sie mehr über die [`<T>` Komponente](/docs/next/reference/t-reference) zum Übersetzen von Text und Komponenten.
+ * Sehen Sie sich die [i18n-Konfiguration](/docs/next/reference/i18n-configuration) für erweiterte Anpassungsoptionen an.

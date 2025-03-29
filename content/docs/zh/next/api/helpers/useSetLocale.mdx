@@ -1,0 +1,46 @@
+---
+title: useSetLocale()
+description: useSetLocale 钩子的 API 参考
+---
+
+## 概述
+
+`useSetLocale` 钩子用于设置用户的语言环境。
+这仅限于客户端，并且必须包装在 [`<GTProvider>`](/docs/next/api/components/gtprovider) 组件中。
+
+
+## 参考
+
+### 返回
+
+一个设置用户语言环境的函数。
+
+---
+
+## 示例
+
+### 基本用法
+
+```jsx
+import { useSetLocale } from 'gt-next/client';
+
+export default function MyComponent() {
+    const setLocale = useSetLocale();
+
+    return (
+        <button onClick={() => setLocale('en')}>设置语言环境</button>
+    );
+}
+```
+
+---
+
+## 注意事项
+
+* `useSetLocale()` 用于设置用户的语言环境。
+* 在[这里](/docs/reference/locale-strings)了解更多关于语言环境字符串的信息。
+
+## 下一步
+
+* 了解更多关于 [`<GTProvider>`](/docs/next/api/components/gtprovider) 组件的信息。
+* 了解更多关于 [`useLocale()`](/docs/next/api/helpers/useLocale) 钩子的信息。

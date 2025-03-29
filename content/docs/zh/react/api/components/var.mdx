@@ -1,0 +1,82 @@
+---
+title: <Var>
+description: <Var> 组件的 API 参考
+---
+
+## 概述
+`<Var>` 组件用于渲染不应翻译的内容。
+这对于渲染变量、代码片段或其他不应翻译的内容非常有用。
+此外，这对于渲染应保密的内容（如 API 密钥或个人信息）也很有用。
+
+```jsx
+<Var>{user.name}</Var>
+```
+
+`<Var>` 组件始终在 `<T>` 组件内部使用。
+可以将其视为不属于 `<Currency>`、`<DateTime>` 或 `<Num>` 类别的动态值的通用处理方式。
+
+## 参考
+
+### 属性
+
+<TypeTable
+    type={{
+        "children?": {
+            type: 'JSX.Element',
+            optional: true,
+            default: 'undefined',
+        },
+        "name?": {
+            type: 'string',
+            optional: true,
+            default: 'undefined',
+        },
+        "value?": {
+            type: 'string',
+            optional: true,
+            default: 'undefined',
+        },
+    }}
+/>
+
+### 描述
+| 属性      | 描述                                                                                                                                            |
+|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `children`  | 要在组件内部渲染的内容。如果提供，它将优先于 value。 |
+| `value`     | 如果未提供 children，则显示的可选默认值。可以是一个字符串。                                  |
+
+
+### 返回
+`JSX.Element` 包含不应翻译的内容。
+
+---
+
+## 示例
+
+### 基本示例
+`<Var>` 组件必须在 `<T>` 组件内使用。
+```jsx title="Address.jsx" copy
+import { T, Var } from 'gt-react'
+
+export default function Example(user) {
+  return (
+    <T>
+      翻译这段文字！
+      你的名字是: <Var>{user.name}</Var> // [!code highlight]
+      <Var><p>Do not translate this text</p></Var> // [!code highlight]
+    </T>
+  );
+}
+```
+
+---
+
+## 注意事项
+ * 变量组件对于在翻译中保持不可翻译的动态内容至关重要。
+ * 始终在 `<T>` 组件中使用变量组件。
+ * 像 `<Num>`、`<Currency>` 和 `<DateTime>` 这样的组件提供本地化功能，以确保准确的格式。
+
+## 下一步
+
+* 有关 `<Var>` 组件和其他变量组件（如 `<Currency>`、`<DateTime>` 和 `<Num>`）的更深入讨论和使用示例，请参阅 [使用变量组件](/docs/react/reference/using-variable-components) 文档。
+* 在 [API 参考](/docs/react/api/components/var) 中了解更多关于特定变量组件的格式选项。

@@ -1,0 +1,156 @@
+---
+title: i18n 配置
+description: 在你的 Next.js 应用程序中配置 i18n 行为
+---
+
+## 概述
+
+[`withGTConfig()`](/docs/next/api/config/withGTConfig) 函数为 Next.js 应用程序初始化通用翻译（GT）设置。
+通过向此函数传递参数，我们可以控制应用程序的国际化（i18n）行为。
+这包括设置默认语言环境（即回退语言）、支持的语言环境以及其他与翻译相关的选项。
+
+
+## 添加插件
+
+第一步是将 `withGTConfig()` 插件函数添加到你的 next 配置文件中。
+
+### 定位你的 next 配置文件
+
+在你项目的根目录中，应该有一个名为 `next.config.js`（或 `.ts`、`.mjs`、`.cjs`）的文件。
+
+<Files>
+  <Folder name="my-app" defaultOpen={true}>
+    <Folder name="src" defaultOpen>
+      <Folder name="app">
+        <File name="page.js" />
+      </Folder>
+      <Folder name="components">
+        <File name="Header.js" />
+        <File name="Footer.js" />
+      </Folder>
+    </Folder>
+    <Folder name="public">
+      <File name="favicon.ico" />
+    </Folder>
+    <File name="next.config.js" />
+    <File name=".gitignore" />
+    <File name="package.json" />
+    <File name="README.md" />
+  </Folder>
+</Files>
+
+### 添加插件
+
+在你的 `next.config.js` 文件中为插件设置基本配置。
+这将回退到默认值。
+
+```js title="next.config.mjs" copy
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {}
+
+export default withGTConfig(nextConfig);
+```
+
+## 一些示例
+
+### 基本用法
+
+在这个配置中，我们指定应用程序可用的语言为`English`、`Spanish`和`French`。
+我们还指定默认语言为`English`。
+我们还添加了描述`"A personal blog about technology and travel"`。
+这个描述将在每次翻译中被考虑。
+
+```js title="next.config.mjs" copy
+import { withGTConfig } from 'gt-next/config'
+
+const nextConfig = {}
+
+export default withGTConfig(nextConfig, {
+  defaultLocale: "en-US", // the default language of your app, usually "en" or "en-US"
+  locales: ["en-US", "es", "fr"], // the languages your app is available in
+  description: "A personal website for John Smith" // a natural language description of your site used to aid in translation
+});
+```
+
+### 包含语言区域 [#include-locales]
+
+`withGTConfig()`允许你指定你想要包含的语言区域列表。
+例如，这个配置指定应用程序将提供英语、中文和日语版本。
+
+这意味着应用程序只会在这些语言中可用。
+任何不包含在此列表中的语言区域将不会被翻译。
+例如，如果用户尝试以未列出的语言访问应用程序，应用程序将默认使用指定的默认语言区域。
+
+<Callout>
+    默认情况下，你的应用可以被翻译成所有可用的语言。
+</Callout>
+
+```js title="next.config.mjs"
+import { withGTConfig } from 'gt-next/config'
+
+const nextConfig = {}
+
+export default withGTConfig(nextConfig, {
+  defaultLocale: "en-US",
+  locales: ["en-US", "zh", "jp"]
+});
+
+```
+
+要查看支持的语言区域列表，请参考[支持的语言区域](/docs/reference/supported-locales)。
+有关选择语言区域的更详细指南，请参考[语言区域管理指南](/docs/next/reference/locale-management)。
+
+### 配置`getLocale()`
+
+`i18n`是一个字符串，指定了定义`getLocale()`函数的文件的自定义路径。
+你可以通过创建一个导出名为`getLocale()`的函数的文件来指定确定用户语言区域的自定义行为。
+
+```js title="myapp/next.config.mjs" copy
+import { withGTConfig } from 'gt-next/config'
+
+const nextConfig = {};
+
+export default withGTConfig(nextConfig, {
+  defaultLocale: "en-US", // the default language of your app, usually "en" or "en-US"
+  i18n: "./i18n.js"
+});
+```
+
+
+```js title="myapp/i18n.js" copy
+import { cookies } from "next/headers";
+
+export async function getLocale() {
+  const cookieStore = await cookies();
+  return cookieStore.get('myCustomLocaleCookie') || 'en';
+}
+```
+
+### 首选提供商 [#preferred-provider]
+
+`preferredModelProvider`允许你指定首选的模型提供商。
+目前，只有Anthropic和OpenAI被启用，但将来会添加更多提供商。
+
+我们会将所有翻译路由到你首选的LLM提供商，但如果你首选的模型不可用或不容易访问，我们会回退到其他提供商。
+
+```js title="next.config.mjs" copy
+import { withGTConfig } from 'gt-next/config'
+
+const nextConfig = {};
+
+export default withGTConfig(nextConfig, {
+  defaultLocale: "en-US",
+  preferredModelProvider: "anthropic"
+});
+```
+
+---
+
+## 注意事项
+ * `withGTConfig()` 允许您在 Next.js 应用程序中配置 GT 的行为。
+ * 您可以指定默认语言环境、支持的语言环境和其他与翻译相关的选项。
+
+
+## 下一步
+ * 阅读 [`withGTConfig()`](/docs/next/api/config/withGTConfig) 的 API 文档。

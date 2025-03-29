@@ -1,0 +1,75 @@
+---
+title: ロケールを管理する
+description: アプリのロケールを管理する方法
+---
+
+
+## 概要
+
+このドキュメントは、`gt-next` を使用して Next.js アプリケーションでロケールを管理する方法についてのガイダンスを提供します。サポートしたいロケールのリストを設定し、翻訳の生成をトリガーする手順を説明します。
+
+このライブラリは、ロケールを定義するために [BCP-47 標準](/docs/reference/locale-strings) を使用します。現在サポートされているロケールのリストは [こちら](/docs/reference/supported-locales) を参照してください。
+
+---
+
+## ロケールの設定
+
+本番環境のロケールを変更する方法は2つあります：
+ 1. CLIツール
+ 2. `gt.config.json`ファイル（推奨）
+
+翻訳を実行するためには、ビルドスクリプトに翻訳コマンドを追加する必要があります：
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate && next build"
+  }
+}
+```
+
+これにより、必要な翻訳が生成され、設定に応じてクラウドまたはローカルファイルシステムに保存されます。
+
+
+### CLIツールでロケールを管理する
+
+ロケールを管理する最も簡単な方法は、`--locales`フラグを使用して[`npx gtx-cli translate`](/docs/cli/translate)コマンドを通じて指定することです。
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales en-US zh jp && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+
+これにより、中国語（`zh`）と日本語（`jp`）の翻訳が生成されます。
+
+### `gt.config.json`を使用する（推奨）
+
+ロケールを管理するより堅牢な方法は、`gt.config.json`ファイルを使用することです。
+`locales`プロパティでサポートしたいロケールのリストを指定できます。
+
+```json title="gt.config.json" copy
+{
+  "locales": ["zh", "jp"],
+}
+```
+
+---
+
+## ホワイトリストに登録されたロケール
+
+オプション機能として、ホワイトリストに登録されたロケールのリストを追加できます。
+これは、プロジェクトロケールページのダッシュボードからアクセスできます。
+この機能を有効にすると、ホワイトリストに登録されていないロケールで `npx translate` を呼び出そうとすると失敗します。
+
+---
+
+## メモ
+ * ロケールは、ダッシュボード、`gt.config.json` ファイル、または CLI ツールを通じて管理できます。
+ * `gt.config.json` または CLI ツールを使用してロケールを管理すると、ダッシュボードの **Manage Locales** 機能が無効になります。
+
+
+ ## 次のステップ
+ * [ロケール文字列](/docs/reference/locale-strings) リファレンスでロケール構文について学ぶ。

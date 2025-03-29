@@ -1,0 +1,117 @@
+---
+title: Traducciones Locales
+description: Configurar traducciones locales para tu aplicación React
+---
+
+## Descripción general
+
+Esta guía te mostrará cómo almacenar traducciones en tu aplicación React en lugar de usar un CDN.
+Esto significa que las traducciones vivirán en el paquete de tu aplicación.
+Esto puede llevar a tiempos de carga más rápidos y evita la dependencia de infraestructura externa.
+
+En este documento, (1) explicaremos qué son las traducciones locales y cómo funcionan y
+(2) te mostraremos cómo configurar traducciones locales para tu aplicación React.
+
+---
+
+## ¿Qué son las traducciones locales?
+
+Las traducciones locales se almacenan en el paquete de tu aplicación, en lugar de ser obtenidas de un CDN (Red de Distribución de Contenidos).
+
+Supongamos que has añadido el comando [`gtx-cli translate`](/docs/cli/translate) a tu proceso de CD.
+Esto generará archivos JSON que contienen traducciones para tu aplicación.
+El paso final es sacar estas traducciones de nuestra API y llevarlas a tu aplicación.
+
+Hay dos maneras de hacer esto:
+ * **En el paquete de tu aplicación:** Después de que se generen las traducciones, añádelas al paquete de tu aplicación.
+ * **En un CDN (por defecto):** Obtén las traducciones de un CDN en tiempo de ejecución.
+
+<Callout>
+  **Nota:**
+  Si no estás utilizando la infraestructura de GT, necesitarás escribir un método personalizado [`loadTranslations()`](/docs/react/api/config/load-translations) para cargar traducciones desde tu infraestructura preferida.
+</Callout>
+
+### ¿Cuáles son los beneficios?
+
+*Tiempos de carga más rápidos:* Las traducciones locales se sirven directamente desde tu aplicación,
+lo que significa que se cargarán más rápido que las traducciones servidas desde un CDN.
+
+*No dependencia de servicios externos:* La capacidad de tu aplicación para cargar traducciones no depende de la disponibilidad de un CDN.
+
+### ¿Cuáles son los inconvenientes?
+
+*Aumento del tamaño del paquete:* Las traducciones locales aumentarán el tamaño del paquete de tu aplicación ya que se servirán junto con tu aplicación.
+Esto significa que tu aplicación puede tardar un poco más en la primera carga.
+
+*Gestión de locales:* Para añadir o eliminar soporte para locales, necesitarás volver a desplegar tu aplicación cada vez.
+
+*Gestión de contenido:* Al igual que la gestión de locales, si deseas cambiar una traducción (es decir, no te gusta cómo se ha expresado tu contenido en otro idioma),
+debes volver a desplegar tu aplicación con la nueva traducción.
+
+---
+
+## Configuración
+
+### Requisitos previos
+
+Asegúrate de haber seguido la [Guía de inicio rápido](/docs/react/tutorials/quickstart) para configurar tu aplicación React con GT.
+
+
+### Pasos
+<Steps>
+  <Step>
+    Agrega un archivo `loadTranslations.js` en `./src` con el siguiente contenido:
+
+    ```js title="src/loadTranslations.js" copy
+    export default async function loadTranslations(locale) {
+      const t = await import(`./_gt/${locale}.json`);
+      return t.default;
+    }
+    ```
+
+  </Step>
+
+  <Step>
+    Pasa `loadTranslations` como una prop al componente `<GTProvider>`.
+
+    ```jsx title="src/App.jsx" copy
+    import { GTProvider } from 'gt-react';
+    import loadTranslations from './loadTranslations'; // [!code highlight]
+
+    export default function App() {
+      return (
+        <GTProvider loadTranslations={loadTranslations} locales={['es', 'fr']}> // [!code highlight]
+          <YourApp />
+        </GTProvider>
+      );
+    }
+    ```
+  </Step>
+
+  <Step>
+    Ejecuta el siguiente comando, y cuando se te pregunte "¿Dónde se almacenan tus archivos de idioma?", selecciona la opción "Local".
+    ```bash
+    npx gtx-cli init
+    ```
+    Luego, ejecuta el comando de traducción.
+    ```bash
+    npx gtx-cli translate
+    ```
+    <Callout type="warn">
+      Dependiendo del marco específico que estés utilizando, es posible que debas asegurarte de que los JSON de traducción estén incluidos en el
+      paquete final.
+    </Callout>
+  </Step>
+</Steps>
+
+¡Eso es todo! Tu aplicación ahora solo cargará traducciones desde tus archivos locales.
+
+---
+
+## Notas
+ * Las traducciones locales son una alternativa a obtener traducciones desde un CDN.
+ * Puedes personalizar [`loadTranslations()`](/docs/react/api/config/load-translations) para cargar traducciones desde otras fuentes, como tu base de datos o tu propio CDN.
+
+## Próximos pasos
+ * Consulte [`loadTranslations()`](/docs/react/api/config/load-translations) para obtener más información sobre cómo escribir un cargador de traducción personalizado.
+ * Consulte la página de [Ejemplos](/docs/reference/examples) para ver algunos proyectos de ejemplo.

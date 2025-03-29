@@ -1,0 +1,204 @@
+---
+title: i18n ルーティング
+description: アプリケーションに国際化 (i18n) ルーティングを追加するためのステップバイステップガイド
+---
+
+## 概要
+このガイドでは、`gt-next`の組み込みミドルウェアを使用して、Next.jsアプリケーションにi18nルーティングとローカライズされたパスを追加する方法を説明します。
+
+### i18nルーティングとは？
+
+各言語に新しいルートを作成することは、ウェブサイトをよりユーザーフレンドリーにし、SEOを改善する利点があります。
+i18nルーティングを使用すると、特定のURLを異なるロケールに関連付けることができます。
+例えば、英語には`/en/airplanes`、中国語には`/zh/airplanes`などを持つことができます。
+
+ローカライズされたパスを使用することで、これをさらに一歩進めることができます。
+これらは、ロケールのエイリアスパスを指定できるi18nルーティングの拡張です。
+例えば、英語には`/en/airplanes`、中国語には`/zh/飞机`などを指定できます。
+
+---
+
+## i18n ルーティングの設定
+
+Next.js アプリケーションに i18n ルーティングを追加するための簡単な2つのステップをご紹介します:
+
+<Steps>
+    <Step>
+        アプリフォルダに動的ルートを追加します。
+    </Step>
+    <Step>
+        ミドルウェアファイルを作成します。
+    </Step>
+</Steps>
+
+
+### ステップ 1: 動的ルートを追加する [#dynamic-route]
+
+アプリフォルダに `[locale]` というディレクトリを挿入します（例: `app/[locale]`）。
+このディレクトリの下にすべてのページとレイアウトを含めます。
+
+<Files>
+  <Folder name="my-app" defaultOpen={true}>
+    <File name="middleware.js" />
+    <Folder name="app" defaultOpen={true}>
+      <Folder name="[locale]" defaultOpen={true}>
+        <File name="layout.js" />
+        <File name="page.js" />
+        <Folder name="some-page">
+          <File name="page.js" />
+        </Folder>
+      </Folder>
+      <Folder name="api">
+        <File name="route.js" />
+      </Folder>
+    </Folder>
+    <Folder name="public">
+      <Folder name="images">
+        <File name="logo.png" />
+      </Folder>
+    </Folder>
+    <Folder name="styles">
+      <File name="globals.css" />
+    </Folder>
+    <File name="next.config.js" />
+  </Folder>
+</Files>
+
+`app/` 内のすべての特別なファイルが `app/[locale]` の下にネストされていることを確認してください。
+
+
+
+### ステップ 2: ミドルウェアファイルを追加する [#middleware]
+
+Next.js では、ルートディレクトリ内に `middleware.js`（または TypeScript を使用している場合は `.ts`）というファイルを作成します。
+`src/` フォルダを使用している場合は、代わりに `src/middleware.js`（または `.ts`）に配置します。
+ファイルに [`createNextMiddleware()`](/docs/next/api/middleware/createNextMiddleware) 関数を追加します。
+
+```js title="middleware.js" copy
+import { createNextMiddleware } from 'gt-next/middleware'
+
+export default createNextMiddleware();
+
+export const config = {
+  matcher: [
+    /*
+      * 以下で始まるものを除くすべてのリクエストパスにマッチします:
+      * - api (API ルート)
+      * - _next (内部ファイル)
+      * - 静的ファイル
+      */
+    "/((?!api|static|.*\\..*|_next).*)",
+  ],
+}
+```
+
+---
+
+## ローカライズされたパスの設定
+
+ミドルウェアファイルの `pathConfig` オプションを通じてローカライズされたパスを指定できます。
+
+```js title="middleware.js" copy
+export default createNextMiddleware({
+  pathConfig: {
+    // 共有パスを指定できます（オプション）
+    // これにより "/en/about" と "/zh/about" が作成されます
+    "/about": "/about",
+
+    // ローカライズされたパスを指定
+    // これにより "/en/airplanes" と "/zh/飞机" が作成されます
+    "/airplanes": {
+      "zh": "/飞机",
+    }
+
+    // 動的パスパラメータを追加
+    // これにより "/en/airports/123" と "/zh/飞机机场/123" が作成されます
+    "/airports/[id]": {
+      "zh": "/飞机机场/[id]",
+    }
+  },
+});
+```
+この例では、`/en/about` のデフォルトパスと、`/en/airplanes` および `/en/airports/[id]` のローカライズされたパスを作成します。
+中国語では、これらはそれぞれ `/zh/about`、`/zh/飞机`、および `/zh/飞机机场/[id]` にエイリアスされます。
+
+<Callout>
+  **ヒント:**
+  `/about` パスはすべてのロケールで同じままなので、`pathConfig` オブジェクトに含める必要はありません。
+  `pathConfig` オブジェクトに指定されていないパスは、ロケールプレフィックスに従ってすべてのロケールで同じパスを使用します。
+</Callout>
+
+---
+
+## ルーティングの動作
+
+### デフォルトのロケールのプレフィックス
+デフォルトでは、`defaultLocale`（つまり、アプリのデフォルト言語）は、URLにロケールコードがプレフィックスされません。
+例えば、デフォルトのロケールが `en` で、`/about` というページがある場合、それは英語で `/about` でアクセス可能です。
+しかし、中国語では、`/zh/about` で中国語でアクセス可能です。
+
+この動作を望まない場合は、ミドルウェアの設定で `prefixDefaultLocale` を `false` に設定することで無効にできます。
+
+### ロケールの検出とリダイレクト
+ミドルウェアは、(1) URLパスのロケール、(2) リファラーのロケール、(3) ブラウザの受け入れ言語、(4) 最後に `defaultLocale` に基づいてユーザーのロケールを検出します。
+その後、ユーザーはそれに応じてリダイレクトされます。
+
+<Steps>
+  <Step>
+    ロケールは常にURLパスから最初にチェックされます。
+    これは、`/zh/about` を訪れると、言語が中国語であると仮定されることを意味します。
+  </Step>
+  <Step>
+    訪問するページがロケールでプレフィックスされていない場合、ミドルウェアはユーザーの以前のロケールをチェックします。
+    例えば、`/zh` にいて、`/about` を訪れると、言語が中国語であると仮定され、`/zh/about` にリダイレクトされます。
+  </Step>
+  <Step>
+    これらのいずれも利用できない場合、ロケール検出はユーザーのブラウザ言語にフォールバックします。
+    例えば、誰かの優先言語が中国語で、初めて `/about` を訪れると、`/zh/about` にリダイレクトされます。
+  </Step>
+  <Step>
+    これらの条件が満たされない場合、`defaultLocale` がフォールバックとして使用されます。
+  </Step>
+</Steps>
+
+いつでもページのローカライズされたバージョンが存在する場合、ローカライズされたURLにリダイレクトされます。
+例えば、`/zh/airplanes` は常に `/zh/飞机` にリダイレクトされます。
+
+#### エッジケース: ロケールプレフィックスなしのローカライズされたパス
+
+ロケールプレフィックスなしでローカライズされたパスに移動すると（例: `/飞机`）、ミドルウェアは現在のロケールと考えるものをそのパスにプレフィックスします。
+
+例えば、`/飞机` を訪れると、ミドルウェアが明示的にロケールを `zh` と認識している場合にのみ `/zh/飞机` にリダイレクトされます。
+これは素晴らしいですが、ミドルウェアがロケールを `zh` と考えている場合にのみ機能します。
+
+それ以外の場合、パスは現在のロケールでプレフィックスされます。
+例えば、`/飞机` を訪れると、ミドルウェアがロケールを `en` と考えている場合、`/en/飞机` にリダイレクトされます。
+これにより、404が発生します。
+
+プロジェクト内のリンクには常に `defaultLocale` のパスを使用することをお勧めします。
+これにより、常に正しいロケールのローカライズされたパスに自動的にリダイレクトされます。
+```jsx
+<Link href="/about">About</Link>
+<Link href="/planes">Planes</Link>
+<Link href="/airports/123">Airport 123</Link>
+```
+
+異なるロケールに明示的にリンクしたい場合は、ローカライズされたパスを使用して行うことができます。
+```jsx
+<Link href="/zh/about">About in Chinese</Link>
+<Link href="/zh/飞机">Planes in Chinese</Link>
+<Link href="/zh/飞机机场/123">Airport 123 in Chinese</Link>
+```
+
+---
+
+
+## メモ
+ * i18n ルーティングはアプリケーションのURL構造を変更します。各言語には独自のURLがあります。
+ * ルーティングロジックを処理するためにミドルウェアファイルが必要です。
+ * ミドルウェアの設定と next config ファイルでサポートされているロケールを指定できます。
+
+## 次のステップ
+ * [`createNextMiddleware()`](/docs/next/api/middleware/createNextMiddleware) のAPIドキュメントを参照してください。
+ * [ロケール管理](/docs/next/reference/locale-management) についてさらに読む。
+ * [アプリケーションを翻訳する方法](/docs/next/reference/translate-your-application) を学ぶ。

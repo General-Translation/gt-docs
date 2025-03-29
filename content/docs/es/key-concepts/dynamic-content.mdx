@@ -1,0 +1,105 @@
+---
+title: Contenido Dinámico
+description: Una breve descripción general de cómo trabajar con Contenido Dinámico en GT.
+---
+
+## Descripción general
+
+**Contenido Dinámico** es generalmente cualquier contenido que puede cambiar según el usuario, contexto, entorno, etc.
+Esto existe en contraste con el **Contenido Estático**, que permanece igual independientemente del usuario, contexto, entorno, etc.
+
+<Accordions>
+    <Accordion title="¿Cuál es la diferencia entre contenido dinámico y estático?">
+        Resumen
+        * El Contenido Estático nunca cambia (cadenas de texto sin procesar, texto, etc.).
+        * El Contenido Dinámico puede cambiar (nombres, correos electrónicos, hora, idioma, etc.).
+
+        **¿Qué es el Contenido Estático?**
+
+        El Contenido Estático generalmente se refiere a cualquier texto sin procesar que existe en el paquete que se sirve a tus usuarios.
+        Una buena regla general es que cualquier texto o cadena que un desarrollador pueda leer en el código fuente es texto estático.
+
+        Por ejemplo, considera este archivo:
+
+        ```jsx title="Landing.jsx" copy
+
+        export default function Landing() {
+            return (
+                <> Welcome to my app!</>
+            );
+        }
+        ```
+        
+        El texto, "Welcome to my app!", es Contenido Estático porque nunca cambia.
+
+        Pero, ¿qué pasaría si quisiéramos cambiar la página para que respondiera si el usuario ha iniciado sesión?:
+
+        ```jsx title="Landing.jsx" copy
+
+        export default function Landing(user) {
+
+            if (user) {
+                return (
+                    <h1> Welcome to my app, {user.name}! </h1>
+                );
+            }
+            
+            return (
+                <h1> Welcome to my app!</h1>
+            );
+        }
+        ```
+        Aunque estas dos frases se están renderizando condicionalmente, ambas se consideran texto estático.
+        Recuerda nuestra regla general: podemos ver este contenido leyendo el código fuente en `landing.jsx`.
+
+        Sin embargo, `{user.name}` se considera contenido dinámico, porque puede cambiar.
+        No podemos saber qué se renderizará en la pantalla del usuario simplemente leyendo el archivo `landing.jsx`.
+    </Accordion>
+</Accordions>
+
+
+## "Traducir o no traducir"
+A veces, queremos traducir contenido dinámico, pero otras veces queremos que permanezca igual.
+
+
+Un buen ejemplo sería la dirección de correo electrónico o el nombre de un usuario.
+Otro ejemplo podría ser el saldo de una cuenta bancaria o el número de seguro social de un usuario.
+Estos elementos (1) probablemente no necesiten traducción cuando tu aplicación se está renderizando en un idioma diferente y (2) pueden variar (en este caso entre cada usuario).
+
+
+### Ejemplo
+
+```jsx title="Greeting.jsx" copy
+import { T, Var } from 'gt-next'
+
+export default function Greeting(name) {
+    return (
+        <T id='greeting'>
+            Hello, <Var>{name}</Var>!
+        </T>
+    );
+}
+```
+
+En cuanto a la traducción, esto tiene dos beneficios:
+1. No tienes que crear una traducción para cada nombre posible.
+    * Usando `<Var>`, solo generamos una traducción que esencialmente se vería así:
+        * \`¡Hola, $\{name\}!\`
+    * Si no usamos `<Var>`, tendríamos que realizar una traducción bajo demanda para cada nombre único:
+        * "¡Hola, Alice!", "¡Hola, Bob!", "¡Hola, Charlie!", "¡Hola, David!", ...
+2. Tampoco tienes que preocuparte de que los nombres mismos cambien a una forma traducida de su nombre: (es decir, "¡Hola, Alicia!", "¡Hola, Roberto!", ...).
+
+Como puedes ver, el componente `<Var>` debe usarse para envolver cualquier contenido que deba permanecer igual independientemente del idioma.
+De esta manera, evitamos la necesidad de crear traducciones para cada valor posible del contenido dinámico.
+
+
+Al envolver información privada en un componente `<Var>`, puedes asegurarte de que la información no se envíe a la API de General Translations.
+<Callout>
+    **Excepciones**
+
+    Las excepciones a la afirmación anterior son (1) en el caso de un componente `<T>` anidado utilizado dentro de un componente `<Var>` (es decir, los hijos del componente `<T>` anidado serán traducidos)
+    o (2) cuando los datos se pasan intencionalmente a nuestra API a través de otros medios dentro de un hijo del componente `<Var>` (por ejemplo, una llamada fetch).
+    Sin embargo, este no es el uso previsto del componente `<Var>` ni de la API de General Translations, y hacerlo puede perjudicar los tiempos de carga y el rendimiento.
+
+</Callout>
+

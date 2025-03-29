@@ -1,0 +1,284 @@
+---
+title: Démarrage rapide Next.js
+description: Internationalisez votre application Next.js en 5 minutes avec gt-next
+---
+
+## Aperçu
+
+Ce guide décrit comment internationaliser un projet [Next.js](https://nextjs.org) existant qui utilise le [Routeur d'App](https://nextjs.org/docs#app-router-vs-pages-router).
+
+Pour un projet utilisant le Routeur de Pages, suivez la [documentation React](/docs/react/tutorials/quickstart).
+
+Nous couvrirons 4 étapes simples :
+
+<Steps>
+  <Step>
+    Installer `gt-next` et `gtx-cli`
+  </Step>
+  <Step>
+    Sélectionner les langues
+  </Step>
+  <Step>
+    Ajouter le composant `<T>`
+  </Step>
+  <Step>
+    Ajouter vos variables d'environnement
+  </Step>
+</Steps>
+
+Ce processus entier devrait prendre moins de **5 minutes**.
+
+<Callout>
+  Utilisez-vous le routeur de pages Next.js ? Suivez plutôt le guide [Démarrage rapide React](/docs/react/tutorials/quickstart).
+</Callout>
+
+---
+
+## Configuration
+
+### 1. Installer les bibliothèques
+
+Installez les bibliothèques [gt-next](https://www.npmjs.com/package/gt-next) et [gtx-cli](https://www.npmjs.com/package/gtx-cli).
+
+<Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gt-next
+  npm i gtx-cli --save-dev
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gt-next
+  yarn add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash 
+  bun add gt-next
+  bun add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gt-next
+  pnpm add gtx-cli --save-dev
+  ```
+  </Tab>
+</Tabs>
+
+
+### 2. Ajouter le plugin `withGTConfig()`
+
+Ajoutez [`withGTConfig()`](/docs/next/api/config/withGTConfig) à votre fichier `next.config.js`.
+Vous pouvez spécifier les langues que vous souhaitez prendre en charge en passant un tableau de [codes de langue](/docs/reference/supported-locales).
+
+```js title="next.config.js" copy
+import { withGTConfig } from 'gt-next/config';
+
+const nextConfig = {};
+
+export default withGTConfig(nextConfig, {
+  locales: ['pt', 'es'], // Support for Portuguese and Spanish
+});
+```
+
+
+### 3. Ajouter le composant `<T>`
+
+Enveloppez tout contenu JSX imbriqué dans le [composant `<T>`](/docs/next/api/components/t) pour le rendre traduisible.
+Pour plus d'informations, consultez le [guide d'utilisation des composants `<T>`](/docs/next/reference/t-reference).
+
+```jsx title="Example.js" copy
+import { T } from "gt-next";
+
+export default function Example() {
+  return (
+    // [!code highlight]
+    <T>
+      <p>
+        This gets translated.
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+Utilisez le [composant `<Var>`](/docs/next/api/components/var) pour désigner le contenu JSX qui ne doit pas être traduit.
+
+```jsx title="Example.js" copy
+import { T, Var } from "gt-next";
+
+export default function Example() {
+  return (
+    // [!code highlight]
+    <T>
+      <p>
+        This gets translated. <Var>This does not.</Var>
+      </p>
+    </T>  // [!code highlight]
+  );
+}
+```
+
+<Callout type="info">
+  **Astuce :**
+  Pour gagner du temps, exécutez [la commande de configuration](/docs/cli/setup).
+  Cela analysera votre code pour trouver le JSX traduisible et insérera les balises [`<T>`](/docs/next/api/components/t) pour vous.
+
+  ```bash title="shell" copy
+  npx gtx-cli setup
+  ```
+</Callout>
+
+Pour les chaînes de caractères, vous pouvez utiliser [`useGT()`](/docs/next/api/strings/useGT) ou [`getGT()`](/docs/next/api/strings/getGT) pour la traduction.
+Pour plus d'informations, consultez [ce guide](/docs/next/reference/translating-strings).
+
+```jsx title="Example.js" copy
+import { useGT } from "gt-next/client";
+import { getGT } from "gt-next/server";
+
+export default function Example() {
+  const t = useGT(); // client side // [!code highlight]
+  const t = await getGT(); // server side // [!code highlight]
+  return (
+    <p>
+      {/* [!code highlight] */}
+      {t("This gets translated.")}
+    </p>
+  );
+}
+```
+
+### 4. Ajouter vos variables d'environnement
+
+Ajoutez votre clé API et votre ID de projet à votre environnement local.
+
+<Steps>
+  <Step>
+    Accédez au [Tableau de bord](https://generaltranslation.com/en-US/signin).
+    Allez à la page **Developer Keys** dans la barre latérale.
+  </Step>
+
+  <Step>
+    Cliquez sur **Create Dev API Key**.
+  </Step>
+
+  <Step>
+    Ajoutez l'ID du projet et la clé API de développement à votre environnement.
+    ```bash title=".env.local" copy
+    GT_API_KEY="YOUR_GT_API_KEY"
+    GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+    ```
+  </Step>
+</Steps>
+<Callout type="warn">
+  **Protégez vos clés API !**
+
+  Les clés de développement doivent **uniquement** être utilisées en développement.
+  De même, les clés de production doivent **uniquement** être utilisées en production.
+  *Ne publiez jamais vos clés API dans un dépôt public !*
+</Callout>
+
+---
+
+## Essayons-le !
+
+Félicitations ! 🥳 Votre application est maintenant multilingue ! Voyons-la en action.
+
+### Voir votre application dans une langue différente [#see-your-app-in-a-different-language]
+
+<Steps>
+  <Step>
+    Ajoutez le composant [`<LocaleSelector>`](/docs/next/api/components/localeSelector) à votre application.
+    Cela vous permettra de sélectionner une langue différente pour votre application.
+    <Callout>
+      **Astuce :**
+      Vous pouvez également changer votre langue dans les paramètres de votre navigateur.
+    </Callout>
+  </Step>
+  <Step>
+    Démarrez votre application Next.js en mode développement.
+    <Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+      <Tab value="npm">
+      ```bash
+      npm run dev 
+      ```
+      </Tab>
+      <Tab value="yarn">
+      ```bash 
+      yarn run dev 
+      ```
+      </Tab>
+      <Tab value="bun">
+      ```bash
+      bun run dev 
+      ```
+      </Tab>
+      <Tab value="pnpm">
+      ```bash
+      pnpm run dev 
+      ```
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step>
+    Ouvrez votre application dans votre navigateur préféré (généralement à
+    [http://localhost:3000](http://localhost:3000)).
+  </Step>
+</Steps>
+
+### Dépannage
+
+<Accordions>
+  <Accordion title="La langue de mon application ne change pas, même si j'ai changé la langue de mon navigateur.">
+    **Cookies du navigateur**
+
+    Si vous décidez de tester différentes langues en changeant la langue de votre navigateur, ce problème peut survenir.
+
+    Vérifiez les cookies de votre navigateur pour votre application.
+    La traduction générale utilise des cookies pour stocker la préférence de langue de l'utilisateur.
+    Le cookie s'appelle `generaltranslation.locale`, et tout ce que vous avez à faire est de le supprimer.
+    Ensuite, vérifiez simplement que vous utilisez la langue préférée souhaitée, puis
+    rafraîchissez la page.
+
+    Comment vérifier les cookies :
+    * [Chrome](https://support.google.com/chrome/answer/95647)
+    * [Firefox](https://support.mozilla.org/en-US/kb/delete-cookies-remove-info-websites-stored)
+    * [Safari](https://support.apple.com/en-mn/guide/safari/sfri11471/16.0/mac/11.0)
+    * [Edge](https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09)
+  </Accordion>
+  <Accordion title="Pourquoi les langues prennent-elles beaucoup de temps à charger en développement ?">
+    **Traduction à la demande**
+
+    Vous remarquerez peut-être que lors du chargement des langues en développement, les traductions prendront quelques secondes pour s'afficher.
+    Cela se produit parce que votre application est traduite en temps réel.
+    Nous appelons ce processus une "traduction à la demande".
+    
+    Cela **se produit uniquement en développement** pour que vous puissiez facilement prototyper votre site web dans différentes langues.
+    Toutes les traductions sont préchargées en production, il n'y aura donc aucun délai.
+    Suivez notre guide sur [la mise en production](/docs/next/tutorials/quickdeploy).
+  </Accordion>
+  <Accordion title="Pourquoi certaines choses sont-elles traduites et d'autres non ?">
+    **Traduction JSX**
+
+    Actuellement, l'outil de configuration ajoute automatiquement des composants `<T>` autour du contenu textuel.
+    Nous travaillons actuellement sur une solution qui configure automatiquement les traductions de chaînes.
+    En attendant, si vous affichez une chaîne, veuillez suivre [ce guide](/docs/next/reference/translating-strings) pour traduire les chaînes.
+  </Accordion>
+</Accordions>
+
+---
+
+## Expédition en Production
+
+Suivez notre guide sur [l'expédition en production](/docs/next/tutorials/quickdeploy).
+
+## Prochaines étapes
+{/* - Apprenez à utiliser les dictionnaires avec [`useGT()`](/docs/next/reference/dictionary) */}
+- Consultez notre [référence API Next.js](/docs/next/api/components/t) pour des informations détaillées sur le composant `<T>` et les autres composants disponibles.
+- Améliorez votre contenu avec les composants [`<Num>`](/docs/next/api/components/num), [`<Currency>`](/docs/next/api/components/currency),
+ [`<Branch>`](/docs/next/api/components/branch), et [`<Plural>`](/docs/next/api/components/plural).
+- Apprenez comment améliorer le SEO avec le [routage i18n](/docs/next/reference/i18n-routing) (ajout de routes pour chaque locale, par exemple `example.com/en`, `example.com/fr`)
+- Miroitez votre application pour prendre en charge les [langues de droite à gauche](/docs/next/reference/rtl) telles que l'arabe et l'hébreu.
+- Créez une liste de langues approuvées pour votre application avec le [plugin Next.js](/docs/next/reference/locale-management#include-locales).

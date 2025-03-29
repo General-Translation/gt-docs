@@ -1,0 +1,138 @@
+---
+title: loadTranslations()
+description: API-Referenz für die Funktion loadTranslations().
+---
+
+## Übersicht
+
+Verwenden Sie `loadTranslations()`, um das Ladeverhalten von Übersetzungen festzulegen.
+Standardmäßig lädt Ihre App Übersetzungen vom GT CDN in der Produktion.
+Sie können eine `loadTranslations()`-Funktion angeben, um Übersetzungen aus einer anderen Quelle zu laden, wie zum Beispiel:
+ * Aus dem Bundle Ihrer App (am häufigsten)
+ * Aus einer Datenbank
+ * Von einer API
+ * Von einem anderen CDN
+
+Wir haben die Unterstützung für das Laden von Übersetzungen aus lokalen Dateien im Bundle Ihrer App integriert.
+Folgen Sie [diesem Leitfaden](/docs/next/reference/local-tx), um lokale Übersetzungen in Ihrer Next.js-App einzurichten.
+
+Wenn Sie daran interessiert sind, Ihre eigenen Übersetzungen manuell zu definieren, schauen Sie sich den [Leitfaden für benutzerdefinierte Übersetzungen](/docs/next/reference/stand-alone)
+ und die [`loadDictionary()`](/docs/next/api/config/load-dictionary)-Funktion an.
+
+## Referenz
+
+### Parameter
+<TypeTable
+  type={{
+    "locale": {
+        type: 'string',
+        optional: false,
+    },
+  }}
+/>
+
+### Beschreibung
+| Typ | Beschreibung |
+| ---- | ----------- |
+| `locale` | Das Gebietsschema, für das Übersetzungen geladen werden sollen. |
+
+### Rückgabewerte
+
+Ein `Promise<any>`, das zu einem Wörterbuch aufgelöst wird, das IDs den Übersetzungen für das gegebene Gebietsschema zuordnet.
+
+---
+
+## Einrichtung
+
+Definieren Sie Ihre `loadTranslations()` als den Standardexport für eine Datei mit dem Namen `loadTranslations.js` oder `loadTranslations.ts` entweder im `src/` Verzeichnis oder im Root-Verzeichnis.
+Stellen Sie sicher, dass die Funktion ein Promise zurückgibt, das zu einem Objekt mit Übersetzungen für die gegebene Sprache aufgelöst wird.
+
+```js title="src/loadTranslations.js"
+export default async function loadTranslations(locale) {
+  const translations = await import(`../public/locales/${locale}.json`);
+  return translations.default;
+};
+```
+
+Wenn Sie einen anderen Namen oder Pfad verwenden möchten, übergeben Sie den relativen Pfad über den `loadTranslationsPath` Parameter in [`withGTConfig()`](/docs/next/api/config/with-gt-config).
+
+---
+
+
+
+## Beispiele
+
+### Übersetzungen aus Ihrem Bundle abrufen
+
+```js title="src/loadTranslations.js"
+export default async function loadTranslations(locale) {
+  const translations = await import(`../public/locales/${locale}.json`);
+  return translations.default;
+};
+```
+
+Wenn konfiguriert, um [lokale Übersetzungen](/docs/next/reference/local-tx) zu verwenden, wird der Befehl [`gtx-cli translate`](/docs/cli/translate)
+Übersetzungen im Dateibaum Ihres Projekts speichern.
+
+Sie können Übersetzungsdateien für Ihr Bundle mit diesem Befehl erstellen:
+
+```bash
+npx gtx-cli translate --no-publish --translations-dir ./public/locales
+```
+
+
+
+### Übersetzungen von einem CDN laden
+
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
+  try {
+    const translations = await fetch(`https://your-cdn.com/translations/${locale}.json`);
+    const data = await translations.json();
+    return data;
+  } catch (e) {
+    console.error(e);
+    return {};
+  }
+};
+```
+
+### Übersetzungen aus Ihrer eigenen Datenbank laden
+
+```js title="loadTranslations.js"
+export default async function loadTranslations(locale) {
+  try {
+    const translations = await prisma.translation.findUnique({
+      where: {
+        locale: locale,
+      },
+    });
+    return translations;
+  } catch (e) {
+    console.error(e);
+    return {};
+  }
+};
+```
+
+
+<Callout>
+  **Frage:** Was ist der Unterschied zwischen [`loadTranslations()`](/docs/next/api/config/load-translations) und [`loadDictionary()`](/docs/next/api/config/load-dictionary)?
+
+  * [`loadTranslations()`](/docs/next/api/config/load-translations) wird verwendet, um benutzerdefiniertes Ladeverhalten für das Abrufen von Übersetzungen für Ihre App zu definieren.
+  Dies könnte das Abrufen von Übersetzungen von einem CDN, einer Datenbank oder dem Bundle Ihrer App sein.
+  Diese sind normalerweise maschinell generierte Übersetzungen, die vom CLI-Tool verwaltet werden und nicht sehr benutzerfreundlich zu bearbeiten sind.
+  * [`loadDictionary()`](/docs/next/api/config/load-dictionary) ist für Implementierungen von `gt-next` als eigenständige Bibliothek gedacht.
+  Benutzer bringen ihre eigenen Übersetzungen mit und es wird keine Übersetzungsinfrastruktur verwendet.
+</Callout>
+
+---
+
+## Notizen
+ * `loadTranslations()` gibt Ihnen die Möglichkeit, anzupassen, wie Übersetzungen in Ihrer App in der Produktion geladen werden.
+ * Der häufigste Anwendungsfall ist das Hinzufügen von [lokalen Übersetzungen](/docs/next/reference/local-tx)
+
+## Nächste Schritte
+ * Erfahren Sie, warum Sie möglicherweise [lokale Übersetzungen](/docs/next/reference/local-tx) verwenden möchten
+ * Fügen Sie Ihre eigenen Übersetzungen mit dem [Leitfaden für benutzerdefinierte Übersetzungen](/docs/next/reference/stand-alone) hinzu
+

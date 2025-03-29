@@ -1,0 +1,46 @@
+---
+title: useSetLocale()
+description: useSetLocale フックのAPIリファレンス
+---
+
+## 概要
+
+`useSetLocale` フックは、ユーザーのロケールを設定するために使用されます。
+これはクライアントサイドのみで、[`<GTProvider>`](/docs/next/api/components/gtprovider) コンポーネントでラップする必要があります。
+
+
+## リファレンス
+
+### 戻り値
+
+ユーザーのロケールを設定する関数。
+
+---
+
+## 例
+
+### 基本的な使用法
+
+```jsx
+import { useSetLocale } from 'gt-next/client';
+
+export default function MyComponent() {
+    const setLocale = useSetLocale();
+
+    return (
+        <button onClick={() => setLocale('en')}>ロケールを設定</button>
+    );
+}
+```
+
+---
+
+## ノート
+
+* `useSetLocale()` はユーザーのロケールを設定するために使用されます。
+* ロケール文字列についての詳細は[こちら](/docs/reference/locale-strings)をご覧ください。
+
+## 次のステップ
+
+* [`<GTProvider>`](/docs/next/api/components/gtprovider) コンポーネントについてもっと学ぶ。
+* [`useLocale()`](/docs/next/api/helpers/useLocale) フックについてもっと学ぶ。

@@ -1,0 +1,154 @@
+---
+title: ローカル翻訳
+description: Next.jsアプリのローカル翻訳を設定する
+---
+
+## 概要
+
+このガイドでは、CDNを使用するのではなく、Next.jsアプリに翻訳を保存する方法を紹介します。
+これにより、翻訳はアプリのバンドル内に存在します。
+これにより、読み込み時間が速くなり、外部インフラストラクチャへの依存を避けることができます。
+
+このドキュメントでは、(1) ローカル翻訳とは何か、どのように機能するかを説明し、
+(2) Next.jsアプリのローカル翻訳を設定する方法を示します。
+
+---
+
+### ローカル翻訳とは何ですか？
+
+ローカル翻訳は、CDN（コンテンツ配信ネットワーク）から取得されるのではなく、アプリのバンドルに保存されます。
+
+例えば、[`gtx-cli translate`](/docs/cli/translate) コマンドをCDプロセスに追加したとします。
+これにより、アプリの翻訳を含むJSONファイルが生成されます。
+最終ステップは、これらの翻訳をAPIから取り出し、アプリに組み込むことです。
+
+これを行う方法は2つあります：
+ * **アプリのバンドル内に:** 翻訳が生成された後、それらをアプリのバンドルに追加します。
+ * **CDN内（デフォルト）:** 実行時にCDNから翻訳を取得します。
+
+### 利点は何ですか？
+
+*読み込み時間の短縮:* ローカル翻訳はアプリから直接提供されるため、
+CDNから提供される翻訳よりも速く読み込まれます。
+
+*外部サービスへの依存なし:* アプリが翻訳を読み込む能力は、CDNの可用性に依存しません。
+
+### 欠点は何ですか？
+
+*バンドルサイズの増加:* ローカル翻訳はアプリのバンドルサイズを増加させます。
+これにより、初回の読み込みが若干遅くなる可能性があります。
+
+*ロケール管理:* ロケールのサポートを追加または削除するには、毎回アプリを再デプロイする必要があります。
+
+*コンテンツ管理:* ロケール管理と同様に、翻訳を変更したい場合（例：他の言語での表現が気に入らない場合）、
+新しい翻訳でアプリを再デプロイする必要があります。
+
+---
+
+## セットアップ
+
+### 前提条件
+
+[クイックスタートガイド](/docs/next/tutorials/quickstart)に従っていることを確認してください。
+
+### 手順
+
+<Steps>
+  <Step>
+    次の内容で `./src` に `loadTranslations.js` ファイルを追加します:
+
+    ```js title="src/loadTranslations.js" copy
+    export default async function loadTranslations(locale) {
+      const t = await import(`../public/_gt/${locale}.json`);
+      return t.default;
+    }
+    ```
+  </Step>
+
+  <Step>
+    次のコマンドを実行し、「言語ファイルはどこに保存されていますか？」と聞かれたら、「ローカル」オプションを選択します。
+    ```bash
+    npx gtx-cli init
+    ```
+    その後、翻訳コマンドを実行します。
+    ```bash
+    npx gtx-cli translate
+    ```
+  </Step>
+</Steps>
+
+以上です！これでアプリはローカルファイルからのみ翻訳を読み込むようになります。
+
+{/* ---
+
+## 独自の翻訳を使用する
+
+独自の翻訳を使用する（GT AI 翻訳サービスを使用しない）には、いくつかのオプションがあります:
+
+**オプション 1:** 独自の言語辞書を作成する
+**オプション 2:** [`gtx-cli generate`](/docs/cli/generate) コマンドで作成されたファイルを修正する
+
+### オプション 1: 独自の言語辞書を作成する
+
+`gt.config.json` で、希望する言語のファイルを辞書ファイルとしてマークすることでこれを行うことができます。
+
+例えば、`./dictionary/en.json` が基本言語ファイルであるとします:
+```json title="gt.config.json" copy
+{
+  "projectId": "your-project-id",
+  "dictionary": "./dictionary/en.json",
+  "locales": ["en", "fr", "de"],
+  ...
+}
+```
+
+そして、翻訳を読み込む関数を追加します:
+```js title="src/loadTranslations.js" copy
+export default async function loadTranslations(locale) {
+  const t = await import(`../public/locales/${locale}.json`);
+  return t.default;
+}
+```
+
+翻訳コマンドを実行すると、`./public/locales` ディレクトリに翻訳が生成されます。
+```bash
+npx gtx-cli translate --no-publish --translations-dir ./public/locales --dictionary ./dictionary/en.json
+```
+
+これらの翻訳にアクセスするには、[`useDict`](/docs/nest/api/dictionary/useDict) と [`getDict`](/docs/nest/api/dictionary/getDict) を使用して翻訳にアクセスできます。
+辞書の使用についての詳細は[こちら](/docs/next/reference/dictionary-reference)を参照してください。
+
+```jsx title="pages/index.jsx" copy
+import { useDict } from 'gt-next/client';
+import { getDict } from 'gt-next/server';
+
+export default function Home() {
+  const d = useDict(); // クライアントサイド // [!code highlight]
+  const d = await getDict(); // サーバーサイド // [!code highlight]
+  return (
+    <div>
+      <h1>{d('identifier')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+より詳細なガイドについては、[カスタム翻訳リファレンス](/docs/next/reference/dictionary-reference)を参照してください。
+
+
+### オプション 2: `gtx-cli generate` コマンドで作成されたファイルを修正する
+
+🚧 このセクションは現在作成中です。 🚧 */}
+
+
+---
+
+
+## メモ
+ * ローカル翻訳は、CDNから翻訳を取得する代替手段です。
+ * [`loadTranslations()`](/docs/next/api/config/load-translations)をカスタマイズして、データベースや独自のCDNなど、他のソースから翻訳をロードすることもできます。
+
+## 次のステップ
+ * カスタム翻訳ローダーの作成に関する詳細は、[`loadTranslations()`](/docs/next/api/config/load-translations)を参照してください。
+ * 独自の翻訳を作成したい場合は、[カスタム翻訳](/docs/next/reference/stand-alone)をチェックしてください。
+ * 辞書の構文に関する詳細は、[辞書リファレンス](/docs/next/reference/dictionary-reference)を参照してください。

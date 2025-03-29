@@ -1,0 +1,157 @@
+---
+title: <Branch>
+description: <Branch> 组件的 API 参考
+---
+
+## 概述
+
+`<Branch>` 组件允许您为翻译添加条件逻辑。
+
+```jsx
+const status = 'active';
+<Branch branch={status}
+    active={<p>用户处于活跃状态。</p>}
+    inactive={<p>用户处于非活跃状态。</p>}
+/>
+```
+您将一个值传递给 `branch` 参数，并根据您提供的键将其与输出值匹配。
+
+## 参考
+
+### 属性
+
+<TypeTable
+  type={{
+    "branch": {
+        description: '要渲染的分支名称。',
+        type: 'string',
+        optional: false,
+    },
+    "children?": {
+        description: '备用内容',
+        type: 'any',
+        optional: true,
+        default: 'undefined',
+    },
+    "name?": {
+        type: 'string',
+        optional: true,
+        default: 'undefined',
+    },
+    "[key]: string": {
+        type: 'string | JSX.Element',
+        optional: false,
+    },
+  }}
+/>
+
+`[key]: string` 语法表示代表潜在分支的任意键。
+例如，可以将 `active` 和 `inactive` 这样的分支添加为参数。
+
+| 属性       | 描述                                                                 |
+|------------|---------------------------------------------------------------------|
+| `branch`     | 要渲染的分支名称。                                                   |
+| `children`   | 如果未找到匹配的分支，则渲染的备用内容。                             |
+| `[key]: string` | 表示给定分支值可能内容的分支。每个键对应一个分支，其值是要渲染的内容。 |
+
+### 返回
+
+`JSX.Element` 包含与指定分支或备用内容相对应的内容。
+
+### 抛出
+
+如果未提供 `branch` 属性或其无效，则抛出 `Error`。
+
+## 示例
+
+### 基本用法
+`<Branch>` 需要为 `branch` 属性的每个可能值提供不同的输出。
+
+在此示例中，使用 `user.hairColor` 值来确定输出。
+我们定义了 `black`、`brown` 和 `blonde` 属性以匹配 `user.hairColor` 的可能值。
+```jsx title="BranchExample.jsx" copy
+import { Branch } from 'gt-react';
+
+export default function HairColor({ user }) {
+  return (
+    <Branch branch={user.hairColor} // [!code highlight]
+      black={<p>他们的头发是深色的。</p>}
+      brown="他们的头发是中间色。" // (如果您愿意，可以传递一个字符串)
+      blonde={<p>他们的头发是浅色的。</p>}
+    />
+  );
+}
+```
+
+### 回退内容
+如果没有属性匹配传递给 `branch` 的值，`children` 将始终用作回退。
+
+```jsx title="BranchExample.jsx" copy
+import { Branch } from 'gt-react';
+
+export default function HairColor({ user }) {
+  return (
+    <Branch branch={user.hairColor}
+      black={<p>他们的头发是深色的。</p>}
+      brown={<p>他们的头发是中间色。</p>}
+      blonde={<p>他们的头发是浅色的。</p>}
+    >
+      <p>他们的头发颜色未知。</p> // [!code highlight]
+    </Branch>
+  );
+}
+```
+
+### 翻译 `<Branch>`
+
+如果您想翻译内容，只需将其包裹在 `<T>` 组件中。
+
+```jsx title="BranchExample.jsx" copy
+import { T, Branch } from 'gt-react';
+
+export default function HairColor({ user }) {
+  return (
+    <T id="example"> // [!code highlight]
+      <Branch branch={user.hairColor}
+        black={<p>他们的头发是深色的。</p>}
+        brown={<p>他们的头发是中间色。</p>}
+        blonde={<p>他们的头发是浅色的。</p>}
+      >
+        <p>他们的头发颜色未知。</p> 
+      </Branch>
+    </T> // [!code highlight]
+  );
+}
+```
+
+### 添加变量
+如果您想在分支中渲染动态值，请确保将它们包裹在 `<Currency>`、`<DateTime>`、`<Num>` 或 `<Var>` 组件中。
+
+```jsx title="BranchExample.jsx" copy
+import { Branch, T, Var } from 'gt-react';
+
+export default function HairColor({ user }) {
+  return (
+    <T id="example">
+      <Branch branch={user.hairColor}
+        black={<p>他们的头发是深色的。</p>}
+        brown={<p>他们的头发是中间色。</p>}
+        blonde={<p>他们的头发是浅色的。</p>}
+      >
+        <p>未处理的头发颜色：<Var>{user.hairColor}</Var></p> // [!code highlight]
+      </Branch>
+    </T>
+  );
+}
+```
+
+---
+
+
+## 注意事项
+ * 分支的键可以是任何与分支属性匹配的字符串值。这种灵活性使得 `<Branch>` 易于适应广泛的用例。
+ * 将 `<Branch>` 与其他组件结合使用，例如用于翻译的 `<T>` 和用于动态内容的[变量组件](/docs/react/reference/using-branching-components)，以创建丰富且本地化的界面。
+
+## 下一步
+ * 有关更高级的用法和示例，请参阅[使用分支组件](/docs/react/reference/using-branching-components)。
+ * 要了解更多关于 `<Currency>`、`<DateTime>`、`<Num>` 和 `<Var>` 等变量组件的信息，请查看[使用变量组件](/docs/react/reference/using-variable-components)文档。

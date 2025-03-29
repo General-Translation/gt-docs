@@ -1,0 +1,87 @@
+---
+title: 使用<T>组件
+description: 让我们来做一些翻译！
+---
+
+
+
+## 概述
+
+终于到了翻译的时候了！
+一旦你设置了 `<T>` 组件，你就可以将你的应用程序翻译成任何你想要的语言！
+
+实际上，这可以分为两个步骤：
+<Steps>
+  <Step>
+    添加 `<GTProvider>` 组件
+  </Step>
+  <Step>
+    添加 `<T>` 组件
+  </Step>
+</Steps>
+
+
+## 添加 `<GTProvider>` 组件
+
+让我们开始在您的应用中添加 `<GTProvider>` 组件。
+好消息是，这只需要做一次。
+
+```jsx title="src/app/layout.tsx" copy
+import { GTProvider } from 'gt-next' // [!code highlight]
+...
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <GTProvider> // [!code highlight]
+            {children}
+        </GTProvider> // [!code highlight]
+      </body>
+    </html>
+  );
+}
+
+```
+
+<Callout>
+  **为什么我们需要 `<GTProvider>` 组件？**
+
+  `<GTProvider>` 负责将翻译从服务器传递到客户端。
+  任何时候我们想在客户端渲染 `<T>` 组件时，我们需要将其包裹在 `<GTProvider>` 中。
+
+  您可以在[这里](/docs/next/reference/t-reference#gtprovider)阅读更多关于 `<GTProvider>` 组件的信息。
+</Callout>
+
+
+## 添加 `<T>` 组件
+
+您一直在等待的部分...
+
+现在我们只需在内容的顶部放一个 `<T>`，并在末尾放一个闭合的 `</T>`。
+别忘了添加一个唯一的标识符字符串作为翻译的 id。
+
+```jsx title="src/app/page.tsx" copy
+import { T } from 'gt-next' // [!code highlight]
+...
+function Page() {
+  ...
+
+  return (
+    <T id="currency-converter"> // [!code highlight]
+      ...
+    </T> // [!code highlight]
+  );
+}
+
+export default Page;
+```
+
+就是这样！您现在可以开始翻译您的应用程序了！
+
+

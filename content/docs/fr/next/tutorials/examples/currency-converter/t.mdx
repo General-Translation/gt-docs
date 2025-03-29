@@ -1,0 +1,87 @@
+---
+title: Utilisation du composant <T>
+description: Faisons un peu de traduction !
+---
+
+
+
+## Aperçu
+
+Il est enfin temps de faire un peu de traduction !
+Une fois que vous avez configuré vos composants `<T>`, vous pouvez traduire votre application dans n'importe quelle langue que vous souhaitez !
+
+En réalité, cela se décompose en deux étapes :
+<Steps>
+  <Step>
+    Ajouter le composant `<GTProvider>`
+  </Step>
+  <Step>
+    Ajouter le composant `<T>`
+    </Step>
+</Steps>
+
+
+## Ajouter le composant `<GTProvider>`
+
+Commençons par ajouter le composant `<GTProvider>` à votre application.
+La bonne nouvelle est que cela ne doit être fait qu'une seule fois.
+
+```jsx title="src/app/layout.tsx" copy
+import { GTProvider } from 'gt-next' // [!code highlight]
+...
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <GTProvider> // [!code highlight]
+            {children}
+        </GTProvider> // [!code highlight]
+      </body>
+    </html>
+  );
+}
+
+```
+
+<Callout>
+  **Pourquoi avons-nous besoin du composant `<GTProvider>` ?**
+
+  Le `<GTProvider>` est responsable de transmettre les traductions du serveur au client.
+  Chaque fois que nous voulons rendre un composant `<T>` côté client, nous devons l'envelopper dans un `<GTProvider>`.
+
+  Vous pouvez en savoir plus sur le composant `<GTProvider>` [ici](/docs/next/reference/t-reference#gtprovider).
+</Callout>
+
+
+## Ajouter le composant `<T>`
+
+La partie que vous attendiez...
+
+Maintenant, tout ce que nous avons à faire est de placer un `<T>` en haut du contenu et un `</T>` à la fin.
+N'oubliez pas d'ajouter une chaîne d'identification unique pour servir d'identifiant pour la traduction.
+
+```jsx title="src/app/page.tsx" copy
+import { T } from 'gt-next' // [!code highlight]
+...
+function Page() {
+  ...
+
+  return (
+    <T id="currency-converter"> // [!code highlight]
+      ...
+    </T> // [!code highlight]
+  );
+}
+
+export default Page;
+```
+
+Et voilà ! Vous êtes maintenant prêt à commencer à traduire votre application !
+
+

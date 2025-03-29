@@ -1,0 +1,71 @@
+---
+title: useLocale()
+description: API-Referenz für den useLocale-Hook
+---
+
+## Überblick
+
+Der `useLocale` Hook ruft die aktuelle Locale des Benutzers aus dem [`<GTProvider>` Kontext](/docs/next/api/components/gtprovider) ab.
+Die zurückgegebene Locale ist [als Zeichenkette formatiert](/docs/reference/locale-strings), z.B. `'en-US'`.
+
+
+<Callout>
+    `useLocale` ist ein clientseitiger Hook und *kann nur in clientseitigen Komponenten verwendet werden*.
+    Stellen Sie sicher, dass Ihre App in einen [`<GTProvider>`](/docs/next/api/components/gtprovider) eingebettet ist.
+</Callout>
+
+Für die serverseitige Locale-Verwaltung siehe [`getLocale()`](/docs/next/api/helpers/getLocale).
+
+## Referenz
+
+### Rückgaben
+
+Ein String, der die aktuelle Gebietsschema des Benutzers darstellt, z.B. `'en-US'`.
+
+---
+
+## Fallback-Verhalten
+Wenn eine nicht unterstützte Locale angefordert wird, wird eine Fallback-Locale ausgewählt.
+
+Zum Beispiel, im Falle einer nicht unterstützten Locale,
+wenn (1) der Benutzer mehrere bevorzugte Locales in seinen Browsereinstellungen konfiguriert hat,
+und (2) eine dieser Locales von Ihrer Anwendung unterstützt wird,
+dann wird die Locale auf die beste Sprache zurückfallen.
+
+Zusätzlich, wenn keine möglichen Fallback-Locales verfügbar sind,
+aber zwei Locales die gleiche Sprache teilen (z.B. `en-US` und `en-GB`),
+dann wird die Locale auf die unterstützte Locale zurückfallen, die die gleiche Sprache teilt.
+
+Wenn keine der Bedingungen erfüllt werden kann, wird die Standard-Locale verwendet.
+
+Siehe [`den Locale-Management-Leitfaden()`](/docs/next/reference/locale-management) für Informationen zur Konfiguration unterstützter Locales.
+
+---
+
+## Beispiele
+
+### Grundlegende Verwendung
+
+Rufen Sie die aktuelle Locale ab und zeigen Sie sie in Ihrer Komponente an.
+
+```jsx title="CurrentLocale.jsx" copy
+"use client";
+import { useLocale } from 'gt-next/client';
+
+export default function CurrentLocale() {
+    const locale = useLocale(); // [!code highlight]
+    return <p>Aktuelle Locale: {locale}</p>;
+}
+```
+
+---
+
+
+## Notizen
+ * Der `useLocale()` Hook basiert auf dem [`<GTProvider>`](/docs/next/api/components/gtprovider), um auf den Kontext zuzugreifen. Stellen Sie sicher, dass Ihre App auf der obersten Ebene mit einem Provider umschlossen ist.
+ * `useLocale()` ist nur clientseitig.
+ * Erfahren Sie mehr über Locale-Strings [hier](/docs/reference/locale-strings).
+
+## Nächste Schritte
+ * Erfahren Sie, wie Sie unterstützte Gebietsschemas in Ihrer Anwendung verwalten und angeben können mit [Gebietsschema-Verwaltung](/docs/next/reference/locale-management).
+ * Um auf die Fallback-Sprache zuzugreifen, siehe [`useDefaultLocale()`](/docs/next/api/helpers/useDefaultLocale).

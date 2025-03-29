@@ -1,0 +1,51 @@
+---
+title: CLI 工具
+description: 通用翻译 CLI 工具
+---
+
+## 概述
+
+这是关于通用翻译 CLI 工具的参考文档。
+
+CLI 工具用于管理项目的翻译。
+它允许您[生成翻译](/docs/cli/translate)、[生成翻译模板](/docs/cli/generate)和[设置项目以进行翻译](/docs/cli/setup)。
+在[这里](/docs/cli)阅读更多关于 `gtx-cli` 的信息。
+
+### 安装
+
+<Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gtx-cli --save-dev
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash 
+  bun add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gtx-cli --save-dev
+  ```
+  </Tab>
+</Tabs>
+
+---
+
+## CLI 工具的功能是什么？
+
+如果您正在使用 `gt-next`，您将主要关注 [`translate`](/docs/cli/translate) 和 [`setup`](/docs/cli/setup) 命令。
+CLI 工具用于管理您的项目和翻译。
+
+ * [`translate` 命令](/docs/cli/translate) 旨在添加到 CD 管道中。
+   它用于扫描您的项目以查找需要翻译的内容。
+   然后将内容上传到 CDN 或添加到您的应用程序包中以便在运行时使用。
+ * [`setup` 命令](/docs/cli/setup) 用于自动将通用翻译库集成到您的项目中。
+   它将扫描您的项目并将任何 JSX 内容包装在 `<T>` 组件中。
+

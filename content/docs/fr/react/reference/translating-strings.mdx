@@ -1,0 +1,60 @@
+---
+title: Traduire des chaînes
+description: Comment traduire des chaînes
+---
+
+## Aperçu
+
+Ce guide est un tutoriel étape par étape sur la façon de traduire des chaînes dans votre application React
+avec [`useGT()`](/docs/react/api/strings/useGT).
+
+
+## Configuration
+
+### Prérequis
+
+Nous supposons que vous avez déjà installé `gt-react` dans votre projet et que vous avez suivi ou suivez actuellement le [Guide de démarrage rapide](/docs/react/tutorials/quickstart).
+
+### Traduction de chaînes
+Pour toutes les chaînes, utilisez [`useGT()`](/docs/react/api/strings/useGT).
+N'oubliez pas que `useGT()` doit être appelé dans un composant enfant de [`<GTProvider>`](/docs/react/api/components/gtprovider).
+
+```jsx title="src/components/MyComponent.jsx" copy
+import { useGT } from 'gt-react';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('This is a string that gets translated')}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+### Ajout de variables
+Les variables sont des valeurs qui peuvent changer, mais ne sont pas traduites.
+Pour ajouter des variables à vos chaînes, utilisez le modèle suivant :
+
+```jsx title="MyComponent.jsx" copy
+import { useGT } from 'gt-react';
+
+export default function MyComponent() {
+  const t = useGT(); // [!code highlight]
+  return (
+    <div>
+      <h1>{t('Hello there, {username}', { variables: { username: 'Brian123' }})}</h1> // [!code highlight]
+    </div>
+  );
+}
+```
+
+---
+
+## Notes
+ * Pour la traduction de chaînes, utilisez [`useGT()`](/docs/react/api/strings/useGT).
+ * Des variables peuvent être ajoutées aux chaînes en utilisant le modèle `{ variables: { key: value } }`.
+
+## Prochaines étapes
+ * Retournez au [Guide de démarrage rapide](/docs/react/tutorials/quickstart) pour terminer la configuration de votre projet pour la traduction.
+ * Consultez la référence API pour [`useGT()`](/docs/next/react/strings/useGT).

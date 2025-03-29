@@ -1,0 +1,106 @@
+---
+title: Gestionar Locales
+description: Cómo gestionar los locales de tu aplicación
+---
+
+
+## Resumen
+
+Este documento proporciona orientación sobre cómo gestionar locales en su aplicación React con `gt-react`.
+Recorreremos la configuración de la lista de locales que desea soportar, luego activaremos la generación de traducciones.
+También cubriremos cómo pasar el archivo de configuración a su aplicación.
+
+Esta biblioteca utiliza el [estándar BCP-47](/docs/reference/locale-strings) para definir locales.
+Vea una lista de los locales actualmente soportados [aquí](/docs/reference/supported-locales).
+
+---
+
+## Configurando locales
+
+Hay dos maneras de cambiar tus locales para producción:
+ 1. La herramienta CLI
+ 2. El archivo `gt.config.json` (preferido)
+
+
+### Gestionando locales con la herramienta CLI
+
+La forma más sencilla de gestionar locales es especificándolos a través del comando [`npx gtx-cli translate`](/docs/cli/translate) usando la bandera `--locales`.
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales zh jp && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+
+Esto generará traducciones para chino (`zh`) y japonés (`jp`).
+
+
+Asegúrate de que tu aplicación sepa que estos locales son compatibles pasando el archivo de configuración al componente GTProvider.
+```jsx title="App.js" copy
+import { GTProvider } from 'gt-react';
+import config from './gt.config.json';
+
+function App() {
+  return (
+    <GTProvider locales={["zh", "jp"]}>
+      <YourApp />
+    </GTProvider>
+  );
+}
+```
+
+
+### Usando `gt.config.json` (preferido)
+
+Una forma más robusta de gestionar locales es usando el archivo `gt.config.json`.
+puedes especificar la lista de locales que deseas soportar con la propiedad `locales`.
+
+```json title="gt.config.json" copy
+{
+  "locales": ["zh", "jp"],
+}
+```
+
+Luego solo pasa el archivo de configuración a tu componente GTProvider.
+
+```jsx title="App.js" copy
+import { GTProvider } from 'gt-react';
+import config from './gt.config.json';
+
+function App() {
+  return (
+    <GTProvider {...config}>
+      <YourApp />
+    </GTProvider>
+  );
+}
+```
+
+El paso final es agregar el comando de traducción a tu script de construcción.
+No necesitas especificar locales con la bandera `--locales` porque ya están definidos en el archivo `gt.config.json`.
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+
+---
+
+## Locales permitidos
+
+Como una característica opcional, puedes agregar una lista de locales permitidos.
+Esto es accesible a través del panel de control en la página de Locales del Proyecto.
+Si habilitas esta característica, cualquier intento de llamar a npx translate con locales no permitidos fallará.
+
+---
+
+## Notas
+ * Puedes gestionar los locales a través del panel de control, el archivo `gt.config.json`, o la herramienta CLI.
+ * Recuerda pasar los locales a [`<GTProvider>`](/docs/react/api/componenets/gtprovider) en tu aplicación.
+
+ ## Próximos Pasos
+ * Aprende sobre la sintaxis de localización en la referencia de [Cadenas de Localización](/docs/reference/locale-strings).

@@ -1,0 +1,71 @@
+---
+title: useLocale()
+description: useLocaleフックのAPIリファレンス
+---
+
+## 概要
+
+`useLocale` フックは、[`<GTProvider>` コンテキスト](/docs/next/api/components/gtprovider)からユーザーの現在のロケールを取得します。
+返されるロケールは[文字列としてフォーマットされます](/docs/reference/locale-strings)、例: `'en-US'`。
+
+
+<Callout>
+    `useLocale` はクライアントサイドのフックであり、*クライアントサイドのコンポーネントでのみ使用できます*。
+    アプリが [`<GTProvider>`](/docs/next/api/components/gtprovider) でラップされていることを確認してください。
+</Callout>
+
+サーバーサイドのロケール管理については、[`getLocale()`](/docs/next/api/helpers/getLocale) を参照してください。
+
+## リファレンス
+
+### 戻り値
+
+ユーザーの現在のロケールを表す文字列、例: `'en-US'`。
+
+---
+
+## フォールバックの動作
+サポートされていないロケールが要求された場合、フォールバックロケールが選択されます。
+
+例えば、サポートされていないロケールの場合、
+(1) ユーザーがブラウザ設定で複数の優先ロケールを設定している場合、
+(2) これらのロケールのうち1つがアプリケーションでサポートされている場合、
+そのロケールは最適な言語にフォールバックされます。
+
+さらに、利用可能なフォールバックロケールがない場合でも、
+2つのロケールが同じ言語を共有している場合（例: `en-US` と `en-GB`）、
+そのロケールは同じ言語を共有するサポートされているロケールにフォールバックされます。
+
+どちらの条件も満たされない場合、デフォルトのロケールが使用されます。
+
+サポートされているロケールの設定に関する情報は、[`ロケール管理ガイド()`](/docs/next/reference/locale-management)を参照してください。
+
+---
+
+## 例
+
+### 基本的な使用法
+
+現在のロケールを取得し、コンポーネントに表示します。
+
+```jsx title="CurrentLocale.jsx" copy
+"use client";
+import { useLocale } from 'gt-next/client';
+
+export default function CurrentLocale() {
+    const locale = useLocale(); // [!code highlight]
+    return <p>現在のロケール: {locale}</p>;
+}
+```
+
+---
+
+
+## メモ
+ * `useLocale()` フックは、コンテキストにアクセスするために [`<GTProvider>`](/docs/next/api/components/gtprovider) に依存しています。アプリがルートレベルでプロバイダーでラップされていることを確認してください。
+ * `useLocale()` はクライアントサイドのみです。
+ * ロケール文字列についての詳細は[こちら](/docs/reference/locale-strings)をご覧ください。
+
+## 次のステップ
+ * アプリケーションでサポートされているロケールを管理し、指定する方法については、[ロケール管理](/docs/next/reference/locale-management)をご覧ください。
+ * フォールバック言語にアクセスするには、[`useDefaultLocale()`](/docs/next/api/helpers/useDefaultLocale)を参照してください。

@@ -1,0 +1,42 @@
+---
+title: <LocaleSelector>
+description: <LocaleSelector> 组件的 API 参考
+---
+
+## 概述
+
+`<LocaleSelector>` 组件用于选择用户的语言环境。
+它是一个客户端组件，提供一个下拉菜单来选择语言环境。
+
+## 参考
+
+### 返回
+
+一个允许用户选择其语言环境的组件。
+
+---
+
+## 示例
+
+### 基本用法
+
+```jsx
+import { LocaleSelector } from 'gt-react';
+
+export default function MyComponent() {
+    return (
+        <LocaleSelector />
+    );
+}
+```
+
+---
+
+## 注意事项
+* `<LocaleSelector>` 组件允许您为您的应用选择不同的区域设置。
+* `<LocaleSelector>` 组件在服务器组件中不可用。
+
+## 下一步
+
+* 了解更多关于 [`useLocale()`](/docs/react/api/helpers/useLocale) 钩子的内容。
+* 在[这里](/docs/reference/locale-strings)了解更多关于语言环境字符串的信息。

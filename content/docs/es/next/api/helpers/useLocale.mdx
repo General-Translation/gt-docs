@@ -1,0 +1,71 @@
+---
+title: useLocale()
+description: Referencia de API para el hook useLocale
+---
+
+## Resumen
+
+El hook `useLocale` recupera la configuración regional actual del usuario desde el [contexto `<GTProvider>`](/docs/next/api/components/gtprovider).
+La configuración regional devuelta está [formateada como una cadena](/docs/reference/locale-strings), por ejemplo, `'en-US'`.
+
+
+<Callout>
+    `useLocale` es un hook del lado del cliente y *solo se puede usar en componentes del lado del cliente*.
+    Asegúrate de que tu aplicación esté envuelta en un [`<GTProvider>`](/docs/next/api/components/gtprovider).
+</Callout>
+
+Para la gestión de configuraciones regionales del lado del servidor, consulta [`getLocale()`](/docs/next/api/helpers/getLocale).
+
+## Referencia
+
+### Devuelve
+
+Una cadena que representa la configuración regional actual del usuario, por ejemplo, `'en-US'`.
+
+---
+
+## Comportamiento de respaldo
+Cuando se solicita una configuración regional no compatible, se seleccionará una configuración regional de respaldo.
+
+Por ejemplo, en el caso de una configuración regional no compatible,
+si (1) el usuario ha configurado múltiples configuraciones regionales preferidas en la configuración de su navegador,
+y (2) una de estas configuraciones regionales es compatible con su aplicación,
+entonces la configuración regional se respaldará al mejor idioma.
+
+Además, si no hay configuraciones regionales de respaldo posibles disponibles,
+pero dos configuraciones regionales comparten el mismo idioma (por ejemplo, `en-US` y `en-GB`),
+entonces la configuración regional se respaldará a la configuración regional compatible que comparte el mismo idioma.
+
+Si no se puede cumplir ninguna de las condiciones, entonces se usará la configuración regional predeterminada.
+
+Consulte [la guía de gestión de configuraciones regionales()](/docs/next/reference/locale-management) para obtener información sobre cómo configurar configuraciones regionales compatibles.
+
+---
+
+## Ejemplos
+
+### Uso Básico
+
+Recupera la configuración regional actual y muéstrala en tu componente.
+
+```jsx title="CurrentLocale.jsx" copy
+"use client";
+import { useLocale } from 'gt-next/client';
+
+export default function CurrentLocale() {
+    const locale = useLocale(); // [!code highlight]
+    return <p>Current locale: {locale}</p>;
+}
+```
+
+---
+
+
+## Notas
+ * El hook `useLocale()` depende del [`<GTProvider>`](/docs/next/api/components/gtprovider) para acceder al contexto. Asegúrate de que tu aplicación esté envuelta con un proveedor en el nivel raíz.
+ * `useLocale()` es solo del lado del cliente.
+ * Aprende más sobre las cadenas de localización [aquí](/docs/reference/locale-strings).
+
+## Próximos Pasos
+ * Aprende cómo gestionar y especificar los locales soportados en tu aplicación con [gestión de locales](/docs/next/reference/locale-management).
+ * Para acceder al idioma de respaldo, consulta [`useDefaultLocale()`](/docs/next/api/helpers/useDefaultLocale).

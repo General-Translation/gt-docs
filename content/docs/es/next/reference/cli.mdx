@@ -1,0 +1,51 @@
+---
+title: La Herramienta CLI
+description: La herramienta CLI de Traducciones Generales 
+---
+
+## Descripción general
+
+Este es un documento de referencia sobre la herramienta CLI de Traducción General.
+
+La herramienta CLI se utiliza para gestionar las traducciones de tu proyecto.
+Te permite [generar traducciones](/docs/cli/translate), [generar plantillas de traducción](/docs/cli/generate), y [configurar tu proyecto para traducción](/docs/cli/setup).
+Lee más sobre `gtx-cli` [aquí](/docs/cli).
+
+### Instalación
+
+<Tabs items={["npm", "yarn", "bun", "pnpm"]}>
+  <Tab value="npm">
+  ```bash 
+  npm i gtx-cli --save-dev
+  ``` 
+  </Tab>
+  <Tab value="yarn">
+  ```bash 
+  yarn add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash 
+  bun add gtx-cli --dev
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash 
+  pnpm add gtx-cli --save-dev
+  ```
+  </Tab>
+</Tabs>
+
+---
+
+## ¿Qué hace la herramienta CLI?
+
+Si estás utilizando `gt-next`, principalmente te interesarán los comandos [`translate`](/docs/cli/translate) y [`setup`](/docs/cli/setup).
+La herramienta CLI se utiliza para gestionar tu proyecto y tus traducciones.
+
+ * [El comando `translate`](/docs/cli/translate) está diseñado para ser añadido al pipeline de CD.
+   Se utiliza para escanear tu proyecto en busca de contenido que necesite ser traducido.
+   El contenido se sube luego a una CDN o se añade al paquete de tu aplicación para ser utilizado en tiempo de ejecución.
+ * [El comando `setup`](/docs/cli/setup) se utiliza para integrar automáticamente la biblioteca General Translation en tu proyecto.
+   Escaneará tu proyecto y envolverá cualquier contenido JSX con un componente `<T>`.
+

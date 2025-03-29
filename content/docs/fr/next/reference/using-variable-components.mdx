@@ -1,0 +1,198 @@
+---
+title: Composants Variables
+description: Référence complète pour les Composants Variables dans gt-next
+---
+
+## Aperçu
+
+Les composants variables dans `gt-next` vous permettent d'insérer du contenu dynamique, non traduisible dans les traductions.
+Ces composants incluent :
+
+- [`<Var>`](/docs/next/api/components/var) : Pour afficher des variables.
+- [`<Num>`](/docs/next/api/components/num) : Pour formater les nombres avec localisation.
+- [`<Currency>`](/docs/next/api/components/currency) : Pour formater les valeurs monétaires avec localisation.
+- [`<DateTime>`](/docs/next/api/components/datetime) : Pour formater les dates et heures.
+
+Ces composants sont utilisés à l'intérieur des composants `<T>` ou dans le cadre d'entrées de dictionnaire de modèles pour garantir que le contenu dynamique est affiché de manière précise et cohérente.
+
+Dans cette référence, nous couvrirons :
+ * Ce que sont les composants variables et comment ils fonctionnent.
+ * Les modèles de conception pour utiliser les composants variables dans vos applications.
+ * Quelques exemples de comment utiliser chaque composant variable.
+ * Les pièges courants à éviter lors de l'utilisation des composants variables.
+
+
+## Qu'est-ce que les Composants Variables ?
+
+Les Composants Variables sont utilisés pour envelopper du contenu dynamique.
+Cela inclut les noms d'utilisateur, les valeurs numériques, les dates et les devises.
+Ces composants sont essentiels pour maintenir l'intégrité du contenu localisé, car ils vous permettent de formater et d'afficher des valeurs dynamiques d'une manière qui s'aligne avec la locale de l'utilisateur.
+
+Chaque Composant Variable a un comportement spécialisé :
+
+- [`<Var>`](/docs/next/api/components/var) : Affiche des variables générales, telles que les noms d'utilisateur ou les identifiants.
+- [`<Num>`](/docs/next/api/components/num) : Formate les valeurs numériques selon les règles spécifiques à la locale.
+- [`<Currency>`](/docs/next/api/components/currency) : Formate les valeurs monétaires avec des symboles et des règles de localisation.
+- [`<DateTime>`](/docs/next/api/components/datetime) : Formate les dates et heures en utilisant les conventions spécifiques à la locale.
+
+Alors que le contenu JSX et les chaînes de caractères sont traduits via les API de Traduction Générale, les Composants Variables sont entièrement gérés localement.
+Cela signifie que le contenu de ces composants n'est jamais envoyé au service de traduction, garantissant la confidentialité et la sécurité des données.
+
+Alors que le composant `<Var>` est utilisé comme un fourre-tout pour les variables générales, les composants `<Num>`, `<Currency>`, et `<DateTime>` sont utilisés pour des types de données spécifiques qui nécessitent un formatage de localisation.
+Pour ceux-ci, nous utilisons l'[API i18n JS](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl) pour formater le contenu selon la locale de l'utilisateur.
+
+---
+
+## Modèles de Conception
+
+### Composants Variables Enveloppés dans `<T>` [#variable-in-t]
+
+Les Composants Variables sont souvent enveloppés dans un composant `<T>` ou font partie d'une entrée de dictionnaire.
+Cela garantit que le contenu environnant est traduit tandis que le contenu variable est rendu dynamiquement et inchangé.
+
+```javascript copy
+import { T, Var } from 'gt-next';
+
+export default function UserGreeting({ user }) {
+  return (
+    <T id="greeting">
+      Hello, <Var>{user.name}</Var>!
+    </T>
+  );
+}
+```
+
+
+### Composants Variables et Localisation [#localization]
+
+Certains Composants Variables, tels que `<Num>`, `<Currency>`, et `<DateTime>`, incluent un support de localisation intégré.
+Ces composants formatent automatiquement leur contenu en fonction de la locale de l'utilisateur ou d'options supplémentaires passées en tant que props.
+
+Par exemple :
+* [`<Num>`](/docs/next/api/components/Num) peut afficher des nombres avec des séparateurs décimaux localisés.
+* [`<Currency>`](/docs/next/api/components/Currency) peut formater des valeurs avec le symbole monétaire correct et le positionnement approprié.
+* [`<DateTime>`](/docs/next/api/components/DateTime) peut formater les dates et heures selon les règles spécifiques à la locale.
+
+Vous pouvez également remplacer la locale par défaut et les options de formatage en passant des props directement à ces composants.
+
+### Confidentialité des Données [#privacy]
+
+Comme mentionné ci-dessus, les Composants Variables gèrent toute la reformatage localement ; par conséquent, aucune information n'est envoyée aux API de Traduction Générale pour traduction.
+C'est parfait pour garder les données sensibles, telles que les noms d'utilisateur ou les numéros de compte, privées et sécurisées.
+
+Chaque Composant Variable gère le formatage différemment et doit être utilisé pour des types spécifiques de contenu privé :
+* [`<Var>`](/docs/next/api/components/var) : Informations privées qui ne changent pas de format en fonction de la locale : par exemple, noms d'utilisateur, numéros de compte.
+* [`<Num>`](/docs/next/api/components/Num) : Valeurs numériques privées qui doivent être formatées selon la locale : par exemple, quantités de commande, âge, distance.
+* [`<Currency>`](/docs/next/api/components/Currency) : Valeurs monétaires privées qui doivent être formatées selon la locale : par exemple, montants des transactions, soldes de compte.
+* [`<DateTime>`](/docs/next/api/components/DateTime) : Valeurs de date et d'heure privées qui doivent être formatées selon la locale : par exemple, dates de création de compte, horodatages de commande.
+
+Il convient de noter que ce n'est pas le cas pour les [Composants de Bifurcation](/docs/next/reference/using-branching-components)
+et les [composants `<T>`](/docs/next/reference/t-reference), qui envoient des données aux API de Traduction Générale pour traduction.
+
+---
+
+## Exemples
+
+### Exemple `<Var>`
+
+Parce que le composant `<Var>` ne reformate pas le contenu, il est presque exclusivement enveloppé dans un composant `<T>`.
+
+Dans cet exemple, nous voyons que passer une variable au champ `value` ou passer une variable en tant qu'enfant du composant `<Var>` a le même effet.
+Comme avec tout autre composant, le composant `<Var>` peut être utilisé pour envelopper n'importe quel contenu JSX arbitraire.
+
+```jsx
+import { T, Var } from 'gt-next';
+
+export default function UserGreeting({ user }) {
+  return (
+    <T id="greeting">
+      Bonjour, <Var>{user.name}</Var>!
+      Votre adresse est <Var value={user.addr} />
+    </T>
+  );
+}
+```
+
+### Exemple `<Num>`
+Contrairement au composant `<Var>`, le composant `<Num>` est utilisé pour formater les valeurs numériques selon les règles spécifiques à la locale.
+Dans cet exemple, nous pouvons voir comment le composant `<Num>` peut être utilisé à la fois en tant qu'enfant d'un composant `<T>` et en tant que composant autonome.
+
+```jsx
+import { T, Num } from 'gt-next';
+import { Badge } from '@components/custom/cart/Badge';
+
+export default function OrderSummary({ order }) {
+  return (
+    <>
+      <T id="orderSummary">
+        Vous avez <Num value={order.quantity} /> articles dans votre panier.
+      </T>
+      <Badge>
+        <Num>{order.quantity}</Num>
+      </Badge>
+    </>
+  );
+}
+```
+
+### Exemple `<Currency>`
+Le composant `<Currency>` prend une valeur numérique et la formate selon la chaîne de devise fournie.
+Dans cet exemple, nous voyons comment le composant `<Currency>` peut être utilisé à la fois en tant qu'enfant d'un composant `<T>` et en tant que composant autonome.
+
+```jsx
+import { T, Currency } from 'gt-next';
+import { Badge } from '@components/custom/cart/Badge';
+
+export default function OrderSummary({ order }) {
+  return (
+    <>
+      <T id="orderSummary">
+        Votre total est <Currency currency={curr}>{order.total}</Currency>.
+      </T>
+      <Badge>
+        <Currency value={order.total} currency={curr} />
+      </Badge>
+    </>
+  );
+}
+
+```
+
+### Exemple `<DateTime>`
+
+Le composant `<DateTime>` formate les valeurs de date et d'heure selon la locale de l'utilisateur.
+Encore une fois, nous voyons comment le composant `<DateTime>` peut être utilisé à la fois en tant qu'enfant d'un composant `<T>` et en tant que composant autonome.
+
+```jsx
+import { T, DateTime } from 'gt-next';
+
+export default function OrderSummary({ order }) {
+  return (
+    <T id="orderSummary">
+      Votre commande a été passée le <DateTime value={order.date} />
+    </T>
+    <DateTime>{order.date}</DateTime>
+  );
+}
+```
+
+---
+
+## Pièges Courants
+
+### Ignorer les Options de Localisation [#localization-options]
+
+Pour `<Currency>`, assurez-vous de passer la prop `currency` pour spécifier le type de devise.
+Cela garantit que le symbole de devise correct et le formatage sont utilisés lors de l'affichage de la valeur.
+
+D'autres composants, tels que `<Num>` et `<DateTime>`, ont également des props optionnelles qui vous permettent de personnaliser le formatage.
+
+## Notes
+ * Les composants de variable sont essentiels pour maintenir l'affichage de contenu dynamique et privé dans les traductions.
+ * Tout le reformatage est effectué localement, garantissant qu'aucune donnée sensible n'est envoyée aux API de traduction générale.
+ * Les composants comme [`<Num>`](/docs/next/api/components/num), [`<Currency>`](/docs/next/api/components/currency), et [`<DateTime>`](/docs/next/api/components/datetime) fournissent des fonctionnalités de localisation pour assurer un formatage précis
+ tandis que le composant [`<Var>`](/docs/next/api/components/var) est utilisé pour les variables générales qui ne nécessitent pas de reformatage.
+
+## Prochaines étapes
+ * Explorez la logique conditionnelle dans [Composants de Ramification](/docs/reference/using-branching-components).
+ * En savoir plus sur les options de formatage pour des Composants Variables spécifiques dans la [Référence API](/docs/api/components/var).

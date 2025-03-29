@@ -1,0 +1,96 @@
+---
+title: Déploiement en Production (5m)
+description: Déployons votre application React avec GT.
+---
+
+## Aperçu
+
+Ceci est un court tutoriel pour vous aider à déployer votre application React avec GT.
+
+Nous allons le faire en 3 étapes :
+<Steps>
+  <Step>
+    Ajoutez vos clés API de production.
+  </Step>
+  <Step>
+    Partagez votre configuration avec votre application.
+  </Step>
+  <Step>
+    Ajoutez la commande de traduction à votre script de construction.
+  </Step>
+</Steps>
+
+## Prérequis
+
+Assurez-vous d'avoir suivi le [Guide de démarrage rapide](/docs/react/tutorials/quickstart) pour configurer votre application React avec GT.
+
+## Étape 1 : Passez à vos clés API de production 🔑
+
+Ajoutez votre clé API **de production** et l'ID de projet à vos variables d'environnement de production.
+
+Depuis votre [tableau de bord](https://www.generaltranslation.com/signin), allez à **Clés API** dans la barre latérale.
+Cliquez sur **Créer une clé API**, et ajoutez-les à votre environnement de production.
+
+```bash copy
+GT_API_KEY="YOUR_GT_API_KEY"
+GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+```
+
+<Callout type="warn">
+    **Protégez vos clés API !**
+
+    Les clés de production doivent **uniquement** être utilisées en production.
+    De même, les clés de développement doivent **uniquement** être utilisées en développement.
+    *Ne commettez jamais vos clés API dans un dépôt public !*
+</Callout>
+
+## Étape 2 : Partagez votre configuration avec votre application ⚙️
+
+La commande de traduction générera un fichier de configuration à la racine.
+
+Passez le fichier de configuration à [`<GTProvider>`](/docs/react/api/components/gtprovider).
+Si vous avez spécifié des locales dans votre fournisseur, supprimez-les.
+Le fichier de configuration s'en chargera.
+
+Ne vous inquiétez pas si vous n'avez pas de fichier `gt.config.json` dans votre répertoire racine.
+La commande de traduction en générera un pour vous.
+
+```jsx title="src/App.js" copy
+import { GTProvider } from "gt-react";
+import MyApp from "./MyApp";
+import config from "../gt.config.json";  // [!code highlight]
+
+export default function App() {
+  return (
+    <GTProvider {...config}> // [!code highlight]
+      <MyApp />
+    </GTProvider> 
+  );
+}
+```
+
+## Étape 3 : Ajoutez la commande de traduction à votre script de construction 🏗️
+
+La dernière étape consiste à ajouter la [commande de traduction](/docs/cli/translate) à votre script de construction.
+Assurez-vous que la commande de traduction vient avant la commande de construction.
+
+Spécifiez les [locales](/docs/reference/supported-locales) que vous souhaitez déployer en production.
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales fr zh && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+Ici, nous avons ajouté le français et le chinois à notre configuration.
+
+C'est tout ! Vous êtes maintenant prêt à déployer votre application React avec GT !
+
+---
+
+## Prochaines étapes
+ * Suivez ce guide sur [Comment gérer les locales](/docs/react/reference/local-management).
+ * Apprenez comment [Traduire des chaînes](/docs/react/reference/translating-strings).
+ * Découvrez le [composant `<T>`](/docs/usage/t).
+

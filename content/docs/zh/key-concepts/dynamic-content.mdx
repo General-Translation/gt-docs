@@ -1,0 +1,105 @@
+---
+title: 动态内容
+description: GT中动态内容工作的简要概述。
+---
+
+## 概述
+
+**动态内容**通常是指可以根据用户、上下文、环境等因素而变化的任何内容。
+这与**静态内容**形成对比，静态内容无论用户、上下文、环境等如何都保持不变。
+
+<Accordions>
+    <Accordion title="动态内容和静态内容有什么区别？">
+        简而言之
+        * 静态内容永远不会改变（原始字符串、文本等）。
+        * 动态内容可以改变（姓名、电子邮件、时间、语言等）。
+
+        **什么是静态内容？**
+
+        静态内容通常指的是存在于提供给用户的包中的任何原始文本。
+        一个好的经验法则是，开发人员可以在源代码中读取的任何文本或字符串都是静态文本。
+
+        例如，考虑这个文件：
+
+        ```jsx title="Landing.jsx" copy
+
+        export default function Landing() {
+            return (
+                <> Welcome to my app!</>
+            );
+        }
+        ```
+        
+        文本"Welcome to my app!"是静态内容，因为它永远不会改变。
+
+        但是，如果我们想更改页面，使其在用户登录时做出响应：
+
+        ```jsx title="Landing.jsx" copy
+
+        export default function Landing(user) {
+
+            if (user) {
+                return (
+                    <h1> Welcome to my app, {user.name}! </h1>
+                );
+            }
+            
+            return (
+                <h1> Welcome to my app!</h1>
+            );
+        }
+        ```
+        尽管这两个短语是条件渲染的，但它们都被视为静态文本。
+        记住我们的经验法则：我们可以通过阅读`landing.jsx`中的源代码来看到这些内容。
+
+        然而，`{user.name}`被视为动态内容，因为它可以改变。
+        我们无法仅通过阅读`landing.jsx`文件就知道用户屏幕上将呈现什么。
+    </Accordion>
+</Accordions>
+
+
+## "翻译或不翻译"
+有时，我们想要翻译动态内容，但其他时候我们希望它保持不变。
+
+
+一个很好的例子是用户的电子邮件地址或姓名。
+另一个例子可能是银行账户余额或用户的社会安全号码。
+这类项目（1）当您的应用程序以不同语言呈现时可能不需要翻译，以及（2）可能会有所不同（在这种情况下，每个用户之间都不同）。
+
+
+### 示例
+
+```jsx title="Greeting.jsx" copy
+import { T, Var } from 'gt-next'
+
+export default function Greeting(name) {
+    return (
+        <T id='greeting'>
+            Hello, <Var>{name}</Var>!
+        </T>
+    );
+}
+```
+
+就翻译而言，这有两个好处：
+1. 您不必为每个可能的名字创建翻译。
+    * 使用`<Var>`，我们只生成一个翻译，本质上看起来像这样：
+        * \`¡Hola, $\{name\}!\`
+    * 如果我们不使用`<Var>`，我们将不得不为每个唯一的名字执行按需翻译：
+        * "¡Hola, Alice!", "¡Hola, Bob!", "¡Hola, Charlie!", "¡Hola, David!", ...
+2. 您也不必担心名字本身变成其名字的翻译形式：（即"¡Hola, Alicia!", "¡Hola, Roberto!", ...）。
+
+如您所见，`<Var>`组件应该用来包装任何无论语言环境如何都应保持不变的内容。
+这样，我们避免了为动态内容的每个可能值创建翻译的需要。
+
+
+通过将私人信息包装在`<Var>`组件中，您可以确保该信息不会发送到General Translations API。
+<Callout>
+    **例外情况**
+
+    上述声明的例外情况是（1）在`<Var>`组件内使用嵌套的`<T>`组件的情况下（即，嵌套的`<T>`组件的子元素将被翻译）
+    或（2）当数据通过`<Var>`组件的子元素中的其他方式有意传递给我们的API时（例如，fetch调用）。
+    然而，这不是`<Var>`组件或General Translations API的预期用途，这样做会损害加载时间和性能。
+
+</Callout>
+

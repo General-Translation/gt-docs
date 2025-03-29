@@ -1,0 +1,65 @@
+---
+title: Desplegar a Producción (5m)
+description: Vamos a desplegar tu aplicación Next.js con GT.
+---
+
+## Resumen
+
+Este es un breve tutorial para ayudarte a desplegar tu aplicación Next.js con GT.
+
+Haremos esto en 2 pasos:
+<Steps>
+  <Step>
+    Agrega tus claves API de producción.
+  </Step>
+  <Step>
+    Añade el comando de traducción a tu script de construcción.
+  </Step>
+</Steps>
+
+## Requisitos previos
+
+Asegúrate de haber seguido la [Guía de inicio rápido](/docs/next/tutorials/quickstart) para configurar tu aplicación Next.js con GT.
+
+## Paso 1: Agrega tus claves API de producción 🔑
+
+Agrega tu clave API de **producción** y el ID del Proyecto a tus variables de entorno de producción.
+
+Desde tu [panel de control](https://www.generaltranslation.com/signin), ve a **Claves API** en la barra lateral.
+Haz clic en **Crear Clave API** y agrégalas a tu entorno de producción.
+
+```bash copy
+GT_API_KEY="YOUR_GT_API_KEY"
+GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+```
+
+<Callout type="warn">
+    **¡Protege tus claves API!**
+
+    Las claves de producción deben usarse **solo** en producción.
+    Del mismo modo, las claves de desarrollo deben usarse **solo** en desarrollo.
+    *¡Nunca comprometas tus claves API en un repositorio público!*
+</Callout>
+
+## Paso 2: Agrega el comando de traducción a tu script de construcción 🏗️
+
+El siguiente paso es agregar el [comando de traducción](/docs/cli/translate) a tu script de construcción,
+y especificar los [locales](/docs/reference/supported-locales) que te gustaría enviar a producción.
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales pt es && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+Aquí, hemos agregado portugués y español a nuestra configuración.
+
+¡Eso es todo! Ahora estás listo para desplegar tu Next.js con GT!
+
+---
+
+## Próximos pasos
+ * Sigue esta guía sobre [Cómo gestionar locales](/docs/next/reference/locale-management).
+ * Aprende cómo [Traducir cadenas](/docs/next/reference/translating-strings).
+ * Aprende sobre el [componente `<T>`](/docs/usage/t).

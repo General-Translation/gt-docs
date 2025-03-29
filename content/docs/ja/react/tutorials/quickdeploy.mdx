@@ -1,0 +1,96 @@
+---
+title: 本番環境へのデプロイ (5分)
+description: GTを使用してあなたのReactアプリをデプロイしましょう。
+---
+
+## 概要
+
+これは、GTを使用してあなたのReactアプリをデプロイするための短いチュートリアルです。
+
+これを3つのステップで行います：
+<Steps>
+  <Step>
+    本番用APIキーを追加します。
+  </Step>
+  <Step>
+    アプリと設定を共有します。
+  </Step>
+  <Step>
+    ビルドスクリプトに翻訳コマンドを追加します。
+  </Step>
+</Steps>
+
+## 前提条件
+
+GTを使用してReactアプリをセットアップするために、[クイックスタートガイド](/docs/react/tutorials/quickstart)に従っていることを確認してください。
+
+## ステップ 1: 本番 API キーに切り替える 🔑
+
+**本番** API キーとプロジェクト ID を本番環境変数に追加します。
+
+[ダッシュボード](https://www.generaltranslation.com/signin)から、サイドバーの **API キー** に移動します。
+**API キーを作成** をクリックし、それらを本番環境に追加します。
+
+```bash copy
+GT_API_KEY="YOUR_GT_API_KEY"
+GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
+```
+
+<Callout type="warn">
+    **API キーを保護してください！**
+
+    本番キーは**本番でのみ**使用する必要があります。
+    同様に、開発キーは**開発でのみ**使用する必要があります。
+    *API キーを公開リポジトリにコミットしないでください！*
+</Callout>
+
+## ステップ 2: アプリと設定を共有する ⚙️
+
+translate コマンドはルートに設定ファイルを生成します。
+
+設定ファイルを [`<GTProvider>`](/docs/react/api/components/gtprovider) に渡します。
+プロバイダーにロケールを指定している場合は、それらを削除してください。
+設定ファイルがそれを処理します。
+
+ルートディレクトリに `gt.config.json` ファイルがなくても心配しないでください。
+translate コマンドがそれを生成します。
+
+```jsx title="src/App.js" copy
+import { GTProvider } from "gt-react";
+import MyApp from "./MyApp";
+import config from "../gt.config.json";  // [!code highlight]
+
+export default function App() {
+  return (
+    <GTProvider {...config}> // [!code highlight]
+      <MyApp />
+    </GTProvider> 
+  );
+}
+```
+
+## ステップ3: ビルドスクリプトに翻訳コマンドを追加する 🏗️
+
+最後のステップは、ビルドスクリプトに[翻訳コマンド](/docs/cli/translate)を追加することです。
+翻訳コマンドがビルドコマンドの前に来ることを確認してください。
+
+本番環境に出荷したい[ロケール](/docs/reference/supported-locales)を指定します。
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "build": "npx gtx-cli translate --locales fr zh && <YOUR_BUILD_COMMAND>"
+  }
+}
+```
+ここでは、フランス語と中国語を設定に追加しました。
+
+これで完了です！ GTを使ってReactアプリをデプロイする準備が整いました！
+
+---
+
+## 次のステップ
+ * [ローカルを管理する方法](/docs/react/reference/local-management)に関するこのガイドに従ってください。
+ * [文字列を翻訳する方法](/docs/react/reference/translating-strings)を学びましょう。
+ * [`<T>` コンポーネント](/docs/usage/t)について学びましょう。
+
