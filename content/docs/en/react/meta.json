@@ -9,6 +9,7 @@
     "reference/local-management",
     "reference/dictionary-reference",
     "reference/cli",
+    "reference/change-language",
     "---Advanced---",
     "reference/using-branching-components",
     "reference/local-tx",

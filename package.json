@@ -7,8 +7,10 @@
     "dev": "next dev",
     "start": "next start",
     "postinstall": "fumadocs-mdx",
+    "i18n": "gtx-cli translate",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@generaltranslation/supported-locales": "^2.0.6",
@@ -33,6 +35,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.2.1",
     "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
     "tailwindcss": "^4.0.13",
     "typescript": "^5.8.2"
   }

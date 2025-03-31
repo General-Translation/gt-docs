@@ -9,6 +9,7 @@
     "reference/dictionary-reference",
     "reference/locale-management",
     "reference/cli",
+    "reference/change-language",
     "---Advanced---",
     "reference/using-branching-components",
     "reference/i18n-configuration",

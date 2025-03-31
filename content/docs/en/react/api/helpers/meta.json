@@ -1,4 +1,9 @@
 {
   "title": "Helpers",
-  "pages": ["./useDefaultLocale", "./useLocale"]
+  "pages": [
+    "./useDefaultLocale",
+    "./useLocale",
+    "./useSetLocale",
+    "./useLocaleSelector"
+  ]
 }
