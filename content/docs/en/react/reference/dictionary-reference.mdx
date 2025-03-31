@@ -10,6 +10,7 @@ Please feel free to skip around this page as needed.
 We will cover the following:
  * [What is a dictionary?](#what-is-a-dictionary)
  * [How to use dictionaries](#how-to-use-dictionaries)
+ * [Loading dictionaries for other languages](#other-languages)
  * [Using dictionaries](#usage)
  * [Production considerations](#production-considerations)
 
@@ -34,6 +35,7 @@ At the same time, it has some disadvantages as well:
 
 1. **Complexity**: Dictionaries are more complex to set up and use than the `<T>` component.
 2. **Readability**: Dictionaries are less readable than the `<T>` component because the content is not inline.
+3. **Maintainability**: Dictionaries are more difficult to maintain than the `<T>` component because the content is not inline, and is instead stored separately. This makes debugging and maintaining translations much more difficult.
 
 Both design patterns are supported by our library and are not mutually exclusive.
 You can use a dictionary along side `<T>` components.
@@ -76,6 +78,20 @@ const dictionary = {
 export default dictionary;
 ```
 
+<Callout>
+  You can also use a `dictionary.json` file to store your dictionary. This is useful if you are migrating from a different library or if you prefer to use JSON files.
+  Here is an example of a `dictionary.json` file:
+
+```json title="src/dictionary.json" copy
+{
+  "greetings": {
+    "hello": "Hello, World!"
+  }
+}
+``` 
+
+</Callout>
+
 Then you pass it to your `<GTProvider>` component:
 
 ```jsx title="index.js" copy
@@ -112,6 +128,19 @@ export default function MyComponent() {
 
 ---
 
+## Loading dictionaries for other languages [#other-languages]
+
+By default, developers only provide a dictionary for the default language.
+
+General Translation automatically generates dictionaries for other languages and loads them with the [`loadTranslations`](/docs/react/api/config/load-translations) function.
+
+However, if you are migrating from another i18n library or already have dictionaries for other languages, you can pass them to the [`loadDictionary`](/docs/react/api/config/load-dictionary) function.
+
+`gt-react` will automatically load the corresponding dictionary for the requested locale when using the `useDict()` hook or `getDict()` function.
+
+See the [API Reference](/docs/react/api/config/load-dictionary) for more information.
+
+---
 
 ## Using dictionaries [#usage]
 

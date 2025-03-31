@@ -30,7 +30,7 @@ import {
 } from '@/components/ui/logocard';
 import SupportedLocales from '@/components/SupportedLocales';
 import { getLocale } from 'gt-next/server';
-
+import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
 const customMdxComponents = {
   a: (props: React.ComponentProps<'a'>) => (
     <a
@@ -54,6 +54,10 @@ export default async function Page(props: {
   if (!page) notFound();
 
   const MDX = page.data.body;
+
+  function TOC() {
+    return page ? <InlineTOC items={page.data.toc} /> : null;
+  }
   return (
     <DocsPage
       toc={page.data.toc}
@@ -92,6 +96,7 @@ export default async function Page(props: {
             CardFooter,
             CardHeader,
             CardTitle,
+            TOC,
             ...customMdxComponents,
           }}
         />

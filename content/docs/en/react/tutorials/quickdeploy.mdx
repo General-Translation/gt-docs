@@ -13,6 +13,9 @@ We will do this in 3 steps:
     Add your production API keys.
   </Step>
   <Step>
+    Run the init command to configure your project.
+  </Step>
+  <Step>
     Share your configuration with your app.
   </Step>
   <Step>
@@ -44,16 +47,26 @@ GT_PROJECT_ID="YOUR_GT_PROJECT_ID"
     *Never commit your API keys to a public repository!*
 </Callout>
 
-## Step 2: Share your configuration with your app ⚙️
+## Step 2: Run the init command 🔧
 
-The translate command will generate a configuration file in the root.
+Run the init command to configure your project.
+
+```bash copy
+npx gtx-cli init
+```
+
+<Callout>
+  If you do not want your translations to be hosted on the GT CDN, select "Local" when asked where your
+  language files are stored. You will also need to configure the [`loadTranslations()`](/docs/react/api/config/load-translations) function.
+</Callout>
+
+## Step 3: Share your configuration with your app ⚙️
+
+The init command will generate a configuration file in the root.
 
 Pass the config file to [`<GTProvider>`](/docs/react/api/components/gtprovider).
 If you have specified any locales in your provider, remove them.
 The configuration file will take care of that.
-
-Don't worry if you don't have a `gt.config.json` file in your root directory.
-The translate command will generate one for you.
 
 ```jsx title="src/App.js" copy
 import { GTProvider } from "gt-react";
@@ -62,35 +75,33 @@ import config from "../gt.config.json";  // [!code highlight]
 
 export default function App() {
   return (
-    <GTProvider {...config}> // [!code highlight]
+    {/* [!code highlight] */}
+    <GTProvider {...config}> 
       <MyApp />
     </GTProvider> 
   );
 }
 ```
 
-## Step 3: Add the translate command to your build script 🏗️
+## Step 4: Add the translate command to your build script 🏗️
 
 The last step is to add the [translate command](/docs/cli/translate) to your build script.
 Make sure that the translate command comes before the build command.
 
-Specify the [locales](/docs/reference/supported-locales) that you would like to ship to production.
-
 ```json title="package.json" copy
 {
   "scripts": {
-    "build": "npx gtx-cli translate --locales fr zh && <YOUR_BUILD_COMMAND>"
+    "build": "npx gtx-cli translate && <YOUR_BUILD_COMMAND>"
   }
 }
 ```
-Here, we have added French and Chinese to our configuration.
 
 That's it! You are now ready to deploy your react app with GT!
 
 ---
 
 ## Next steps
- * Follow this guide on [How to Manage Locales](/docs/react/reference/local-management).
+ * See the [CLI docs](/docs/cli/tutorials/quickstart) for more information on the CLI tool.
  * Learn how to [Translate Strings](/docs/react/reference/translating-strings).
  * Learn about the [`<T>` component](/docs/usage/t).
 

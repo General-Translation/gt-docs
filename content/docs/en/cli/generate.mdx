@@ -32,14 +32,24 @@ After generating the source files, you can use [local translations](/docs/next/r
 | `--inline`        | Include inline `<T>` tags in addition to the dictionary     | `boolean` | `true`     | `true`            |
 | `--default-locale <locale>`| The source locale for the project                  | `string`  | `true`     |  `en`               |
 | `--ignore-errors` | Ignore errors and force translation for valid content       | `flag` | `true`     | `false`           |
-| `-t, --translations-dir <path>`    | The directory to save the translations to  | `string`  | `false`     |            |
 
-The `-t` parameter is required, as it specifies the directory to save the source template to.
+## Setup
+
+First, run the `gtx-cli init` command to configure your project.
+
+```bash
+npx gtx-cli init
+```
+
+This will create a `gt.config.json` file in the root of your project.
+
+Then, run the `gtx-cli generate` command to generate template files for your project.
+
+```bash
+npx gtx-cli generate
+```
 
 
 ### Configuration file
-
-When running the CLI tool for the first time, it will attempt to create a `gt.config.json` file in the root of your project.
-This file contains metadata about your project that is used to translate your content.
 
 Read more about the `gt.config.json` file [here](/docs/cli/reference/config).

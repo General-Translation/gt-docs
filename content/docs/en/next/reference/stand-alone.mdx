@@ -1,17 +1,23 @@
 ---
-title: Stand-alone i18n
-description: Using gt-next as a stand-alone i18n library
+title: Migrating to gt-next
+description: Migrating from another i18n library to gt-next
 ---
 
 ## Overview
 
 This guide will walk you through internationalizing your existing Next.js app using `gt-next` as a stand-alone i18n library.
+This guide can also be used to help you migrate from another i18n library to `gt-next`.
+
 All translations are stored in your project's repository and are managed by you.
 Furthermore, you bring your own translations. This means you won't have to add API keys.
 
+<Callout>
+  If you would like to automatically generate translations for your JSON files, please refer to the [CLI tool](/docs/cli/tutorials/json).
+</Callout>
+
 ### How it works
 
-Translations live in JSON files called "dictionaries" (`en.json`, `fr.json`, etc.).
+Translations can live in JSON files called "dictionaries" (`en.json`, `fr.json`, etc.).
 The keys are used as references, and the values are the translated content:
 ```json title="public/dictionaries/en.json"
 // [!code word:greeting]
@@ -48,7 +54,7 @@ export default function MyComponent() {
   **Note:** Because these translations are managed by you, you will need to update them manually as your app evolves.
   That means each time you add or change content, you will need to update your translation files.
 
-  Consider using [`the translate command`](/docs/cli/tutorials/translate-json) if you are interested in automating this process.
+  Consider using [`the CLI tool`](/docs/cli/tutorials/json) if you are interested in automating this process.
 </Callout>
 
 ---
@@ -97,9 +103,11 @@ export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-        <GTProvider> // [!code highlight]
+        {/* [!code highlight] */}
+        <GTProvider>
           {children}
-        </GTProvider>  // [!code highlight]
+          {/* [!code highlight] */}
+        </GTProvider>
       </body>
     </html>
   );
@@ -147,6 +155,18 @@ export default function MyComponent() {
 <Callout>
   **Tip:** For more information on dictionary syntax, such as inserting variables, see the [dictionary reference](/docs/next/reference/dictionary-reference).
 </Callout>
+
+---
+
+## Compatibility
+
+This guide helps you migrate from another i18n library to `gt-next`. The dictionary format is generally compatible with other libraries.
+
+Our dictionaries support variables, dates, and number interpolation. See the [dictionary options](/docs/next/api/types/DictionaryTranslationOptions) for more information.
+
+However, if your project is using complex syntax such as plurals or branches, you will need to convert those to the `gt-next` syntax.
+
+See the [Branching Components](/docs/next/reference/using-branching-components) page for more information on the `gt-next` syntax.
 
 ---
 
